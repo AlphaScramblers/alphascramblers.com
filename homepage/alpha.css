@@ -379,7 +379,7 @@ body{
         margin: 3%;
     }
     .banner1,.banner2,.banner3,.banner4{
-        height: 30vh;
+        height: 35vh;
     }
     .b1,.b2,.b3,.b4{
         background-size: 100vw 30vh;
@@ -391,7 +391,7 @@ body{
     border: 1.8px solid black;
     border-radius: 10px;
     left: 42.5vw;
-    top: 35vh;
+    top: 40vh;
     background-color: white;
     cursor: pointer;
     }
@@ -409,17 +409,19 @@ body{
     }
     .psychohead{
         font-size: 1.5em;
+        margin-top: 1vh;
     }
     .strtbut{
         width: 30%;
         margin-top: 1.5%;
         height: 3vh;
-        font-size: 1em;
+        font-size: 0.7em;
     }
     .strtbut-text{
         font-size: 0.7em;
         width: 90%;
         margin-top: 2%;
+        margin-bottom: 2vh;
     }
     .boxes{
         flex-direction: column;
@@ -449,6 +451,7 @@ body{
     }
     .middle{
         font-size: 1.5em;
+        margin: 1%;
     }
     .boxline{
         font-size: 0.7em;
@@ -472,8 +475,10 @@ body{
         height: 3vh;
         border: 2px solid black;
         border-radius: 10px;
-        width: 48vw;
-        margin: 0.5vw;
+        width: 47vw;
+        margin: 2vw;
+        margin-right: 1vw;
+        margin-left: 1vw;
     }
     .morehead{
         font-size: 1.5em;
