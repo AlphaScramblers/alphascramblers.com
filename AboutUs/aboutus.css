@@ -1,0 +1,91 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+main{
+    font-family: 'Segoe UI', sans-serif;
+    margin-top: 12vh;
+    overflow-x: hidden;
+}
+.headtext{
+    text-align: center;
+    font-size: 3em;
+    color: #05445E;
+    padding: 2.5%;
+}
+.imgdata{
+    height: 70vh;
+    display: flex;
+    width: 100vw;
+}
+.data{
+    height: 70vh;
+    width: 50vw;
+    background-color: #093A81;
+    display: flex;
+    flex-direction: column;
+    gap: 7vh;
+    align-items: center;
+    justify-content: center;
+}
+.datahead{
+    font-family: "mada",sans-serif;
+    color: white;
+    font-size: 2em;
+}
+.datadata{
+    font-family: "mada",sans-serif;
+    color: white;
+    letter-spacing: 2px;
+    text-align: center;
+    width: 80%;
+    line-height: 25px;
+    font-size: 1.2em;
+}
+.iu{
+    height: 70vh;
+    width: 50vw;
+    object-fit: cover;
+    overflow: hidden;
+}
+.texta{
+     font-family: "mada",sans-serif;
+
+}
+.image2{
+    overflow: hidden;
+}
+.animtext{
+    display: flex;
+}
+.fullanim{
+    display: flex;
+    flex-direction: column;
+}
+.anim{
+    width: 50vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.texta{
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+}
+.text2{
+    text-align: center;
+    font-weight: 600;
+}
+.text3{
+    line-height: 30px;
+    padding: 5%;
+}
+.text1{
+    font-size: 2em;
+    font-weight: 700;
+    text-align: center;
+}
+dotlottie-wc{
+    overflow-y: hidden;
+}

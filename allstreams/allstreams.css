@@ -1,0 +1,137 @@
+*{
+    margin: 0;
+    padding: 0;
+    scroll-padding-top: 14vh;
+    scroll-behavior: smooth;
+}
+main{
+    margin-top: 12vh;
+}
+body{
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f9fd;
+    color: #333;
+}
+.f1{
+    display: flex;
+    justify-content: center;
+}
+.headtext{
+    text-align: center;
+    font-size: 2.4em;
+    color: #05445E;
+    padding-top: 2.5%;
+}
+.textarea{
+    width: 92vw;
+    margin: 4vw;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+    line-height: 35px;
+}
+.subjects{
+    display: flex;
+    flex-direction: column;
+}
+.sub1,.sub2,.sub3{
+    display: flex;
+}
+.s1,.s2,.s3,.s4,.s5,.s6{
+    margin: 1vw;
+    padding: 1vw;
+    width: 42vw;
+    background-color: 	#e2effa;
+}
+.s7{
+    margin: 1vw;
+    padding: 1vw;
+    height: 40vh;
+    width: 88vw;
+    background-color: 	#e2effa;
+}
+.head{
+    color: #05445E;
+    font-size: 1.7em;
+    font-weight: bolder;
+    font-weight:700;
+}
+.head1
+{
+    font-size: 1.3em;
+    color: #05445E;
+}
+.subhead{
+    font-size: 1.3em;
+    color: #05445E;
+}
+.subsubhead{
+    font-size: 1.1em;
+    color: #05445E;
+}
+.pointers{
+    margin-left: 4.5%;
+}
+.pointers1{
+    margin-left: 4.5%;
+    list-style-type:square;
+}
+.b{
+    background-color: #a7d6f1;
+    padding: 1%;
+    border-radius: 15px;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0.5%;
+    color: #05445E;
+}
+.b:hover{
+    background-color: #76bfe3;
+}
+.fc1,.fc2,.fc3,.fc4,.fc5,.fc6,.fc7,.fc8,.fc9,.fc10{
+    display: none;
+}
+.fc1n,.fc2n,.fc3n,.fc4n,.fc5n,.fc6n,.fc7n,.fc8n,.fc9n,.fc10n{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2%;
+    scroll-margin-top: 9vh;
+}
+.cnf{
+    background-color: #e6f0fa;
+    border-collapse: collapse;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.cnf td{
+        border: 1px solid #b3d8e7;
+}
+.cnf th,.cnf td {
+    padding: 1%;
+    text-align: center;
+    border: 1px solid #b3d8e7;
+}
+.cnf th{
+    background-color: #d0ebf9;
+    font-weight: bold;
+}
+.cnf td:nth-child(1){
+    font-weight: 700;
+    list-style: square;
+    width: 20vw;
+}
+.cnf td:nth-child(4){
+    width: 12vw;
+}
+.s5PCB{
+    margin: 1vw;
+    padding: 1vw;
+    width: 88vw;
+    background-color: #e2effa;
+}
