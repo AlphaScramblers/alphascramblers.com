@@ -1,4 +1,4 @@
-for(let i=1;i<=10;i++){
+for(let i=1;i<=12;i++){
     let button = document.querySelector(`.C${i}`);
     let fc = document.querySelector(`.fc${i}`);
     let fcnew = document.querySelector(`.fc${i}n`)
