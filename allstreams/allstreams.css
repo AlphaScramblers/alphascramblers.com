@@ -20,7 +20,7 @@ body{
     display: flex;
     justify-content: center;
 }
-.headtext{
+.headtext,.headtext1{
     text-align: center;
     font-size: 2.4em;
     color: #05445E;
@@ -136,5 +136,67 @@ body{
     background-color: #e2effa;
 }
 @media screen and (min-width: 0px) and (max-width: 700px){
-    
+    .cnf{
+        font-size: 0.6em;
+        line-height: 17px;
+        width: 102%;
+    }
+    th,td{
+        padding: 2%;
+    }
+    .headtext{
+        font-size: 1.5em;
+    }
+    .headtext1{
+        font-size: 1.4em;
+    }
+    .ta{
+        font-size: 0.8em;
+        line-height: 25px;
+    }
+    .f1{
+        width: 50vh;
+        height: 20vh;
+        margin-left: -3vw;
+    }
+    .head{
+        font-size: 1.1em;
+    }
+    .sub1,.sub2,.sub3{
+        flex-direction: column;
+    }
+    .s1,.s2,.s3,.s4,.s5,.s6,.s7,.s5PCB{
+        width: 90%;
+        margin: 3%;
+        padding: 2%;
+        height: auto;
+        font-size: 0.8em;
+        line-height: 30px;
+        margin-bottom: 0;
+    }
+    .s1{
+        margin-top: -6%;
+    }
+    .subhead{
+        font-size: 1.3em;
+    }
+    .subsubhead{
+        font-size: 1.2em;
+    }
+    .cnf td:nth-child(4){
+        word-wrap: break-word;
+    }
+    main{
+        overflow-x: hidden;
+    }
+    .career img{
+        width: 80vh;
+        height: 25vh;
+    }
+    .b{
+        font-size: 0.8em;
+        padding: 2%;
+        height: auto;
+        border-radius: 8px;
+    }
 }

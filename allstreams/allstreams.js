@@ -4,14 +4,12 @@ for(let i=1;i<=12;i++){
     let fcnew = document.querySelector(`.fc${i}n`)
 
     button.addEventListener("click",()=>{
-    if(currstat=="unvis"){
-        currstat="vis"
+    if(fc){
         fc.classList.remove(`fc${i}`);
         fc.classList.add(`fc${i}n`);
         fc.scrollIntoView();
     }
     else{
-        currstat="unvis"
         fc.classList.remove(`fc${i}n`);
         fc.classList.add(`fc${i}`)
     }
