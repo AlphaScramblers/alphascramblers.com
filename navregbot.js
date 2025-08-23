@@ -21,8 +21,17 @@ else{
 overlay.style.height=`${document.documentElement.scrollHeight}px`
 let register = document.querySelector(".register");
 let regbtn = document.querySelector(".login");
+let regbtn1 = document.querySelector(".login1");
 let cross= document.querySelector(".cross")
 regbtn.addEventListener("click",()=>{
+    register.classList.remove("regdis");
+    header.style.opacity="1";
+    main.style.opacity="0.3";
+    footer.style.opacity="0.3";
+    overlay.classList.add("overlay1");
+    document.body.style.overflow="hidden";
+})
+regbtn1.addEventListener("click",()=>{
     register.classList.remove("regdis");
     header.style.opacity="1";
     main.style.opacity="0.3";
@@ -78,33 +87,35 @@ button.addEventListener("click",(e)=>{
     footer.style.opacity="0.3";
     overlay.classList.add("overlay1");
 })
-button.addEventListener("mousedown",(e)=>{
-    hasmoved=false
-    isdragging = true;
-    offsetX = e.clientX - button.offsetLeft;
-    offsetY = e.clientY - button.offsetTop;
+if(window.innerWidth>700){
+    button.addEventListener("mousedown",(e)=>{
+        hasmoved=false
+        isdragging = true;
+        offsetX = e.clientX - button.offsetLeft;
+        offsetY = e.clientY - button.offsetTop;
     
-    button.style.cursor = "grabbing"
-})
-document.addEventListener("mousemove",(e)=>{
-    if(isdragging){
-        hasmoved=true;
-        let x = e.clientX - offsetX;
-        let y = e.clientY - offsetY;
-        
-        button.style.top = y + "px"
-        button.style.left = x + "px"
-    }
-})
-document.addEventListener("mouseup",(e)=>{
-    isdragging = false;
-    button.style.cursor = "pointer"
-    let screenmiddle = window.innerWidth/2;
-    let rect = button.getBoundingClientRect();
-    if(rect.left<screenmiddle){
-        button.style.left = "10px"
-    }
-    else{
-        button.style.left = (window.innerWidth-rect.width-20) + "px";
-    }
-})
+        button.style.cursor = "grabbing"
+    })
+    document.addEventListener("mousemove",(e)=>{
+        if(isdragging){
+            hasmoved=true;
+            let x = e.clientX - offsetX;
+            let y = e.clientY - offsetY;
+    
+            button.style.top = y + "px"
+            button.style.left = x + "px"
+        }
+    })
+    document.addEventListener("mouseup",(e)=>{
+        isdragging = false;
+        button.style.cursor = "pointer"
+        let screenmiddle = window.innerWidth/2;
+        let rect = button.getBoundingClientRect();
+        if(rect.left<screenmiddle){
+            button.style.left = "10px"
+        }
+        else{
+            button.style.left = (window.innerWidth-rect.width-20) + "px";
+        }
+    })
+}
