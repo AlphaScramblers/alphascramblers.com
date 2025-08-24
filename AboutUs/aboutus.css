@@ -17,6 +17,7 @@ main{
     height: 70vh;
     display: flex;
     width: 100vw;
+    flex-direction: row-reverse;
 }
 .data{
     height: 70vh;
@@ -49,13 +50,12 @@ main{
     overflow: hidden;
 }
 .texta{
-     font-family: "mada",sans-serif;
-
+    font-family: "mada",sans-serif;
 }
 .image2{
     overflow: hidden;
 }
-.animtext{
+.animtext,.animtext2,.animtext3{
     display: flex;
 }
 .fullanim{
@@ -80,6 +80,9 @@ main{
 .text3{
     line-height: 30px;
     padding: 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 4vh;
 }
 .text1{
     font-size: 2em;
@@ -88,4 +91,92 @@ main{
 }
 dotlottie-wc{
     overflow-y: hidden;
+}
+.anim1{
+    width: 300px;
+    height: 300px;
+}
+.anim2{
+    width: 420px;
+    height: 420px;
+}
+.anim3{
+    width: 250px;
+    height: 250px;
+}
+@media screen and (min-width: 0px) and (max-width: 700px){
+    .headtext{
+        font-size: 1.5em;
+    }
+    .data{
+        width: 100%;
+        gap: 1vh;
+        height: 50vh;
+        background-image: url(../images/banner1.png);
+        font-weight: 600;
+    }
+    .datahead{
+        font-size: 1.2em;
+        font-weight: 800;
+    }
+    .datadata{
+        font-size: 0.8em;
+        width: 95%;
+        line-height: 20px;
+        letter-spacing: 1px;
+    }
+    .imgdata{
+        flex-direction: column;
+        height: 40vh;
+    }
+    .image2{
+        display: none;
+    }
+    .animtext,.animtext3{
+        flex-direction: column;
+        margin: 3%;
+        background-color:#f9fbfd;
+        border: 1px solid #cfe0f5
+    }
+    .animtext2{
+        flex-direction: column-reverse;
+        margin: 3%;
+        background-color:#f9fbfd;
+        border: 1px solid #cfe0f5
+    }
+    .text1{
+        font-size: 1.3em;
+        margin-bottom: 1vh;
+        color: #3b5998;
+    }
+    .text2{
+        font-size: 1em;
+        color: #3b5998;
+    }
+    .text3{
+        font-size: 0.8em;
+        line-height: 20px;
+        gap: 3vh;
+        padding: 2%;
+        color: #5c6b82;
+    }
+    .texta{
+        width: 100%;
+        margin-right: 2%;
+    }
+    .anim{
+        width: 100%;
+    }
+    .anim1{
+        width: 200px;
+        height: 200px;
+    }
+    .anim2{
+        height: 400px;
+        margin-top: -30%;
+        margin-bottom: -35%;
+    }
+    .anim3{
+        margin-bottom:5%
+    }
 }
