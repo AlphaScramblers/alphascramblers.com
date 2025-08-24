@@ -139,3 +139,61 @@ body{
     justify-content: center;
     align-items: center;
 }
+@media screen and (min-width: 0px) and (max-width: 700px){
+    .faqbanner{
+        flex-direction: column;
+    }
+    .faqanim{
+        width: 90%;
+        padding-left: 5%;
+        margin-top: 3vh;
+    }
+    .faqtext{
+        width: 90%;
+    }
+    .fhead{
+        font-size: 1.5em;
+        margin-top: 1vh;
+    }
+    .ftext{
+        font-size: 0.9em;
+        line-height: 25px;
+    }
+    .SIQ{
+        font-size: 1.5em;
+        margin-top: 3vh;
+        margin-bottom: 2vh;
+    }
+    .Questions{
+        width: 95%;
+        margin-left: 2.5%;
+        overflow-x: hidden;
+        height: auto;
+    }
+    .IN{
+        width: 95%;
+        margin-left: 0.5%;
+        font-size: 0.8em;
+    }
+    .a1n,.a2n,.a3n,.a4n,.a5n,.a6n,.a7n,.a8n,.a9n,.a10n{
+        width: 95%;
+        margin-left: 0.5%;
+        font-size: 0.8em;
+    }
+    .b1,.b2,.b3,.b4,.b5,.b6,.b7,.b8,.b9,.b10{
+        width: 5%;
+    }
+    .Query{
+        font-size: 1.5em;
+        margin-top: 3vh;
+        margin-bottom: 2vh;
+    }
+    .QB{
+        height: 10vh;
+    }
+    .Submit{
+        width: 30%;
+        font-size: 1em;
+        height: 4vh;
+    }
+}
