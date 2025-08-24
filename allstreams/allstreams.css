@@ -18,6 +18,8 @@ body{
 .f1{
     display: flex;
     justify-content: center;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
 }
 .headtext,.headtext1{
     text-align: center;
@@ -156,11 +158,10 @@ h3{
     .ta{
         font-size: 0.8em;
         line-height: 25px;
+        margin-bottom: 5%;
     }
     .f1{
-        width: 50vh;
-        height: 20vh;
-        margin-left: -3vw;
+        display: none;
     }
     .head{
         font-size: 1.1em;
