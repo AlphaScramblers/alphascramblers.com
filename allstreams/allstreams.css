@@ -111,7 +111,8 @@ body{
     overflow: hidden;
 }
 .cnf td{
-        border: 1px solid #b3d8e7;
+    border: 1px solid #b3d8e7;
+    word-wrap: break-word;
 }
 .cnf th,.cnf td {
     padding: 1%;
@@ -207,4 +208,16 @@ h3{
         margin-top: 4vh;
         margin-bottom: 2vh;
     }
+}
+@media screen and (min-width: 700px) and (max-width: 1000px){
+    h3{
+        margin-top: 3vh;
+        margin-bottom: 1vh;
+    }
+    .s1,.s2,.s3,.s4,.s5,.s6,.s7{
+        height: auto;
+    }
+    *{
+    scroll-padding-top: 12vh;
+}
 }

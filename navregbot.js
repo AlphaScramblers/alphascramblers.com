@@ -52,11 +52,9 @@ scrolltop.addEventListener("click",()=>{
 })
 window.addEventListener("scroll",()=>{
     if(scrollY>innerHeight/4){
-        console.log("scroll")
         scrolltop.classList.remove("d");
     }
     if(scrollY<innerHeight/innerHeight){
-        console.log("scroll")
         scrolltop.classList.add("d");
     }
 })
@@ -87,7 +85,10 @@ button.addEventListener("click",(e)=>{
     footer.style.opacity="0.3";
     overlay.classList.add("overlay1");
 })
-if(window.innerWidth>700){
+if(window.matchMedia("(pointer: coarse)").matches){
+    console.log("Touch device");
+}
+else{
     button.addEventListener("mousedown",(e)=>{
         hasmoved=false
         isdragging = true;

@@ -92,6 +92,14 @@ body{
     height: 20vh;
     padding: 2.5vw;
 }
+.exi1{
+    width: 30vw;
+    height: 25vh;
+    padding-top: 5vh;
+}
+.ex4c{
+    padding-top: 5vh;
+}
 .ex1,.ex2,.ex3,.ex4{
     display: flex;
     width: 22vw;
@@ -124,6 +132,10 @@ body{
 }
 .htext{
     margin-top: 5%;
+}
+.ex1m,.ex2m{
+    display: flex;
+    gap: 2vw;
 }
 @media screen and (min-width: 0px) and (max-width: 700px){
     .banner{
@@ -189,9 +201,75 @@ body{
     .ex1,.ex2,.ex3,.ex4{
         font-size: 1em;
         margin: 2%;
+        height: 30vh;
     }
     .exi{
-        width: 60%;
-        height: 30%;
+        width: 100%;
+        height: 60%;
+    }
+    .exi1{
+        width: 100%;
+        height: 40%;
+    }
+    .ex1m,.ex2m{
+        display: flex;
+        flex-direction: column;
+        gap: 0vh;
+    }
+    .explorebut{
+        justify-content: space-around;
+        margin-bottom: 5vh;
+    }
+    .explore{
+        margin-top: -5%;
+    }
+    .ex4c{
+        padding-top: 1vh;
+    }
+}
+@media screen and (min-width: 700px) and (max-width: 1000px){
+    main{
+        margin-top: 10vh;
+    }
+    .anim{
+        display: none;
+    }
+    .bannertext{
+        width: 100%;
+    }
+    .banner{
+        height: 30vh;
+    }
+    .bhead{
+        line-height: 50px;
+        margin-bottom: 3%;
+    }
+    .science,.commerce,.humanities{
+        width: 30vw;
+    }
+    .streamsel{
+        width: 95%;
+        margin: 2.5%;
+    }
+    .sanim{
+        width: 24vw;
+        margin-top: -10%;
+        margin-bottom: -20%;
+    }
+    .stop,.ctop,.htop{
+        font-size: 2em;
+    }
+    .s1,.s2,.c1,.c2,.h1{
+        height: 4vh;
+        width: 95%;
+        font-size: 1em;
+    }
+    .exi1{
+        width: 20vw;
+        height: 15vh;
+        padding-top: 5vh;
+    }
+    .ex1c,.ex2c,.ex3c,.ex4c{
+        margin-top: -25%;
     }
 }

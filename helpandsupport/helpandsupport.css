@@ -197,3 +197,26 @@ body{
         height: 4vh;
     }
 }
+@media screen and (min-width: 700px) and (max-width: 1000px){
+    main{
+        margin-top: 10vh;
+    }
+    .faqtext{
+        margin-top: 2vh;
+    }
+    .Questions{
+        height: auto;
+    }
+    .QB{
+        height: 10vh;
+    }
+    .Submit{
+        height: 3vh;
+    }
+    .Query{
+        margin-top: 5%;
+    }
+    .SIQ{
+        margin-top: 5%;
+    }
+}
