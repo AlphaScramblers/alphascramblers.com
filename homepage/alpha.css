@@ -215,6 +215,8 @@ body{
     height: 10vh;
     margin-top: 2.5vh;
     font-size: 1.25em;
+    font-family: "Abel", sans-serif;
+    font-weight: 500;
 }
 .strtbut{
     display: flex;
@@ -417,13 +419,13 @@ body{
         width: 30%;
         margin-top: 1.5%;
         height: 3vh;
-        font-size: 0.7em;
+        font-size: 0.85em;
     }
     .strtbut-text{
-        font-size: 0.7em;
+        font-size: 0.9em;
         width: 90%;
         margin-top: 2%;
-        margin-bottom: 2vh;
+        margin-bottom: 4vh;
     }
     .boxes{
         flex-direction: column;
@@ -439,7 +441,10 @@ body{
         font-size: 1.5em;
     }
     .hed1text,.hed2text,.hed3text{
-        font-size: 1em;
+        font-size: 0.9em;
+        text-align: center;
+        width: 90%;
+        text-align: justify;
     }
     .hed1ex,.hed2ex,.hed3ex{
         height: 5vh;

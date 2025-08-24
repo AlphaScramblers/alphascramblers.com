@@ -41,7 +41,8 @@ main{
     text-align: center;
     width: 80%;
     line-height: 25px;
-    font-size: 1.2em;
+    font-size: 1.3em;
+    margin-top: -4%;
 }
 .iu{
     height: 70vh;
@@ -76,16 +77,15 @@ main{
 .text2{
     text-align: center;
     font-weight: 600;
+    font-size: 1.3em;
 }
 .text3{
     line-height: 30px;
-    padding: 5%;
-    display: flex;
-    flex-direction: column;
-    gap: 4vh;
+    padding: 4.5%;
+    font-size: 1.2em;
 }
 .text1{
-    font-size: 2em;
+    font-size: 2.2em;
     font-weight: 700;
     text-align: center;
 }
@@ -104,6 +104,9 @@ dotlottie-wc{
     width: 250px;
     height: 250px;
 }
+.text3 li{
+    margin-bottom: 5%;
+}
 @media screen and (min-width: 0px) and (max-width: 700px){
     .headtext{
         font-size: 1.5em;
@@ -121,9 +124,12 @@ dotlottie-wc{
     }
     .datadata{
         font-size: 0.8em;
-        width: 95%;
+        width: 89%;
         line-height: 20px;
         letter-spacing: 1px;
+        text-align: justify;
+        margin-top: 1%;
+        font-weight: 500;
     }
     .imgdata{
         flex-direction: column;
@@ -150,15 +156,15 @@ dotlottie-wc{
         color: #3b5998;
     }
     .text2{
-        font-size: 1em;
+        font-size: 1.1em;
         color: #3b5998;
+        margin-top: 1vh;
+        margin-bottom: 1vh;
     }
     .text3{
-        font-size: 0.8em;
+        font-size: 0.95em;
         line-height: 20px;
-        gap: 3vh;
-        padding: 2%;
-        color: #5c6b82;
+        padding-left: 8%;
     }
     .texta{
         width: 100%;

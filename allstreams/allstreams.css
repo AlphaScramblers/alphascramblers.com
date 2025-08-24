@@ -194,8 +194,8 @@ h3{
         overflow-x: hidden;
     }
     .career img{
-        width: 80vh;
-        height: 25vh;
+        width: 90vw;
+        margin: 5vw;
     }
     .b{
         font-size: 0.8em;
