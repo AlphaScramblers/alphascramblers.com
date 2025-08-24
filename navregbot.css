@@ -191,8 +191,8 @@
     text-decoration: underline;
 }
 .contactuslogo{
-    height: 10vh;
-    width: 5vw;
+    height: 10%;
+    width: 5.2%;
     font-size: 2em;
     position: fixed;
     top: 75vh;
@@ -259,24 +259,53 @@
 .rightnav{
     display: flex;
     align-items: center;
-    width: 65%;
-    padding-left: 30%;
-    padding-right: 1%;
-    flex-wrap: nowrap;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
+    width: 80%;
+    padding-left: 20%;
 }
-.logname{
-    font-size: 1rem;
+.image{
+    width: 20%;
 }
 .navbar{
-    height: 12vh;
+    height: 10vh;
     width: 100%;
     background-color: #f4f9fd;
     display: flex;
     align-items: center;
     font-family: "Rowdies", sans-serif;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}}
+}
+.contactuslogo{
+    width: 70px;
+    height: 70px;
+}
+.register{
+    height: 45vh;
+    top: 30vh;
+    width: 95vw;
+    left: 2.5vw;
+}
+.contactus{
+    width: 92vw;
+    left: 4vw;
+    top: 27vh;
+}
+.callicon,.mailicon{
+    height: 90px;
+    width: 90px;
+}
+.contactdata{
+    width: 50%;
+}
+.call,.mail{
+    height: 17vh;
+    gap: 2vh;
+}
+.bottom{
+    height: 30vh;
+    margin-top: 0;
+}
+}
 @media screen and (min-width: 0px) and (max-width: 700px){
     .rightnav{
         display: flex;
@@ -320,8 +349,8 @@
         margin-top: 8vh;
     }
     .bottom{
-        margin-top: 2vh;
         height: 30vh;
+        margin-top: 2vh;
     }
     .contactuslogo{
         width: 10vw;

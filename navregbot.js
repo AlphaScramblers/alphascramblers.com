@@ -87,7 +87,7 @@ button.addEventListener("click",(e)=>{
     footer.style.opacity="0.3";
     overlay.classList.add("overlay1");
 })
-if(window.innerWidth>700){
+if(window.innerWidth>1000){
     button.addEventListener("mousedown",(e)=>{
         hasmoved=false
         isdragging = true;

@@ -497,3 +497,86 @@ body{
         font-size: 1em;
     }
 }
+@media screen and (min-width: 700px) and (max-width: 1000px){
+    main{
+        margin-top: 10vh;
+    }
+    .banner-wrapper{
+        height: 30vh;
+    }
+    .text{
+        height: 30vh;
+        line-height: 25px;
+    }
+    .banimg,.banimg3{
+        height: 20vh;
+        width: 45vw;
+        top: 24%;
+        left: 7%;
+    }
+    .head{
+        margin-bottom: 5%;
+    }
+    .strtbut{
+        height: 3vh;
+        width: 20%;
+    }
+    .d1,.d2,.d3,.d4{
+        top: 37.8vh;
+        width: 18px;height: 18px;
+    }
+    .d1{
+        left: 44.5vw;
+    }
+    .d2{
+        left: 48.5vw;
+    }
+    .d3{
+        left: 52.5vw;
+    }
+    .d4{
+        left: 56.5vw;
+    }
+    .box1,.box2,.box3{
+        width: 35vw;
+    }
+    .boxes{
+        gap: 2vw;
+        margin: 1vw;
+        margin-top: 4vh;
+        margin-bottom: 4vh;
+    }
+    .hed1,.hed2,.hed3{
+        font-size: 1.5em;
+    }
+    .hed1text,.hed2text,.hed3text{
+        font-size: 1em;
+    }
+    .hed1ex,.hed2ex,.hed3ex{
+        height: 3vh;
+        border-radius: 10px;
+        margin: 1vh;
+        font-size: 1.3em;
+    }
+    .hed3anim{
+        height: 17vh;
+        width: 100%;
+    }
+    .boxmain{
+        width: 100%;
+        margin-bottom: -8%;
+    }
+    .blogbox11,.blogbox12,.blogbox13,.blogbox14,.blogbox21,.blogbox22,.blogbox23,.blogbox24{
+        height: 6vh;
+        margin-left: 2%;
+    }
+    .readbut{
+        width: 20%;
+        height: 3vh;
+    }
+    .explorebut{
+        height: 3vh;
+        display: flex;
+        align-items: center;
+    }
+}
