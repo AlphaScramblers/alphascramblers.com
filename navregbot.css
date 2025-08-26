@@ -4,12 +4,6 @@
 .body{
     background-color: #f4f9fd;
 }
-.bottom{
-    width: 100%;
-    height: 60vh;
-    background-color: #2F2C41;
-    margin-top: 5vh;
-}
 .navbar{
     top: 0;
     left: 0;
@@ -254,6 +248,58 @@
     font-size: 1.2em;
     cursor: pointer;
     color: white;
+}
+.bottom{
+    width: 100%;
+    height: 60vh;
+    background-color: #2F2C41;
+    margin-top: 5vh;
+}
+.bdata{
+    display: flex;
+    width: 100%;
+    color: white;
+    font-family: "Inter", sans-serif;
+    font-size: 0.9em;
+    height: 100%;
+}
+.bdata a{
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+.ql{
+    width: 25%;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.features{
+    width: 25%;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.s3{
+    width: 25%;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.cnt{
+    width: 25%;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.ql1,.feat,.kn,.help,.chead{
+    margin-bottom: 12%;
+    opacity: 1;
+    font-weight: 900;
 }
 @media screen and (min-width: 700px) and (max-width: 1000px){
 .rightnav{
