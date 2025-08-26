@@ -5,6 +5,7 @@ let overlay=document.querySelector(".overlay");
 let bars = document.querySelector(".navcon");
 let menu = document.querySelector(".navcon-ele");
 let scrolltop = document.querySelector(".top");
+let bottom = document.querySelector(".bottom");
 let currstat="unvis";
 bars.addEventListener("click",()=>{
 if(currstat=="unvis"){
@@ -21,13 +22,22 @@ else{
 overlay.style.height=`${document.documentElement.scrollHeight}px`
 let register = document.querySelector(".register");
 let regbtn = document.querySelector(".login");
+let reg = document.querySelector(".regi");
 let regbtn1 = document.querySelector(".login1");
 let cross= document.querySelector(".cross")
+reg.addEventListener("click",()=>{
+    register.classList.remove("regdis");
+    header.style.opacity="1";
+    main.style.opacity="0.3";
+    bottom.style.opacity="0.3";
+    overlay.classList.add("overlay1");
+    document.body.style.overflow="hidden";
+})
 regbtn.addEventListener("click",()=>{
     register.classList.remove("regdis");
     header.style.opacity="1";
     main.style.opacity="0.3";
-    footer.style.opacity="0.3";
+    bottom.style.opacity="0.3";
     overlay.classList.add("overlay1");
     document.body.style.overflow="hidden";
 })
@@ -35,7 +45,7 @@ regbtn1.addEventListener("click",()=>{
     register.classList.remove("regdis");
     header.style.opacity="1";
     main.style.opacity="0.3";
-    footer.style.opacity="0.3";
+    bottom.style.opacity="0.3";
     overlay.classList.add("overlay1");
     document.body.style.overflow="hidden";
 })
@@ -43,7 +53,7 @@ cross.addEventListener("click",()=>{
     register.classList.add("regdis");
     header.style.opacity="1";
     main.style.opacity="1";
-    footer.style.opacity="1";
+    bottom.style.opacity="1";
     overlay.classList.remove("overlay1");
     document.body.style.overflow="scroll";
 })
@@ -59,12 +69,14 @@ window.addEventListener("scroll",()=>{
     }
 })
 let contactus=document.querySelector(".contactus")
+let contactus1=document.querySelector(".cntus")
+let contactus2=document.querySelector(".cntus1")
 let crossct = document.querySelector(".crossct")
 crossct.addEventListener("click",()=>{
     contactus.classList.add("dis");
     header.style.opacity="1";
     main.style.opacity="1";
-    footer.style.opacity="1";
+    bottom.style.opacity="1";
     overlay.classList.remove("overlay1");
 })
 let button = document.querySelector(".contactuslogo");
@@ -82,7 +94,33 @@ button.addEventListener("click",(e)=>{
     contactus.classList.remove("dis");
     header.style.opacity="1";
     main.style.opacity="0.3";
-    footer.style.opacity="0.3";
+    bottom.style.opacity="0.3";
+    overlay.classList.add("overlay1");
+})
+contactus1.addEventListener("click",(e)=>{
+    if(hasmoved){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        hasmoved=false;
+        return;
+    }
+    contactus.classList.remove("dis");
+    header.style.opacity="1";
+    main.style.opacity="0.3";
+    bottom.style.opacity="0.3";
+    overlay.classList.add("overlay1");
+})
+contactus2.addEventListener("click",(e)=>{
+    if(hasmoved){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        hasmoved=false;
+        return;
+    }
+    contactus.classList.remove("dis");
+    header.style.opacity="1";
+    main.style.opacity="0.3";
+    bottom.style.opacity="0.3";
     overlay.classList.add("overlay1");
 })
 if(window.matchMedia("(pointer: coarse)").matches){
