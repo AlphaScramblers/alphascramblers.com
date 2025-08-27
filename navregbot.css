@@ -275,10 +275,13 @@
     width: 25%;
     padding: 5%;
     padding-bottom: 1%;
-    padding-top: 1.5%;
+    padding-top: 2%;
     display: flex;
     flex-direction: column;
     gap: 5%;
+}
+.ql{
+    gap: 3%;
 }
 .ql1,.feat,.kn,.hands{
     margin-bottom: 15%;
@@ -309,6 +312,9 @@
 }
 .bhead{
     display: flex;
+    font-family: "Inter", sans-serif;
+    margin-bottom: 2%;
+    font-size: 0.9em;
 }
 .blogoimg{
     width: 100%;
