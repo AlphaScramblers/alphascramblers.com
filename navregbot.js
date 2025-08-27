@@ -19,7 +19,7 @@ else{
     menu.classList.add("navcon-ele");
 }
 })
-overlay.style.height=`${document.documentElement.scrollHeight}px`
+// overlay.style.height= document.documentElement.scrollHeight + "px";
 let register = document.querySelector(".register");
 let reg = document.querySelectorAll(".r");
 let cross= document.querySelector(".cross")
@@ -39,7 +39,7 @@ cross.addEventListener("click",()=>{
     main.style.opacity="1";
     bottom.style.opacity="1";
     overlay.classList.remove("overlay1");
-    document.body.style.overflow="scroll";
+    document.body.style.overflow="auto";
 })
 scrolltop.addEventListener("click",()=>{
     window.scrollTo(0,0);

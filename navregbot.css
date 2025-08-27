@@ -1,8 +1,11 @@
 *{
     scroll-behavior: smooth;
 }
-.body{
+html,body{
     background-color: #f4f9fd;
+    overflow-x: hidden;
+    margin: 0%;
+    padding: 0%;
 }
 .navbar{
     top: 0;
@@ -82,16 +85,19 @@
 .register{
     display: flex;
     border: 2px solid black;
-    height: 74%;
+    height: auto;
     width: 62%;
     text-align: center;
     font-family: "Mada", sans-serif;
     position: fixed;
-    top: 18%;
-    left: 19%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
     background-color: white;
     z-index: 100001;
     flex-direction: column;
+    box-sizing: border-box;
+    max-height: 90vh;
 }
 .regdis{
     display: none;
@@ -102,6 +108,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-bottom: 5vh;
 }
 .reglogo1{
     height: 50%;
@@ -137,14 +144,13 @@
     font-size: 1.1em;
 }
 .overlay{
-    height: auto;
     width: 100vw;
     background-color: rgba(0,0,0,0.7);
-    position: absolute;
+    position: fixed;
     top: 0;
-    bottom: 0;
-    z-index: 100000;
+    z-index: 100000;    
     display: none;
+    height: 100vh;
 }
 .overlay1{
     display: block;
@@ -253,7 +259,6 @@
 .bottom{
     width: 100%;
     background-color: #2F2C41;
-    margin-top: 5vh;
     height: auto;
 }
 .bottomdata{
