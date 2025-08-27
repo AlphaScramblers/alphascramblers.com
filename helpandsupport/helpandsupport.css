@@ -4,13 +4,14 @@
 }
 main{
     margin-top: 12vh;
+    overflow-x: hidden;
 }
 body{
     overflow-x: hidden;
 }
 .faqbanner
 {
-    width: 100vw;
+    width: 100%;
     background-color: #D7EEFB;
     display: flex;
     align-items: center;
@@ -133,6 +134,7 @@ body{
     font-size: 1.2em;
     color: white;
     font-weight: 700;
+    margin-bottom: 2%;
 }
 .subbut{
     display: flex;
