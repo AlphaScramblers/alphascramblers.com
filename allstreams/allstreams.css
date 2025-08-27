@@ -6,6 +6,7 @@
 }
 main{
     margin-top: 12vh;
+    overflow-x: hidden;
 }
 body{
     font-family: Arial, sans-serif;
@@ -18,8 +19,8 @@ body{
 .f1{
     display: flex;
     justify-content: center;
-    margin-top: 2vh;
-    margin-bottom: 2vh;
+    margin-top: 4vh;
+    margin-bottom: 10vh;
 }
 .headtext,.headtext1{
     text-align: center;

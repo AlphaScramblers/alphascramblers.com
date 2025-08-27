@@ -50,6 +50,7 @@ body{
     text-decoration: none;
     color: white;
     cursor: pointer;
+    margin-bottom: 2%;
 }
 .blogbox{
     display: flex;
@@ -149,7 +150,6 @@ body{
     display: flex;
     font-size: 1.1em;
     width: 88%;
-    color: #5c6b82;
     height: 40%;
     text-align: justify;
 }
@@ -301,6 +301,7 @@ body{
     font-weight: 700;
     padding: 1%;
     color: #1E293B;
+    letter-spacing: 3px;
 }
 .boxline1{
     display: flex;
@@ -349,7 +350,6 @@ body{
     align-items: center;
     text-align: center;
     font-size: 1.2em;
-    color: #334155;
     padding-top: 1vh;
     font-family: Arial, sans-serif;
     margin: 5%;
@@ -431,7 +431,7 @@ body{
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-top: 0.5vh;
+        margin-top: 5vh;
         margin-bottom: 3vh;
     }
     .box1,.box2,.box3{
