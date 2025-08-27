@@ -301,6 +301,7 @@ body{
     font-weight: 700;
     padding: 1%;
     color: #1E293B;
+    letter-spacing: 3px;
 }
 .boxline1{
     display: flex;
