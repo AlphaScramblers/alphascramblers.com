@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>AlphaScramblers Psychometric Test</title>
+  <link rel="stylesheet" href="test.css"/>
+</head>
+<body>
+  <header class="header">
+    <h1>AlphaScramblers — Stream Selection Psychometric Test</h1>
+    <p class="sub">Answer honestly. Each statement has five choices: Strongly Disagree → Strongly Agree.</p>
+  </header>
+
+  <main class="container">
+    <form id="testForm" class="card">
+      <div class="row">
+        <div class="field">
+          <label for="name">Student Name</label>
+          <input id="name" name="name" type="text" placeholder="Your full name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email (to receive report)</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required>
+        </div>
+      </div>
+
+      <div id="questions"></div>
+
+      <div class="actions">
+        <button type="submit">Submit & Email My Report</button>
+        <p id="status" class="status"></p>
+      </div>
+    </form>
+  </main>
+
+  <footer class="footer">
+    <small>© AlphaScramblers</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
