@@ -5,6 +5,7 @@
 main{
     margin-top: 12vh;
     font-family: "Mada", sans-serif;
+    overflow-x: hidden;
 }
 body{
     overflow-x: hidden;

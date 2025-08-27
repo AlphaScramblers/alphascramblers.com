@@ -90,14 +90,11 @@ html,body{
     text-align: center;
     font-family: "Mada", sans-serif;
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    top: 16%;
+    left: 19%;
     background-color: white;
     z-index: 100001;
     flex-direction: column;
-    box-sizing: border-box;
-    max-height: 90vh;
 }
 .regdis{
     display: none;
@@ -319,7 +316,6 @@ html,body{
 .bottomhead{
     display: flex;
     font-family: "Inter", sans-serif;
-    margin-bottom: 2%;
     font-size: 0.9em;
 }
 .blogoimg{
@@ -388,6 +384,34 @@ html,body{
 }
 }
 @media screen and (min-width: 0px) and (max-width: 700px){
+    .bottomhead{
+        font-size: 0.75em;
+        flex-direction: column;
+    }
+    .bottomtext{
+        padding: 5%;
+        padding-top: 0;
+    }
+    .bt1,.bt2,.bt3,.bt4{
+        margin-bottom: 5%;
+    }
+    .bottomlogo{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .blogoimg{
+        width: 40%;
+    }
+    .ql,.features,.know,.hns,.cnt{
+        font-size: 0.75em;
+    }
+    .ql,.features,.bottoms3,.cnt{
+        padding: 3%;
+    }
+    .bottomdata{
+        padding: 3%;
+    }
     .rightnav{
         display: flex;
         flex-direction: column;
@@ -415,8 +439,9 @@ html,body{
         position: fixed;
         animation-name: navconele;
         animation-duration: 1s;
-        z-index: 1000;
+        z-index: 10000;
         position: fixed;
+        top: 8vh;
     }
     .image,.img{
         width: 100%;

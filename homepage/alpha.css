@@ -50,6 +50,7 @@ body{
     text-decoration: none;
     color: white;
     cursor: pointer;
+    margin-bottom: 2%;
 }
 .blogbox{
     display: flex;
@@ -431,7 +432,7 @@ body{
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-top: 0.5vh;
+        margin-top: 5vh;
         margin-bottom: 3vh;
     }
     .box1,.box2,.box3{
