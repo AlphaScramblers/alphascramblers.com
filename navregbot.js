@@ -21,11 +21,10 @@ else{
 })
 overlay.style.height=`${document.documentElement.scrollHeight}px`
 let register = document.querySelector(".register");
-let regbtn = document.querySelector(".login");
-let reg = document.querySelector(".regi");
-let regbtn1 = document.querySelector(".login1");
+let reg = document.querySelectorAll(".r");
 let cross= document.querySelector(".cross")
-reg.addEventListener("click",()=>{
+reg.forEach(r=>{
+    r.addEventListener("click",()=>{
     register.classList.remove("regdis");
     header.style.opacity="1";
     main.style.opacity="0.3";
@@ -33,21 +32,6 @@ reg.addEventListener("click",()=>{
     overlay.classList.add("overlay1");
     document.body.style.overflow="hidden";
 })
-regbtn.addEventListener("click",()=>{
-    register.classList.remove("regdis");
-    header.style.opacity="1";
-    main.style.opacity="0.3";
-    bottom.style.opacity="0.3";
-    overlay.classList.add("overlay1");
-    document.body.style.overflow="hidden";
-})
-regbtn1.addEventListener("click",()=>{
-    register.classList.remove("regdis");
-    header.style.opacity="1";
-    main.style.opacity="0.3";
-    bottom.style.opacity="0.3";
-    overlay.classList.add("overlay1");
-    document.body.style.overflow="hidden";
 })
 cross.addEventListener("click",()=>{
     register.classList.add("regdis");
