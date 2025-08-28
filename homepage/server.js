@@ -5,16 +5,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ⚠️ Warning: This is a direct injection of a sensitive API key.
-// This is not a recommended security practice.
-// You should use environment variables for production environments.
+
 const API_KEY = "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";
 
 app.post("/generateReport", async (req, res) => {
   try {
     const { answers = {} } = req.body;
 
-    // Sum only numeric answers safely
+    
     const totalScore = Object.values(answers).reduce((sum, v) => {
       const n = parseInt(v, 10);
       return sum + (isNaN(n) ? 0 : n);
@@ -24,7 +22,7 @@ app.post("/generateReport", async (req, res) => {
 You are a career counselor generating a clear stream-selection report after Grade 10.
 Use the psychometric responses to recommend a stream (Science/Commerce/Arts/vocational),
 with reasons, top strengths, and 3-5 actionable improvement tips.
-
+give big report ...
 Total Score: ${totalScore}
 Answers (1–5 per Q): ${JSON.stringify(answers, null, 2)}
 Return plain text only.
@@ -48,7 +46,7 @@ Return plain text only.
 
     const data = await response.json();
 
-    // Basic guard rails / debugging
+   
     if (!response.ok) {
       console.error("OpenRouter error:", data);
       return res.status(502).json({ error: "AI provider error", detail: data });
@@ -62,4 +60,4 @@ Return plain text only.
   }
 });
 
-app.listen(5000, () => console.log("✅ Server running on http://localhost:5000"));
+app.listen(5000, () => console.log(" Server running on http://localhost:5000"));
