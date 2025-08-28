@@ -5,64 +5,27 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Psychometric Test — 30 Questions</title>
   <style>
-    :root{
-      --bg:#f7f8fb;
-      --card:#ffffff;
-      --accent:#6BCFD4;
-      --text:#111827;
-      --muted:#6b7280;
-      --line:#e6e9ef;
+   :root{
+      --bg:#f7f8fb; --card:#ffffff; --accent:#6BCFD4; --text:#111827; --muted:#6b7280; --line:#e6e9ef;
     }
     *{box-sizing:border-box;}
-    body{
-      margin:0;
-      font-family:system-ui,Segoe UI,Roboto,Arial;
-      background:var(--bg);
-      color:var(--text);
-      padding:20px;
-    }
-    .container{
-      max-width:900px;
-      margin:0 auto;
-    }
+    body{ margin:0; font-family:system-ui,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text); padding:20px; }
+    .container{ max-width:900px; margin:0 auto; }
     header{ text-align:center; margin-bottom:16px; }
     header h1{ margin:0; font-size:1.4rem; }
     header p{ margin:6px 0 0; color:var(--muted); }
-
-    form{
-      background:var(--card);
-      border:1px solid var(--line);
-      padding:18px;
-      border-radius:10px;
-      box-shadow:0 8px 24px rgba(15,23,42,0.04);
-    }
-    .question{
-      padding:12px;
-      border-radius:8px;
-      background:#fbfcfd;
-      margin-bottom:12px;
-      border:1px solid #f0f3f6;
-    }
+    form{ background:var(--card); border:1px solid var(--line); padding:18px; border-radius:10px; box-shadow:0 8px 24px rgba(15,23,42,0.04); }
+    .question{ padding:12px; border-radius:8px; background:#fbfcfd; margin-bottom:12px; border:1px solid #f0f3f6; }
     .question p{ margin:0 0 10px; font-weight:600; }
     .options{ display:flex; gap:12px; flex-wrap:wrap; }
-    .opt{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      cursor:pointer;
-      user-select:none;
-      font-size:0.95rem;
-    }
+    .opt{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid var(--line); cursor:pointer; user-select:none; font-size:.95rem; }
     .opt input{ accent-color:var(--accent); }
     .submitRow{ text-align:center; margin-top:18px; }
     button{ background:var(--accent); border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:700; }
-    @media (max-width:640px){
-      .options{ flex-direction:column; }
-    }
+    @media (max-width:640px){ .options{ flex-direction:column; } }
   </style>
+ 
+
 </head>
 <body>
   <div class="container">
@@ -444,6 +407,44 @@
   <h2>AI Personality Report</h2>
   <pre id="reportContent" style="white-space:pre-wrap;"></pre>
 </div>
+ <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("psychTestForm");
+      const box  = document.getElementById("aiReport");
+      const out  = document.getElementById("reportContent");
 
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Collect only question answers (q1..q30)
+        const formData = new FormData(form);
+        const answers = {};
+        for (const [key, value] of formData.entries()) {
+          if (/^q\d+$/.test(key)) answers[key] = value;
+        }
+
+        // Show loading state
+        out.textContent = "Generating report...";
+        box.style.display = "block";
+
+        try {
+          const res = await fetch("http://localhost:5000/generateReport", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ answers })
+          });
+
+          const data = await res.json();
+          if (!res.ok) {
+            out.textContent = data?.error ? `Error: ${data.error}` : "Error generating report.";
+            return;
+          }
+          out.textContent = data.report || "No response from AI.";
+        } catch (err) {
+          out.textContent = "Network error. Is the server running on :5000?";
+        }
+      });
+    });
+  </script>
 </body>
 </html>
