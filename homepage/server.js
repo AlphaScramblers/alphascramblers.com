@@ -1,17 +1,14 @@
 import express from "express";
 import cors from "cors";
 
-// If you're on Node 18+, fetch is built-in. If on older Node, run: npm i node-fetch
-// and uncomment the next line:
-// import fetch from "node-fetch";
-
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ❗️Put your OpenRouter API key in an env var instead of hardcoding
-// On Mac/Linux:  OPENROUTER_API_KEY=sk-or-... node server.js
-const API_KEY = process.env.OPENROUTER_API_KEY || "YOUR_API_KEY_HERE";
+// ⚠️ Warning: This is a direct injection of a sensitive API key.
+// This is not a recommended security practice.
+// You should use environment variables for production environments.
+const API_KEY = "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";
 
 app.post("/generateReport", async (req, res) => {
   try {

@@ -439,7 +439,7 @@
             out.textContent = data?.error ? `Error: ${data.error}` : "Error generating report.";
             return;
           }
-          out.textContent = data.report || "No response from AI.";
+          out.textContent = data.report || "No response from ";
         } catch (err) {
           out.textContent = "Network error. Is the server running on :5000?";
         }
