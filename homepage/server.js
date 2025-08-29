@@ -25,6 +25,7 @@ with reasons, top strengths, and 3-5 actionable improvement tips.
 give big report ...
 Total Score: ${totalScore}
 Answers (1–5 per Q): ${JSON.stringify(answers, null, 2)}
+
 Return plain text only.
 `;
 
