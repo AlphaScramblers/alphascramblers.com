@@ -296,9 +296,6 @@ footer{
     background-color: #2F2C41;
     height: auto;
 }
-.bottomhead{
-    display: none;
-}
 .bottomdata{
     display: flex;
     color: white;
@@ -355,7 +352,7 @@ footer{
     flex-direction: column;
 }
 .bottomhead{
-    display: flex;
+    display: none;
     font-family: "Inter", sans-serif;
     font-size: 0.9em;
 }
