@@ -6,6 +6,10 @@ html,body{
     overflow-x: hidden;
     margin: 0%;
     padding: 0%;
+    overflow-y: auto;
+}
+body{
+    min-height: 100vh;
 }
 .navbar{
     top: 0;
@@ -147,7 +151,7 @@ html,body{
     top: 0;
     z-index: 100000;    
     display: none;
-    height: 100vh;
+    height: 100%;
 }
 .overlay1{
     display: block;
@@ -193,7 +197,7 @@ html,body{
     width: 70px;
     font-size: 2em;
     position: fixed;
-    top: 75vh;
+    bottom: 25vh;
     right: 0.5vw;
     z-index: 10000;
     cursor: pointer;
