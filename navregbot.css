@@ -239,6 +239,7 @@ footer{
     justify-content: center;
     align-items: center;
     user-select: none;
+    display: none;
 }
 .contactdata{
     width: 25vw;

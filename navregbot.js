@@ -146,5 +146,6 @@ window.addEventListener("load", () => {
     document.querySelector(".preloader").style.display = "none";
     document.querySelector("header").style.display = "block";
     document.querySelector("main").style.display = "block";
-    document.querySelector("footer").style.display = "block";   
+    document.querySelector("footer").style.display = "block";
+    button.style.display = "block";
   });
