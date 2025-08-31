@@ -313,20 +313,19 @@ footer{
     opacity: 0.7;
 }
 .ql,.features,.bottoms3,.cnt{
-    width: 25%;
-    padding: 5%;
-    padding-bottom: 1%;
-    padding-top: 2%;
+    width: 20%;
     display: flex;
     flex-direction: column;
-    gap: 5%;
+    margin-left: 5vw;
+    margin-top: 3vh;
 }
 .ql{
     gap: 3%;
 }
 .ql1,.feat,.kn,.hands{
-    margin-bottom: 15%;
+    margin-bottom: 5%;
     font-weight: 900;
+    font-size: 1.1em;
 }
 .chead,.bottoms{
     margin-bottom: 3%;
