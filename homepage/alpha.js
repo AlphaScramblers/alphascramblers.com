@@ -76,8 +76,3 @@ d4.addEventListener("click",()=>{
     d3.style.backgroundColor="white";
     d4.style.backgroundColor="gray";
 })
-window.addEventListener("load", () => {
-  document.body.style.overflowY = "hidden";  
-  document.body.offsetHeight; // forces reflow
-  document.body.style.overflowY = "auto";
-});

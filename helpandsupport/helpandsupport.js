@@ -18,8 +18,3 @@ for(let i=1;i<=10;i++){
     }
 })
 }
-window.addEventListener("load", () => {
-  document.body.style.overflowY = "hidden";  
-  document.body.offsetHeight; // forces reflow
-  document.body.style.overflowY = "auto";
-});
