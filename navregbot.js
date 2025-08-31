@@ -142,3 +142,6 @@ else{
         }
     })
 }
+window.addEventListener("load", () => {
+    document.body.style.overflowY = "auto";
+  });
