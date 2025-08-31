@@ -296,6 +296,9 @@ footer{
     background-color: #2F2C41;
     height: auto;
 }
+.bottomhead{
+    display: none;
+}
 .bottomdata{
     display: flex;
     color: white;
