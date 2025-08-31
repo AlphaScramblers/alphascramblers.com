@@ -148,7 +148,4 @@ window.addEventListener("load", () => {
     document.querySelector("main").style.display = "block";
     document.querySelector("footer").style.display = "block";
     button.style.display = "flex";
-    document.body.style.overflowY = "hidden";  
-    document.body.offsetHeight;
-    document.body.style.overflowY = "auto";
 });
