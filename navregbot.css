@@ -309,27 +309,27 @@ footer{
     opacity: 0.7;
 }
 .features a{
-    /* margin-bottom: 4%; */
+    margin-bottom: 4%;
     opacity: 0.7;
 }
 .ql,.features,.bottoms3,.cnt{
     width: 25%;
-    padding: 5%;
+    /* padding: 5%;
     padding-bottom: 1%;
-    padding-top: 2%;
+    padding-top: 2%; */
     display: flex;
     flex-direction: column;
     gap: 5%;
 }
 .ql{
-    /* gap: 3%; */
+    gap: 3%;
 }
 .ql1,.feat,.kn,.hands{
-    /* margin-bottom: 15%; */
+    margin-bottom: 15%;
     font-weight: 900;
 }
 .chead,.bottoms{
-    /* margin-bottom: 3%; */
+    margin-bottom: 3%;
     font-weight: 900;
 }
 .bottomreg,.cntus,.cntus1{
@@ -337,17 +337,17 @@ footer{
     opacity: 0.7;
 }
 .know{
-    /* margin-bottom: 3%; */
+    margin-bottom: 3%;
 }
 .s21{
-    /* margin-bottom: 3%; */
+    margin-bottom: 3%;
     opacity: 0.7;
 }
 .bottompsycho{
-    /* margin-bottom: 4%; */
+    margin-bottom: 4%;
 }
 .bottomscience,.bottomcommerce,.bottomhumanities{
-    /* margin-bottom: 3%; */
+    margin-bottom: 3%;
     display: flex;
     flex-direction: column;
 }
