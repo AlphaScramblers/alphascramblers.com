@@ -149,3 +149,8 @@ window.addEventListener("load", () => {
     document.querySelector("footer").style.display = "block";
     button.style.display = "flex";
 });
+window.addEventListener("load", () => {
+  document.body.style.overflowY = "hidden";  
+  document.body.offsetHeight;
+  document.body.style.overflowY = "auto";
+});
