@@ -132,6 +132,7 @@ else{
     document.addEventListener("mouseup",(e)=>{
         isdragging = false;
         button.style.cursor = "pointer"
+        hasmoved = false    
         let screenmiddle = window.innerWidth/2;
         let rect = button.getBoundingClientRect();
         if(rect.left<screenmiddle){
