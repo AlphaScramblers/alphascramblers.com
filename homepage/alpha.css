@@ -22,6 +22,7 @@ body{
     font-family: "Mada", sans-serif;
     font-weight: 600;
     text-align: center;
+    display: none;
 }
 .more{
     display: flex;
@@ -53,7 +54,7 @@ body{
     margin-bottom: 2%;
 }
 .blogbox{
-    display: flex;
+    display: none;
 }
 .blogbox1{
     display: flex;
