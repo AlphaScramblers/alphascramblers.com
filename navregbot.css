@@ -354,6 +354,7 @@ footer{
     display: flex;
     font-family: "Inter", sans-serif;
     font-size: 0.9em;
+    height: auto;
 }
 .blogoimg{
     width: 100%;
@@ -361,8 +362,13 @@ footer{
 .bottomlogo{
     width: 100%;
 }
-.bottomlogo1{
+.logobottom1{
     width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+.bottomlogo1{
+    width: 100%;
 }
 .logobottom{
     width: 30%;
@@ -375,6 +381,15 @@ footer{
 }
 .social a{
     margin-right: 1vw;
+}
+.social1{
+    margin-top: -5vh;
+    margin-bottom: 4vh;
+    margin-left: 5vw;
+}
+.social1 a{
+    margin-right: 1vw;
+    color: lightgrey;
 }
 .bottomtext{
     display: flex;
