@@ -60,8 +60,8 @@ main{
     display: flex;
     align-items:flex-end;
     height: auto;
-    margin-bottom: 5vh;
-    margin-top: 5vh;
+    margin-bottom: 2vh;
+    margin-top: 2vh;
 }
 .fullanim{
     display: flex;
