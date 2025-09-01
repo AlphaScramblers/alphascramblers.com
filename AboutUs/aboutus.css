@@ -58,6 +58,7 @@ main{
 }
 .animtext,.animtext2,.animtext3{
     display: flex;
+    align-items:flex-end;
 }
 .fullanim{
     display: flex;
@@ -69,13 +70,15 @@ main{
     justify-content: center;
     align-items: center;
 }
+.aboutimg{
+    width: 35vw;
+}
 .texta{
     display: flex;
     flex-direction: column;
     width: 50vw;
     margin-left: 5vw;
     margin-right: 5vw;
-    margin-bottom: 4vh;
 }
 .text2{
     text-align: center;
