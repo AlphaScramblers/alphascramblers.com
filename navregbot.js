@@ -6,6 +6,13 @@ let bars = document.querySelector(".navcon");
 let menu = document.querySelector(".navcon-ele");
 let bottom = document.querySelector(".bottom");
 let currstat="unvis";
+window.addEventListener("load", () => {
+    document.querySelector(".preloader").style.display = "none";
+    document.querySelector("header").style.display = "block";
+    document.querySelector("main").style.display = "block";
+    document.querySelector("footer").style.display = "block";
+    button.style.display = "flex";
+});
 bars.addEventListener("click",()=>{
 if(currstat=="unvis"){
     currstat="vis"
@@ -39,9 +46,6 @@ cross.addEventListener("click",()=>{
     bottom.style.opacity="1";
     overlay.classList.remove("overlay1");
     document.body.style.overflow="auto";
-})
-scrolltop.addEventListener("click",()=>{
-    window.scrollTo(0,0);
 })
 let calcScrollValue = () => {
     let scrollProgress = document.querySelector(".progress");
@@ -153,10 +157,3 @@ else{
         }
     })
 }
-window.addEventListener("load", () => {
-    document.querySelector(".preloader").style.display = "none";
-    document.querySelector("header").style.display = "block";
-    document.querySelector("main").style.display = "block";
-    document.querySelector("footer").style.display = "block";
-    button.style.display = "flex";
-});
