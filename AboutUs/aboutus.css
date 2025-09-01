@@ -59,7 +59,7 @@ main{
 .animtext,.animtext2,.animtext3{
     display: flex;
     align-items:flex-end;
-    height: 50vh;
+    height: auto;
     margin-bottom: 5vh;
     margin-top: 10vh;
 }
