@@ -61,7 +61,7 @@ main{
     align-items:flex-end;
     height: auto;
     margin-bottom: 5vh;
-    margin-top: 10vh;
+    margin-top: 5vh;
 }
 .fullanim{
     display: flex;
@@ -74,7 +74,7 @@ main{
     align-items: center;
 }
 .aboutimg{
-    width: 35vw;
+    width: 30vw;
 }
 .texta{
     display: flex;
