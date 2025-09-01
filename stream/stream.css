@@ -24,22 +24,22 @@ body{
 }
 .bhead{
     font-family: "Baloo Bhaijaan 2", sans-serif;
-    font-size: 2.7em;
+    font-size: 2.9em;
     font-weight: 700;
 }
 .btext{
     font-family: "Abel", sans-serif;
     line-height: 30px;
-    font-size: 1.2em;
+    font-size: 1.4em;
 }
 .introtext{
     margin: 1.5vw;
-    font-size: 1.1em;
+    font-size: 1.3em;
 }
 .streamintro{
     text-align: center;
     font-family: "Mada", sans-serif;
-    font-size: 3em;
+    font-size: 3.2em;
     font-weight: 600;
 }
 .streamsel{
@@ -65,21 +65,21 @@ body{
     height: 25vh;
 }
 .stop,.ctop,.htop{
-    font-size: 2.3em;
+    font-size: 2.5em;
     font-weight: 600;
     margin: 2.5%;
     color: #3b5998;
 }
 .stext,.ctext,.htext{
     display: flex;
-    font-size: 1.2em;
+    font-size: 1.4em;
     width: 95%;
     color: #5c6b82;
 }
 .exploreintro{
     text-align: center;
     font-family: "Mada", sans-serif;
-    font-size: 2em;
+    font-size: 2.2em;
     font-weight: 600;
     padding-top: 5vh;
 }
@@ -122,13 +122,13 @@ body{
     margin: 3%;
     border-radius: 15px;
     color: white;
-    font-size: 1.3em;
+    font-size: 1.5em;
     font-family: "Baloo Bhaijaan 2", sans-serif;
     font-weight: 600;
     text-decoration: none;
 }
 .h1{
-    font-size: 1.7em;
+    font-size: 1.9em;
     margin-top: 20%;
 }
 .htext{
