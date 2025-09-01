@@ -374,10 +374,8 @@ footer{
     width: 30%;
     display: flex;
     flex-direction: column;
-}
-.social{
-    margin-top: -5vh;
-    margin-left: 4.3vw;
+    align-items: center;
+    gap: 2vh;
 }
 .social a{
     margin-right: 1vw;
