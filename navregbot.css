@@ -610,3 +610,8 @@ footer{
     0%{padding-left:100%}
     100%{padding-left:0%}
 }
+@media screen and (min-width: 1360px){
+    html{
+        font-size: 19px;
+    }
+}
