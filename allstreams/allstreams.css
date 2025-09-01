@@ -103,6 +103,10 @@ body{
     padding: 2%;
     scroll-margin-top: 9vh;
 }
+.fcnew{
+    height: 50vh;
+    width: 90vw;
+}
 .cnf{
     background-color: #e6f0fa;
     border-collapse: collapse;
