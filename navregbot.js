@@ -4,7 +4,6 @@ let footer = document.querySelector("footer");
 let overlay=document.querySelector(".overlay");
 let bars = document.querySelector(".navcon");
 let menu = document.querySelector(".navcon-ele");
-let scrolltop = document.querySelector(".top");
 let bottom = document.querySelector(".bottom");
 let currstat="unvis";
 bars.addEventListener("click",()=>{
@@ -44,14 +43,25 @@ cross.addEventListener("click",()=>{
 scrolltop.addEventListener("click",()=>{
     window.scrollTo(0,0);
 })
-window.addEventListener("scroll",()=>{
-    if(scrollY>innerHeight/4){
-        scrolltop.classList.remove("d");
+let calcScrollValue = () => {
+    let scrollProgress = document.querySelector(".progress");
+    let progressValue = document.querySelector(".progress-value");
+    let pos = document.documentElement.scrollTop;
+    let calcHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let scrollValue = Math.round((pos * 100) / calcHeight);
+    if (scrollY>innerHeight/4) {
+        scrollProgress.style.display = "flex";
     }
     if(scrollY<innerHeight/innerHeight){
-        scrolltop.classList.add("d");
+        scrollProgress.style.display = "none";    
     }
-})
+    scrollProgress.addEventListener("click",()=>{
+        document.documentElement.scrollTop = 0;
+    })
+    scrollProgress.style.background = `conic-gradient(#4d5bf9 ${scrollValue}%, #d7d7d7 ${scrollValue}%)`;
+}
+window.onscroll = calcScrollValue;
+window.onload = calcScrollValue;
 let contactus=document.querySelector(".contactus")
 let contactus1=document.querySelector(".cntus")
 let contactus2=document.querySelector(".cntus1")

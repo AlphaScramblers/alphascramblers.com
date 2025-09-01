@@ -189,19 +189,32 @@ footer{
 .overlay1{
     display: block;
 }
-.top{
+.progress{
+    background-color: #3b5998;
     position: fixed;
-    bottom: 1vh;
-    right: 0.5vw;
-    z-index: 10000;
-    cursor: pointer;
-    background-color: gray;
-    padding: 1%;
-    font-family: "Rowdies", sans-serif;
-    font-weight: lighter;
-}
-.d{
+    bottom: 0;
+    right: 0;
+    margin: 2%;
+    height: 8vh;
+    width: 8vh;
     display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+.progress-value{
+    display: block;
+    height: calc(100% - 15px);
+    width: calc(100% - 15px);
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.9em;
+    color: #001a2e;
 }
 #name,#mail,#contact,#namect,#contactct,#mailct{
     width: 90%;
