@@ -142,6 +142,9 @@ h3{
     margin-top: 5vh;
     margin-bottom: 5vh;
 }
+.fcnew{
+    height: 60vh;
+}
 @media screen and (min-width: 0px) and (max-width: 700px){
     .cnf{
         font-size: 0.6rem;
