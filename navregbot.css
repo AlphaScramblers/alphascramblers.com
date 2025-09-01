@@ -69,7 +69,7 @@ footer{
 }
 .home,.login,.help,.about{
     cursor:pointer;
-    font-size: 1.1em;
+    font-size: 0.9rem;
     font-weight: lighter;
 }
 .explorebut{
@@ -104,7 +104,7 @@ footer{
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     font-family: "Rowdies", sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.7rrem;
 }
 .cross{
     height: 5%;
@@ -112,7 +112,7 @@ footer{
     position: absolute;
     right: 0;
     padding-top: 1%;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     cursor: pointer;
 }
 .regdata{
@@ -163,19 +163,19 @@ footer{
     height: 5vh;
     width: 70%;
     font-weight: 700;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     letter-spacing: 2px;
 }
 .ct{
     background-color: #6BCFD4;
     height: 5vh;
     width: 80%;
-    font-size: 1.1em;
+    font-size: 1.1rem;
     font-weight: 600;
 }
 .regalpha{
     font-weight: 700;
-    font-size: 1.1em;
+    font-size: 1.1rem;
 }
 .overlay{
     width: 100vw;
@@ -213,7 +213,7 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.9em;
+    font-size: 1.9rem;
     color: #001a2e;
 }
 #name,#mail,#contact,#namect,#contactct,#mailct{
@@ -231,7 +231,7 @@ footer{
 }
 .contacthead,.reachhead{
     color: white;
-    font-size: 1.4em;
+    font-size: 1.4rem;
     text-align: center;
     color: black;
     font-weight: 600;
@@ -241,7 +241,7 @@ footer{
 .contactuslogo{
     height: 60px;
     width: 60px;
-    font-size: 1.7em;
+    font-size: 1.7rem;
     position: fixed;
     bottom: 25vh;
     right: 0.2vw;
@@ -262,7 +262,7 @@ footer{
 .callicon,.mailicon{
     height: 10vh;
     width: 5vw;
-    font-size: 2em;
+    font-size: 2rem;
     background-color: #0D1B2A;
     border-radius: 1000px;
     display: flex;
@@ -277,7 +277,7 @@ footer{
     flex-direction: column;
     align-items: center;
     padding: 5%;
-    font-size: 1.2em;
+    font-size: 1.2rem;
 }
 .contactus{
     font-family: "Mada", sans-serif;
@@ -300,7 +300,7 @@ footer{
     position: absolute;
     right: -6%;
     top: -6.5%;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     cursor: pointer;
     color: white;
 }
@@ -321,7 +321,7 @@ footer{
     display: flex;
     color: white;
     font-family: "Inter", sans-serif;
-    font-size: 0.9em;
+    font-size: 0.9rem;
 }
 .bottomdata a{
     text-decoration: none;
@@ -346,12 +346,12 @@ footer{
 .ql1{
     margin-bottom: 0vh;
     font-weight: 900;
-    font-size: 1.1em;
+    font-size: 1.1rem;
 }
 .feat,.kn,.hands{
     margin-bottom: 4vh;
     font-weight: 900;
-    font-size: 1.1em;
+    font-size: 1.1rem;
 }
 .chead,.bottoms{
     margin-bottom: 4vh;
@@ -388,7 +388,7 @@ footer{
 .bottomhead{
     display: flex;
     font-family: "Inter", sans-serif;
-    font-size: 0.9em;
+    font-size: 0.9rem;
     height: auto;
 }
 .blogoimg{
@@ -442,7 +442,7 @@ footer{
 .rightnav{
     display: flex;
     align-items: center;
-    font-size: 0.9rem;
+    font-size: 0.9rrem;
     width: 80%;
     padding-left: 20%;
 }
@@ -490,7 +490,7 @@ footer{
 }
 @media screen and (min-width: 0px) and (max-width: 700px){
     .bottomhead{
-        font-size: 0.75em;
+        font-size: 0.75rem;
         flex-direction: column;
     }
     .bottomtext{
@@ -509,7 +509,7 @@ footer{
         width: 40%;
     }
     .ql,.features,.know,.hns,.cnt{
-        font-size: 0.75em;
+        font-size: 0.75rem;
     }
     .ql,.features,.bottoms3,.cnt{
         padding: 3%;
@@ -520,10 +520,10 @@ footer{
     .rightnav{
         display: flex;
         flex-direction: column;
-        font-size: 0.6rem;
+        font-size: 0.6rrem;
     }
     .logname{
-        font-size: 0.9rem;
+        font-size: 0.9rrem;
     }
     .home,.login,.help,.about{
         display: none;
@@ -565,7 +565,7 @@ footer{
     .contactuslogo{
         width: 10vw;
         height: 5.1vh;
-        font-size: 1em;
+        font-size: 1rem;
         right: 2%;
     }
     .reglogo{

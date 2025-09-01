@@ -9,7 +9,7 @@ main{
 }
 .headtext{
     text-align: center;
-    font-size: 3em;
+    font-size: 3rem;
     color: #05445E;
     padding: 2.5%;
 }
@@ -32,7 +32,7 @@ main{
 .datahead{
     font-family: "mada",sans-serif;
     color: white;
-    font-size: 2em;
+    font-size: 2rem;
 }
 .datadata{
     font-family: "mada",sans-serif;
@@ -41,7 +41,7 @@ main{
     text-align: justify;
     width: 80%;
     line-height: 25px;
-    font-size: 1.3em;
+    font-size: 1.3rem;
     margin-top: -4%;
 }
 .iu{
@@ -86,15 +86,15 @@ main{
 .text2{
     text-align: center;
     font-weight: 600;
-    font-size: 1.3em;
+    font-size: 1.3rem;
 }
 .text3{
     line-height: 30px;
     padding: 4.5%;
-    font-size: 1.2em;
+    font-size: 1.2rem;
 }
 .text1{
-    font-size: 2.2em;
+    font-size: 2.2rem;
     font-weight: 700;
     text-align: center;
 }
@@ -107,7 +107,7 @@ dotlottie-wc{
 }
 @media screen and (min-width: 0px) and (max-width: 700px){
     .headtext{
-        font-size: 1.5em;
+        font-size: 1.5rem;
     }
     .data{
         width: 100%;
@@ -117,11 +117,11 @@ dotlottie-wc{
         font-weight: 600;
     }
     .datahead{
-        font-size: 1.2em;
+        font-size: 1.2rem;
         font-weight: 800;
     }
     .datadata{
-        font-size: 0.8em;
+        font-size: 0.8rem;
         width: 89%;
         line-height: 20px;
         letter-spacing: 1px;
@@ -149,18 +149,18 @@ dotlottie-wc{
         border: 1px solid #cfe0f5
     }
     .text1{
-        font-size: 1.3em;
+        font-size: 1.3rem;
         margin-bottom: 1vh;
         color: #3b5998;
     }
     .text2{
-        font-size: 1.1em;
+        font-size: 1.1rem;
         color: #3b5998;
         margin-top: 1vh;
         margin-bottom: 1vh;
     }
     .text3{
-        font-size: 0.95em;
+        font-size: 0.95rem;
         line-height: 20px;
         padding-left: 8%;
     }
