@@ -344,6 +344,27 @@ footer{
 .ql{
     gap: 7%;
 }
+.ql div:hover{
+    text-decoration: underline;
+}
+.ql a:hover{
+    text-decoration: underline;
+}
+.features a:hover{
+    text-decoration: underline;
+}
+.hov:hover{
+    text-decoration: underline;
+}
+.know a:hover{
+    text-decoration: underline;
+}
+.hns a:hover{
+    text-decoration: underline;
+}
+.cntus1:hover{
+    text-decoration: underline;
+}
 .ql1{
     margin-bottom: 0vh;
     font-weight: 900;
@@ -433,7 +454,7 @@ footer{
     display: flex;
     flex-direction: column;
     color: white;
-    gap: 3vh;
+    gap: 5vh;
     padding: 2%;
     padding-top: 3%;
     opacity: 0.7;
