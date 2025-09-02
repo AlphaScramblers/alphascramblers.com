@@ -96,18 +96,13 @@ body{
     background-size: 100vw 60vh;
 }
 .banimg{
-    width: 40vw;
-    height: 50vh;
-    position: relative;
-    top: 9%;
-    left: 10%;
+    width: 60vw;
+    display: flex;
+    justify-content: end;
 }
-.banimg3{
-    width: 43vw;
-    height: 60vh;
+.banimg1{
+    width: 85%;
     position: relative;
-    top: 0%;
-    left: 10%;
 }
 .text{
     display: flex;
