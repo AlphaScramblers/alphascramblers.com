@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGODB_URI;
+let client;
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
