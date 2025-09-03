@@ -2,16 +2,24 @@ import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGODB_URI;
 let client;
+let clientPromise;
+
+async function connectToDatabase() {
+  if (client) {
+    return client;
+  }
+  if (!clientPromise) {
+    clientPromise = MongoClient.connect(uri);
+  }
+  client = await clientPromise;
+  return client;
+}
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
-      if (!client) {
-        client = new MongoClient(uri);
-        await client.connect();
-      }
-
-      const db = client.db("myDatabase"); // use your db name
+      const client = await connectToDatabase();
+      const db = client.db("myDatabase"); // Use your database name
       const collection = db.collection("contacts");
 
       const result = await collection.insertOne(req.body);
