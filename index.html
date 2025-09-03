@@ -385,7 +385,8 @@
         <div class="contactdata">
             <div class="contacthead">CONTACT US</div>
             <div class="form">
-                <form id="contactForm">
+               <form action="/api/contact" method="POST" id="contactForm">
+
                         <div class="n">
                             <label for="name">NAME:</label><br>
                             <input type="text" name="name" id="namect" placeholder="Enter Your Name"><br>
@@ -430,9 +431,9 @@
     e.preventDefault();
 
     const formData = {
-      name: e.target.name.value,
-      email: e.target.mail.value,
-      contact: e.target.contact.value
+      name: document.getElementById("namect").value,
+      email: document.getElementById("mailct").value,
+      contact: document.getElementById("contactct").value
     };
 
     const res = await fetch("/api/contact", {
@@ -442,8 +443,13 @@
     });
 
     const data = await res.json();
-    alert(data.msg);
+    if (data.success) {
+      alert("✅ Message saved successfully!");
+    } else {
+      alert("❌ Error: " + data.error);
+    }
   });
 </script>
+
 </body>
 </html>
