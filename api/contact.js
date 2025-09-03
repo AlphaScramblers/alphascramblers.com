@@ -1,7 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const uri = "mongodb+srv://aryanrai1402_db_user:grODXJpndQ6CDtbX@cluster0.dyakpji.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"; // stored in Vercel env vars
-let client;
+const uri = process.env.MONGODB_URI;
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
