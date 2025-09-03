@@ -173,6 +173,7 @@ footer{
     width: 80%;
     font-size: 1.1rem;
     font-weight: 600;
+    cursor: pointer;
 }
 .regalpha{
     font-weight: 700;
