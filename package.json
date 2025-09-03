@@ -1,9 +1,28 @@
 {
   "dependencies": {
+    "type": "module",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "mongodb": "^6.19.0",
     "node-fetch": "^3.3.2",
     "nodemailer": "^7.0.5"
-  }
+  },
+  "name": "alphascramblers.com",
+  "version": "1.0.0",
+  "main": "navregbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlphaScramblers/alphascramblers.com.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlphaScramblers/alphascramblers.com/issues"
+  },
+  "homepage": "https://github.com/AlphaScramblers/alphascramblers.com#readme",
+  "description": ""
 }

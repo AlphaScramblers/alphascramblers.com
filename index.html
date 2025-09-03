@@ -385,21 +385,21 @@
         <div class="contactdata">
             <div class="contacthead">CONTACT US</div>
             <div class="form">
-                <form action="">
+                <form id="contactForm">
                         <div class="n">
                             <label for="name">NAME:</label><br>
-                            <input type="text" id="namect" placeholder="Enter Your Name"><br>
+                            <input type="text" name="name" id="namect" placeholder="Enter Your Name"><br>
                         </div>
                         <div class="e">
                             <label for="mail">EMAIL ID:</label><br>
-                            <input type="text" id="mailct" placeholder="Enter Your Email Id"><br>
+                            <input type="text" name="mail" id="mailct" placeholder="Enter Your Email Id"><br>
                         </div>
                         <div class="c">
                             <label for="contact">CONTACT NO.:</label><br>
-                            <input type="text" id="contactct" placeholder="Enter Your Contact No."><br>
+                            <input type="text" name="contact" id="contactct" placeholder="Enter Your Contact No."><br>
                         </div>
                         <div class="ctbut">
-                            <button class="ct">Talk To An Expert</button>
+                            <button class="submit" name="ctbut" type="submit">Talk To An Expert</button>
                         </div>
                 </form>
             </div>
@@ -425,5 +425,25 @@
     </div>
     <script src="./homepage/alpha.js"></script>
     <script src="../navregbot.js"></script>
+    <script>
+  document.getElementById("contactForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      name: e.target.name.value,
+      email: e.target.mail.value,
+      contact: e.target.contact.value
+    };
+
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await res.json();
+    alert(data.msg);
+  });
+</script>
 </body>
 </html>
