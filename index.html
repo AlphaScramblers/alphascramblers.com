@@ -400,7 +400,7 @@
                             <input type="text" name="contact" id="contactct" placeholder="Enter Your Contact No."><br>
                         </div>
                         <div class="ctbut">
-                            <button class="submit" name="ctbut" type="submit">Talk To An Expert</button>
+                            <button class="ct" class="submit" name="ctbut" type="submit">Talk To An Expert</button>
                         </div>
                 </form>
             </div>
@@ -426,30 +426,5 @@
     </div>
     <script src="./homepage/alpha.js"></script>
     <script src="../navregbot.js"></script>
-    <script>
-  document.getElementById("contactForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const formData = {
-      name: document.getElementById("namect").value,
-      mail: document.getElementById("mailct").value,
-      contact: document.getElementById("contactct").value
-    };
-
-    const res = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      alert("✅ Message saved successfully!");
-    } else {
-      alert("❌ Error: " + data.error);
-    }
-  });
-</script>
-
 </body>
 </html>

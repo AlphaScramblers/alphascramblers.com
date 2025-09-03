@@ -157,3 +157,25 @@ else{
         }
     })
 }
+document.getElementById("contactForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      name: document.getElementById("namect").value,
+      mail: document.getElementById("mailct").value,
+      contact: document.getElementById("contactct").value
+    };
+
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert("✅ Message saved successfully!");
+    } else {
+      alert("❌ Error: " + data.error);
+    }
+  });
