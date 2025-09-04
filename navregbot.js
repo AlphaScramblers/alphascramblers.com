@@ -161,10 +161,12 @@ let talk = document.querySelector(".ct");
 let namect = document.querySelector("#namect");
 let mailct = document.querySelector("#mailct");
 let contactct = document.querySelector("#contactct");
+let cloader = document.querySelector(".contactloader");
 document.getElementById("contactForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    const formData = {
+    cloader.style.display="flex";
+    try{
+        const formData = {
       name: document.getElementById("namect").value,
       mail: document.getElementById("mailct").value,
       contact: document.getElementById("contactct").value
@@ -185,5 +187,15 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
       contactct.disabled = true;
     } else {
       alert("❌ Error: " + data.error);
+    }
+    }
+    catch (err) {
+        alert("❌ Something went wrong.");
+    } 
+    finally {
+        cloader.style.display = "none";
+        header.style.opacity="1";
+        main.style.opacity="1";
+        bottom.style.opacity="1";
     }
   });

@@ -461,6 +461,28 @@ footer{
     opacity: 0.7;
     margin-bottom: 2vh;
 }
+.contactloader{
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+.cloader{
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    border: 6px solid #ddd;
+    border-top: 6px solid #6BCFD4;
+    animation: cspin 1s linear infinite;
+}
+@keyframes cspin{
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+}
 @media screen and (min-width: 700px) and (max-width: 1000px){
 .rightnav{
     display: flex;
