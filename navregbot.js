@@ -203,5 +203,6 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
         main.style.opacity="1";
         bottom.style.opacity="1";
         overlay.classList.remove("overlay1");
+        contactus.style.opacity="1"
     }
   });
