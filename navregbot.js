@@ -180,7 +180,9 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
     if (data.success) {
       talk.innerHTML="Query Submitted";
       talk.disabled = true;
-      
+      namect.disabled = true;
+      mailct.disabled = true;
+      contactct.disabled = true;
     } else {
       alert("❌ Error: " + data.error);
     }
