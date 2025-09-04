@@ -158,9 +158,9 @@ else{
     })
 }
 let talk = document.querySelector(".ct");
-let namect = document.querySelector(".namect");
-let mailct = document.querySelector(".mailct");
-let contactct = document.querySelector(".contactct");
+let namect = document.querySelector("#namect");
+let mailct = document.querySelector("#mailct");
+let contactct = document.querySelector("#contactct");
 document.getElementById("contactForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
