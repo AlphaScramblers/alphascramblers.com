@@ -158,6 +158,9 @@ else{
     })
 }
 let talk = document.querySelector(".ct");
+let namect = document.querySelector(".namect");
+let mailct = document.querySelector(".mailct");
+let contactct = document.querySelector(".contactct");
 document.getElementById("contactForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -176,6 +179,8 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
     const data = await res.json();
     if (data.success) {
       talk.innerHTML="Query Submitted";
+      talk.disabled = true;
+      
     } else {
       alert("❌ Error: " + data.error);
     }
