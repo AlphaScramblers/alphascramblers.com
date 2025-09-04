@@ -175,7 +175,7 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
 
     const data = await res.json();
     if (data.success) {
-      talk.innerHTML="Query Submitted"
+      talk.innerHTML="Query Submitted";
     } else {
       alert("❌ Error: " + data.error);
     }
