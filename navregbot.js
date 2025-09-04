@@ -165,13 +165,14 @@ let cloader = document.querySelector(".contactloader");
 document.getElementById("contactForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
-    try{
-        const formData = {
+    contactus.style.opacity="0.3";
+    const formData = {
       name: document.getElementById("namect").value,
       mail: document.getElementById("mailct").value,
       contact: document.getElementById("contactct").value
     };
-
+    
+    try{
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -194,8 +195,6 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
     } 
     finally {
         cloader.style.display = "none";
-        header.style.opacity="1";
-        main.style.opacity="1";
-        bottom.style.opacity="1";
+        contactus.style.opacity="1";
     }
   });

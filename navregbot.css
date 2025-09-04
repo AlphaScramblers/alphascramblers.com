@@ -470,6 +470,7 @@ footer{
     top: 0;
     left: 0;
     position: fixed;
+    z-index: 1000000000;
 }
 .cloader{
     width: 50px;
