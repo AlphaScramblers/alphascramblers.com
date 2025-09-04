@@ -165,7 +165,7 @@ let cloader = document.querySelector(".contactloader");
 document.getElementById("contactForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
-    contactus.style.opacity="0.3";
+    overlay.classList.add("overlay1");
     const formData = {
       name: document.getElementById("namect").value,
       mail: document.getElementById("mailct").value,
@@ -195,6 +195,6 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
     } 
     finally {
         cloader.style.display = "none";
-        contactus.style.opacity="1";
+        overlay.classList.remove("overlay1");
     }
   });
