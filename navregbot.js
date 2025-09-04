@@ -157,6 +157,7 @@ else{
         }
     })
 }
+let talk = document.querySelector(".ct");
 document.getElementById("contactForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -174,7 +175,7 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
 
     const data = await res.json();
     if (data.success) {
-      alert("✅ Message saved successfully!");
+      talk.innerHTML="Query Submitted"
     } else {
       alert("❌ Error: " + data.error);
     }
