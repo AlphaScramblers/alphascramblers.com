@@ -195,6 +195,6 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
     } 
     finally {
         cloader.style.display = "none";
-        contactus.style.opacity="1";
+        contactus.style.display = "none";
     }
   });
