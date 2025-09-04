@@ -166,6 +166,9 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
     contactus.style.opacity="0.3";
+    header.style.opacity="0";
+    main.style.opacity="0";
+    bottom.style.opacity="0";
     const formData = {
       name: document.getElementById("namect").value,
       mail: document.getElementById("mailct").value,
@@ -195,6 +198,10 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
     } 
     finally {
         cloader.style.display = "none";
-        contactus.style.display = "none";
+        contactus.classList.add("dis");
+        header.style.opacity="1";
+        main.style.opacity="1";
+        bottom.style.opacity="1";
+        overlay.classList.remove("overlay1");
     }
   });
