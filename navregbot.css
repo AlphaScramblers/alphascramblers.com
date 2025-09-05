@@ -105,7 +105,7 @@ footer{
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     font-family: "Rowdies", sans-serif;
-    font-size: 0.7rrem;
+    font-size: 0.7rem;
 }
 .cross{
     height: 5%;
@@ -117,57 +117,6 @@ footer{
     cursor: pointer;
     color: white;
 }
-.regdata{
-    display: flex;
-    padding-top: 5%;
-}
-.register{
-    display: flex;
-    border: 2px solid black;
-    height: auto;
-    width: 62%;
-    text-align: center;
-    font-family: "Mada", sans-serif;
-    position: fixed;
-    top: 16%;
-    left: 19%;
-    background-color: white;
-    z-index: 100001;
-    flex-direction: column;
-}
-.regdis{
-    display: none;
-}
-.regtext,.reglogo{
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 5vh;
-}
-.reglogo1{
-    height: 60%;
-    width: auto;
-}
-.regbody{
-    border: 1px solid black;
-    text-align: left;
-    width: 70%;
-    padding: 5%;
-}
-.regbut,.ctbut{
-    display: flex;
-    justify-content: center;
-}
-.reg{
-    background-color: #6BCFD4;
-    height: 5vh;
-    width: 70%;
-    font-weight: 700;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-}
 .ct{
     background-color: #6BCFD4;
     height: 5vh;
@@ -175,10 +124,6 @@ footer{
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
-}
-.regalpha{
-    font-weight: 700;
-    font-size: 1.1rem;
 }
 .overlay{
     width: 100vw;

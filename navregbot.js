@@ -26,8 +26,6 @@ else{
 }
 })
 // overlay.style.height= document.documentElement.scrollHeight + "px";
-// let register = document.querySelector(".register");
-// let reg = document.querySelectorAll(".r");
 let cross= document.querySelector(".cross")
 let alphalogin = document.querySelector(".alphalogin");
 let reg = document.querySelectorAll(".r");
