@@ -449,7 +449,7 @@ footer{
   justify-content: center;
 }
 .vb{
-    width: 45vw;
+    width: 40vw;
     height: 80vh;
 }
 .start{
@@ -472,18 +472,32 @@ footer{
     font-size: 0.9rem;
     margin: 2%;
 }
+.member1{
+    display: flex;
+    padding: 2%;
+    color: #ddd;
+    padding-left: 0;
+    gap: 1vw;
+    font-size: 1rem;
+    margin: 11%;
+    margin-top: 2%;
+}
 .log{
     color: blue;
     cursor: pointer;
 }
-#logfname,#loglname,#logmail,#logpass{
+.caa{
+    color: blue;
+    cursor: pointer;
+}
+#logfname,#loglname,#logmail,#logpass1,#logpass2,#logname{
     height: 6vh;
     width: 14vw;
     border-radius: 10px;
     padding-left: 1vw;
     margin: 2%;
 }
-#logmail,#logpass{
+#logmail,#logpass1,#logpass2,#logname{
     width: 30vw;
 }
 #logfname{
@@ -491,6 +505,21 @@ footer{
 }
 #loglname{
     margin-left: 1%;
+}
+.accdetails{
+    padding: 2%;
+    color: #ddd;
+    padding-left: 0;
+    font-size: 1rem;
+    margin: 2%;
+    margin-top: 0%;
+}
+.fp{
+    margin-left: 3%;
+    color: #052f97;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    cursor: pointer;
 }
 .logsub{
     width: 20vw;
@@ -502,6 +531,20 @@ footer{
     color: white;
     font-weight: 800;
     margin-left: 6vw;
+    cursor: pointer;
+}
+.logsignin{
+    width: 20vw;
+    margin: 2%;
+    height: 6vh;
+    border-radius: 20px;
+    background-color:#052f97;
+    border: 0;
+    color: white;
+    font-weight: 800;
+    margin-left: 6vw;
+    cursor: pointer;
+    margin-top: 4vh;
 }
 .alphalogin{
     display: flex;
@@ -517,6 +560,26 @@ footer{
     left: 5vw;
 }
 .alphadis{
+    display: none;
+}
+.loginform{
+    width: 60vw;
+    padding: 1vw;
+    background-image: linear-gradient(
+    to right,
+    #0a0a0a 0%,
+    #001a4d 50%,
+    #052f97 90%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  display: none;
+}
+.signdis{
+    display: none;
+}
+.logdis{
     display: none;
 }
 @media screen and (min-width: 700px) and (max-width: 1000px){

@@ -207,4 +207,18 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
         overlay.classList.remove("overlay1");
         contactus.style.opacity="1"
     }
-  });
+});
+let loginform = document.querySelector(".loginform");
+let signup = document.querySelector(".signup");
+let caa = document.querySelector(".caa");
+let log = document.querySelector(".log");
+log.addEventListener("click",()=>{
+    signup.classList.add("signdis");
+    loginform.classList.remove("logdis");
+    loginform.style.display="flex"
+})
+caa.addEventListener("click",()=>{
+    signup.classList.remove("signdis");
+    loginform.classList.add("logdis")
+    loginform.style.display="none"
+})
