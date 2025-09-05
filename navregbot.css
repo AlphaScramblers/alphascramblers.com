@@ -111,7 +111,7 @@ footer{
     height: 5%;
     width: 5%;
     position: absolute;
-    left: 88.5vw;
+    left: 78.5vw;
     padding-top: 0.1%;
     font-size: 1.2rem;
     cursor: pointer;
@@ -124,6 +124,10 @@ footer{
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
+}
+.ctbut{
+    display: flex;
+    justify-content: center;
 }
 .overlay{
     width: 100vw;
@@ -445,8 +449,8 @@ footer{
   justify-content: center;
 }
 .vb{
-    width: 50vw;
-    height: 90vh;
+    width: 45vw;
+    height: 80vh;
 }
 .start{
     font-size: 1.1rem;
@@ -502,15 +506,15 @@ footer{
 .alphalogin{
     display: flex;
     position: fixed;
-    height: 90vh;
-    width: 90vw;
+    height: 80vh;
+    width: 80vw;
     background-size: cover;
     margin-left: 5vw;
     border-radius: 50px;
     font-family: Arial, Helvetica, sans-serif;
     z-index: 100001;
-    top: 5vh;
-    left: 0vw;
+    top: 10vh;
+    left: 5vw;
 }
 .alphadis{
     display: none;
