@@ -26,26 +26,30 @@ else{
 }
 })
 // overlay.style.height= document.documentElement.scrollHeight + "px";
-let register = document.querySelector(".register");
-let reg = document.querySelectorAll(".r");
+// let register = document.querySelector(".register");
+// let reg = document.querySelectorAll(".r");
 let cross= document.querySelector(".cross")
+let alphalogin = document.querySelector(".alphalogin");
+let reg = document.querySelectorAll(".r");
 reg.forEach(r=>{
     r.addEventListener("click",()=>{
-    register.classList.remove("regdis");
+    alphalogin.classList.remove("alphadis");
     header.style.opacity="1";
     main.style.opacity="0.3";
     bottom.style.opacity="0.3";
     overlay.classList.add("overlay1");
     document.body.style.overflow="hidden";
+    document.documentElement.style.overflow = "hidden";
 })
 })
 cross.addEventListener("click",()=>{
-    register.classList.add("regdis");
+    alphalogin.classList.add("alphadis");
     header.style.opacity="1";
     main.style.opacity="1";
     bottom.style.opacity="1";
     overlay.classList.remove("overlay1");
     document.body.style.overflow="auto";
+    document.documentElement.style.overflow = "auto";
 })
 let calcScrollValue = () => {
     let scrollProgress = document.querySelector(".progress");
