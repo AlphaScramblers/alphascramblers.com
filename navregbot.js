@@ -258,6 +258,7 @@ logsub.addEventListener("click", async (e) => {
             logpass1.readOnly = true
             logsub.disabled = true
             logsub.innerHTML="Account Created"
+            error1.style.display = "none";  
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
             error1.style.display = "block";  
