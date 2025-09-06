@@ -228,7 +228,8 @@ let logmob = document.getElementById("logmob");
 let logmail = document.getElementById("logmail");
 let logpass1 = document.getElementById("logpass1");
 let error1 = document.querySelector(".error")
-document.querySelector(".logsub").addEventListener("click", async (e) => {
+let logsub = document.querySelector(".logsub")
+logsub.addEventListener("click", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
     alphalogin.style.opacity="0.3";
