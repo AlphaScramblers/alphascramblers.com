@@ -232,6 +232,9 @@ let logsub = document.querySelector(".logsub")
 let profile = document.querySelector(".profile")
 let profile1 = document.querySelector(".profile1")
 let login = document.querySelector(".login")
+let logpass2 = document.getElementById("logpass2");
+let logname = document.getElementById("logname");
+let logsignin = document.querySelector(".logsignin");
 logsub.addEventListener("click", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
@@ -253,7 +256,6 @@ logsub.addEventListener("click", async (e) => {
             body: JSON.stringify({ firstName, lastName, email, password,mobileno }),
         });
         const data = await res.json();
-            console.log("Raw API Response:", res.status, data);
         if (data.success) {
             logfname.readOnly = true
             loglname.readOnly = true
@@ -287,6 +289,14 @@ logsub.addEventListener("click", async (e) => {
   });
   document.querySelector(".logsignin").addEventListener("click", async (e) => {
     e.preventDefault();
+    cloader.style.display="flex";
+    alphalogin.style.opacity="0.3";
+    header.style.opacity="0";
+    main.style.opacity="0";
+    bottom.style.opacity="0";
+    overlay.classList.add("overlay1");
+    alphalogin.classList.remove("alphadis");
+    try{
     const email = document.getElementById("logname").value;
     const password = document.getElementById("logpass2").value;
     const res = await fetch("/api/login", {
@@ -295,11 +305,33 @@ logsub.addEventListener("click", async (e) => {
       body: JSON.stringify({ email, password }),
     });
     const data = await res.json();
-    console.log(data);
     if (data.success) {
-      alert("Login successful!");
-      localStorage.setItem("userProfile", JSON.stringify(data.profile));
+        alert("Login successful!");
+        localStorage.setItem("userProfile", JSON.stringify(data.profile));
+        error1.style.display = "none";
+        login.style.display="none";
+        profile.style.display="block"
+        profile1.style.display="block"  
+        logsignin.innerHTML="Signed In Successfully"
+        logname.readOnly=true;
+        logpass2.readOnly=true;
+        logsignin.disabled=true;
     } else {
-      alert(data.error);
+        error1.innerHTML = data.message || "Something went wrong!";
+        error1.style.display = "block"; 
+    }
+    }
+    catch (err){
+        alert("❌ Something went wrong.");
+    }
+    finally{
+        cloader.style.display = "none";
+        header.style.opacity="1";
+        main.style.opacity="1";
+        bottom.style.opacity="1";
+        overlay.classList.remove("overlay1");
+        alphalogin.style.opacity="1"
+        document.body.style.overflow="auto";
+        document.documentElement.style.overflow = "auto";
     }
   });
