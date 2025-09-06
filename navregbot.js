@@ -262,13 +262,13 @@ logsub.addEventListener("click", async (e) => {
             logpass1.readOnly = true
             logsub.disabled = true
             logsub.innerHTML="Account Created"
-            error1.style.display = "none";  
+            error1.style.display = "none";
+            login.style.display="none";
+            profile.style.display="block"
+            profile1.style.display="block"  
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
             error1.style.display = "block"; 
-            login.style.display="block";
-            profile.style.display="none"
-            profile1.style.display="none" 
         }
     }
     catch (err) {
@@ -283,9 +283,6 @@ logsub.addEventListener("click", async (e) => {
         alphalogin.style.opacity="1"
         document.body.style.overflow="auto";
         document.documentElement.style.overflow = "auto";
-        login.style.display="none";
-        profile.style.display="block"
-        profile1.style.display="block"
     }
   });
   document.querySelector(".logsignin").addEventListener("click", async (e) => {
