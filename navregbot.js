@@ -251,11 +251,11 @@ logsub.addEventListener("click", async (e) => {
         const data = await res.json();
             console.log("Raw API Response:", res.status, data);
         if (data.success) {
-            logfname.disabled = true
-            loglname.disabled = true
-            logmail.disabled = true
-            logmob.disabled = true
-            logpass1.disabled = true
+            logfname.readOnly = true
+            loglname.readOnly = true
+            logmail.readOnly = true
+            logmob.readOnly = true
+            logpass1.readOnly = true
             logsub.disabled = true
             logsub.innerHTML="Account Created"
         } else {
