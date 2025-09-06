@@ -235,7 +235,7 @@ document.querySelector(".logsub").addEventListener("click", async (e) => {
     header.style.opacity="0";
     main.style.opacity="0";
     bottom.style.opacity="0";
-    alphalogin.classList.remove("signdis");
+    alphalogin.classList.remove("alphadis");
     const firstName = document.getElementById("logfname").value;
     const lastName = document.getElementById("loglname").value;
     const email = document.getElementById("logmail").value;
@@ -266,7 +266,7 @@ document.querySelector(".logsub").addEventListener("click", async (e) => {
     }
     finally{
         cloader.style.display = "none";
-        alphalogin.classList.add("signdis");
+        alphalogin.classList.add("alphadis");
         header.style.opacity="1";
         main.style.opacity="1";
         bottom.style.opacity="1";
