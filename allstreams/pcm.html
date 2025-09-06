@@ -491,18 +491,19 @@
         <div class="contactdata">
             <div class="contacthead">CONTACT US</div>
             <div class="form">
-                <form action="">
+               <form action="/api/contact" method="POST" id="contactForm">
+
                         <div class="n">
                             <label for="name">NAME:</label><br>
-                            <input type="text" id="namect" placeholder="Enter Your Name"><br>
+                            <input type="text" name="name" id="namect" placeholder="Enter Your Name"><br>
                         </div>
                         <div class="e">
                             <label for="mail">EMAIL ID:</label><br>
-                            <input type="text" id="mailct" placeholder="Enter Your Email Id"><br>
+                            <input type="text" name="mail" id="mailct" placeholder="Enter Your Email Id"><br>
                         </div>
                         <div class="c">
                             <label for="contact">CONTACT NO.:</label><br>
-                            <input type="text" id="contactct" placeholder="Enter Your Contact No."><br>
+                            <input type="text" name="contact" id="contactct" placeholder="Enter Your Contact No."><br>
                         </div>
                         <div class="ctbut">
                             <button class="ct" class="submit" name="ctbut" type="submit">Talk To An Expert</button>
