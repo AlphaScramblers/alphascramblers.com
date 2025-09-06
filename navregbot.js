@@ -272,6 +272,7 @@ logsub.addEventListener("click", async (e) => {
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
             error1.style.display = "block"; 
+            overlay.classList.add("overlay1");
         }
     }
     catch (err) {
@@ -319,6 +320,7 @@ logsub.addEventListener("click", async (e) => {
     } else {
         error2.innerHTML = data.message || "Something went wrong!";
         error2.style.display = "block";     
+        overlay.classList.add("overlay1");
     }
     }
     catch (err){
