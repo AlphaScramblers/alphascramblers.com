@@ -265,7 +265,10 @@ logsub.addEventListener("click", async (e) => {
             error1.style.display = "none";  
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
-            error1.style.display = "block";  
+            error1.style.display = "block"; 
+            login.style.display="block";
+            profile.style.display="none"
+            profile1.style.display="none" 
         }
     }
     catch (err) {
