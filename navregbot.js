@@ -236,6 +236,7 @@ logsub.addEventListener("click", async (e) => {
     header.style.opacity="0";
     main.style.opacity="0";
     bottom.style.opacity="0";
+    overlay.classList.add("overlay1");
     alphalogin.classList.remove("alphadis");
     const firstName = document.getElementById("logfname").value;
     const lastName = document.getElementById("loglname").value;
