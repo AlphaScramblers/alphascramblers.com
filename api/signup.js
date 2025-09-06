@@ -10,9 +10,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, mobileno } = req.body;
 
-    if (!firstName || !lastName || !email || !password) {
+    if (!firstName || !lastName || !email || !password|| !mobileno) {
       return res.status(400).json({ error: "All fields required" });
     }
 
@@ -32,6 +32,7 @@ export default async function handler(req, res) {
       firstName,
       lastName,
       email,
+      mobileno,
       password: hashedPassword,
     });
 
