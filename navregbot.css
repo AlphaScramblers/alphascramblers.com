@@ -107,6 +107,9 @@ footer{
     font-family: "Rowdies", sans-serif;
     font-size: 0.7rem;
 }
+.r{
+    display: block;
+}
 .profile,.profile1{
     display: none;
 }
