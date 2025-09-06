@@ -222,12 +222,12 @@ caa.addEventListener("click",()=>{
     loginform.classList.add("logdis")
     loginform.style.display="none"
 })
-let logfname = getElementById("logfname");
-let loglname = getElementById("loglname");
-let logmob = getElementById("logmob");
-let logmail = getElementById("logmail");
-let logpass1 = getElementById("logpass1");
-let logsub = getElementById("logsub");
+let logfname = document.getElementById("logfname");
+let loglname = document.getElementById("loglname");
+let logmob = document.getElementById("logmob");
+let logmail = document.getElementById("logmail");
+let logpass1 = document.getElementById("logpass1");
+let logsub = document.getElementById("logsub");
 document.querySelector(".logsub").addEventListener("click", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
