@@ -262,7 +262,7 @@ document.querySelector(".logsub").addEventListener("click", async (e) => {
             error.style.display="block"
         }
     }
-    catch(err){
+    catch (err) {
         alert("❌ Something went wrong.");
     }
     finally{
