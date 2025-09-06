@@ -240,12 +240,12 @@ document.querySelector(".logsub").addEventListener("click", async (e) => {
     const email = document.getElementById("logmail").value;
     const mobileno=document.getElementById("logmob").value;
     const password = document.getElementById("logpass1").value;
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firstName, lastName, email, password,mobileno }),
-    });
     try{
+        const res = await fetch("/api/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ firstName, lastName, email, password,mobileno }),
+        });
         const data = await res.json();
             console.log(data);
         if (data.success) {
