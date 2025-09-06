@@ -490,14 +490,14 @@ footer{
     color: blue;
     cursor: pointer;
 }
-#logfname,#loglname,#logmail,#logpass1,#logpass2,#logname{
+#logfname,#loglname,#logmail,#logpass1,#logpass2,#logname,#logmob{
     height: 6vh;
     width: 14vw;
     border-radius: 10px;
     padding-left: 1vw;
     margin: 2%;
 }
-#logmail,#logpass1,#logpass2,#logname{
+#logmail,#logpass1,#logpass2,#logname,#logmob{
     width: 30vw;
 }
 #logfname{
