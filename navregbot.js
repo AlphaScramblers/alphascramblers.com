@@ -231,6 +231,7 @@ let error1 = document.querySelector(".error")
 let logsub = document.querySelector(".logsub")
 let profile = document.querySelector(".profile")
 let profile1 = document.querySelector(".profile1")
+let login = document.querySelector(".login")
 logsub.addEventListener("click", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
@@ -279,7 +280,7 @@ logsub.addEventListener("click", async (e) => {
         alphalogin.style.opacity="1"
         document.body.style.overflow="auto";
         document.documentElement.style.overflow = "auto";
-        r.classList.add("navlogindis");
+        login.style.display="none";
         profile.style.display="block"
         profile1.style.display="block"
     }
