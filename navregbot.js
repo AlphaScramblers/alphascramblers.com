@@ -228,10 +228,12 @@ let logmob = document.getElementById("logmob");
 let logmail = document.getElementById("logmail");
 let logpass1 = document.getElementById("logpass1");
 let logsub = document.getElementById("logsub");
+let logologin = document.querySelector(".logologin");
 document.querySelector(".logsub").addEventListener("click", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
     signup.style.opacity="0.3";
+    logologin.style.opacity="0.3";
     header.style.opacity="0";
     main.style.opacity="0";
     bottom.style.opacity="0";
@@ -266,6 +268,7 @@ document.querySelector(".logsub").addEventListener("click", async (e) => {
     finally{
         cloader.style.display = "none";
         signup.classList.add("signdis");
+        logologin.classList.add("signdis");
         header.style.opacity="1";
         main.style.opacity="1";
         bottom.style.opacity="1";
