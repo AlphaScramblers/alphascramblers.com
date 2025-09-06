@@ -308,7 +308,7 @@ logsub.addEventListener("click", async (e) => {
     const data = await res.json();
     if (data.success) {
         localStorage.setItem("userProfile", JSON.stringify(data.profile));
-        error1.style.display = "none";
+        error2.style.display = "none";
         login.style.display="none";
         profile.style.display="block"
         profile1.style.display="block"  
