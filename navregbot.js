@@ -271,6 +271,8 @@ document.querySelector(".logsub").addEventListener("click", async (e) => {
         bottom.style.opacity="1";
         overlay.classList.remove("overlay1");
         alphalogin.style.opacity="1"
+        document.body.style.overflow="auto";
+        document.documentElement.style.overflow = "auto";
     }
   });
   document.querySelector(".logsignin").addEventListener("click", async (e) => {
