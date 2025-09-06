@@ -248,7 +248,7 @@ document.querySelector(".logsub").addEventListener("click", async (e) => {
             body: JSON.stringify({ firstName, lastName, email, password,mobileno }),
         });
         const data = await res.json();
-            console.log(data);
+            console.log("Raw API Response:", res.status, data);
         if (data.success) {
             logfname.disabled = true
             loglname.disabled = true
