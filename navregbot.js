@@ -235,6 +235,7 @@ document.querySelector(".logsub").addEventListener("click", async (e) => {
     header.style.opacity="0";
     main.style.opacity="0";
     bottom.style.opacity="0";
+    alphalogin.classList.remove("signdis");
     const firstName = document.getElementById("logfname").value;
     const lastName = document.getElementById("loglname").value;
     const email = document.getElementById("logmail").value;
