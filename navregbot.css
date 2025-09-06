@@ -582,6 +582,13 @@ footer{
 .logdis{
     display: none;
 }
+.error{
+    color: red;
+    font-size: 1.1rem;
+    margin: 2%;
+    margin-left: 14%;
+    display: none;
+}
 @media screen and (min-width: 700px) and (max-width: 1000px){
 .rightnav{
     display: flex;

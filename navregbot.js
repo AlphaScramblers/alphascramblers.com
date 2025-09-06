@@ -228,6 +228,7 @@ let logmob = document.getElementById("logmob");
 let logmail = document.getElementById("logmail");
 let logpass1 = document.getElementById("logpass1");
 let logsub = document.getElementById("logsub");
+let error = document.querySelector(".error")
 document.querySelector(".logsub").addEventListener("click", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
@@ -258,7 +259,7 @@ document.querySelector(".logsub").addEventListener("click", async (e) => {
             logsub.disabled = true
             logsub.innerHTML="Account Created"
         } else {
-            alert(data.error);
+            error.style.display="block"
         }
     }
     catch(err){
