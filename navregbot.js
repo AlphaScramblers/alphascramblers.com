@@ -259,7 +259,7 @@ logsub.addEventListener("click", async (e) => {
             logsub.disabled = true
             logsub.innerHTML="Account Created"
         } else {
-            error1.innerText = data.message || "Something went wrong!";
+            error1.innerHTML = data.message || "Something went wrong!";
             error1.style.display = "block";  
         }
     }
