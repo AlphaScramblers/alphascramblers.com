@@ -585,11 +585,9 @@ footer{
 .error{
     color: red;
     font-size: 1.1rem;
-    margin-top: 2%;
-    margin-bottom: 2%;
-    width: 60vw;
+    margin: 2%;
+    width: 30vw;
     text-align: center;
-    display: none;
 }
 @media screen and (min-width: 700px) and (max-width: 1000px){
 .rightnav{
