@@ -279,7 +279,7 @@ logsub.addEventListener("click", async (e) => {
         alphalogin.style.opacity="1"
         document.body.style.overflow="auto";
         document.documentElement.style.overflow = "auto";
-        r.style.display="none";
+        r.classList.add("navlogindis");
         profile.style.display="block"
         profile1.style.display="block"
     }
