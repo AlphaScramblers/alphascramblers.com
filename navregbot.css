@@ -68,7 +68,7 @@ footer{
     height: auto;
     width: auto;
 }
-.home,.login,.help,.about{
+.home,.login,.help,.about,.profile{
     cursor:pointer;
     font-size: 0.9rem;
     font-weight: lighter;
@@ -97,7 +97,7 @@ footer{
 .navcon,.navcon-ele{
     display:none;
 }
-.home1,.login1,.about1,.help1{
+.home1,.login1,.about1,.help1,.profile1{
     padding: 2%;
     margin: 0.5%;
     background-color: white;
@@ -106,6 +106,9 @@ footer{
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     font-family: "Rowdies", sans-serif;
     font-size: 0.7rem;
+}
+.profile,.profile1{
+    display: none;
 }
 .cross{
     height: 5%;
