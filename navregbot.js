@@ -259,7 +259,8 @@ logsub.addEventListener("click", async (e) => {
             logsub.disabled = true
             logsub.innerHTML="Account Created"
         } else {
-            error1.style.display="block"
+            error.innerText = data.message || "Something went wrong!";
+            error.style.display = "block";
         }
     }
     catch (err) {
@@ -267,7 +268,6 @@ logsub.addEventListener("click", async (e) => {
     }
     finally{
         cloader.style.display = "none";
-        alphalogin.classList.add("alphadis");
         header.style.opacity="1";
         main.style.opacity="1";
         bottom.style.opacity="1";
