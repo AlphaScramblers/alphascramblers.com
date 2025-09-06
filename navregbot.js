@@ -228,6 +228,7 @@ let logmob = document.getElementById("logmob");
 let logmail = document.getElementById("logmail");
 let logpass1 = document.getElementById("logpass1");
 let error1 = document.querySelector(".error")
+let error2 = document.querySelector(".error1")
 let logsub = document.querySelector(".logsub")
 let profile = document.querySelector(".profile")
 let profile1 = document.querySelector(".profile1")
@@ -316,8 +317,8 @@ logsub.addEventListener("click", async (e) => {
         logpass2.readOnly=true;
         logsignin.disabled=true;
     } else {
-        error1.innerHTML = data.message || "Something went wrong!";
-        error1.style.display = "block"; 
+        error2.innerHTML = data.message || "Something went wrong!";
+        error2.style.display = "block";     
     }
     }
     catch (err){
