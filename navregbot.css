@@ -72,6 +72,7 @@ footer{
     cursor:pointer;
     font-size: 0.9rem;
     font-weight: lighter;
+    display: block;
 }
 .explorebut{
     cursor:pointer;
@@ -106,9 +107,6 @@ footer{
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     font-family: "Rowdies", sans-serif;
     font-size: 0.7rem;
-}
-.navlogindis{
-    display: block;
 }
 .profile,.profile1{
     display: none;
