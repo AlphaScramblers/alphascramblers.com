@@ -464,61 +464,6 @@
                 </div>
         </div>
     </div>
-    <script>
-  
-  document.querySelector(".logsub").addEventListener("click", async (e) => {
-    e.preventDefault();
-
-    const firstName = document.getElementById("logfname").value;
-    const lastName = document.getElementById("loglname").value;
-    const email = document.getElementById("logmail").value;
-    const mobileno=document.getElementById("logmob").value;
-    const password = document.getElementById("logpass1").value;
-
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firstName, lastName, email, password,mobileno }),
-    });
-
-    const data = await res.json();
-    console.log(data);
-
-    if (data.success) {
-      alert("Signup successful!");
-    } else {
-      alert(data.error);
-    }
-  });
-
-  
-  document.querySelector(".logsignin").addEventListener("click", async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById("logname").value;
-    const password = document.getElementById("logpass2").value;
-
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await res.json();
-    console.log(data);
-
-    if (data.success) {
-      alert("Login successful!");
-      
-      localStorage.setItem("userProfile", JSON.stringify(data.profile));
-       
-    } else {
-      alert(data.error);
-    }
-  });
-</script>
-
-
     <script src="./homepage/alpha.js"></script>
     <script src="../navregbot.js"></script>
 </body>

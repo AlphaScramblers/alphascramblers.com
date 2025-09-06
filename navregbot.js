@@ -222,3 +222,72 @@ caa.addEventListener("click",()=>{
     loginform.classList.add("logdis")
     loginform.style.display="none"
 })
+let logfname = getElementById("logfname");
+let loglname = getElementById("loglname");
+let logmob = getElementById("logmob");
+let logmail = getElementById("logmail");
+let logpass1 = getElementById("logpass1");
+let logsub = getElementById("logsub");
+document.querySelector(".logsub").addEventListener("click", async (e) => {
+    e.preventDefault();
+    cloader.style.display="flex";
+    signup.style.opacity="0.3";
+    header.style.opacity="0";
+    main.style.opacity="0";
+    bottom.style.opacity="0";
+    const firstName = document.getElementById("logfname").value;
+    const lastName = document.getElementById("loglname").value;
+    const email = document.getElementById("logmail").value;
+    const mobileno=document.getElementById("logmob").value;
+    const password = document.getElementById("logpass1").value;
+    const res = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ firstName, lastName, email, password,mobileno }),
+    });
+    try{
+        const data = await res.json();
+            console.log(data);
+        if (data.success) {
+            logfname.disabled = true
+            loglname.disabled = true
+            logmail.disabled = true
+            logmob.disabled = true
+            logpass1.disabled = true
+            logsub.disabled = true
+            logsub.innerHTML="Account Created"
+        } else {
+            alert(data.error);
+        }
+    }
+    catch(err){
+        alert("❌ Something went wrong.");
+    }
+    finally{
+        cloader.style.display = "none";
+        signup.classList.add("signdis");
+        header.style.opacity="1";
+        main.style.opacity="1";
+        bottom.style.opacity="1";
+        overlay.classList.remove("overlay1");
+        signup.style.opacity="1"
+    }
+  });
+  document.querySelector(".logsignin").addEventListener("click", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("logname").value;
+    const password = document.getElementById("logpass2").value;
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    console.log(data);
+    if (data.success) {
+      alert("Login successful!");
+      localStorage.setItem("userProfile", JSON.stringify(data.profile));
+    } else {
+      alert(data.error);
+    }
+  });
