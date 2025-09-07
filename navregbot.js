@@ -233,6 +233,7 @@ let logsub = document.querySelector(".logsub")
 let profile = document.querySelector(".profile")
 let profile1 = document.querySelector(".profile1")
 let login = document.querySelector(".login")
+let login1 = document.querySelector(".login1")
 let logpass2 = document.getElementById("logpass2");
 let logname = document.getElementById("logname");
 let logsignin = document.querySelector(".logsignin");
@@ -267,6 +268,7 @@ logsub.addEventListener("click", async (e) => {
             logsub.innerHTML="Account Created"
             error1.style.display = "none";
             login.style.display="none";
+            login1.style.display="none";
             profile.style.display="block"
             profile1.style.display="block"  
         } else {
