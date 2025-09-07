@@ -268,7 +268,7 @@ logsub.addEventListener("click", async (e) => {
             logsub.innerHTML="Account Created"
             error1.style.display = "none";
             login.style.display="none";
-            login1.style.display="none";
+            login1.innerHTML="hello"
             profile.style.display="block"
             profile1.style.display="block"  
         } else {
