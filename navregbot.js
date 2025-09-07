@@ -313,6 +313,7 @@ logsub.addEventListener("click", async (e) => {
         localStorage.setItem("userProfile", JSON.stringify(data.profile));
         error2.style.display = "none";
         login.style.display="none";
+        login1.style.display="none";
         profile.style.display="block"
         profile1.style.display="block"  
         logsignin.innerHTML="Signed In Successfully"
