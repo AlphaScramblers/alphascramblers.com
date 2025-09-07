@@ -1,0 +1,89 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    background-color: #EFEFEF;
+    
+}
+main{
+    margin-top: 12vh;
+    /* margin-left: 10vw;
+    margin-right: 10vw; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* html,body{
+    margin: 0;
+    padding: 0;
+} */
+.heading{
+    font-size: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.qbox{
+    /* background-color: white;
+    border-radius: 4%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: 1px solid black;
+    height: 30vw;
+    width: 50vw;
+    padding-left: 3vw; */
+    background: #fff;
+    padding: 30px;
+    padding-top: 1vh;
+    border-radius: 20px;
+    /* width: 78vw; */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 5%;
+    margin-left: 20vw;
+    margin-right: 20vw;
+}
+.ques{
+    font-size: 1.7rem;
+}
+.opt{
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+}
+.opt1,.opt2,.opt3,.opt4{
+    border: 1px solid black;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.sbt{
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3.5%;
+    padding: 2%;
+    padding-left: 1.5%;
+    margin-right: 81%;
+    border-radius: 20vw;
+    background-color: #14AE5C;
+}
+.progress-bar{
+    width: 69.32vw;
+    height: 1.57vh;
+    background-color: #4049F0;
+    margin-left: 15vw;
+    margin-right: 15vw;
+    border-radius: 2vw;
+}
+.warning{
+    background-color: #FFF79A;
+    margin-left: 15vw;
+    margin-right: 15vw;
+    
+}
