@@ -223,5 +223,9 @@ h3{
     }
     *{
     scroll-padding-top: 12vh;
-}
+    }
+    .fcnew{
+        width: 90vw;
+        height: 35vh;
+    }
 }
