@@ -87,3 +87,17 @@ main{
     margin-right: 15vw;
     
 }
+@media screen and (min-width:700px) and (max-width:1000px)
+{
+    .heading
+    {
+        font-size: 4rem;
+    }
+}
+@media screen and (max-width:700px)
+{
+    .heading
+    {
+        font-size: 4rem;
+    }
+}
