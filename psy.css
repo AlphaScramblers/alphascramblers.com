@@ -2,50 +2,41 @@
     padding: 0;
     margin: 0;
 }
-body{
-    background-color: #EFEFEF;
-    
-}
 main{
     margin-top: 12vh;
-    /* margin-left: 10vw;
-    margin-right: 10vw; */
     display: flex;
     justify-content: center;
     align-items: center;
 }
-/* html,body{
-    margin: 0;
-    padding: 0;
-} */
 .heading{
     font-size: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 1%;
 }
 .qbox{
-    /* background-color: white;
-    border-radius: 4%;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    border: 1px solid black;
-    height: 30vw;
-    width: 50vw;
-    padding-left: 3vw; */
     background: #fff;
-    padding: 30px;
-    padding-top: 1vh;
     border-radius: 20px;
-    /* width: 78vw; */
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
-    gap: 5%;
-    margin-left: 20vw;
-    margin-right: 20vw;
+    width: 60vw;
+    padding: 1vw;
+}
+.qarea{
+    display: flex;
+    width: 100vw;
+    height: auto;
+    justify-content: center;
+    font-family: "Mada", sans-serif;
+    font-weight: 600;
 }
 .ques{
     font-size: 1.7rem;
+    padding: 1%;
+    padding-left: 0;
+    margin-bottom: 2%;
 }
 .opt{
     font-size: 1.2rem;
@@ -53,39 +44,53 @@ main{
     flex-direction: column;
     gap: 3vh;
 }
-.opt1,.opt2,.opt3,.opt4{
+.opt label{
     border: 1px solid black;
-    padding: 12px;
+    padding: 1.1%;
     border-radius: 12px;
     cursor: pointer;
     display: flex;
     align-items: center;
 }
-.sbt{
-    font-size: 1.2rem;
+.opt1{
+    margin-left: 2%;
+}
+.opt form{
+    display: flex;
+    flex-direction: column;
+}
+.subbtn{
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-top: 3.5%;
-    padding: 2%;
-    padding-left: 1.5%;
-    margin-right: 81%;
-    border-radius: 20vw;
+    width: 60vw;
+    height: 6vh;
+}
+.sbt{
+    width: 20%;
+    height: 100%;
+    border-radius: 20px;
     background-color: #14AE5C;
+    font-size: 1.3rem;
+    cursor: pointer;
+    font-weight: 700;
 }
 .progress-bar{
-    width: 69.32vw;
-    height: 1.57vh;
     background-color: #4049F0;
-    margin-left: 15vw;
-    margin-right: 15vw;
-    border-radius: 2vw;
+    height: 2vh;
+    width: 80vw;
+    margin: 1%;
+    border-radius: 25px;
+    border: 1px solid black;
+
 }
-.warning{
-    background-color: #FFF79A;
-    margin-left: 15vw;
-    margin-right: 15vw;
-    
+.progress-bar-cover{
+    height: 6vh;
+    display: flex;
+    justify-content: center;
+}
+input[type="radio"]{
+    transform: scale(1.3);
+    margin-left: 1%;
 }
 @media screen and (min-width:700px) and (max-width:1000px)
 {
