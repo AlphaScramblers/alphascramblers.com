@@ -498,17 +498,18 @@ body{
         margin-top: 10vh;
     }
     .banner-wrapper{
-        height: 30vh;
+        height: auto;
     }
     .text{
         height: 30vh;
         line-height: 25px;
+        padding: 3%;
     }
     .banimg,.banimg3{
         height: 20vh;
         width: 45vw;
-        top: 24%;
         left: 7%;
+        bottom: 0;
     }
     .head{
         margin-bottom: 5%;
@@ -518,7 +519,7 @@ body{
         width: 20vw;
     }
     .d1,.d2,.d3,.d4{
-        top: 37.8vh;
+        top: 40.8vh;
         width: 18px;height: 18px;
     }
     .d1{
@@ -584,5 +585,4 @@ body{
         margin-bottom: 0;
         padding: 0;
     }
-    
 }
