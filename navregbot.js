@@ -311,8 +311,10 @@ logsub.addEventListener("click", async (e) => {
     overlay.classList.add("overlay1");
     alphalogin.classList.remove("alphadis");
     try{
-    const email = document.getElementById("logname").value;
-    const password = document.getElementById("logpass2").value;
+    const emailrun = document.getElementById("logname");
+    const passwordrun = document.getElementById("logpass2");
+    const email =emailrun.value;
+    const password=passwordrun.value;
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -342,6 +344,8 @@ logsub.addEventListener("click", async (e) => {
         error2.innerHTML = data.message || "Something went wrong!";
         error2.style.display = "block";     
         overlay.classList.add("overlay1");
+        emailrun.value="";
+        passwordrun.value="";
     }
     }
     catch (err){
