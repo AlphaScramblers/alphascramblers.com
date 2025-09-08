@@ -342,6 +342,8 @@ logsub.addEventListener("click", async (e) => {
         error2.innerHTML = data.message || "Something went wrong!";
         error2.style.display = "block";     
         overlay.classList.add("overlay1");
+        email.value="";
+        password.value="";
     }
     }
     catch (err){
