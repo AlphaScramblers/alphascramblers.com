@@ -249,11 +249,16 @@ logsub.addEventListener("click", async (e) => {
     bottom.style.opacity="0";
     overlay.classList.add("overlay1");
     alphalogin.classList.remove("alphadis");
-    const firstName = document.getElementById("logfname").value;
-    const lastName = document.getElementById("loglname").value;
-    const email = document.getElementById("logmail").value;
-    const mobileno=document.getElementById("logmob").value;
-    const password = document.getElementById("logpass1").value;
+    const firstNamerun = document.getElementById("logfname");
+    const lastNamerun = document.getElementById("loglname");
+    const emailrun = document.getElementById("logmail");
+    const mobilenorun = document.getElementById("logmob");
+    const passwordrun = document.getElementById("logpass1");
+    const firstName = firstNamerun.value;
+    const lastName = lastNamerun.value;
+    const email = emailrun.value;
+    const mobileno = mobilenorun.value;
+    const password = passwordrun.value;
     try{
         const res = await fetch("/api/signup", {
             method: "POST",
@@ -284,6 +289,11 @@ logsub.addEventListener("click", async (e) => {
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
             error1.style.display = "block"; 
+            firstNamerun.value=""
+            lastNamerun.value=""
+            emailrun.value=""
+            mobilenorun.value=""
+            passwordrun.value=""
         }
     }
     catch (err) {
@@ -312,8 +322,8 @@ logsub.addEventListener("click", async (e) => {
     try{
     const emailrun = document.getElementById("logname");
     const passwordrun = document.getElementById("logpass2");
-    const email =emailrun.value;
-    const password=passwordrun.value;
+    const email = emailrun.value;
+    const password= passwordrun.value;
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -323,7 +333,6 @@ logsub.addEventListener("click", async (e) => {
     if (data.success) {
         localStorage.setItem("userProfile", JSON.stringify(data.profile));
         error2.style.display = "none";
-
         login.style.display="none";
         login1.style.display="none";
         if(tab.matches){
