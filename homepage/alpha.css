@@ -515,7 +515,7 @@ body{
     }
     .strtbut{
         height: 3vh;
-        width: 20%;
+        width: 20vw;
     }
     .d1,.d2,.d3,.d4{
         top: 37.8vh;
@@ -575,4 +575,14 @@ body{
         display: flex;
         align-items: center;
     }
+    .banimg1{
+        /* margin-top: 5vh; */
+        scale: 1.3;
+    }
+    .banimg{
+        margin-top: 5.5%;
+        margin-bottom: 0;
+        padding: 0;
+    }
+    
 }
