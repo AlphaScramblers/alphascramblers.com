@@ -505,11 +505,10 @@ body{
         line-height: 25px;
         padding: 3%;
     }
-    .banimg,.banimg3{
+    .banimg1{
         height: 20vh;
-        width: 45vw;
-        left: 7%;
-        bottom: 0;
+        top: 7.2vh;
+        right: 7vw;
     }
     .head{
         margin-bottom: 5%;
