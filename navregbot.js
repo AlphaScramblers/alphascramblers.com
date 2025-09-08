@@ -222,33 +222,19 @@ caa.addEventListener("click",()=>{
     loginform.classList.add("logdis")
     loginform.style.display="none"
 })
-let logfname = document.getElementById("logfname");
-let loglname = document.getElementById("loglname");
-let logmob = document.getElementById("logmob");
-let logmail = document.getElementById("logmail");
-let logpass1 = document.getElementById("logpass1");
-let error1 = document.querySelector(".error")
-let error2 = document.querySelector(".error1")
-let logsub = document.querySelector(".logsub")
-let profile = document.querySelector(".profile")
-let profile1 = document.querySelector(".profile1")
-let login = document.querySelector(".login")
-let login1 = document.querySelector(".login1")
-let logpass2 = document.getElementById("logpass2");
-let logname = document.getElementById("logname");
-let logsignin = document.querySelector(".logsignin");
-let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
-let mobile = window.matchMedia("(max-width: 700px)");
-let lap = window.matchMedia("(min-width: 700px)");
-logsub.addEventListener("click", async (e) => {
+let logfname = getElementById("logfname");
+let loglname = getElementById("loglname");
+let logmob = getElementById("logmob");
+let logmail = getElementById("logmail");
+let logpass1 = getElementById("logpass1");
+let logsub = getElementById("logsub");
+document.querySelector(".logsub").addEventListener("click", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
-    alphalogin.style.opacity="0.3";
+    signup.style.opacity="0.3";
     header.style.opacity="0";
     main.style.opacity="0";
     bottom.style.opacity="0";
-    overlay.classList.add("overlay1");
-    alphalogin.classList.remove("alphadis");
     const firstName = document.getElementById("logfname").value;
     const lastName = document.getElementById("loglname").value;
     const email = document.getElementById("logmail").value;
@@ -261,100 +247,78 @@ logsub.addEventListener("click", async (e) => {
             body: JSON.stringify({ firstName, lastName, email, password,mobileno }),
         });
         const data = await res.json();
+            console.log(data);
         if (data.success) {
-            logfname.readOnly = true
-            loglname.readOnly = true
-            logmail.readOnly = true
-            logmob.readOnly = true
-            logpass1.readOnly = true
+            logfname.disabled = true
+            loglname.disabled = true
+            logmail.disabled = true
+            logmob.disabled = true
+            logpass1.disabled = true
             logsub.disabled = true
             logsub.innerHTML="Account Created"
-            error1.style.display = "none";
-            if(tab.matches){
-                profile.style.display="block"
-            }
-            if(mobile.matches){
-                profile1.style.display="block"  
-            }
-            if(lap.matches){
-                profile.style.display="block"
-            }
-            login1.style.display="none";
-            login.style.display="none";
         } else {
-            error1.innerHTML = data.message || "Something went wrong!";
-            error1.style.display = "block"; 
-            overlay.classList.add("overlay1");  
+            alert(data.error);
         }
     }
-    catch (err) {
+    catch(err){
         alert("❌ Something went wrong.");
     }
     finally{
         cloader.style.display = "none";
+        signup.classList.add("signdis");
         header.style.opacity="1";
         main.style.opacity="1";
         bottom.style.opacity="1";
         overlay.classList.remove("overlay1");
-        alphalogin.style.opacity="1"
-        document.body.style.overflow="auto";
-        document.documentElement.style.overflow = "auto";
+        signup.style.opacity="1"
     }
   });
   document.querySelector(".logsignin").addEventListener("click", async (e) => {
-    e.preventDefault();
-    cloader.style.display="flex";
-    alphalogin.style.opacity="0.3";
-    header.style.opacity="0";
-    main.style.opacity="0";
-    bottom.style.opacity="0";
-    overlay.classList.add("overlay1");
-    alphalogin.classList.remove("alphadis");
-    try{
-    const email = document.getElementById("logname").value;
-    const password = document.getElementById("logpass2").value;
+  e.preventDefault();
+
+  const emailInput = document.getElementById("logname");
+  const passwordInput = document.getElementById("logpass2");
+
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  try {
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-    const data = await res.json();
-    if (data.success) {
-        localStorage.setItem("userProfile", JSON.stringify(data.profile));
-        error2.style.display = "none";
 
-        login.style.display="none";
-        login1.style.display="none";
-        if(tab.matches){
-                profile.style.display="block"
-       }
-        if(mobile.matches){
-            profile1.style.display="block"  
-        }
-        if(lap.matches){
-            profile.style.display="block"
-        } 
-        logsignin.innerHTML="Signed In Successfully"
-        logname.readOnly=true;
-        logpass2.readOnly=true;
-        logsignin.disabled=true;
+    const data = await res.json();
+    console.log(data);
+
+    if (data.success) {
+      alert("Login successful!");
+
+     
+      localStorage.setItem("userProfile", JSON.stringify(data.profile));
+
+     
+      
     } else {
-        error2.innerHTML = data.message || "Something went wrong!";
-        error2.style.display = "block";     
-        overlay.classList.add("overlay1");
+      alert(data.message || "Login failed");
+
+      
+      emailInput.value = "";
+      passwordInput.value = "";
     }
-    }
-    catch (err){
-        alert("❌ Something went wrong.");
-    }
-    finally{
-        cloader.style.display = "none";
-        header.style.opacity="1";
-        main.style.opacity="1";
-        bottom.style.opacity="1";
-        overlay.classList.remove("overlay1");
-        alphalogin.style.opacity="1"
-        document.body.style.overflow="auto";
-        document.documentElement.style.overflow = "auto";
-    }
-  });
+  } catch (err) {
+    console.error("Error:", err);
+    alert("Something went wrong. Try again.");
+    emailInput.value = "";
+    passwordInput.value = "";
+  }
+});
+
+
+window.addEventListener("DOMContentLoaded", () => {
+  const userProfile = localStorage.getItem("userProfile");
+  if (userProfile) {
+    
+  }
+});
