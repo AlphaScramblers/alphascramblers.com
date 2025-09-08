@@ -203,23 +203,24 @@ dotlottie-wc{
     .image2{
         display: none;
     }
-    .animtext2,.animtext3{
-        margin: 3%;
-    }
-    .text1{
-        margin-bottom: 1vh;
-        color: #3b5998;
-    }
-    .text2{
-        color: #3b5998;
-        margin-top: 1vh;
-        margin-bottom: 1vh;
-    }
-    .text3{
-        line-height: 20px;
-        padding-left: 8%;
-    }
     main{
         margin-top: 10vh;
+    }
+    .aboutimg{
+        scale: 1.5;
+    }
+    .anim{
+        overflow-y: hidden;
+        align-items: center;
+    }
+    .animtext{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .animtext1,.animtext2,.animtext3{
+        height: 35vh;
+        display: flex;
+        align-items: center;
     }
 }
