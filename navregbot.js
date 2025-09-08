@@ -316,9 +316,3 @@ document.querySelector(".logsub").addEventListener("click", async (e) => {
 });
 
 
-window.addEventListener("DOMContentLoaded", () => {
-  const userProfile = localStorage.getItem("userProfile");
-  if (userProfile) {
-    
-  }
-});
