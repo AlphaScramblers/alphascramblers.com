@@ -284,10 +284,6 @@ logsub.addEventListener("click", async (e) => {
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
             error1.style.display = "block"; 
-            overlay.classList.remove("overlay1");  
-            document.body.style.overflow="hidden";
-            document.documentElement.style.overflow = "hidden";
-            return;
         }
     }
     catch (err) {
