@@ -284,7 +284,7 @@ logsub.addEventListener("click", async (e) => {
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
             error1.style.display = "block"; 
-            overlay.classList.add("overlay1");  
+            overlay.classList.remove("overlay1");  
         }
     }
     catch (err) {
