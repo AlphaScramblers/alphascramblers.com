@@ -287,6 +287,7 @@ logsub.addEventListener("click", async (e) => {
             overlay.classList.remove("overlay1");  
             document.body.style.overflow="hidden";
             document.documentElement.style.overflow = "hidden";
+            return;
         }
     }
     catch (err) {
