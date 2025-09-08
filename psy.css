@@ -15,15 +15,6 @@ main{
     align-items: center;
     padding: 1%;
 }
-.qbox1,.qbox2{
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    width: 60vw;
-    padding: 1vw;
-}
 .qarea{
     display: flex;
     width: 100vw;
@@ -32,8 +23,16 @@ main{
     font-family: "Mada", sans-serif;
     font-weight: 600;
 }
+.qtop{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+.section{
+    font-size: 1.3rem;
+}
 .ques{
-    font-size: 1.7rem;
+    font-size: 1.2rem;
     padding: 1%;
     padding-left: 0;
     margin-bottom: 2%;
@@ -50,6 +49,7 @@ main{
     cursor: pointer;
     display: flex;
     align-items: center;
+    margin-bottom: 1%;
 }
 .opt1{
     margin-left: 2%;
@@ -61,7 +61,7 @@ main{
     width: 60vw;
     height: 6vh;
 }
-.sbt1,.sbt2{
+.sbt{
     width: 20%;
     height: 100%;
     border-radius: 20px;
@@ -70,9 +70,18 @@ main{
     cursor: pointer;
     font-weight: 700;
     margin: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ipbar{
+    height: 100%;
+    width: 0%;
+    background-color:#4049F0;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    border-radius: 10px 0 0 10px;
 }
 .progress-bar{
-    background-color: #4049F0;
     height: 2vh;
     width: 80vw;
     margin: 1%;
@@ -93,7 +102,7 @@ input[type="radio"]{
 .question{
     display: none;
 }
-.question:active{
+.question.active{
     display: block;
 }
 @media screen and (min-width:700px) and (max-width:1000px)
