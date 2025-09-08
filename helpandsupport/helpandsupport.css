@@ -9,8 +9,7 @@ main{
 body{
     overflow-x: hidden;
 }
-.faqbanner
-{
+.faqbanner{
     width: 100%;
     background-color: #D7EEFB;
     display: flex;
