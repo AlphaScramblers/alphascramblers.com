@@ -652,6 +652,35 @@ footer{
 .bottom{
     margin-top: 2vh;
 }
+.logologin,.vb{
+    display: none;
+}
+.alphalogin{
+    width: 100vw;
+}
+.signup{
+    width: 80vw;
+    height: 60vh;
+}
+#logfname,#loglname,#logmob,#logmail,#logpass1{
+    height: 4vh;
+}
+#logmob,#logmail,#logpass1{
+    width: 70vw;
+    margin-left: 4vw;
+}
+#logfname,#loglname{
+    width: 33.5vw;
+}
+#logfname{
+    margin-left: 4vw;
+}
+.logsub{
+    margin-left: 15vw;
+    width: 50vw;
+    font-size: 1.2rem;
+    height: 4vh;
+}
 }
 @media screen and (min-width: 0px) and (max-width: 700px){
     .bottomhead{
