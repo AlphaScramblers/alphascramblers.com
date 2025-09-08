@@ -3,6 +3,7 @@ const submit = document.querySelector(".sbt");
 const bar = document.querySelector(".ipbar");
 const qh = document.querySelector(".qh");
 const section = document.querySelector(".section");
+let pcalvalue = document.querySelector(".pcalvalue");
 let currentIndex = 0;
 
 function showQuestion(index){
@@ -23,6 +24,7 @@ submit.addEventListener("click",()=>{
     currentIndex++;
     const progress = (currentIndex/question.length)*100;
     bar.style.width= progress + "%";
+    pcalvalue.innerHTML=`${Math.round(progress)}%`
     if(currentIndex<question.length){
         showQuestion(currentIndex);
     }
