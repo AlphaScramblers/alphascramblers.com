@@ -281,15 +281,17 @@ logsub.addEventListener("click", async (e) => {
             }
             login1.style.display="none";
             login.style.display="none";
+        } else {
+            error1.innerHTML = data.message || "Something went wrong!";
+            error1.style.display = "block"; 
+            overlay.classList.remove("overlay1");  
+            document.body.style.overflow="hidden";
+            document.documentElement.style.overflow = "hidden";
+            return;
         }
     }
     catch (err) {
-        error1.innerHTML = data.message || "Something went wrong!";
-        error1.style.display = "block"; 
-        overlay.classList.remove("overlay1");  
-        document.body.style.overflow="hidden";
-        document.documentElement.style.overflow = "hidden";
-        return;
+        alert("❌ Something went wrong.");
     }
     finally{
         cloader.style.display = "none";
