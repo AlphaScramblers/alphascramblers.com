@@ -409,11 +409,11 @@ body{
     }
     .psychohead{
         font-size: 1.5rem;
-        margin-top: 1vh;
+        margin-top: 2.5vh;
     }
     .strtbut{
-        width: 30%;
-        margin-top: 1.5%;
+        width: 25vw;
+        margin-top: 1.3vh;
         height: 3vh;
         font-size: 0.85rem;
     }
@@ -427,7 +427,7 @@ body{
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-top: 5vh;
+        margin-top: 3vh;
         margin-bottom: 3vh;
     }
     .box1,.box2,.box3{
@@ -452,15 +452,26 @@ body{
         width: 60%;
         height: 10%;
     }
+    .whybig{
+        margin-top: 7vh;
+    }
     .middle{
         font-size: 1.5rem;
         margin: 1%;
     }
+    .boxline1{
+        display: flex;
+        flex-direction: column;
+    }
     .boxline{
+        width: 80vw;
         font-size: 0.7rem;
     }
     .boldhead{
         font-size: 1.3rem;
+        text-align: center;
+    }
+    .intext{
         text-align: center;
     }
     .boxmain{
@@ -492,7 +503,13 @@ body{
         margin: 2%;
         font-size: 1rem;
     }
-}
+    .copyright{
+        font-size: 0.75rem;
+        margin-left: 6.5vw;
+        margin-right: 6.5vw;
+        margin-bottom: 1.5vh;
+
+    }
 @media screen and (min-width: 700px) and (max-width: 1000px){
     main{
         margin-top: 10vh;
