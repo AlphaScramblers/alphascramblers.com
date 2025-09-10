@@ -510,14 +510,19 @@
 //     profile1.style.display = "none";
 //   }
 // });
-document.getElementsByClassName("link1").addEventListener("click", function (e) {
-  const loggedIn = localStorage.getItem("userProfile");
-  
-  if (!loggedIn) {
-    e.preventDefault(); // stop the click
-    alert("Please log in first to access the Physio Test page!");
-  }
+document.addEventListener("DOMContentLoaded", () => {
+  const link = document.querySelector(".link1"); 
+
+  link.addEventListener("click", (e) => {
+    const loggedIn = localStorage.getItem("userProfile");
+
+    if (!loggedIn) {
+      e.preventDefault(); 
+      alert("Please log in first to access the Physio Test page!");
+    }
+  });
 });
+
 
 </script>
 
