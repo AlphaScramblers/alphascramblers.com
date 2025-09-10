@@ -479,37 +479,37 @@
     <script src="./homepage/alpha.js"></script>
     <script src="../navregbot.js"></script>
     <script>
-// document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
  
-//   const loggedIn = localStorage.getItem("loggedIn");
+  const loggedIn = localStorage.getItem("loggedIn");
 
-//   if (loggedIn) {
+  if (loggedIn) {
    
-//     login.style.display = "none";
-//     login1.style.display = "none";
+    login.style.display = "none";
+    login1.style.display = "none";
 
-//     if (tab.matches) {
-//       profile.style.display = "block";
-//     }
-//     if (mobile.matches) {
-//       profile1.style.display = "block";
-//     }
-//     if (lap.matches) {
-//       profile.style.display = "block";
-//     }
+    if (tab.matches) {
+      profile.style.display = "block";
+    }
+    if (mobile.matches) {
+      profile1.style.display = "block";
+    }
+    if (lap.matches) {
+      profile.style.display = "block";
+    }
 
-//     logsignin.innerHTML = "Signed In Successfully";
-//     logsignin.disabled = true;
-//     logname.readOnly = true;
-//     logpass2.readOnly = true;
-//   } else {
+    logsignin.innerHTML = "Signed In Successfully";
+    logsignin.disabled = true;
+    logname.readOnly = true;
+    logpass2.readOnly = true;
+  } else {
     
-//     login.style.display = "block";
-//     login1.style.display = "block";
-//     profile.style.display = "none";
-//     profile1.style.display = "none";
-//   }
-// });
+    login.style.display = "block";
+    login1.style.display = "block";
+    profile.style.display = "none";
+    profile1.style.display = "none";
+  }
+});
 document.addEventListener("DOMContentLoaded", () => {
   const link = document.querySelector(".link1"); 
 
