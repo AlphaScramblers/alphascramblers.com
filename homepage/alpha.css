@@ -503,13 +503,7 @@ body{
         margin: 2%;
         font-size: 1rem;
     }
-    .copyright{
-        font-size: 0.75rem;
-        margin-left: 6.5vw;
-        margin-right: 6.5vw;
-        margin-bottom: 1.5vh;
-
-    }
+}
 @media screen and (min-width: 700px) and (max-width: 1000px){
     main{
         margin-top: 10vh;
