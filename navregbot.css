@@ -815,6 +815,9 @@ footer{
         margin-right: 6.5vw;
         margin-bottom: 1.5vh;
     }
+    .login1{
+        display: none;
+    }
 }
 @keyframes navconele{
     0%{padding-left:100%}
