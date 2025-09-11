@@ -240,6 +240,7 @@ let logsignin = document.querySelector(".logsignin");
 let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
 let mobile = window.matchMedia("(max-width: 700px)");
 let lap = window.matchMedia("(min-width: 700px)");
+let profile = document.querySelector(".profile-section");
 logsub.addEventListener("click", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
@@ -277,12 +278,21 @@ logsub.addEventListener("click", async (e) => {
             error1.style.display = "none";
             if(tab.matches){
                 profile.style.display="block"
+                profile.addEventListener("click",()=>{
+                    profile.style.display="block"
+                })
             }
             if(mobile.matches){
                 profile1.style.display="block"  
+                profile.addEventListener("click",()=>{
+                    profile.style.display="block"
+                })
             }
             if(lap.matches){
                 profile.style.display="block"
+                profile.addEventListener("click",()=>{
+                    profile.style.display="block"
+                })
             }
             login1.style.display="none";
             login.style.display="none";

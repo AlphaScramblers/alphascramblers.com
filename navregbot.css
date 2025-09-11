@@ -603,6 +603,159 @@ footer{
     text-align: center;
     display: none;
 }
+.ahead{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.avatar {
+  width: 10vw;
+  height: 18vh;
+  border-radius: 50%;
+  background: #3a506b;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-size: 3rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5%;
+}
+.profile-section{
+    width: auto;
+    height: auto;
+    position: fixed;
+    top: 12vh;
+    right: 0;
+    background: #dbe9f4;
+    border: 1px solid #e0e6ed;        
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+    display: none;
+}
+.profiledetails{
+    margin: 2vw;
+}
+.bdetails{
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    font-size: 1.2rem;
+}
+.mobiledata{
+    display: flex;
+    gap: 0.1vw;
+}
+.lgtBtn{
+    width: 60%;
+    height: 6vh;
+}
+.lgt{
+    width: 100%;
+    text-align: center;
+}
+.lgtBtn {
+  background: #3a506b;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(58, 80, 107, 0.2);
+}
+
+.lgtBtn:hover {
+  background: #5bc0be;
+  box-shadow: 0 6px 14px rgba(91, 192, 190, 0.3);
+  transform: translateY(-2px);
+}
+
+.lgtBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+.name,
+.mobile,
+.email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f4f9fd;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333333;
+}
+.namehead,
+.mobilehead,
+.emailhead {
+  font-weight: 600;
+  color: #3a506b;
+}
+.emaildata{
+  color: #2d3748;
+  word-break: break-word;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.emaildata:hover {
+  color: #5bc0be;
+  text-decoration: underline;
+}
+.ccode {
+  color: #5bc0be;
+  font-weight: 600;
+  margin-right: 4px;
+}
+.psychodetails {
+  background: #ffffff;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+  font-size: 1rem;
+  color: #333333;
+  max-width: 500px;
+  margin: 20px auto;
+}
+.phead {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #3a506b;
+  margin-bottom: 12px;
+}
+.psub,
+.sug {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f4f9fd;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.psubhead,
+.sughead {
+  font-weight: 600;
+  color: #3a506b;
+  min-width: 140px;
+}
+.psubstatus,
+.sugdata {
+  font-weight: 500;
+  color: #2d3748;
+}
+
 @media screen and (min-width: 700px) and (max-width: 1000px){
 .rightnav{
     display: flex;
