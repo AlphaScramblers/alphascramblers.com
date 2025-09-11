@@ -608,7 +608,7 @@ footer{
     display: flex;
     justify-content: center;
 }
-.avatar {
+.avatar{
   width: 10vw;
   height: 18vh;
   border-radius: 50%;
@@ -621,6 +621,19 @@ footer{
   align-items: center;
   justify-content: center;
   margin-top: 5%;
+}
+.avatar1{
+  width: 2vw;
+  height: 5vh;
+  border-radius: 50%;
+  background: #3a506b;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-size: 3rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .profile-section {
     width: auto;
