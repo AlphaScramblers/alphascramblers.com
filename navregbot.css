@@ -635,12 +635,14 @@ footer{
     display: none;
     animation: slidein 2s;
 }
-@keyframes slidein{
-    from{
-        right: 100%;
+@keyframes slidein {
+    from {
+        right: -100%;
+        opacity: 0;
     }
-    to{
-        right: 0%;
+    to {
+        right: 0;
+        opacity: 1;
     }
 }
 .profiledetails{
