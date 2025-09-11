@@ -645,13 +645,12 @@ footer{
     border: 1px solid #e0e6ed;        
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
-    transition: right 1s ease;
+    transition: right 0.5s ease;
+    display: block;
 }
-
 .profile-section.show {
     right: 0;
 }
-
 @keyframes slidein {
     from {
         right: -100%;
