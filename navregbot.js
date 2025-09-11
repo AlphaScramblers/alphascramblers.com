@@ -371,25 +371,25 @@ logsub.addEventListener("click", async (e) => {
         document.documentElement.style.overflow = "auto";
     }
   });
-let state=vis;
+let state="vis";
 profile.addEventListener("click",()=>{
-    if(state==vis){
+    if(state=="vis"){
         profilesection.style.display="none"
-        state=unvis
+        state="unvis"
     }
     else{
         profilesection.style.display="none"
-        state=vis
+        state="vis"
     }
 })
-let state1=vis;
+let state1="vis";
 profile1.addEventListener("click",()=>{
-    if(state1==vis){
+    if(state1=="vis"){
         profilesection.style.display="none"
-        state1=unvis
+        state1="unvis"
     }
     else{
         profilesection.style.display="none"
-        state1=vis
+        state1="vis"
     }
 })
