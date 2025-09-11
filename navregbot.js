@@ -378,7 +378,7 @@ profile.addEventListener("click",()=>{
         state="unvis"
     }
     else{
-        profilesection.style.display="none"
+        profilesection.style.display="block"
         state="vis"
     }
 })
@@ -389,7 +389,7 @@ profile1.addEventListener("click",()=>{
         state1="unvis"
     }
     else{
-        profilesection.style.display="none"
+        profilesection.style.display="block"
         state1="vis"
     }
 })
