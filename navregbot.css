@@ -637,7 +637,7 @@ footer{
 }
 @keyframes slidein{
     from{
-        right: 100%;
+        left: 100%;
     }
     to{
         right: 0%;
