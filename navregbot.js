@@ -382,13 +382,14 @@ profile.addEventListener("click",()=>{
         state=vis
     }
 })
+let state1=vis;
 profile1.addEventListener("click",()=>{
-    if(state==vis){
+    if(state1==vis){
         profilesection.style.display="none"
-        state=unvis
+        state1=unvis
     }
     else{
         profilesection.style.display="none"
-        state=vis
+        state1=vis
     }
 })
