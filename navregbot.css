@@ -624,12 +624,12 @@ footer{
 }
 .avatar1{
   width: 5vw;
-  height: 5vh;
+  height: 10vh;
   border-radius: 50%;
   background: #3a506b;
   color: #ffffff;
   font-family: "Inter", sans-serif;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 600;
   display: flex;
   align-items: center;
