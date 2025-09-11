@@ -371,25 +371,23 @@ logsub.addEventListener("click", async (e) => {
         document.documentElement.style.overflow = "auto";
     }
   });
-let state="vis";
-profile.addEventListener("click",()=>{
-    if(state=="vis"){
-        profilesection.style.display="none"
-        state="unvis"
+let state = "vis";
+profile.addEventListener("click", () => {
+    if (state == "vis") {
+        profilesection.classList.remove("show");
+        state = "unvis";
+    } else {
+        profilesection.classList.add("show");
+        state = "vis";
     }
-    else{
-        profilesection.style.display="block"
-        state="vis"
+});
+let state1 = "vis";
+profile1.addEventListener("click", () => {
+    if (state1 == "vis") {
+        profilesection.classList.remove("show");
+        state1 = "unvis";
+    } else {
+        profilesection.classList.add("show");
+        state1 = "vis";
     }
-})
-let state1="vis";
-profile1.addEventListener("click",()=>{
-    if(state1=="vis"){
-        profilesection.style.display="none"
-        state1="unvis"
-    }
-    else{
-        profilesection.style.display="block"
-        state1="vis"
-    }
-})
+});

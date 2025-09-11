@@ -622,19 +622,23 @@ footer{
   justify-content: center;
   margin-top: 5%;
 }
-.profile-section{
+.profile-section {
     width: auto;
     height: auto;
     position: fixed;
     top: 12vh;
-    right: 0;
+    right: -100%;
     background: #dbe9f4;
     border: 1px solid #e0e6ed;        
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
-    display: none;
-    animation: slidein 2s forwards;
+    transition: right 0.5s ease;
 }
+
+.profile-section.show {
+    right: 0; /* slide in */
+}
+
 @keyframes slidein {
     from {
         right: -100%;
