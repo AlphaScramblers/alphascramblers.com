@@ -278,21 +278,12 @@ logsub.addEventListener("click", async (e) => {
             error1.style.display = "none";
             if(tab.matches){
                 profile.style.display="block"
-                profile.addEventListener("click",()=>{
-                    profilesection.style.display="block"
-                })
             }
             if(mobile.matches){
                 profile1.style.display="block"  
-                profile1.addEventListener("click",()=>{
-                    profilesection.style.display="block"
-                })
             }
             if(lap.matches){
                 profile.style.display="block"
-                profile.addEventListener("click",()=>{
-                    profilesection.style.display="block"
-                })
             }
             login1.style.display="none";
             login.style.display="none";
@@ -380,3 +371,9 @@ logsub.addEventListener("click", async (e) => {
         document.documentElement.style.overflow = "auto";
     }
   });
+profile.addEventListener("click",()=>{
+    profilesection.style.display="block"
+})
+profile1.addEventListener("click",()=>{
+    profilesection.style.display="block"
+})
