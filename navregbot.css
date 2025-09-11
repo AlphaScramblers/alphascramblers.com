@@ -633,6 +633,15 @@ footer{
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
     display: none;
+    animation: slidein 2s;
+}
+@keyframes slidein{
+    from{
+        right: 100%;
+    }
+    to{
+        right: 0%;
+    }
 }
 .profiledetails{
     margin: 2vw;
