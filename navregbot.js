@@ -371,7 +371,7 @@ logsub.addEventListener("click", async (e) => {
         document.documentElement.style.overflow = "auto";
     }
   });
-let state = "vis";
+let state = "unvis";
 profile.addEventListener("click", () => {
     if (state == "vis") {
         profilesection.classList.remove("show");
@@ -381,7 +381,7 @@ profile.addEventListener("click", () => {
         state = "vis";
     }
 });
-let state1 = "vis";
+let state1 = "unvis";
 profile1.addEventListener("click", () => {
     if (state1 == "vis") {
         profilesection.classList.remove("show");
