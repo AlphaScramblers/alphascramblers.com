@@ -78,7 +78,7 @@ export default async function handler(req, res) {
       password: hashedPassword,
     });
 
-    return res.status(201).json({ success: true, userId: result.insertedId, message: "Account created successfully" });
+    return res.status(201).json({ success: true,result:result, userId: result.insertedId, message: "Account created successfully" });
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message });
   } finally {
