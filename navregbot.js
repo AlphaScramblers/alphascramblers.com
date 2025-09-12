@@ -333,6 +333,7 @@ logsub.addEventListener("click", async (e) => {
     const data = await res.json();
     if (data.success) {
         localStorage.setItem("loggedIn", "true");
+
         error2.style.display = "none";
         login.style.display="none";
         login1.style.display="none";
@@ -393,8 +394,25 @@ profile1.addEventListener("click", () => {
 });
 const logout=document.querySelector(".lgtBtn")
 logout.addEventListener("click",() => {
-    localStorage.setItem("loggedIn", "false");
+    localStorage.setItem("loggedIn", "false"); 
+    error2.style.display = "block";
+        login.style.display="block";
+        login1.style.display="block";
+        if(tab.matches){
+                profile.style.display="none"
+       }
+        if(mobile.matches){
+            profile1.style.display="none"  
+        }
+        if(lap.matches){
+            profile.style.display="none"
+        } 
+        logsignin.innerHTML="Signed In Successfully"
+        logname.readOnly=true;
+        logpass2.readOnly=true;
+        logsignin.disabled=true;
+    }
 
   
-}
+
 )
