@@ -241,16 +241,8 @@ let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
 let mobile = window.matchMedia("(max-width: 700px)");
 let lap = window.matchMedia("(min-width: 700px)");
 let profilesection = document.querySelector(".profile-section");
-logsub.addEventListener("click", async (e) => {
-    e.preventDefault();
-    cloader.style.display="flex";
-    alphalogin.style.opacity="0.3";
-    header.style.opacity="0";
-    main.style.opacity="0";
-    bottom.style.opacity="0";
-    overlay.classList.add("overlay1");
-    alphalogin.classList.remove("alphadis");
-    const firstNamerun = document.getElementById("logfname");
+  let name1 =document.querySelector(".namedata");
+  const firstNamerun = document.getElementById("logfname");
     const lastNamerun = document.getElementById("loglname");
     const emailrun = document.getElementById("logmail");
     const mobilenorun = document.getElementById("logmob");
@@ -260,7 +252,17 @@ logsub.addEventListener("click", async (e) => {
     const email = emailrun.value;
     const mobileno = mobilenorun.value;
     const password = passwordrun.value;
-    const name =document.querySelector(".namedata");
+logsub.addEventListener("click", async (e) => {
+    e.preventDefault();
+    cloader.style.display="flex";
+    alphalogin.style.opacity="0.3";
+    header.style.opacity="0";
+    main.style.opacity="0";
+    bottom.style.opacity="0";
+    overlay.classList.add("overlay1");
+    alphalogin.classList.remove("alphadis");
+    
+  
     try{
         const res = await fetch("/api/signup", {
             method: "POST",
@@ -395,3 +397,4 @@ profile1.addEventListener("click", () => {
         state1 = "vis";
     }
 });
+name1.innerHTML=firstName+lastName
