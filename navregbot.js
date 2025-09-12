@@ -244,7 +244,16 @@ let mobile = window.matchMedia("(max-width: 700px)");
 let lap = window.matchMedia("(min-width: 700px)");
 let profilesection = document.querySelector(".profile-section");
   let name1 =document.querySelector(".namedata");
-  
+  const firstNamerun = document.getElementById("logfname");
+    const lastNamerun = document.getElementById("loglname");
+    const emailrun = document.getElementById("logmail");
+    const mobilenorun = document.getElementById("logmob");
+    const passwordrun = document.getElementById("logpass1");
+    const firstName = firstNamerun.value;
+    const lastName = lastNamerun.value;
+    const email = emailrun.value;
+    const mobileno = mobilenorun.value;
+    const password = passwordrun.value;
 logsub.addEventListener("click", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
