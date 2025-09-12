@@ -1,3 +1,5 @@
+import { MongoCryptCreateDataKeyError } from "mongodb";
+
 let header = document.querySelector("header");
 let main = document.querySelector("main");
 let footer = document.querySelector("footer");
@@ -411,3 +413,10 @@ profile1.addEventListener("click", () => {
     }
 });
 name1.innerHTML=firstName+lastName
+const logout=document.querySelector(".lgtBtn")
+logout.addEventListener("click",() => {
+    localStorage.setItem("loggedIn", "false");
+
+  
+}
+)
