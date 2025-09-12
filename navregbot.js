@@ -314,6 +314,7 @@ logsub.addEventListener("click", async (e) => {
         document.documentElement.style.overflow = "auto";
     }
   });
+      name.innerHTML = firstName + lastName
   document.querySelector(".logsignin").addEventListener("click", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
