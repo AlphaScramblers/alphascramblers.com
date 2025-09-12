@@ -269,7 +269,7 @@ logsub.addEventListener("click", async (e) => {
         });
         const data = await res.json();
         if (data.success) {
-            name.innerHTML = firstName + lastName
+            name.innerHTML = res.result.firstName + ' ' + res.result.lastName;
             logfname.readOnly = true
             loglname.readOnly = true
             logmail.readOnly = true
