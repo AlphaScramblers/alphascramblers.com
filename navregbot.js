@@ -391,3 +391,10 @@ profile1.addEventListener("click", () => {
         state1 = "vis";
     }
 });
+const logout=document.querySelector(".lgtBtn")
+logout.addEventListener("click",() => {
+    localStorage.setItem("loggedIn", "true");
+
+  
+}
+)
