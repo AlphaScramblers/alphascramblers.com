@@ -241,17 +241,6 @@ let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
 let mobile = window.matchMedia("(max-width: 700px)");
 let lap = window.matchMedia("(min-width: 700px)");
 let profilesection = document.querySelector(".profile-section");
-  let name1 =document.querySelector(".namedata");
-  const firstNamerun = document.getElementById("logfname");
-    const lastNamerun = document.getElementById("loglname");
-    const emailrun = document.getElementById("logmail");
-    const mobilenorun = document.getElementById("logmob");
-    const passwordrun = document.getElementById("logpass1");
-    const firstName = firstNamerun.value;
-    const lastName = lastNamerun.value;
-    const email = emailrun.value;
-    const mobileno = mobilenorun.value;
-    const password = passwordrun.value;
 logsub.addEventListener("click", async (e) => {
     e.preventDefault();
     cloader.style.display="flex";
@@ -261,8 +250,17 @@ logsub.addEventListener("click", async (e) => {
     bottom.style.opacity="0";
     overlay.classList.add("overlay1");
     alphalogin.classList.remove("alphadis");
-    
-  
+    const firstNamerun = document.getElementById("logfname");
+    const lastNamerun = document.getElementById("loglname");
+    const emailrun = document.getElementById("logmail");
+    const mobilenorun = document.getElementById("logmob");
+    const passwordrun = document.getElementById("logpass1");
+    const firstName = firstNamerun.value;
+    const lastName = lastNamerun.value;
+    const email = emailrun.value;
+    const mobileno = mobilenorun.value;
+    const password = passwordrun.value;
+    const name =document.querySelector(".namedata");
     try{
         const res = await fetch("/api/signup", {
             method: "POST",
@@ -397,4 +395,3 @@ profile1.addEventListener("click", () => {
         state1 = "vis";
     }
 });
-name1.innerHTML=firstName+lastName
