@@ -261,6 +261,16 @@ logsub.addEventListener("click", async (e) => {
     bottom.style.opacity="0";
     overlay.classList.add("overlay1");
     alphalogin.classList.remove("alphadis");
+    const firstNamerun = document.getElementById("logfname");
+    const lastNamerun = document.getElementById("loglname");
+    const emailrun = document.getElementById("logmail");
+    const mobilenorun = document.getElementById("logmob");
+    const passwordrun = document.getElementById("logpass1");
+    const firstName = firstNamerun.value;
+    const lastName = lastNamerun.value;
+    const email = emailrun.value;
+    const mobileno = mobilenorun.value;
+    const password = passwordrun.value;
     
   
     try{
@@ -271,7 +281,7 @@ logsub.addEventListener("click", async (e) => {
         });
         const data = await res.json();
         if (data.success) {
-            name.innerHTML = firstName + lastName
+            name1.innerHTML = firstName + lastName
             logfname.readOnly = true
             loglname.readOnly = true
             logmail.readOnly = true
