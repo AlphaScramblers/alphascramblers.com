@@ -393,7 +393,7 @@ profile1.addEventListener("click", () => {
 });
 const logout=document.querySelector(".lgtBtn")
 logout.addEventListener("click",() => {
-    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("loggedIn", "false");
 
   
 }
