@@ -103,9 +103,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 document.addEventListener("DOMContentLoaded", () => {
+  const userFirstName = localStorage.getItem('userFirstName');
+    const userLastName = localStorage.getItem('userLastName');
+    const name1 = document.querySelector(".namedata");
+
+    if (userFirstName && userLastName) {
+   
+        name1.innerHTML = userFirstName + ' ' + userLastName;
+    }
+    
   const link = document.querySelector(".link1"); 
   link.addEventListener("click", (e) => {
     const loggedIn = localStorage.getItem("loggedIn");
+    
+    
+
     if (!loggedIn) {
       e.preventDefault(); 
       alert("Please log in first to access the Psychometric Test page!");   
