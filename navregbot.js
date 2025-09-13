@@ -260,6 +260,7 @@ logsub.addEventListener("click", async (e) => {
     const email = emailrun.value;
     const mobileno = mobilenorun.value;
     const password = passwordrun.value;
+    const avatar = document.querySelector(".avatar");
     try{
         const res = await fetch("/api/signup", {
             method: "POST",
@@ -269,8 +270,10 @@ logsub.addEventListener("click", async (e) => {
         const data = await res.json();
         if (data.success) {
 
+
             localStorage.setItem("phla",firstName );
             localStorage.setItem("dusra",lastName );
+            avatar.style.display="none";
             
             logfname.readOnly = true
             loglname.readOnly = true
@@ -337,6 +340,7 @@ logsub.addEventListener("click", async (e) => {
     const data = await res.json();
     if (data.success) {
         localStorage.setItem("loggedIn", "true");
+        avatar.style.display="block";
 
         error2.style.display = "none";
         login.style.display="none";
@@ -396,7 +400,3 @@ profile1.addEventListener("click", () => {
         state1 = "vis";
     }
 });
-const name1=document.querySelector(".namedata");
-const phla =localStorage.getItem("phla");
-const dusra =localStorage.getItem("dusra");
-name1.innerHTML=phla +" "+dusra;
