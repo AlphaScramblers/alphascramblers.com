@@ -77,67 +77,59 @@ d4.addEventListener("click",()=>{
     d4.style.backgroundColor="gray";
 })
 
+
 document.addEventListener("DOMContentLoaded", () => {
-  
-  const banner = document.querySelector(".banner");
-  const d1 = document.querySelector(".d1");
-  const d2 = document.querySelector(".d2");
-  const d3 = document.querySelector(".d3");
-  const d4 = document.querySelector(".d4");
-  const logout = document.querySelector(".lgtBtn");
-  const login = document.querySelector(".login");
-  const login1 = document.querySelector(".login1");
-  const profile = document.querySelector(".profile");
-  const profile1 = document.querySelector(".profile1");
   const logsignin = document.querySelector(".logsignin");
   const logname = document.getElementById("logname");
   const logpass2 = document.getElementById("logpass2");
   const error2 = document.querySelector(".error1");
-  const tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
-  const mobile = window.matchMedia("(max-width: 700px)");
-  const lap = window.matchMedia("(min-width: 700px)");
 
+  logsignin.addEventListener("click", async () => {
+    error2.style.display = "none";
 
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: logname.value,
+          password: logpass2.value
+        })
+      });
 
-  
-  const loggedIn = localStorage.getItem("loggedIn");
-  if (loggedIn === "true") {
-    login.style.display = "none";
-    login1.style.display = "none";
-    profile.style.display = lap.matches ? "block" : "none";
-    profile1.style.display = mobile.matches ? "block" : "none";
-    logsignin.innerHTML = "Signed In Successfully";
-    logsignin.disabled = true;
-    logname.readOnly = true;
-    logpass2.readOnly = true;
-  } else {
-    login.style.display = "block";
-    login1.style.display = "block";
-    profile.style.display = "none";
-    profile1.style.display = "none";
-  }
+      // 🔹 DEBUG: read raw text first
+      const text = await res.text();
+      console.log("Status:", res.status);
+      console.log("Raw response:", text);
 
-  
-  const link = document.querySelector(".link1");
-  if (link) {
-    link.addEventListener("click", e => {
-      if (localStorage.getItem("loggedIn") !== "true") {
-        e.preventDefault();
-        alert("Please log in first to access the Psychometric Test page!");
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        alert("Server did not return JSON:\n" + text);
+        return;
       }
-    });
-  }
 
+      if (data.success) {
+        localStorage.setItem("loggedIn", "true");
+        document.querySelector(".login").style.display = "none";
+        document.querySelector(".login1").style.display = "none";
+        document.querySelector(".profile").style.display = "block";
+        document.querySelector(".profile1").style.display = "block";
+        logsignin.innerHTML = "Signed In Successfully";
+        logsignin.disabled = true;
+        logname.readOnly = true;
+        logpass2.readOnly = true;
+      } else {
+        error2.innerHTML = data.message || "Something went wrong!";
+        error2.style.display = "block";
+      }
 
-  if (logout) {
-    logout.addEventListener("click", () => {
-      localStorage.removeItem("loggedIn");
-      error2.style.display = "block";
-      login.style.display = "block";
-      login1.style.display = "block";
-      profile.style.display = "none";
-      profile1.style.display = "none";
-    });
-  }
+    } catch (err) {
+      alert("❌ Something went wrong (network):\n" + err.message);
+    }
+  });
 });
+
+
 
