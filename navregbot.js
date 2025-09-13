@@ -392,8 +392,4 @@ profile1.addEventListener("click", () => {
         profilesection.classList.add("show");
         state1 = "vis";
     }
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> parent of e0a085e (logout)
