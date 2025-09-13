@@ -273,10 +273,27 @@ logsub.addEventListener("click", async (e) => {
 
             localStorage.setItem("phla",firstName );
             localStorage.setItem("dusra",lastName );
-           
             
-           
-           
+            
+            logfname.readOnly = true
+            loglname.readOnly = true
+            logmail.readOnly = true
+            logmob.readOnly = true
+            logpass1.readOnly = true
+            logsub.disabled = true
+            logsub.innerHTML="Account Created"
+            error1.style.display = "none";
+            if(tab.matches){
+                profile.style.display="block"
+            }
+            if(mobile.matches){
+                profile1.style.display="block"  
+            }
+            if(lap.matches){
+                profile.style.display="block"
+            }
+            login1.style.display="none";
+            login.style.display="none";
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
             error1.style.display = "block"; 
