@@ -304,7 +304,7 @@ logsub.addEventListener("click", async (e) => {
         }
     }
     catch (err) {
-        alert("❌ Something went wrong.");
+        alert("❌ Something went wrong."  );
     }
     finally{
         cloader.style.display = "none";
@@ -339,7 +339,7 @@ logsub.addEventListener("click", async (e) => {
     const data = await res.json();
     if (data.success) {
         localStorage.setItem("loggedIn", "true");
-        avatar.style.display="block"
+        
 
         error2.style.display = "none";
         login.style.display="none";
