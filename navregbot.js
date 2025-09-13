@@ -268,6 +268,10 @@ logsub.addEventListener("click", async (e) => {
         });
         const data = await res.json();
         if (data.success) {
+
+            localStorage.setItem("phla",firstName );
+            localStorage.setItem("dusra",lastName );
+            
             logfname.readOnly = true
             loglname.readOnly = true
             logmail.readOnly = true
@@ -392,27 +396,7 @@ profile1.addEventListener("click", () => {
         state1 = "vis";
     }
 });
-const logout=document.querySelector(".lgtBtn")
-logout.addEventListener("click",() => {
-    localStorage.setItem("loggedIn", "false"); 
-    error2.style.display = "block";
-        login.style.display="block";
-        login1.style.display="block";
-        if(tab.matches){
-                profile.style.display="none"
-       }
-        if(mobile.matches){
-            profile1.style.display="none"  
-        }
-        if(lap.matches){
-            profile.style.display="none"
-        } 
-        logsignin.innerHTML="Signed In Successfully"
-        logname.readOnly=true;
-        logpass2.readOnly=true;
-        logsignin.disabled=true;
-    }
-
-  
-
-)
+const name1=document.querySelector(".namedata");
+const phla =localStorage.getItem("phla");
+const dusra =localStorage.getItem("dusra");
+name1.innerHTML=phla +" "+dusra;
