@@ -76,41 +76,36 @@ d4.addEventListener("click",()=>{
     d3.style.backgroundColor="white";
     d4.style.backgroundColor="gray";
 })
-const logout=document.querySelector(".lgtBtn")
-let logfname = document.getElementById("logfname");
-let loglname = document.getElementById("loglname");
-let logmob = document.getElementById("logmob");
-let logmail = document.getElementById("logmail");
-let logpass1 = document.getElementById("logpass1");
-let error1 = document.querySelector(".error")
-let error2 = document.querySelector(".error1")
-let logsub = document.querySelector(".logsub")
-let profile = document.querySelector(".profile")
-let profile1 = document.querySelector(".profile1")
-let login = document.querySelector(".login")
-let login1 = document.querySelector(".login1")
-let logpass2 = document.getElementById("logpass2");
-let logname = document.getElementById("logname");
-let logsignin = document.querySelector(".logsignin");
-let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
-let mobile = window.matchMedia("(max-width: 700px)");
-let lap = window.matchMedia("(min-width: 700px)");
-let profilesection = document.querySelector(".profile-section");
+
 document.addEventListener("DOMContentLoaded", () => {
+  
+  const banner = document.querySelector(".banner");
+  const d1 = document.querySelector(".d1");
+  const d2 = document.querySelector(".d2");
+  const d3 = document.querySelector(".d3");
+  const d4 = document.querySelector(".d4");
+  const logout = document.querySelector(".lgtBtn");
+  const login = document.querySelector(".login");
+  const login1 = document.querySelector(".login1");
+  const profile = document.querySelector(".profile");
+  const profile1 = document.querySelector(".profile1");
+  const logsignin = document.querySelector(".logsignin");
+  const logname = document.getElementById("logname");
+  const logpass2 = document.getElementById("logpass2");
+  const error2 = document.querySelector(".error1");
+  const tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
+  const mobile = window.matchMedia("(max-width: 700px)");
+  const lap = window.matchMedia("(min-width: 700px)");
+
+
+
+  
   const loggedIn = localStorage.getItem("loggedIn");
-  if (loggedIn) {
+  if (loggedIn === "true") {
     login.style.display = "none";
     login1.style.display = "none";
-
-    if (tab.matches) {
-      profile.style.display = "block";
-    }
-    if (mobile.matches) {
-      profile1.style.display = "block";
-    }
-    if (lap.matches) {
-      profile.style.display = "block";
-    }
+    profile.style.display = lap.matches ? "block" : "none";
+    profile1.style.display = mobile.matches ? "block" : "none";
     logsignin.innerHTML = "Signed In Successfully";
     logsignin.disabled = true;
     logname.readOnly = true;
@@ -121,34 +116,28 @@ document.addEventListener("DOMContentLoaded", () => {
     profile.style.display = "none";
     profile1.style.display = "none";
   }
-   const link = document.querySelector(".link1"); 
-  link.addEventListener("click", (e) => {
-    const loggedIn = localStorage.getItem("loggedIn");
-    if (!loggedIn) {
-      e.preventDefault(); 
-      alert("Please log in first to access the Psychometric Test page!");   
-    }
-
-  });
-  
-logout.addEventListener("click",() => {
-    localStorage.removeItem("loggedIn");
-    error2.style.display = "block";
-        login.style.display="block";
-        login1.style.display="block";
-        if(tab.matches){
-                profile.style.display="none"
-       }
-        if(mobile.matches){
-            profile1.style.display="none"  
-        }
-        if(lap.matches){
-            profile.style.display="none"
-        } 
-       
-    }
 
   
+  const link = document.querySelector(".link1");
+  if (link) {
+    link.addEventListener("click", e => {
+      if (localStorage.getItem("loggedIn") !== "true") {
+        e.preventDefault();
+        alert("Please log in first to access the Psychometric Test page!");
+      }
+    });
+  }
 
-)
+
+  if (logout) {
+    logout.addEventListener("click", () => {
+      localStorage.removeItem("loggedIn");
+      error2.style.display = "block";
+      login.style.display = "block";
+      login1.style.display = "block";
+      profile.style.display = "none";
+      profile1.style.display = "none";
+    });
+  }
 });
+
