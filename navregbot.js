@@ -276,7 +276,17 @@ logsub.addEventListener("click", async (e) => {
             logsub.disabled = true
             logsub.innerHTML="Account Created"
             error1.style.display = "none";
-           
+            if(tab.matches){
+                profile.style.display="block"
+            }
+            if(mobile.matches){
+                profile1.style.display="block"  
+            }
+            if(lap.matches){
+                profile.style.display="block"
+            }
+            login1.style.display="none";
+            login.style.display="none";
 
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
