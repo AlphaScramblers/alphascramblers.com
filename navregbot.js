@@ -25,6 +25,7 @@ else{
     menu.classList.add("navcon-ele");
 }
 })
+// overlay.style.height= document.documentElement.scrollHeight + "px";
 let cross= document.querySelector(".cross")
 let alphalogin = document.querySelector(".alphalogin");
 let reg = document.querySelectorAll(".r");
@@ -175,12 +176,14 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
       mail: document.getElementById("mailct").value,
       contact: document.getElementById("contactct").value
     };
+    
     try{
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData)
     });
+
     const data = await res.json();
     if (data.success) {
       talk.innerHTML="Query Submitted";
@@ -247,6 +250,16 @@ logsub.addEventListener("click", async (e) => {
     bottom.style.opacity="0";
     overlay.classList.add("overlay1");
     alphalogin.classList.remove("alphadis");
+    const firstNamerun = document.getElementById("logfname");
+    const lastNamerun = document.getElementById("loglname");
+    const emailrun = document.getElementById("logmail");
+    const mobilenorun = document.getElementById("logmob");
+    const passwordrun = document.getElementById("logpass1");
+    const firstName = firstNamerun.value;
+    const lastName = lastNamerun.value;
+    const email = emailrun.value;
+    const mobileno = mobilenorun.value;
+    const password = passwordrun.value;
     try{
         const res = await fetch("/api/signup", {
             method: "POST",
@@ -285,7 +298,7 @@ logsub.addEventListener("click", async (e) => {
         }
     }
     catch (err) {
-        alert("❌ Something went wrong."  );
+        alert("❌ Something went wrong.");
     }
     finally{
         cloader.style.display = "none";
@@ -308,11 +321,11 @@ logsub.addEventListener("click", async (e) => {
     overlay.classList.add("overlay1");
     alphalogin.classList.remove("alphadis");
     try{
-        const emailrun = document.getElementById("logname");
-        const passwordrun = document.getElementById("logpass2");
-        const email = emailrun.value;
-        const password= passwordrun.value;
-        const res = await fetch("/api/login", {
+    const emailrun = document.getElementById("logname");
+    const passwordrun = document.getElementById("logpass2");
+    const email = emailrun.value;
+    const password= passwordrun.value;
+    const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
