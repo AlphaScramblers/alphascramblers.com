@@ -102,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     profile1.style.display = "none";
   }
 });
+const logout=document.querySelector(".lgtBtn")
 document.addEventListener("DOMContentLoaded", () => {
   const link = document.querySelector(".link1"); 
   link.addEventListener("click", (e) => {
@@ -110,5 +111,30 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault(); 
       alert("Please log in first to access the Psychometric Test page!");   
     }
+
   });
+  
+logout.addEventListener("click",() => {
+    localStorage.setItem("loggedIn", "false"); 
+    error2.style.display = "block";
+        login.style.display="block";
+        login1.style.display="block";
+        if(tab.matches){
+                profile.style.display="none"
+       }
+        if(mobile.matches){
+            profile1.style.display="none"  
+        }
+        if(lap.matches){
+            profile.style.display="none"
+        } 
+        logsignin.innerHTML="Signed In Successfully"
+        logname.readOnly=true;
+        logpass2.readOnly=true;
+        logsignin.disabled=true;
+    }
+
+  
+
+)
 });
