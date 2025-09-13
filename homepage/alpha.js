@@ -112,7 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const name1=document.querySelector(".namedata")
   name1.addEventListener("click",() => {
     localStorage.removeItem("loggedIn")
-    if (!loggedIn) {
+    const uploggedIn=localStorage.getItem("loggedIn");
+    if (!uploggedIn) {
     login.style.display = "block";
     login1.style.display = "block";
 
