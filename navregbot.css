@@ -781,12 +781,14 @@ footer{
   font-weight: 500;
   color: #2d3748;
 }
-
+.socialicons{
+    display: none;
+}
 @media screen and (min-width: 700px) and (max-width: 1000px){
 .rightnav{
     display: flex;
     align-items: center;
-    font-size: 0.9rrem;
+    font-size: 0.9rem;
     width: 80%;
     padding-left: 20%;
 }
@@ -874,30 +876,46 @@ footer{
         margin-bottom: 5%;
     }
     .bottomlogo{
+        display: none;
+    }
+    .social{
+        position: absolute;
+        left: 40%;
+    }
+    .socialicons{
         width: 100%;
         display: flex;
         justify-content: center;
-        display: none;
+        gap: 3%;
+        margin-bottom: 4%;
+        margin-top: 4%;
     }
-    .blogoimg{
-        width: 40%;
+    .socialicons a{
+        color: lightgrey;
+        font-size: 0.8rem;
+    }
+    .logobottom{
+        display: none;
     }
     .ql,.features,.know,.hns,.cnt{
         font-size: 0.75rem;
     }
+    .hands,.kn,.chead{
+        font-size: 1rem;
+    }
     .ql,.features,.bottoms3,.cnt{
-        padding: 3%;
+        padding: 0.5%;
     }
     .bottomdata{
-        padding: 3%;
+        padding: 1%;
     }
     .rightnav{
         display: flex;
         flex-direction: column;
-        font-size: 0.6rrem;
+        font-size: 0.6rem;
     }
     .logname{
-        font-size: 0.9rrem;
+        font-size: 0.9rem;
     }
     .home,.login,.help,.about{
         display: none;
@@ -908,7 +926,6 @@ footer{
         padding-right: 1%;
         position: absolute;
         right: 8%;
-        position: fixed;
     }
     .navcon-ele-new{
         display: flex;
@@ -937,8 +954,8 @@ footer{
         margin-top: 2vh;
     }
     .contactuslogo{
-        width: 10vw;
-        height: 5.1vh;
+        width: 11%;
+        height: 6.2%;
         font-size: 1rem;
         right: 2%;
     }
@@ -978,10 +995,6 @@ footer{
     .crossct{
         right: -4%;
         top: -4%;
-    }
-    .logobottom{
-        margin-top: 70vh;
-        /* display: flex; */
     }
     .social{
         display: flex;
@@ -1065,11 +1078,27 @@ footer{
         margin-left: 4vw;
     }
     .member1{
-        /* margin-top: 5vh; */
         margin-left: 6vw;
     }
     .caa{
         color: #4aa72d;
+    }
+    .bottomtext{
+        gap: 0;
+    }
+    .logobottom1{
+        margin-top: 6%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+    }
+    .social1{
+        margin-top: 15%;
+    }
+    .bottomlogo1{
+        width: 35%;
     }
 }
 @keyframes navconele{

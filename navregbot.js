@@ -335,13 +335,11 @@ logsub.addEventListener("click", async (e) => {
     const data = await res.json();
     if (data.success) {
         localStorage.setItem("loggedIn", "true");
-        
-
         error2.style.display = "none";
         login.style.display="none";
         login1.style.display="none";
         if(tab.matches){
-                profile.style.display="block"
+            profile.style.display="block"
        }
         if(mobile.matches){
             profile1.style.display="block"  
@@ -394,4 +392,24 @@ profile1.addEventListener("click", () => {
         profilesection.classList.add("show");
         state1 = "vis";
     }
+});
+window.addEventListener("load", () => {
+  if (localStorage.getItem("loggedIn") === "true") {
+    login.style.display = "none";
+    login1.style.display = "none";
+    if (tab.matches || lap.matches) {
+      profile.style.display = "block";
+    }
+  } else {
+    if (mobile.matches) {
+      login1.style.display = "block";
+      login.style.display="none"
+    }
+    if (tab.matches || lap.matches) {
+      login.style.display = "block";
+      login1.style.display = "none";
+    }
+    profile.style.display = "none";
+    profile1.style.display = "none";
+  }
 });
