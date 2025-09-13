@@ -22,12 +22,14 @@ export default async function handler(req, res) {
 
     const user = await users.findOne({ email });
     if (!user) {
-      return res.status(400).json({success: false, message: "User Not Found"});
+return res.status(400).json({ success: false, message: "User Not Found" });
+
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({success: false, message: "Invalid Credentials"});
+      return res.status(401).json({ success: false, message: "Invalid Credentials" });
+
     }
 
    
@@ -41,6 +43,7 @@ export default async function handler(req, res) {
       },
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  return res.status(500).json({ success: false, message: err.message });
+}
+
 }
