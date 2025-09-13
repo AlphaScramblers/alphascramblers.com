@@ -284,13 +284,13 @@ logsub.addEventListener("click", async (e) => {
             logsub.innerHTML="Account Created"
             error1.style.display = "none";
             if(tab.matches){
-                profile.style.display="block"
+                profile.style.display="none"
             }
             if(mobile.matches){
-                profile1.style.display="block"  
+                profile1.style.display="none"  
             }
             if(lap.matches){
-                profile.style.display="block"
+                profile.style.display="none"
             }
             login1.style.display="none";
             login.style.display="none";
