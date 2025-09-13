@@ -101,8 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
     profile.style.display = "none";
     profile1.style.display = "none";
   }
-});
-document.addEventListener("DOMContentLoaded", () => {
   const link = document.querySelector(".link1"); 
   link.addEventListener("click", (e) => {
     const loggedIn = localStorage.getItem("loggedIn");
@@ -111,4 +109,4 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Please log in first to access the Psychometric Test page!");   
     }
   });
-})
+});
