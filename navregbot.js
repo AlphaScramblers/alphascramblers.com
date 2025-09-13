@@ -287,6 +287,7 @@ logsub.addEventListener("click", async (e) => {
             }
             login1.style.display="none";
             login.style.display="none";
+
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
             error1.style.display = "block"; 
@@ -333,6 +334,8 @@ logsub.addEventListener("click", async (e) => {
     const data = await res.json();
     if (data.success) {
         localStorage.setItem("loggedIn", "true");
+        
+
         error2.style.display = "none";
         login.style.display="none";
         login1.style.display="none";
@@ -390,4 +393,8 @@ profile1.addEventListener("click", () => {
         profilesection.classList.add("show");
         state1 = "vis";
     }
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> parent of e0a085e (logout)
