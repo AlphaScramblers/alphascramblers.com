@@ -274,7 +274,6 @@ logsub.addEventListener("click", async (e) => {
             localStorage.setItem("phla",firstName );
             localStorage.setItem("dusra",lastName );
             
-            
             logfname.readOnly = true
             loglname.readOnly = true
             logmail.readOnly = true
