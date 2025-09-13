@@ -77,17 +77,17 @@ d4.addEventListener("click",()=>{
     d4.style.backgroundColor="gray";
 })
 document.addEventListener("DOMContentLoaded", () => {
-  const tab    = window.matchMedia("(min-width: 768px) and (max-width: 1024px)");
-const mobile = window.matchMedia("(max-width: 767px)");
-const lap    = window.matchMedia("(min-width: 1025px)");
+  let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
+let mobile = window.matchMedia("(max-width: 700px)");
+let lap = window.matchMedia("(min-width: 700px)");
 
    const login      = document.querySelector(".login");
   const login1     = document.querySelector(".login1");
   const profile    = document.querySelector(".profile");
   const profile1   = document.querySelector(".profile1");
-  const logsignin  = document.querySelector("#logsignin");
-  const logname    = document.querySelector("#logname");
-  const logpass2   = document.querySelector("#logpass2");
+let logsignin = document.querySelector(".logsignin");
+  let logname = document.getElementById("logname");
+let logpass2 = document.getElementById("logpass2");
 
   const loggedIn = localStorage.getItem("loggedIn");
   if (loggedIn) {
@@ -121,8 +121,8 @@ const lap    = window.matchMedia("(min-width: 1025px)");
       alert("Please log in first to access the Psychometric Test page!");   
     }
   });
-  const name1=document.querySelector(".lgtBtn")
-  name1.addEventListener("click",() => {
+  const logoutbut=document.querySelector(".lgtBtn")
+  logoutbut.addEventListener("click",() => {
     localStorage.removeItem("loggedIn")
     const uploggedIn=localStorage.getItem("loggedIn");
     if (!uploggedIn) {
