@@ -183,6 +183,16 @@ dotlottie-wc{
     .anim3{
         margin-bottom:5%
     }
+    .logobottom1{
+        /* margin: 10px; */
+        margin-left: 23vw;
+    }
+    .blogoimg{
+        scale: 1.5;
+    }
+    .social1{
+        margin-top: 5vw;
+    }
 }
 @media screen and (min-width: 700px) and (max-width: 1000px){
     .imgdata{

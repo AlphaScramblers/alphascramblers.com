@@ -472,7 +472,8 @@ body{
         text-align: center;
     }
     .intext{
-        text-align: center;
+        text-align:justify;
+        font-size: 0.9rem;
     }
     .boxmain{
         width: 98%;

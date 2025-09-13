@@ -997,6 +997,80 @@ footer{
     .logologin{
         display: none;
     }
+    .alphalogin{
+        margin-left: 3.7vw;
+        margin-top: 10vw;
+        width: 100vw;
+    }
+    .signup{
+        width: 80vw;
+        height: 55vh;
+    }
+    .start{
+        font-size: 0.9rem;
+        margin-left: 4vw;
+    }
+    .acc{
+        font-size: 2.5rem;
+        margin-left: 4vw;
+    }
+    .member{
+        margin-left: 4vw;
+    }
+    #logfname,#loglname,#logmob,#logmail,#logpass1{
+        height: 4vh;
+    }
+    #logmob,#logmail,#logpass1{
+        width: 70vw;
+        margin-left: 4vw;
+    }
+    #logfname{
+        width: 33.5vw;
+        margin-left: 4vw;
+    }
+    #loglname{
+        width: 33vw;
+    }
+    .log{
+        margin-left: 10px;
+        color:#4aa72d;
+    }
+    .sub{
+        margin-top: 2vw;
+    }
+    .logsub{
+        margin-left: 15vw;
+        width: 50vw;
+        font-size: 1.2rem;
+        height: 4vh;
+    }
+    .loginform{
+        width: 80vw;
+        height: 55vh;
+    }
+    .accdetails{
+        margin-left: 4vw;
+    }
+    #logname,#logpass2{
+        height: 4vh;
+        width: 70vw;
+        margin-left: 4vw;
+    }
+    .fp{
+        margin-top: 2vh;
+        margin-left: 4vw;
+        color: #4aa72d;
+    }
+    .logsignin{
+        margin-left: 4vw;
+    }
+    .member1{
+        /* margin-top: 5vh; */
+        margin-left: 6vw;
+    }
+    .caa{
+        color: #4aa72d;
+    }
 }
 @keyframes navconele{
     0%{padding-left:100%}
