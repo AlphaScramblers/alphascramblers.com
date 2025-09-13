@@ -127,9 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
       profile.style.display = "none";
     }
    
-    logsignin.disabled = true;
-    logname.readOnly = true;
-    logpass2.readOnly = true;
+    logsignin.disabled = false;
+    logname.readOnly = false;
+    logpass2.readOnly = false;
   } else {
     login.style.display = "none";
     login1.style.display = "none";
