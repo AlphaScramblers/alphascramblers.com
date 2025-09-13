@@ -77,6 +77,10 @@ d4.addEventListener("click",()=>{
     d4.style.backgroundColor="gray";
 })
 document.addEventListener("DOMContentLoaded", () => {
+  const tab    = window.matchMedia("(min-width: 768px) and (max-width: 1024px)");
+const mobile = window.matchMedia("(max-width: 767px)");
+const lap    = window.matchMedia("(min-width: 1025px)");
+
    const login      = document.querySelector(".login");
   const login1     = document.querySelector(".login1");
   const profile    = document.querySelector(".profile");
