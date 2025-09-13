@@ -260,7 +260,7 @@ logsub.addEventListener("click", async (e) => {
     const email = emailrun.value;
     const mobileno = mobilenorun.value;
     const password = passwordrun.value;
-    
+    const name =document.querySelector(".namedata");
     try{
         const res = await fetch("/api/signup", {
             method: "POST",
@@ -269,11 +269,7 @@ logsub.addEventListener("click", async (e) => {
         });
         const data = await res.json();
         if (data.success) {
-
-
-            localStorage.setItem("phla",firstName );
-            localStorage.setItem("dusra",lastName );
-            
+            name.innerHTML = res.result.firstName + ' ' + res.result.lastName;
             logfname.readOnly = true
             loglname.readOnly = true
             logmail.readOnly = true
