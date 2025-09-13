@@ -80,6 +80,7 @@ d4.addEventListener("click",()=>{
 document.addEventListener("DOMContentLoaded", () => {
   
   const banner = document.querySelector(".banner");
+  const pp = document.querySelector(".profile-section");
   const d1 = document.querySelector(".d1");
   const d2 = document.querySelector(".d2");
   const d3 = document.querySelector(".d3");
@@ -137,6 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
       login1.style.display = "block";
       profile.style.display = "none";
       profile1.style.display = "none";
+      pp.style.display="none";
+
     });
   }
 });
