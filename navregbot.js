@@ -292,8 +292,8 @@ logsub.addEventListener("click", async (e) => {
             if(lap.matches){
                 profile.style.display="none"
             }
-            login1.style.display="none";
-            login.style.display="none";
+            login1.style.display="block";
+            login.style.display="block";
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
             error1.style.display = "block"; 
