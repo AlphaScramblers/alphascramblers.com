@@ -275,14 +275,7 @@ logsub.addEventListener("click", async (e) => {
             localStorage.setItem("dusra",lastName );
            
             
-            logfname.readOnly = true
-            loglname.readOnly = true
-            logmail.readOnly = true
-            logmob.readOnly = true
-            logpass1.readOnly = true
-            logsub.disabled = true
-            logsub.innerHTML="Account Created"
-            error1.style.display = "none";
+           
            
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
