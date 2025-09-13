@@ -77,6 +77,14 @@ d4.addEventListener("click",()=>{
     d4.style.backgroundColor="gray";
 })
 document.addEventListener("DOMContentLoaded", () => {
+   const login      = document.querySelector(".login");
+  const login1     = document.querySelector(".login1");
+  const profile    = document.querySelector(".profile");
+  const profile1   = document.querySelector(".profile1");
+  const logsignin  = document.querySelector("#logsignin");
+  const logname    = document.querySelector("#logname");
+  const logpass2   = document.querySelector("#logpass2");
+
   const loggedIn = localStorage.getItem("loggedIn");
   if (loggedIn) {
     login.style.display = "none";
