@@ -273,7 +273,7 @@ logsub.addEventListener("click", async (e) => {
 
             localStorage.setItem("phla",firstName );
             localStorage.setItem("dusra",lastName );
-            avatar.style.display="none";
+           
             
             logfname.readOnly = true
             loglname.readOnly = true
@@ -283,17 +283,7 @@ logsub.addEventListener("click", async (e) => {
             logsub.disabled = true
             logsub.innerHTML="Account Created"
             error1.style.display = "none";
-            if(tab.matches){
-                profile.style.display="none"
-            }
-            if(mobile.matches){
-                profile1.style.display="none"  
-            }
-            if(lap.matches){
-                profile.style.display="none"
-            }
-            login1.style.display="block";
-            login.style.display="block";
+           
         } else {
             error1.innerHTML = data.message || "Something went wrong!";
             error1.style.display = "block"; 
