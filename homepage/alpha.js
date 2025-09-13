@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Please log in first to access the Psychometric Test page!");   
     }
   });
-  const name1=document.querySelector(".namedata")
+  const name1=document.querySelector(".lgtBtn")
   name1.addEventListener("click",() => {
     localStorage.removeItem("loggedIn")
     const uploggedIn=localStorage.getItem("loggedIn");
