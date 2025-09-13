@@ -76,6 +76,26 @@ d4.addEventListener("click",()=>{
     d3.style.backgroundColor="white";
     d4.style.backgroundColor="gray";
 })
+const logout=document.querySelector(".lgtBtn")
+let logfname = document.getElementById("logfname");
+let loglname = document.getElementById("loglname");
+let logmob = document.getElementById("logmob");
+let logmail = document.getElementById("logmail");
+let logpass1 = document.getElementById("logpass1");
+let error1 = document.querySelector(".error")
+let error2 = document.querySelector(".error1")
+let logsub = document.querySelector(".logsub")
+let profile = document.querySelector(".profile")
+let profile1 = document.querySelector(".profile1")
+let login = document.querySelector(".login")
+let login1 = document.querySelector(".login1")
+let logpass2 = document.getElementById("logpass2");
+let logname = document.getElementById("logname");
+let logsignin = document.querySelector(".logsignin");
+let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
+let mobile = window.matchMedia("(max-width: 700px)");
+let lap = window.matchMedia("(min-width: 700px)");
+let profilesection = document.querySelector(".profile-section");
 document.addEventListener("DOMContentLoaded", () => {
   const loggedIn = localStorage.getItem("loggedIn");
   if (loggedIn) {
@@ -101,10 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     profile.style.display = "none";
     profile1.style.display = "none";
   }
-});
-const logout=document.querySelector(".lgtBtn")
-document.addEventListener("DOMContentLoaded", () => {
-  const link = document.querySelector(".link1"); 
+   const link = document.querySelector(".link1"); 
   link.addEventListener("click", (e) => {
     const loggedIn = localStorage.getItem("loggedIn");
     if (!loggedIn) {
@@ -115,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   
 logout.addEventListener("click",() => {
-    localStorage.setItem("loggedIn", "false"); 
+    localStorage.removeItem("loggedIn");
     error2.style.display = "block";
         login.style.display="block";
         login1.style.display="block";
@@ -128,10 +145,7 @@ logout.addEventListener("click",() => {
         if(lap.matches){
             profile.style.display="none"
         } 
-        logsignin.innerHTML="Signed In Successfully"
-        logname.readOnly=true;
-        logpass2.readOnly=true;
-        logsignin.disabled=true;
+       
     }
 
   
