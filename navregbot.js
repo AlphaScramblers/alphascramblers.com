@@ -270,6 +270,9 @@ logsub.addEventListener("click", async (e) => {
         if (data.success) {
             localStorage.setItem("firstName", firstName);
     localStorage.setItem("lastName", lastName);
+     localStorage.setItem("email", email);
+     localStorage.setItem("no", mobileno);
+     
             localStorage.setItem("loggedIn", "true");
             logfname.readOnly = true
             loglname.readOnly = true
