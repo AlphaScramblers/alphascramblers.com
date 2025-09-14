@@ -274,6 +274,7 @@ logsub.addEventListener("click", async (e) => {
      localStorage.setItem("no", mobileno);
      
             localStorage.setItem("loggedIn", "true");
+            window.location.reload();
             logfname.readOnly = true
             loglname.readOnly = true
             logmail.readOnly = true
@@ -317,6 +318,7 @@ logsub.addEventListener("click", async (e) => {
         document.body.style.overflow="auto";
         document.documentElement.style.overflow = "auto";
     }
+
   });
   document.querySelector(".logsignin").addEventListener("click", async (e) => {
     e.preventDefault();
@@ -340,6 +342,7 @@ logsub.addEventListener("click", async (e) => {
     const data = await res.json();
     if (data.success) {
         localStorage.setItem("loggedIn", "true");
+        window.location.reload();
         error2.style.display = "none";
         login.style.display="none";
         login1.style.display="none";
