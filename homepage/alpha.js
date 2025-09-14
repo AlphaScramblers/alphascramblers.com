@@ -81,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
 let mobile = window.matchMedia("(max-width: 700px)");
 let lap = window.matchMedia("(min-width: 700px)");
 const mainprof = document.querySelector(".profile-section")
-const naam = document.querySelector(".namedata");
 
    const login      = document.querySelector(".login");
   const login1     = document.querySelector(".login1");
@@ -131,7 +130,6 @@ let logpass2 = document.getElementById("logpass2");
     login.style.display = "block";
     login1.style.display = "block";
     mainprof.style.display="none";
-    naam.innerHTML=phla+" " +dusra 
 
     if (tab.matches) {
       profile.style.display = "none";
