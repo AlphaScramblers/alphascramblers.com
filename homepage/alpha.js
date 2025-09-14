@@ -96,15 +96,18 @@ let logpass2 = document.getElementById("logpass2");
 
   const loggedIn = localStorage.getItem("loggedIn");
   if (loggedIn) {
+    const avatar = document.querySelector(".avatar");
     const naam = document.querySelector(".namedata");
     const emailva=document.querySelector(".emaildata");
     const number = document.querySelector(".cnum");
     login.style.display = "none";
     login1.style.display = "none";
-    if (naam && storedFirstName && storedLastName &&emailva && number && email && no) {
+    if (naam && storedFirstName && storedLastName &&emailva && number && email && no && avatar) {
             naam.innerHTML = `${storedFirstName} ${storedLastName}`;
             emailva.innerHTML=`${email}`;
             number.innerHTML=`${no}`;
+             avatar.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
+            
             
         }
 

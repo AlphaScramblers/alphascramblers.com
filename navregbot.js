@@ -341,6 +341,11 @@ logsub.addEventListener("click", async (e) => {
     });
     const data = await res.json();
     if (data.success) {
+         localStorage.setItem("loggedIn", "true");
+            localStorage.setItem("firstName", data.profile.firstName);
+            localStorage.setItem("lastName", data.profile.lastName);
+            localStorage.setItem("email", data.profile.email);
+            localStorage.setItem("no", data.profile.mobileNumber); 
         localStorage.setItem("loggedIn", "true");
         window.location.reload();
         error2.style.display = "none";
