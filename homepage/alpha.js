@@ -77,6 +77,8 @@ d4.addEventListener("click",()=>{
     d4.style.backgroundColor="gray";
 })
 document.addEventListener("DOMContentLoaded", () => {
+   const storedFirstName = localStorage.getItem("firstName");
+    const storedLastName = localStorage.getItem("lastName");
   let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
 let mobile = window.matchMedia("(max-width: 700px)");
 let lap = window.matchMedia("(min-width: 700px)");
@@ -92,8 +94,12 @@ let logpass2 = document.getElementById("logpass2");
 
   const loggedIn = localStorage.getItem("loggedIn");
   if (loggedIn) {
+    const naam = document.querySelector(".namedata");
     login.style.display = "none";
     login1.style.display = "none";
+    if (naam && storedFirstName && storedLastName) {
+            naam.innerHTML = `${storedFirstName} ${storedLastName}`;
+        }
 
     if (tab.matches) {
       profile.style.display = "block";

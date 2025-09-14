@@ -268,6 +268,8 @@ logsub.addEventListener("click", async (e) => {
         });
         const data = await res.json();
         if (data.success) {
+            localStorage.setItem("firstName", firstName);
+    localStorage.setItem("lastName", lastName);
             localStorage.setItem("loggedIn", "true");
             logfname.readOnly = true
             loglname.readOnly = true
