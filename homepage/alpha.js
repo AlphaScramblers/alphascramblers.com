@@ -97,6 +97,7 @@ let logpass2 = document.getElementById("logpass2");
   const loggedIn = localStorage.getItem("loggedIn");
   if (loggedIn) {
     const avatar = document.querySelector(".avatar");
+     const avatar1 = document.querySelector(".avatar1");
     const naam = document.querySelector(".namedata");
     const emailva=document.querySelector(".emaildata");
     const number = document.querySelector(".cnum");
