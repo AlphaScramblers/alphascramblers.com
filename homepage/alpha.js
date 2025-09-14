@@ -153,7 +153,7 @@ let logpass2 = document.getElementById("logpass2");
     if (lap.matches) {
       profile.style.display = "none";
     }
-   
+     logsignin.innerHTML = "Sign In";
     logsignin.disabled = false;
     logname.readOnly = false;
     logpass2.readOnly = false;
