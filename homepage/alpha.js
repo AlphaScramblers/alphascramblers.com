@@ -95,6 +95,7 @@ let logpass2 = document.getElementById("logpass2");
   if (loggedIn) {
     login.style.display = "none";
     login1.style.display = "none";
+    naam.innerHTML=phla+" " +dusra 
 
     if (tab.matches) {
       profile.style.display = "block";
@@ -131,7 +132,7 @@ let logpass2 = document.getElementById("logpass2");
     login.style.display = "block";
     login1.style.display = "block";
     mainprof.style.display="none";
-    naam.innerHTML=phla+" " +dusra 
+    
 
     if (tab.matches) {
       profile.style.display = "none";
