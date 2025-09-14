@@ -107,6 +107,7 @@ let logpass2 = document.getElementById("logpass2");
             emailva.innerHTML=`${email}`;
             number.innerHTML=`${no}`;
              avatar.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
+             avatar1.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
             
             
         }
