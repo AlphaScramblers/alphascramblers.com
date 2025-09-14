@@ -274,7 +274,7 @@ logsub.addEventListener("click", async (e) => {
      localStorage.setItem("no", mobileno);
      
             localStorage.setItem("loggedIn", "true");
-            window.location.reload();
+           
             logfname.readOnly = true
             loglname.readOnly = true
             logmail.readOnly = true
@@ -317,6 +317,8 @@ logsub.addEventListener("click", async (e) => {
         alphalogin.style.opacity="1"
         document.body.style.overflow="auto";
         document.documentElement.style.overflow = "auto";
+         if(localStorage.getItem("loggedIn") === "true"){
+            window.location.reload();}
     }
 
   });
@@ -347,7 +349,7 @@ logsub.addEventListener("click", async (e) => {
             localStorage.setItem("email", data.profile.email);
             localStorage.setItem("no", data.profile.mobileNumber); 
         localStorage.setItem("loggedIn", "true");
-        window.location.reload();
+        
         error2.style.display = "none";
         login.style.display="none";
         login1.style.display="none";
@@ -384,6 +386,8 @@ logsub.addEventListener("click", async (e) => {
         alphalogin.style.opacity="1"
         document.body.style.overflow="auto";
         document.documentElement.style.overflow = "auto";
+         if(localStorage.getItem("loggedIn") === "true"){
+            window.location.reload();}
     }
   });
 let state = "unvis";
