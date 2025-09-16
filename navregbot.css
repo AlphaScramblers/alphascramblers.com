@@ -768,6 +768,7 @@ footer{
 .status{
     display: flex;
     gap: 3vw;
+    margin-left: 7%;
 }
 .phead {
   font-weight: 700;
