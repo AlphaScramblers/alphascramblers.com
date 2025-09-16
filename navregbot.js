@@ -521,9 +521,7 @@ let logpass2 = document.getElementById("logpass2");
     login1.style.display = "none";
     profile.style.display = "block";
     profile1.style.display = "block";
-  }
-
-    
+  } 
   }
   )
 });
