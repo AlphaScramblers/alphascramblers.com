@@ -610,7 +610,6 @@ footer{
     align-items: center;
     flex-direction: column;
     background: linear-gradient(to right, #3B82F6 0%, #2563EB 50%);
-    margin-bottom: 20vh;
     border-top-left-radius: 25px;
     border-top-right-radius: 25px;
 }
