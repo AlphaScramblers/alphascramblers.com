@@ -390,26 +390,26 @@ logsub.addEventListener("click", async (e) => {
             window.location.reload();}
     }
   });
-let state = "unvis";
-profile.addEventListener("click", () => {
-    if (state == "vis") {
-        profilesection.classList.remove("show");
-        state = "unvis";
-    } else {
-        profilesection.classList.add("show");
-        state = "vis";
-    }
-});
-let state1 = "unvis";
-profile1.addEventListener("click", () => {
-    if (state1 == "vis") {
-        profilesection.classList.remove("show");
-        state1 = "unvis";
-    } else {
-        profilesection.classList.add("show");
-        state1 = "vis";
-    }
-});
+// let state = "unvis";
+// profile.addEventListener("click", () => {
+//     if (state == "vis") {
+//         profilesection.classList.remove("show");
+//         state = "unvis";
+//     } else {
+//         profilesection.classList.add("show");
+//         state = "vis";
+//     }
+// });
+// let state1 = "unvis";
+// profile1.addEventListener("click", () => {
+//     if (state1 == "vis") {
+//         profilesection.classList.remove("show");
+//         state1 = "unvis";
+//     } else {
+//         profilesection.classList.add("show");
+//         state1 = "vis";
+//     }
+// });
 window.addEventListener("load", () => {
   if (localStorage.getItem("loggedIn") === "true") {
     login.style.display = "none";
