@@ -616,8 +616,9 @@ footer{
     border-top-right-radius: 25px;
 }
 .namedatahead{
-    font-size: 2.5rem;
-    color: #0E1420
+    font-size: 1.5rem;
+    color: #0E1420;
+    font-weight: 700;
 }
 .avatar{
   width: 120px;
