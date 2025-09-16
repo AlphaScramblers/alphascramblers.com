@@ -453,12 +453,14 @@ let logpass2 = document.getElementById("logpass2");
     const avatar = document.querySelector(".avatar");
      const avatar1 = document.querySelector(".avatar1");
     const naam = document.querySelector(".namedata");
+    const naam1 = document.querySelector(".namedata1");
     const emailva=document.querySelector(".emaildata");
     const number = document.querySelector(".cnum");
     login.style.display = "none";
     login1.style.display = "none";
     if (naam && storedFirstName && storedLastName &&emailva && number && email && no && avatar) {
             naam.innerHTML = `${storedFirstName} ${storedLastName}`;
+            naam1.innerHTML = `${storedFirstName} ${storedLastName}`;
             emailva.innerHTML=`${email}`;
             number.innerHTML=`${no}`;
              avatar.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
