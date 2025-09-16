@@ -609,7 +609,7 @@ footer{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: linear-gradient(to right, #3B82F6 0%, #2563EB 50%, #ffffff 51%);
+    background: linear-gradient(to bottom, #3B82F6 0%, #2563EB 50%, #ffffff 51%);
 }
 .namedatahead{
     font-size: 2rem;
@@ -621,7 +621,7 @@ footer{
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: linear-gradient(to bottom, #579CF1 100%, #56A3F2 0%);
+  background: linear-gradient(to right, #579CF1 100%, #56A3F2 0%);
   color: #ffffff;
   font-family: "Inter", sans-serif;
   font-size: 3.5rem;
