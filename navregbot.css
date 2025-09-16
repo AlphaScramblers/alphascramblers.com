@@ -607,12 +607,17 @@ footer{
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-direction: column;
     background: linear-gradient(to right, #3B82F6 0%, #2563EB 100%);
     height: 13vh;
     margin-bottom: 20vh;
     border-top-left-radius: 25px;
     border-top-right-radius: 25px;
+}
+.namedatahead{
+    font-size: 2.5rem;
+    color: #0E1420
 }
 .avatar{
   width: 120px;
