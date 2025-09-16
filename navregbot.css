@@ -614,14 +614,14 @@ footer{
 .namedatahead{
     font-size: 2rem;
     color: #0E1420;
-    font-weight: 700;
+    font-weight: 600;
     font-family: "Inter", sans-serif;
 }
 .avatar{
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: linear-gradient(to right, #579CF1 100%, #56A3F2 0%);
+  background: linear-gradient(to bottom, #579CF1 100%, #56A3F2 0%);
   color: #ffffff;
   font-family: "Inter", sans-serif;
   font-size: 3.5rem;
@@ -630,7 +630,7 @@ footer{
   align-items: center;
   justify-content: center;
   margin-top: 5%;
-  margin-bottom: 7%;
+  margin-bottom: 8%;
 }
 .outer{
   width: 135px;
