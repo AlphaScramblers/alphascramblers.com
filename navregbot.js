@@ -410,7 +410,7 @@ profile1.addEventListener("click", () => {
         state1 = "vis";
     }
 });
-window.addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("loggedIn") === "true") {
     login.style.display = "none";
     login1.style.display = "none";
@@ -430,27 +430,15 @@ window.addEventListener("load", () => {
     profile1.style.display = "none";
   }
 });
-document.addEventListener("DOMContentLoaded", () => {
-   const storedFirstName = localStorage.getItem("firstName");
-   const email= localStorage.getItem("email");
-   const no=localStorage.getItem("no");
-   const storedLastName = localStorage.getItem("lastName");
-  let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
-  let mobile = window.matchMedia("(max-width: 700px)");
-  let lap = window.matchMedia("(min-width: 700px)");
+  const storedFirstName = localStorage.getItem("firstName");
+  const email= localStorage.getItem("email");
+  const no=localStorage.getItem("no");
+  const storedLastName = localStorage.getItem("lastName");
   const mainprof = document.querySelector(".profile-section")
-  const login      = document.querySelector(".login");
-  const login1     = document.querySelector(".login1");
-  const profile    = document.querySelector(".profile");
-  const profile1   = document.querySelector(".profile1");
-let logsignin = document.querySelector(".logsignin");
-  let logname = document.getElementById("logname");
-let logpass2 = document.getElementById("logpass2");
-
   const loggedIn = localStorage.getItem("loggedIn");
   if (loggedIn) {
     const avatar = document.querySelector(".avatar");
-     const avatar1 = document.querySelector(".avatar1");
+    const avatar1 = document.querySelector(".avatar1");
     const naam = document.querySelector(".namedata");
     const naam1 = document.querySelector(".namedatahead");
     const emailva=document.querySelector(".emaildata");
@@ -522,4 +510,3 @@ let logpass2 = document.getElementById("logpass2");
   } 
   }
   )
-});
