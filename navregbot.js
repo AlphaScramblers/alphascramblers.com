@@ -101,6 +101,7 @@ let offsetY;
 let isdragging = false;
 let hasmoved= false;
 button.addEventListener("click",(e)=>{
+  e.stopPropagation();
     if(hasmoved){
         e.preventDefault();
         e.stopImmediatePropagation();
