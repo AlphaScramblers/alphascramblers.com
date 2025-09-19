@@ -434,13 +434,12 @@ document.addEventListener("DOMContentLoaded", () => {
    const storedFirstName = localStorage.getItem("firstName");
    const email= localStorage.getItem("email");
    const no=localStorage.getItem("no");
-    const storedLastName = localStorage.getItem("lastName");
+   const storedLastName = localStorage.getItem("lastName");
   let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
-let mobile = window.matchMedia("(max-width: 700px)");
-let lap = window.matchMedia("(min-width: 700px)");
-const mainprof = document.querySelector(".profile-section")
-
-   const login      = document.querySelector(".login");
+  let mobile = window.matchMedia("(max-width: 700px)");
+  let lap = window.matchMedia("(min-width: 700px)");
+  const mainprof = document.querySelector(".profile-section")
+  const login      = document.querySelector(".login");
   const login1     = document.querySelector(".login1");
   const profile    = document.querySelector(".profile");
   const profile1   = document.querySelector(".profile1");
@@ -463,12 +462,9 @@ let logpass2 = document.getElementById("logpass2");
             naam1.innerHTML = `${storedFirstName} ${storedLastName}`;
             emailva.innerHTML=`${email}`;
             number.innerHTML=`${no}`;
-             avatar.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
-             avatar1.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
-            
-            
+            avatar.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
+            avatar1.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
         }
-
     if (tab.matches) {
       profile.style.display = "block";
     }
@@ -496,7 +492,8 @@ let logpass2 = document.getElementById("logpass2");
       alert("Please log in first to access the Psychometric Test page!");   
     }
   });
-  const logoutbut=document.querySelector(".lgtBtn")
+  document.addEventListener("DOMContentLoaded",()=>{
+    const logoutbut=document.querySelector(".lgtBtn")
   logoutbut.addEventListener("click",() => {
     localStorage.removeItem("loggedIn")
     const uploggedIn=localStorage.getItem("loggedIn");
@@ -514,7 +511,7 @@ let logpass2 = document.getElementById("logpass2");
     if (lap.matches) {
       profile.style.display = "none";
     }
-     logsignin.innerHTML = "Sign In";
+    logsignin.innerHTML = "Sign In";
     logsignin.disabled = false;
     logname.readOnly = false;
     logpass2.readOnly = false;
@@ -526,4 +523,5 @@ let logpass2 = document.getElementById("logpass2");
   } 
   }
   )
+  })
 });
