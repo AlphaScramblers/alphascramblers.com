@@ -417,10 +417,10 @@ profile1.addEventListener("click", (e) => {
     if (state1 == "vis") {
         profilesection.classList.remove("show");
         state1 = "unvis";
-        smallnav.style.display = "none";
     } else {
         profilesection.classList.add("show");
         state1 = "vis";
+        smallnav.style.display = "none";
     }
 });
 document.addEventListener("click",(e)=>{
