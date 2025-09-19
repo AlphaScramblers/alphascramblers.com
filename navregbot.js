@@ -159,6 +159,15 @@ else{
         }
     })
 }
+document.addEventListener("click",(e)=>{
+ if(!contactus.contains(e.target) && e.target !== button){
+    contactus.classList.add("dis");
+    header.style.opacity="1";
+    main.style.opacity="1";
+    bottom.style.opacity="1";
+    overlay.classList.remove("overlay1");
+ }
+})
 let talk = document.querySelector(".ct");
 let namect = document.querySelector("#namect");
 let mailct = document.querySelector("#mailct");

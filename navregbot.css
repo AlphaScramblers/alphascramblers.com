@@ -587,6 +587,9 @@ footer{
 .logdis{
     display: none;
 }
+login{
+    display: block;
+}
 .error{
     color: red;
     font-size: 1.1rem;
