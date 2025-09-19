@@ -492,8 +492,7 @@ let logpass2 = document.getElementById("logpass2");
       alert("Please log in first to access the Psychometric Test page!");   
     }
   });
-  document.addEventListener("DOMContentLoaded",()=>{
-    const logoutbut=document.querySelector(".lgtBtn")
+  const logoutbut=document.querySelector(".lgtBtn")
   logoutbut.addEventListener("click",() => {
     localStorage.removeItem("loggedIn")
     const uploggedIn=localStorage.getItem("loggedIn");
@@ -523,5 +522,4 @@ let logpass2 = document.getElementById("logpass2");
   } 
   }
   )
-  })
 });
