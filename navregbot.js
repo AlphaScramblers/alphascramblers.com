@@ -115,6 +115,7 @@ button.addEventListener("click",(e)=>{
     overlay.classList.add("overlay1");
 })
 contactus1.addEventListener("click",(e)=>{
+  e.stopPropagation();
     if(hasmoved){
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -128,6 +129,7 @@ contactus1.addEventListener("click",(e)=>{
     overlay.classList.add("overlay1");
 })
 contactus2.addEventListener("click",(e)=>{
+  e.stopPropagation();
     if(hasmoved){
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -177,7 +179,11 @@ else{
     })
 }
 document.addEventListener("click",(e)=>{
- if(!contactus.contains(e.target) && e.target !== button){
+ if(!contactus.contains(e.target) 
+  && e.target !== button
+  && e.target !== contactus1
+  && e.target !== contactus2
+){
     contactus.classList.add("dis");
     header.style.opacity="1";
     main.style.opacity="1";
