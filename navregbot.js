@@ -401,27 +401,37 @@ const link = document.querySelector(".link1");
 let state = "unvis";
 profile.addEventListener("click", (e) => {
   e.stopPropagation();
-    if (state == "vis" && !profilesection.contains(e.target)) {
+    if (state == "vis") {
         profilesection.classList.remove("show");
+        menu.classList.add("navcon-ele");
         state = "unvis";
     } else {
         profilesection.classList.add("show");
-        menu.classList.add("navcon-ele");
         state = "vis";
     }
 });
 let state1 = "unvis";
 profile1.addEventListener("click", (e) => {
   e.stopPropagation();
-    if (state1 == "vis" && !profilesection.contains(e.target)) {
+    if (state1 == "vis") {
         profilesection.classList.remove("show");
+        menu.classList.add("navcon-ele");
         state1 = "unvis";
     } else {
-        menu.classList.add("navcon-ele");
         profilesection.classList.add("show");
         state1 = "vis";
     }
 });
+document.addEventListener("click",(e)=>{
+ if((state=="vis" || state1 == "vis")
+  && !profilesection.contains(e.target) 
+  && e.target!==profile 
+  && e.target!==profile1){
+  profilesection.classList.remove("show");
+  state="unvis"
+  state1="unvis"
+ }
+})
 document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("loggedIn") === "true") {
     login.style.display = "none";
