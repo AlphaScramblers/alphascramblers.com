@@ -420,6 +420,7 @@ profile1.addEventListener("click", (e) => {
         state1 = "vis";
         menu.classList.remove("navcon-ele-new");
         menu.classList.add("navcon-ele");
+        currstat="unvis"
     }
 });
 document.addEventListener("click",(e)=>{
