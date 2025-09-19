@@ -922,7 +922,7 @@ footer{
         font-size: 0.9rem;
     }
     .home,.login,.help,.about{
-        display: none;
+        display: none !important;
     }
     .navcon{
         display:flex;
@@ -975,7 +975,7 @@ footer{
         left: 5vw;
     }
     .cross{
-        right: 2%;
+        left: 77%;
     }
     .contactus{
         flex-direction: column;

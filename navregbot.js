@@ -443,7 +443,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     if (mobile.matches) {
       login1.style.display = "block";
-      login.style.display="none"
+      login.style.display = "none"
     }
     if (tab.matches || lap.matches) {
       login.style.display = "block";
@@ -524,21 +524,4 @@ document.addEventListener("DOMContentLoaded", () => {
     } 
   }
 ) 
-});
-window.addEventListener("load", () => {
-  if (localStorage.getItem("loggedIn") === "true") {
-    login.style.display = "none";
-    login1.style.display = "none";
-    if (tab.matches || lap.matches) {
-      profile.style.display = "block";
-    }
-    if (mobile.matches) {
-      profile1.style.display = "block";
-    }
-  } else {
-    login.style.display = "block";
-    login1.style.display = "block";
-    profile.style.display = "none";
-    profile1.style.display = "none";
-  }
 });
