@@ -399,7 +399,7 @@ const link = document.querySelector(".link1");
     }
   });
 let state = "unvis";
-profile.addEventListener("click", () => {
+profile.addEventListener("click", (e) => {
   e.stopPropagation();
     if (state == "vis" && !profilesection.contains(e.target)) {
         profilesection.classList.remove("show");
@@ -411,7 +411,7 @@ profile.addEventListener("click", () => {
     }
 });
 let state1 = "unvis";
-profile1.addEventListener("click", () => {
+profile1.addEventListener("click", (e) => {
   e.stopPropagation();
     if (state1 == "vis" && !profilesection.contains(e.target)) {
         profilesection.classList.remove("show");
