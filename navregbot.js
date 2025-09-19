@@ -429,7 +429,6 @@ document.addEventListener("DOMContentLoaded", () => {
     profile.style.display = "none";
     profile1.style.display = "none";
   }
-});
   const storedFirstName = localStorage.getItem("firstName");
   const email= localStorage.getItem("email");
   const no=localStorage.getItem("no");
@@ -510,3 +509,4 @@ document.addEventListener("DOMContentLoaded", () => {
     } 
   }
 ) 
+});
