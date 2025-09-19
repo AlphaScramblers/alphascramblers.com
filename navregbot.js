@@ -410,14 +410,14 @@ profile.addEventListener("click", (e) => {
         state = "vis";
     }
 });
+let smallnav = document.querySelector(".navcon-ele-new");
 let state1 = "unvis";
 profile1.addEventListener("click", (e) => {
   e.stopPropagation();
     if (state1 == "vis") {
         profilesection.classList.remove("show");
         state1 = "unvis";
-        menu.classList.remove("navcon-ele-new");
-        menu.classList.add("navcon-ele");
+        smallnav.style.display = "none";
     } else {
         profilesection.classList.add("show");
         state1 = "vis";
