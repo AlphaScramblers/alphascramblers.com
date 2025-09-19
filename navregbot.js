@@ -488,9 +488,7 @@ document.addEventListener("DOMContentLoaded", () => {
     login1.style.display = "block";
     login.style.display = "none";
     profile1.style.display = "none";
-  }
-
-  if (tab.matches || lap.matches) {
+  } else if (tab.matches || lap.matches) {
     login.style.display = "block";
     login1.style.display = "none";
     profile.style.display = "none";
