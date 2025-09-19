@@ -480,22 +480,33 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Please log in first to access the Psychometric Test page!");   
     }
   });
-  logoutbut.addEventListener("click", () => {
-  localStorage.setItem("loggedIn", "false");
-  mainprof.style.display = "none";
-
-  if (mobile.matches) {
-    login1.style.display = "block";
-    login.style.display = "none";
-    profile1.style.display = "none";
-  } else if (tab.matches || lap.matches) {
+  const logoutbut=document.querySelector(".lgtBtn")
+  logoutbut.addEventListener("click",() => {
+    localStorage.removeItem("loggedIn")
+    const uploggedIn=localStorage.getItem("loggedIn");
+    if (!uploggedIn) {
     login.style.display = "block";
-    login1.style.display = "none";
-    profile.style.display = "none";
-  }
+    login1.style.display = "block";
+    mainprof.style.display="none";
 
-  logsignin.innerHTML = "Sign In";
-  logsignin.disabled = false;
-  logname.readOnly = false;
-  logpass2.readOnly = false;
-});
+    if (tab.matches) {
+      profile.style.display = "none";
+    }
+    if (mobile.matches) {
+      profile1.style.display = "none";
+    }
+    if (lap.matches) {
+      profile.style.display = "none";
+    }
+    logsignin.innerHTML = "Sign In";
+    logsignin.disabled = false;
+    logname.readOnly = false;
+    logpass2.readOnly = false;
+  } else {
+    login.style.display = "none";
+    login1.style.display = "none";
+    profile.style.display = "block";
+    profile1.style.display = "block";
+    } 
+  }
+) 
