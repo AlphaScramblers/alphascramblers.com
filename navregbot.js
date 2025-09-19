@@ -403,14 +403,12 @@ profile.addEventListener("click", (e) => {
   e.stopPropagation();
     if (state == "vis") {
         profilesection.classList.remove("show");
-
         state = "unvis";
     } else {
         profilesection.classList.add("show");
         state = "vis";
     }
 });
-let smallnav = document.querySelector(".navcon-ele-new");
 let state1 = "unvis";
 profile1.addEventListener("click", (e) => {
   e.stopPropagation();
@@ -420,7 +418,8 @@ profile1.addEventListener("click", (e) => {
     } else {
         profilesection.classList.add("show");
         state1 = "vis";
-        smallnav.style.display = "none";
+        menu.classList.remove("navcon-ele-new");
+        menu.classList.add("navcon-ele");
     }
 });
 document.addEventListener("click",(e)=>{
