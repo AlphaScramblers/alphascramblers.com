@@ -400,20 +400,24 @@ const link = document.querySelector(".link1");
   });
 let state = "unvis";
 profile.addEventListener("click", () => {
-    if (state == "vis") {
+  e.stopPropagation();
+    if (state == "vis" && !profilesection.contains(e.target)) {
         profilesection.classList.remove("show");
         state = "unvis";
     } else {
         profilesection.classList.add("show");
+        menu.classList.add("navcon-ele");
         state = "vis";
     }
 });
 let state1 = "unvis";
 profile1.addEventListener("click", () => {
-    if (state1 == "vis") {
+  e.stopPropagation();
+    if (state1 == "vis" && !profilesection.contains(e.target)) {
         profilesection.classList.remove("show");
         state1 = "unvis";
     } else {
+        menu.classList.add("navcon-ele");
         profilesection.classList.add("show");
         state1 = "vis";
     }

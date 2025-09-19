@@ -488,11 +488,11 @@ footer{
     margin-top: 2%;
 }
 .log{
-    color: blue;
+    color: #4aa72d;
     cursor: pointer;
 }
 .caa{
-    color: blue;
+    color: #4aa72d;
     cursor: pointer;
 }
 #logfname,#loglname,#logmail,#logpass1,#logpass2,#logname,#logmob{
@@ -521,7 +521,7 @@ footer{
 }
 .fp{
     margin-left: 3%;
-    color: #052f97;
+    color: #4aa72d;
     font-size: 0.9rem;
     text-decoration: underline;
     cursor: pointer;
@@ -1050,7 +1050,6 @@ footer{
     }
     .log{
         margin-left: 10px;
-        color:#4aa72d;
     }
     .sub{
         margin-top: 2vw;
@@ -1076,16 +1075,12 @@ footer{
     .fp{
         margin-top: 2vh;
         margin-left: 4vw;
-        color: #4aa72d;
     }
     .logsignin{
         margin-left: 4vw;
     }
     .member1{
         margin-left: 6vw;
-    }
-    .caa{
-        color: #4aa72d;
     }
     .bottomtext{
         gap: 0;
