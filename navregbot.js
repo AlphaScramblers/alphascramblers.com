@@ -403,7 +403,7 @@ profile.addEventListener("click", (e) => {
   e.stopPropagation();
     if (state == "vis") {
         profilesection.classList.remove("show");
-        menu.classList.add("navcon-ele");
+
         state = "unvis";
     } else {
         profilesection.classList.add("show");
@@ -415,8 +415,9 @@ profile1.addEventListener("click", (e) => {
   e.stopPropagation();
     if (state1 == "vis") {
         profilesection.classList.remove("show");
-        menu.classList.add("navcon-ele");
         state1 = "unvis";
+        menu.classList.remove("navcon-ele-new");
+        menu.classList.add("navcon-ele");
     } else {
         profilesection.classList.add("show");
         state1 = "vis";
