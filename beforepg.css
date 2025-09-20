@@ -1,0 +1,65 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+main{
+    margin-top: 13vh;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+}
+h1{
+    text-decoration: underline;
+    margin-bottom: 3vh;
+}
+h3{
+    color: red;
+    margin-bottom: 3vh;
+}
+.instruct{
+    margin-left: 3vw;
+    margin-bottom: 3vh;
+    font-size: 1.2rem;
+}
+.ts{
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    margin-left: 3vw;
+    background-color: #ffffff;
+    border-collapse: collapse;
+    width: 10vw;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    font-size: 1.2rem;
+}
+.ts td{
+    border: 2px solid rgba(0, 0, 0, 0.6);
+    padding: 2%;
+}
+.ts td:nth-child(1){
+    text-align: center;
+}
+.butt{
+    margin-top: 4vh;
+    margin-left: 1.3vw;
+}
+button{
+    width: 25vh;
+    height: 7vh;
+    background-color: rgb(25, 25, 203);
+    color: #ffffff;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.btn:hover{
+    background-color: rgb(45, 45, 230); 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+.btn:active {
+    background-color: rgb(15, 15, 150); /* darker blue */
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
