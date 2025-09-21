@@ -51,20 +51,20 @@ cross.addEventListener("click",(e)=>{
     document.body.style.overflow="auto";
     document.documentElement.style.overflow = "auto";
 })
-document.addEventListener("click", (e) => {
-    if (!alphalogin.contains(e.target) && !e.target.classList.contains("r")) {
-        alphalogin.classList.add("alphadis");
-        header.style.opacity = "1";
-        main.style.opacity = "1";
-        bottom.style.opacity = "1";
-        overlay.classList.remove("overlay1");
-        document.body.style.overflow = "auto";
-        document.documentElement.style.overflow = "auto";
-    }
-});
-alphalogin.addEventListener("click", (e) => {
-    e.stopPropagation();
-});
+// document.addEventListener("click", (e) => {
+//     if (!alphalogin.contains(e.target) && !e.target.classList.contains("r")) {
+//         alphalogin.classList.add("alphadis");
+//         header.style.opacity = "1";
+//         main.style.opacity = "1";
+//         bottom.style.opacity = "1";
+//         overlay.classList.remove("overlay1");
+//         document.body.style.overflow = "auto";
+//         document.documentElement.style.overflow = "auto";  
+//     }
+// });
+// alphalogin.addEventListener("click", (e) => {
+//     e.stopPropagation();
+// });
 let calcScrollValue = () => {
     let scrollProgress = document.querySelector(".progress");
     let progressValue = document.querySelector(".progress-value");
