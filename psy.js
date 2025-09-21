@@ -1,5 +1,7 @@
 const question = document.querySelectorAll(".question");
 const submit = document.querySelector(".sbt");
+const submit0 = document.querySelector(".subbtn");
+const submit1 = document.querySelector(".subbtn1");
 const bar = document.querySelector(".ipbar");
 const qh = document.querySelector(".qh");
 const section = document.querySelector(".section");
@@ -30,6 +32,8 @@ submit.addEventListener("click",()=>{
     }
     else{
         submit.style.display="none"
+        submit0.style.display="none"
+        submit1.style.display="flex"
     }
     for(let i=0;i<10;i++){
         if(currentIndex<=10){

@@ -55,14 +55,14 @@ main{
 .opt1{
     margin-left: 2%;
 }
-.subbtn{
+.subbtn,.subbtn1{
     font-size: 1.2rem;
     display: flex;
     justify-content: center;
     width: 60vw;
     height: 6vh;
 }
-.sbt{
+.sbt,.sbt1{
     width: 20%;
     height: 100%;
     border-radius: 20px;
@@ -74,6 +74,17 @@ main{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.sbt1{
+    background-color: #4facfe;
+    width: 40%;
+    height: 120%;
+    font-size: 1.5rem;
+    color: darkblue;
+}
+.subbtn1{
+    display: none;
+    margin-bottom: 1vh;
 }
 .ipbar{
     height: 100%;
@@ -113,7 +124,7 @@ input[type="radio"]{
 .pcal{
     display: flex;
     justify-content: space-between;
-    margin-top: 1.4%;
+    margin-top: 0.5%;
     width: 80vw;
     font-weight: 700;
 }
