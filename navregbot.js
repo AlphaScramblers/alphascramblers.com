@@ -85,6 +85,7 @@ let offsetY;
 let isdragging = false;
 let hasmoved= false;
 button.addEventListener("click",(e)=>{
+  e.stopPropagation()
     if(hasmoved){
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -98,6 +99,7 @@ button.addEventListener("click",(e)=>{
     overlay.classList.add("overlay1");
 })
 contactus1.addEventListener("click",(e)=>{
+  e.stopPropagation()
     if(hasmoved){
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -111,6 +113,7 @@ contactus1.addEventListener("click",(e)=>{
     overlay.classList.add("overlay1");
 })
 contactus2.addEventListener("click",(e)=>{
+  e.stopPropagation()
     if(hasmoved){
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -122,6 +125,19 @@ contactus2.addEventListener("click",(e)=>{
     main.style.opacity="0.3";
     bottom.style.opacity="0.3";
     overlay.classList.add("overlay1");
+})
+document.addEventListener("click",(e)=>{
+ if(!contactus.contains(e.target) 
+  && e.target !== button
+  && e.target !== contactus1
+  && e.target !== contactus2
+){
+    contactus.classList.add("dis");
+    header.style.opacity="1";
+    main.style.opacity="1";
+    bottom.style.opacity="1";
+    overlay.classList.remove("overlay1");
+ }
 })
 if(window.matchMedia("(pointer: coarse)").matches){
     console.log("Touch device");
