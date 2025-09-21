@@ -452,8 +452,7 @@ let logpass2 = document.getElementById("logpass2");
   if (loggedIn) {
     const avatar = document.querySelector(".avatar");
      const avatar1 = document.querySelector(".avatar1");
-    const naam = document.querySelector(".namedata");
-    const naam1 = document.querySelector(".namedata1");
+    const naam = document.querySelector(".namedata"); 
     const naam1 = document.querySelector(".namedatahead");
     const emailva=document.querySelector(".emaildata");
     const number = document.querySelector(".cnum");
