@@ -30,7 +30,8 @@ let cross= document.querySelector(".cross")
 let alphalogin = document.querySelector(".alphalogin");
 let reg = document.querySelectorAll(".r");
 reg.forEach(r=>{
-    r.addEventListener("click",()=>{
+    r.addEventListener("click",(e)=>{
+    e.stopPropagation()
     alphalogin.classList.remove("alphadis");
     header.style.opacity="1";
     main.style.opacity="0.3";
@@ -40,7 +41,8 @@ reg.forEach(r=>{
     document.documentElement.style.overflow = "hidden";
 })
 })
-cross.addEventListener("click",()=>{
+cross.addEventListener("click",(e)=>{
+    e.stopPropagation()
     alphalogin.classList.add("alphadis");
     header.style.opacity="1";
     main.style.opacity="1";
@@ -49,6 +51,20 @@ cross.addEventListener("click",()=>{
     document.body.style.overflow="auto";
     document.documentElement.style.overflow = "auto";
 })
+document.addEventListener("click", (e) => {
+    if (!alphalogin.contains(e.target) && !e.target.classList.contains("r")) {
+        alphalogin.classList.add("alphadis");
+        header.style.opacity = "1";
+        main.style.opacity = "1";
+        bottom.style.opacity = "1";
+        overlay.classList.remove("overlay1");
+        document.body.style.overflow = "auto";
+        document.documentElement.style.overflow = "auto";  
+    }
+});
+alphalogin.addEventListener("click", (e) => {
+    e.stopPropagation();
+});
 let calcScrollValue = () => {
     let scrollProgress = document.querySelector(".progress");
     let progressValue = document.querySelector(".progress-value");
@@ -85,6 +101,7 @@ let offsetY;
 let isdragging = false;
 let hasmoved= false;
 button.addEventListener("click",(e)=>{
+  e.stopPropagation();
     if(hasmoved){
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -98,6 +115,7 @@ button.addEventListener("click",(e)=>{
     overlay.classList.add("overlay1");
 })
 contactus1.addEventListener("click",(e)=>{
+  e.stopPropagation();
     if(hasmoved){
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -111,6 +129,7 @@ contactus1.addEventListener("click",(e)=>{
     overlay.classList.add("overlay1");
 })
 contactus2.addEventListener("click",(e)=>{
+  e.stopPropagation();
     if(hasmoved){
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -159,6 +178,19 @@ else{
         }
     })
 }
+document.addEventListener("click",(e)=>{
+ if(!contactus.contains(e.target) 
+  && e.target !== button
+  && e.target !== contactus1
+  && e.target !== contactus2
+){
+    contactus.classList.add("dis");
+    header.style.opacity="1";
+    main.style.opacity="1";
+    bottom.style.opacity="1";
+    overlay.classList.remove("overlay1");
+ }
+})
 let talk = document.querySelector(".ct");
 let namect = document.querySelector("#namect");
 let mailct = document.querySelector("#mailct");
@@ -390,8 +422,17 @@ logsub.addEventListener("click", async (e) => {
             window.location.reload();}
     }
   });
+const link = document.querySelector(".link1"); 
+  link.addEventListener("click", (e) => {
+    const loggedIn = localStorage.getItem("loggedIn");
+    if (!loggedIn) {
+      e.preventDefault(); 
+      alert("Please log in first to access the Psychometric Test page!");   
+    }
+  });
 let state = "unvis";
-profile.addEventListener("click", () => {
+profile.addEventListener("click", (e) => {
+  e.stopPropagation();
     if (state == "vis") {
         profilesection.classList.remove("show");
         state = "unvis";
@@ -401,16 +442,29 @@ profile.addEventListener("click", () => {
     }
 });
 let state1 = "unvis";
-profile1.addEventListener("click", () => {
+profile1.addEventListener("click", (e) => {
     if (state1 == "vis") {
         profilesection.classList.remove("show");
         state1 = "unvis";
     } else {
         profilesection.classList.add("show");
         state1 = "vis";
+        menu.classList.remove("navcon-ele-new");
+        menu.classList.add("navcon-ele");
+        currstat="unvis"
     }
 });
-window.addEventListener("load", () => {
+document.addEventListener("click",(e)=>{
+ if((state=="vis" || state1 == "vis")
+  && !profilesection.contains(e.target) 
+  && e.target!==profile 
+  && e.target!==profile1){
+  profilesection.classList.remove("show");
+  state="unvis"
+  state1="unvis"
+ }
+})
+document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("loggedIn") === "true") {
     login.style.display = "none";
     login1.style.display = "none";
@@ -420,7 +474,7 @@ window.addEventListener("load", () => {
   } else {
     if (mobile.matches) {
       login1.style.display = "block";
-      login.style.display="none"
+      login.style.display = "none"
     }
     if (tab.matches || lap.matches) {
       login.style.display = "block";
@@ -429,29 +483,15 @@ window.addEventListener("load", () => {
     profile.style.display = "none";
     profile1.style.display = "none";
   }
-});
-document.addEventListener("DOMContentLoaded", () => {
-   const storedFirstName = localStorage.getItem("firstName");
-   const email= localStorage.getItem("email");
-   const no=localStorage.getItem("no");
-    const storedLastName = localStorage.getItem("lastName");
-  let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
-let mobile = window.matchMedia("(max-width: 700px)");
-let lap = window.matchMedia("(min-width: 700px)");
-const mainprof = document.querySelector(".profile-section")
-
-   const login      = document.querySelector(".login");
-  const login1     = document.querySelector(".login1");
-  const profile    = document.querySelector(".profile");
-  const profile1   = document.querySelector(".profile1");
-let logsignin = document.querySelector(".logsignin");
-  let logname = document.getElementById("logname");
-let logpass2 = document.getElementById("logpass2");
-
+  const storedFirstName = localStorage.getItem("firstName");
+  const email= localStorage.getItem("email");
+  const no=localStorage.getItem("no");
+  const storedLastName = localStorage.getItem("lastName");
+  const mainprof = document.querySelector(".profile-section")
   const loggedIn = localStorage.getItem("loggedIn");
   if (loggedIn) {
     const avatar = document.querySelector(".avatar");
-     const avatar1 = document.querySelector(".avatar1");
+    const avatar1 = document.querySelector(".avatar1");
     const naam = document.querySelector(".namedata");
     const naam1 = document.querySelector(".namedatahead");
     const emailva=document.querySelector(".emaildata");
@@ -463,12 +503,9 @@ let logpass2 = document.getElementById("logpass2");
             naam1.innerHTML = `${storedFirstName} ${storedLastName}`;
             emailva.innerHTML=`${email}`;
             number.innerHTML=`${no}`;
-             avatar.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
-             avatar1.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
-            
-            
+            avatar.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
+            avatar1.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
         }
-
     if (tab.matches) {
       profile.style.display = "block";
     }
@@ -488,14 +525,6 @@ let logpass2 = document.getElementById("logpass2");
     profile.style.display = "none";
     profile1.style.display = "none";
   }
-  const link = document.querySelector(".link1"); 
-  link.addEventListener("click", (e) => {
-    const loggedIn = localStorage.getItem("loggedIn");
-    if (!loggedIn) {
-      e.preventDefault(); 
-      alert("Please log in first to access the Psychometric Test page!");   
-    }
-  });
   const logoutbut=document.querySelector(".lgtBtn")
   logoutbut.addEventListener("click",() => {
     localStorage.removeItem("loggedIn")
@@ -514,7 +543,7 @@ let logpass2 = document.getElementById("logpass2");
     if (lap.matches) {
       profile.style.display = "none";
     }
-     logsignin.innerHTML = "Sign In";
+    logsignin.innerHTML = "Sign In";
     logsignin.disabled = false;
     logname.readOnly = false;
     logpass2.readOnly = false;
@@ -523,7 +552,7 @@ let logpass2 = document.getElementById("logpass2");
     login1.style.display = "none";
     profile.style.display = "block";
     profile1.style.display = "block";
-  } 
+    } 
   }
-  )
+) 
 });
