@@ -37,14 +37,14 @@ submit.addEventListener("click",()=>{
     }
     for(let i=0;i<10;i++){
         if(currentIndex<=10){
-            qh.innerHTML=`Question ${currentIndex+1} of 10`;
+            qh.innerHTML=`Question ${currentIndex+1} of 30`;
         }
         if(currentIndex>=10 && currentIndex<=20){
-            qh.innerHTML=`Question ${currentIndex} of 10`;  
+            qh.innerHTML=`Question ${currentIndex+1} of 30`;  
             section.innerHTML="Behaviour" 
         }
         if(currentIndex>=20 && currentIndex<=30){
-            qh.innerHTML=`Question ${currentIndex+1} of 10`;
+            qh.innerHTML=`Question ${currentIndex+1} of 30`;
             section.innerHTML="Mental & Psychology" 
         }
     }
