@@ -40,7 +40,7 @@ submit.addEventListener("click",()=>{
             qh.innerHTML=`Question ${currentIndex+1} of 10`;
         }
         if(currentIndex>=10 && currentIndex<=20){
-            qh.innerHTML=`Question ${currentIndex+9} of 10`;  
+            qh.innerHTML=`Question ${currentIndex} of 10`;  
             section.innerHTML="Behaviour" 
         }
         if(currentIndex>=20 && currentIndex<=30){
