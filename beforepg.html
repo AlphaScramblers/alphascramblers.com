@@ -61,8 +61,10 @@
         </div>
     </header>
     <main>
-        <h1>INSTRUCTIONS FOR PSYCHOMETRIC TEST</h1>
-        <h3>Please read the instructions CAREFULLY before starting the test.</h3>
+        <div class="topper">
+            <h1>INSTRUCTIONS FOR PSYCHOMETRIC TEST</h1>
+            <h3>Please read the instructions CAREFULLY before starting the test.</h3>
+        </div>
         <div class="instruct">
             <ol>
                 <li>Click <b>Start</b> test on bottom of your screen to begin the test.</li>
@@ -87,16 +89,21 @@
                         </tr>
                     </table>
                 </div>
-                <li>Keep your device charged and connected to a stable internet before starting.</li>
                 <li>Do not refresh or close the browser tab during the test.</li>
                 <li>Answering all questions is compulsory, and you cannot move to the next question until you submit the current one. This rule ensures the best output.</li>
                 <li>All the answered questions will be counted for calculating the final output.</li>
-                <li>Result of the test will be given immediately after final submission.</li>            
+                <li>Result of the test will be given immediately after final submission.</li>  
+                <li><form>
+                    <input type="checkbox">   I have read all the instructions carefully.
+                </form></li>          
             </ol>
         </div>
-        <hr>
-        <div class="butt">
-            <a href="psy.html"><button class="btn">START TEST</button></a>
+        <div class="topper">
+            <div class="butt">
+                <button type="button" class="btn b" onclick="window.location.href='psy.html'" title="Please read all the instructions" >
+                    START TEST
+                </button>
+            </div>
         </div>
     </main>
     <login>
@@ -257,5 +264,6 @@
 <script src="/navregbot.js"></script>
 <script src="/psy.js"></script>
 <script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
+<script src="beforepg.js"></script>
 </body>
 </html>

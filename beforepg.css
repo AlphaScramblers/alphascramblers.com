@@ -6,6 +6,7 @@ main{
     margin-top: 13vh;
     margin-left: 0.5vw;
     margin-right: 0.5vw;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 h1{
     text-decoration: underline;
@@ -15,10 +16,22 @@ h3{
     color: red;
     margin-bottom: 3vh;
 }
+.topper{
+    width: 100%;
+    text-align: center;
+}
+.tpc{
+    border: 1px solid black;
+}
 .instruct{
     margin-left: 3vw;
-    margin-bottom: 3vh;
-    font-size: 1.2rem;
+    margin-right: 3vw;
+    margin-bottom: 2vh;
+    font-size: 1.15rem;
+    background-color: #e2effa;
+    list-style-position: inside;
+    height: 58vh;
+    overflow-y: scroll;
 }
 .ts{
     margin-top: 2vh;
@@ -39,27 +52,37 @@ h3{
     text-align: center;
 }
 .butt{
-    margin-top: 4vh;
-    margin-left: 1.3vw;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
 }
 button{
-    width: 25vh;
+    width: 20vw;
     height: 7vh;
     background-color: rgb(25, 25, 203);
     color: #ffffff;
     font-size: 1.2rem;
+    font-weight: 700;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
-.btn:hover{
+.b:hover{
     background-color: rgb(45, 45, 230); 
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
-.btn:active {
-    background-color: rgb(15, 15, 150); /* darker blue */
+.b:active {
+    background-color: rgb(15, 15, 150);
     transform: translateY(1px);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+li{
+    border: 1px solid black;
+    padding: 1%;
+}
+li:nth-child(12){
+    display: flex;
+    font-size: 1.3rem;
+    font-weight: 700;
 }
