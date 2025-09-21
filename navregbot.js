@@ -413,6 +413,16 @@ profile1.addEventListener("click", () => {
         currstat="unvis"
     }
 });
+document.addEventListener("click",(e)=>{
+ if((state=="vis" || state1 == "vis")
+  && !profilesection.contains(e.target) 
+  && e.target!==profile 
+  && e.target!==profile1){
+  profilesection.classList.remove("show");
+  state="unvis"
+  state1="unvis"
+ }
+})
 window.addEventListener("load", () => {
   if (localStorage.getItem("loggedIn") === "true") {
     login.style.display = "none";
