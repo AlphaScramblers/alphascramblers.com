@@ -455,16 +455,16 @@ profile1.addEventListener("click", (e) => {
         currstat="unvis"
     }
 });
-document.addEventListener("click",(e)=>{
- if((state=="vis" || state1 == "vis")
-  && !profilesection.contains(e.target) 
-  && e.target!==profile 
-  && e.target!==profile1){
-  profilesection.classList.remove("show");
-  state="unvis"
-  state1="unvis"
- }
-})
+// document.addEventListener("click",(e)=>{
+//  if((state=="vis" || state1 == "vis")
+//   && !profilesection.contains(e.target) 
+//   && e.target!==profile 
+//   && e.target!==profile1){
+//   profilesection.classList.remove("show");
+//   state="unvis"
+//   state1="unvis"
+//  }
+// })
 document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("loggedIn") === "true") {
     login.style.display = "none";
