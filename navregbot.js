@@ -31,6 +31,7 @@ let alphalogin = document.querySelector(".alphalogin");
 let reg = document.querySelectorAll(".r");
 reg.forEach(r=>{
     r.addEventListener("click",()=>{
+    e.stopPropagation()
     alphalogin.classList.remove("alphadis");
     header.style.opacity="1";
     main.style.opacity="0.3";
@@ -41,6 +42,7 @@ reg.forEach(r=>{
 })
 })
 cross.addEventListener("click",()=>{
+    e.stopPropagation()
     alphalogin.classList.add("alphadis");
     header.style.opacity="1";
     main.style.opacity="1";
@@ -49,6 +51,20 @@ cross.addEventListener("click",()=>{
     document.body.style.overflow="auto";
     document.documentElement.style.overflow = "auto";
 })
+document.addEventListener("click", (e) => {
+  if (!alphalogin.contains(e.target) && !e.target.classList.contains("r")) {
+      alphalogin.classList.add("alphadis");
+      header.style.opacity = "1";
+      main.style.opacity = "1";
+      bottom.style.opacity = "1";
+      overlay.classList.remove("overlay1");
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";  
+  }
+});
+alphalogin.addEventListener("click", (e) => {
+    e.stopPropagation();
+});
 let calcScrollValue = () => {
     let scrollProgress = document.querySelector(".progress");
     let progressValue = document.querySelector(".progress-value");
@@ -465,10 +481,7 @@ let logpass2 = document.getElementById("logpass2");
             number.innerHTML=`${no}`;
              avatar.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
              avatar1.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
-            
-            
         }
-
     if (tab.matches) {
       profile.style.display = "block";
     }
