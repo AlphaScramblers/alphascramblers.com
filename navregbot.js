@@ -30,7 +30,7 @@ let cross= document.querySelector(".cross")
 let alphalogin = document.querySelector(".alphalogin");
 let reg = document.querySelectorAll(".r");
 reg.forEach(r=>{
-    r.addEventListener("click",(e)=>{
+    r.addEventListener("click",()=>{ 
     alphalogin.classList.remove("alphadis");
     header.style.opacity="1";
     main.style.opacity="0.3";
@@ -40,7 +40,7 @@ reg.forEach(r=>{
     document.documentElement.style.overflow = "hidden";
 })
 })
-cross.addEventListener("click",(e)=>{
+cross.addEventListener("click",()=>{
     alphalogin.classList.add("alphadis");
     header.style.opacity="1";
     main.style.opacity="1";
@@ -399,7 +399,7 @@ const link = document.querySelector(".link1");
     }
   });
 let state = "unvis";
-profile.addEventListener("click", (e) => {
+profile.addEventListener("click", () => {
     if (state == "vis") {
         profilesection.classList.remove("show");
         state = "unvis";
@@ -409,7 +409,7 @@ profile.addEventListener("click", (e) => {
     }
 });
 let state1 = "unvis";
-profile1.addEventListener("click", (e) => {
+profile1.addEventListener("click", () => {
     if (state1 == "vis") {
         profilesection.classList.remove("show");
         state1 = "unvis";
@@ -418,7 +418,6 @@ profile1.addEventListener("click", (e) => {
         state1 = "vis";
         menu.classList.remove("navcon-ele-new");
         menu.classList.add("navcon-ele");
-        currstat="unvis"
     }
 });
 document.addEventListener("DOMContentLoaded", () => {
