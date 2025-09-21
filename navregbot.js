@@ -408,6 +408,9 @@ profile1.addEventListener("click", () => {
     } else {
         profilesection.classList.add("show");
         state1 = "vis";
+        menu.classList.remove("navcon-ele-new");
+        menu.classList.add("navcon-ele");
+        currstat="unvis"
     }
 });
 window.addEventListener("load", () => {
@@ -464,11 +467,8 @@ let logpass2 = document.getElementById("logpass2");
             emailva.innerHTML=`${email}`;
             number.innerHTML=`${no}`;
              avatar.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
-             avatar1.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
-            
-            
+             avatar1.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;  
         }
-
     if (tab.matches) {
       profile.style.display = "block";
     }
