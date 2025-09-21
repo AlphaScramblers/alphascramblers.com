@@ -30,7 +30,7 @@ let cross= document.querySelector(".cross")
 let alphalogin = document.querySelector(".alphalogin");
 let reg = document.querySelectorAll(".r");
 reg.forEach(r=>{
-    r.addEventListener("click",()=>{ 
+    r.addEventListener("click",()=>{
     alphalogin.classList.remove("alphadis");
     header.style.opacity="1";
     main.style.opacity="0.3";
@@ -390,14 +390,6 @@ logsub.addEventListener("click", async (e) => {
             window.location.reload();}
     }
   });
-const link = document.querySelector(".link1"); 
-  link.addEventListener("click", (e) => {
-    const loggedIn = localStorage.getItem("loggedIn");
-    if (!loggedIn) {
-      e.preventDefault(); 
-      alert("Please log in first to access the Psychometric Test page!");   
-    }
-  });
 let state = "unvis";
 profile.addEventListener("click", () => {
     if (state == "vis") {
@@ -416,11 +408,9 @@ profile1.addEventListener("click", () => {
     } else {
         profilesection.classList.add("show");
         state1 = "vis";
-        // menu.classList.remove("navcon-ele-new");
-        // menu.classList.add("navcon-ele");
     }
 });
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
   if (localStorage.getItem("loggedIn") === "true") {
     login.style.display = "none";
     login1.style.display = "none";
@@ -430,7 +420,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     if (mobile.matches) {
       login1.style.display = "block";
-      login.style.display = "none"
+      login.style.display="none"
     }
     if (tab.matches || lap.matches) {
       login.style.display = "block";
@@ -439,15 +429,29 @@ document.addEventListener("DOMContentLoaded", () => {
     profile.style.display = "none";
     profile1.style.display = "none";
   }
-  const storedFirstName = localStorage.getItem("firstName");
-  const email= localStorage.getItem("email");
-  const no=localStorage.getItem("no");
-  const storedLastName = localStorage.getItem("lastName");
-  const mainprof = document.querySelector(".profile-section")
+});
+document.addEventListener("DOMContentLoaded", () => {
+   const storedFirstName = localStorage.getItem("firstName");
+   const email= localStorage.getItem("email");
+   const no=localStorage.getItem("no");
+    const storedLastName = localStorage.getItem("lastName");
+  let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
+let mobile = window.matchMedia("(max-width: 700px)");
+let lap = window.matchMedia("(min-width: 700px)");
+const mainprof = document.querySelector(".profile-section")
+
+   const login      = document.querySelector(".login");
+  const login1     = document.querySelector(".login1");
+  const profile    = document.querySelector(".profile");
+  const profile1   = document.querySelector(".profile1");
+let logsignin = document.querySelector(".logsignin");
+  let logname = document.getElementById("logname");
+let logpass2 = document.getElementById("logpass2");
+
   const loggedIn = localStorage.getItem("loggedIn");
   if (loggedIn) {
     const avatar = document.querySelector(".avatar");
-    const avatar1 = document.querySelector(".avatar1");
+     const avatar1 = document.querySelector(".avatar1");
     const naam = document.querySelector(".namedata");
     const naam1 = document.querySelector(".namedatahead");
     const emailva=document.querySelector(".emaildata");
@@ -459,9 +463,12 @@ document.addEventListener("DOMContentLoaded", () => {
             naam1.innerHTML = `${storedFirstName} ${storedLastName}`;
             emailva.innerHTML=`${email}`;
             number.innerHTML=`${no}`;
-            avatar.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
-            avatar1.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
+             avatar.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
+             avatar1.innerHTML = `${storedFirstName.charAt(0)}${storedLastName.charAt(0)}`;
+            
+            
         }
+
     if (tab.matches) {
       profile.style.display = "block";
     }
@@ -481,6 +488,14 @@ document.addEventListener("DOMContentLoaded", () => {
     profile.style.display = "none";
     profile1.style.display = "none";
   }
+  const link = document.querySelector(".link1"); 
+  link.addEventListener("click", (e) => {
+    const loggedIn = localStorage.getItem("loggedIn");
+    if (!loggedIn) {
+      e.preventDefault(); 
+      alert("Please log in first to access the Psychometric Test page!");   
+    }
+  });
   const logoutbut=document.querySelector(".lgtBtn")
   logoutbut.addEventListener("click",() => {
     localStorage.removeItem("loggedIn")
@@ -499,7 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (lap.matches) {
       profile.style.display = "none";
     }
-    logsignin.innerHTML = "Sign In";
+     logsignin.innerHTML = "Sign In";
     logsignin.disabled = false;
     logname.readOnly = false;
     logpass2.readOnly = false;
@@ -508,7 +523,7 @@ document.addEventListener("DOMContentLoaded", () => {
     login1.style.display = "none";
     profile.style.display = "block";
     profile1.style.display = "block";
-    } 
+  } 
   }
-) 
+  )
 });
