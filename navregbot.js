@@ -391,7 +391,8 @@ logsub.addEventListener("click", async (e) => {
     }
   });
 let state = "unvis";
-profile.addEventListener("click", () => {
+profile.addEventListener("click", (e) => {
+  e.stopPropagation()
     if (state == "vis") {
         profilesection.classList.remove("show");
         state = "unvis";
@@ -401,8 +402,9 @@ profile.addEventListener("click", () => {
     }
 });
 let state1 = "unvis";
-profile1.addEventListener("click", () => {
-    if (state1 == "vis") {
+profile1.addEventListener("click", (e) => {
+  e.stopPropagation()  
+  if (state1 == "vis") {
         profilesection.classList.remove("show");
         state1 = "unvis";
     } else {
