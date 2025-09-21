@@ -81,6 +81,7 @@ main{
     height: 120%;
     font-size: 1.5rem;
     color: darkblue;
+    text-decoration: none;
 }
 .subbtn1{
     display: none;
@@ -148,5 +149,4 @@ input[type="radio"]{
     {
         font-size: 4rem;
     }
-    
 }
