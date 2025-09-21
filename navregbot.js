@@ -416,8 +416,8 @@ profile1.addEventListener("click", () => {
     } else {
         profilesection.classList.add("show");
         state1 = "vis";
-        menu.classList.remove("navcon-ele-new");
-        menu.classList.add("navcon-ele");
+        // menu.classList.remove("navcon-ele-new");
+        // menu.classList.add("navcon-ele");
     }
 });
 document.addEventListener("DOMContentLoaded", () => {
