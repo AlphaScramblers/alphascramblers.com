@@ -53,6 +53,7 @@ export default async function handler(req, res) {
     console.error(err);
     return res.status(500).json({ success: false, message: err.message });
   } finally {
+     await client.close(); 
     
   }
 }
