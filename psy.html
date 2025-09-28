@@ -554,20 +554,14 @@
 <script src="/psy.js"></script>
 <script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
 <script>
-    const submission = document.querySelector(".subbtn1");
-    submission.addEventListener("click",() => {
+const submission = document.querySelector(".subbtn1");
 
-        let scienceScore = 0;
-let commerceScore = 0;
-let humanitiesScore = 0;
+submission.addEventListener("click", async () => {
+    let scienceScore = 0;
+    let commerceScore = 0;
+    let humanitiesScore = 0;
 
-
-function calculateStreamScores() {
-    
-    scienceScore = 0;
-    commerceScore = 0;
-    humanitiesScore = 0;
-
+   
     const allQuesTextDivs = document.querySelectorAll(".ques");
 
     allQuesTextDivs.forEach(quesDiv => {
@@ -578,70 +572,43 @@ function calculateStreamScores() {
             const value = parseInt(selectedRadio.value);
             const classes = quesDiv.classList;
 
-          
-            if (classes.contains('science')) {
-                scienceScore += value;
-            }
-            if (classes.contains('commerce')) {
-                commerceScore += value;
-            }
-            if (classes.contains('humanities')) {
-                humanitiesScore += value;
-            }
+            if (classes.contains('science')) scienceScore += value;
+            if (classes.contains('commerce')) commerceScore += value;
+            if (classes.contains('humanities')) humanitiesScore += value;
         }
     });
 
-  
-    determineMaxStream();
-}
-
- async function determineMaxStream() {
+    
     const streamScores = {
         'Science': scienceScore,
         'Commerce': commerceScore,
         'Humanities': humanitiesScore
     };
-    
-    
-   
-        let maxStream = Object.keys(streamScores).reduce((a, b) => streamScores[a] > streamScores[b] ? a : b);
-        try{
-            const id= localStorage.getItem("userId");
-            const res = await fetch("/api/testresult", {
+    const maxStream = Object.keys(streamScores).reduce(
+        (a, b) => streamScores[a] > streamScores[b] ? a : b
+    );
+
+ 
+    try {
+        const id = localStorage.getItem("userId");
+        if (!id) throw new Error("User ID not found");
+
+        const res = await fetch("/api/testresult", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ maxStream,id }),
+            body: JSON.stringify({ maxStream, id }),
         });
 
+        if (!res.ok) {
+            console.error("Failed to send data:", res.status);
+        } else {
+            console.log("Result sent successfully!");
         }
-        catch{
-
-        }
-        
-      
-    
-}
-
-
-document.addEventListener('change', (event) => {
-    
-    if (event.target.type === 'radio') {
-        calculateStreamScores();
+    } catch (error) {
+        console.error("Error sending stream result:", error);
     }
 });
-
-
-
-        
-      
-    }
-    )
-    
-      
-
-
-
-
 </script>
+
 </body>
 </html>
