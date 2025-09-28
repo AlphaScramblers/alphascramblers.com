@@ -272,6 +272,7 @@ logsub.addEventListener("click", async (e) => {
     localStorage.setItem("lastName", lastName);
      localStorage.setItem("email", email);
      localStorage.setItem("no", mobileno);
+     localStorage.setItem("userId", data.userId); 
      
             localStorage.setItem("loggedIn", "true");
            
