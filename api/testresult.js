@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 
 
     const result = await users.findOneAndUpdate(
-      { _id: new ObjectId(id) },
+      { _id: new ObjectId(String(id)) },
       { $set: { selectedStream: maxStream } },
       { returnDocument: "after" } 
     );
