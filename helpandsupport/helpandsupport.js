@@ -135,7 +135,7 @@ document.getElementById('queryForm').addEventListener('submit', async function(e
       messageArea.textContent = "Failed: " + (result.message || "Server error.");
     }
   } catch (error) {
-    messageArea.textContent = "⚠️ Network error occurred.";
+    messageArea.textContent = " Network error occurred.";
   }
 });
 document.addEventListener("DOMContentLoaded", () => {
