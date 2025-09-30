@@ -140,19 +140,22 @@ document.getElementById('queryForm').addEventListener('submit', async function(e
 });
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("queryForm");
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
+    // Get email from localStorage
     const email = localStorage.getItem("email");
     if (!email) {
       document.getElementById("formMessage").innerText = "User email not found!";
       return;
     }
 
-    data.userEmail = email; // make sure key matches backend
+    // Send to backend as userEmail
+    data.userEmail = email;
 
     try {
       const response = await fetch("/api/sendQuery", {
@@ -161,14 +164,11 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Server error: ${text}`);
-      }
-
       const result = await response.json();
+      console.log(result); // for debugging
       document.getElementById("formMessage").innerText = result.message;
-      form.reset();
+
+      if (response.ok) form.reset();
     } catch (err) {
       console.error("Fetch failed:", err);
       document.getElementById("formMessage").innerText =
