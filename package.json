@@ -1,7 +1,6 @@
 {
   "name": "alphascramblers.com",
   "version": "1.0.0",
-  "description": "",
   "main": "navregbot.js",
   "type": "module",
   "scripts": {
@@ -26,5 +25,6 @@
   "bugs": {
     "url": "https://github.com/AlphaScramblers/alphascramblers.com/issues"
   },
-  "homepage": "https://github.com/AlphaScramblers/alphascramblers.com#readme"
+  "homepage": "https://github.com/AlphaScramblers/alphascramblers.com#readme",
+  "description": ""
 }
