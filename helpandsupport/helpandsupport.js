@@ -138,37 +138,41 @@ document.getElementById('queryForm').addEventListener('submit', async function(e
     messageArea.textContent = "⚠️ Network error occurred.";
   }
 });
-document.getElementById('queryForm').addEventListener('submit', async function(event) {
-  event.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("queryForm");
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-  const formData = new FormData(event.target);
-  const data = Object.fromEntries(formData.entries());
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
 
-  
-  const em = localStorage.getItem("email");
-  if (!em) {
-    document.getElementById("formMessage").innerText = "User email not found!";
-    return;
-  }
+    const email = localStorage.getItem("email");
+    if (!email) {
+      document.getElementById("formMessage").innerText = "User email not found!";
+      return;
+    }
 
-  
-  const payload = {
-    ...data,
-    userEmail: em
-  };
+    data.userEmail = email; // make sure key matches backend
 
-  try {
-    const response = await fetch("/api/sendQuery", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const response = await fetch("/api/sendQuery", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    const result = await response.json();
-    document.getElementById("formMessage").innerText = result.message;
-    event.target.reset(); 
-  } catch (err) {
-    console.error(err);
-    document.getElementById("formMessage").innerText = "Failed to send query.";
-  }
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Server error: ${text}`);
+      }
+
+      const result = await response.json();
+      document.getElementById("formMessage").innerText = result.message;
+      form.reset();
+    } catch (err) {
+      console.error("Fetch failed:", err);
+      document.getElementById("formMessage").innerText =
+        "Failed to send query. Check console.";
+    }
+  });
 });

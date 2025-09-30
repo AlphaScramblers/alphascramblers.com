@@ -12,20 +12,21 @@ export default async function handler(req, res) {
       service: "gmail",
       auth: {
         user: process.env.MY_EMAIL,
-        pass: process.env.MY_EMAIL_PASS, 
-    }});
+        pass: process.env.MY_EMAIL_PASS, // App password
+      },
+    });
 
     try {
       await transporter.sendMail({
-        from: userEmail,           
-        to: process.env.MY_EMAIL, 
+        from: userEmail,
+        to: process.env.MY_EMAIL,
         subject: "New Query",
         text: queryMessage,
       });
 
       res.status(200).json({ message: "Query sent successfully!" });
     } catch (error) {
-      console.error(error);
+      console.error("Nodemailer error:", error);
       res.status(500).json({ message: "Failed to send query" });
     }
   } else {
