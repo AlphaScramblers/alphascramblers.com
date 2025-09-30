@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
     data.userEmail = email;
 
     try {
-      const response = await fetch("/api/sendQuery", {
+      const response = await fetch("/api/sendquery", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
