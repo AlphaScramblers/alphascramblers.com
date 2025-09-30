@@ -110,3 +110,65 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 ) 
 });
+document.getElementById('queryForm').addEventListener('submit', async function(event) {
+  event.preventDefault();
+
+  const form = event.target;
+  const messageArea = document.getElementById('formMessage');
+  messageArea.textContent = "Sending query...";
+
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+
+  try {
+    const response = await fetch(form.action, {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      messageArea.textContent = " Query sent successfully!";
+      document.getElementById("queryContentId").value = "";
+    } else {
+      const result = await response.json();
+      messageArea.textContent = "Failed: " + (result.message || "Server error.");
+    }
+  } catch (error) {
+    messageArea.textContent = "⚠️ Network error occurred.";
+  }
+});
+document.getElementById('queryForm').addEventListener('submit', async function(event) {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData.entries());
+
+  
+  const em = localStorage.getItem("email");
+  if (!em) {
+    document.getElementById("formMessage").innerText = "User email not found!";
+    return;
+  }
+
+  
+  const payload = {
+    ...data,
+    userEmail: em
+  };
+
+  try {
+    const response = await fetch("/api/sendQuery", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json();
+    document.getElementById("formMessage").innerText = result.message;
+    event.target.reset(); 
+  } catch (err) {
+    console.error(err);
+    document.getElementById("formMessage").innerText = "Failed to send query.";
+  }
+});
