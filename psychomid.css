@@ -1,0 +1,113 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #a5d8ff, #e0f7fa);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #1e293b;
+}
+
+.status-card {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 25px;
+  padding: 40px 35px;
+  max-width: 600px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.status-card h1 {
+  font-size: 2rem;
+  color: #0f172a;
+  margin-bottom: 15px;
+}
+
+.desc {
+  font-size: 1rem;
+  color: #334155;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+.btn {
+  text-decoration: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.download {
+  background-color: #2563eb;
+  color: #fff;
+}
+
+.download:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-3px);
+}
+
+.retake {
+  background-color: #22c55e;
+  color: #fff;
+}
+
+.retake:hover {
+  background-color: #16a34a;
+  transform: translateY(-3px);
+}
+
+.note {
+  background: #f1f5f9;
+  border-left: 4px solid #2563eb;
+  border-radius: 10px;
+  padding: 12px 18px;
+  color: #1e3a8a;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .status-card {
+    padding: 30px 25px;
+  }
+
+  .status-card h1 {
+    font-size: 1.5rem;
+  }
+
+  .desc {
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+  }
+}

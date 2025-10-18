@@ -76,3 +76,12 @@ d4.addEventListener("click",()=>{
     d3.style.backgroundColor="white";
     d4.style.backgroundColor="gray";
 })
+document.getElementsByClassName("strtbut").addEventListener("click", () => {
+  const paymentDone = localStorage.getItem("paymentDone");
+
+  if (paymentDone === "true") {
+    window.location.href = "psychomid.html";
+  } else {
+    window.location.href = "beforepg.html";
+  }
+});

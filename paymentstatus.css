@@ -1,0 +1,84 @@
+body {
+font-family: "Poppins", sans-serif;
+background: linear-gradient(135deg, #a5d8ff, #e0f7fa);
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100vh;
+margin: 0;
+padding: 20px;
+color: #1e293b;
+}
+.card {
+background: rgba(255, 255, 255, 0.3);
+backdrop-filter: blur(12px);
+padding: 40px 30px;
+border-radius: 20px;
+text-align: center;
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+max-width: 480px;
+width: 100%;
+}
+.card h1 {
+font-size: 1.8rem;
+color: #0f172a;
+margin-bottom: 10px;
+}
+.card p {
+font-size: 1rem;
+color: #334155;
+margin-bottom: 20px;
+line-height: 1.5;
+}
+.options {
+display: flex;
+flex-direction: column;
+gap: 15px;
+margin-top: 20px;
+}
+.btn {
+padding: 12px 18px;
+border-radius: 10px;
+font-size: 1rem;
+font-weight: 600;
+border: none;
+cursor: pointer;
+transition: 0.3s ease;
+}
+.btn-download {
+background: #2563eb;
+color: white;
+text-decoration: none;
+}
+.btn-download:hover {
+background: #1e4ed8;
+}
+.btn-retake {
+background: #16a34a;
+color: white;
+}
+.btn-retake:hover {
+background: #15803d;
+}
+.small-text {
+font-size: 0.9rem;
+color: #475569;
+margin-top: 15px;
+}
+.back-home-btn {
+  display: inline-block;
+  background-color: #2563eb;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 20px;
+}
+
+.back-home-btn:hover {
+  background-color: #1e40af;
+  transform: scale(1.05);
+}

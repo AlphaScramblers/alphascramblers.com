@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Psychometric Test</title>
-    <link rel="stylesheet" href="afterpg.css">
+    <link rel="stylesheet" href="paymentstatus.css">
     <link rel="stylesheet" href="/homepage/alpha.css">
     <link rel="stylesheet" href="navregbot.css">
        <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,40 +18,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Abel&family=Baloo+Bhaijaan+2:wght@400..800&family=Baloo+Chettan+2:wght@400..800&family=Mada:wght@200..900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="./images/Untitled design (3).png">
 </head>
-<body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Stream Result</title>
-</head>
 <body style="background-color: #E0F2FE;">
-<div class="result-card">
-    <h1>Psychometric Test Result</h1>
-    <br>
-    <div class="scores">
-        <p>Congratulations! You have sucessfully submitted your Psychometric Test</p>
+    <div class="card">
+    <h1>Payment Successful</h1>
+    <p>Thank you for completing your payment! You can now <strong>download your detailed Psychometric Test Report</strong>.  
+      If you made any mistake earlier, you can also retake the test anytime.</p>
+
+    <div class="options">
+      <a id="downloadReport" href="your-report.pdf" class="btn btn-download" download>Download Report</a>
+      <button id="retakeTest" class="btn btn-retake">Retake Test</button>
     </div>
-    <div class="recommend">
-        To get your detailed report please pay an amount of ₹49.00  
-    </div>
-    <div class="attract">
-        Discover your true potential with our detailed Psychometric Test!
-        It helps you understand your strengths, interests, and ideal career path — so you can choose your stream with confidence and clarity.
-    </div>
-    <div class="razorpay-embed-btn" data-url="https://pages.razorpay.com/pl_RUzDIinPncLEZm/view" data-text="Pay now" data-color="#528FF0" data-size="large">
-    <script>
-        (function(){
-            var d=document; var x=!d.getElementById('razorpay-embed-btn-js')
-            if(x){ var s=d.createElement('script'); s.defer=!0;s.id='razorpay-embed-btn-js';
-            s.src='https://cdn.razorpay.com/static/embed_btn/bundle.js';d.body.appendChild(s);} else{var rzp=window['__rzp__'];
-            rzp && rzp.init && rzp.init()}})();
-    </script>
-    </div>
-</div>
-</body>
-</html>
-    <script src="psy.js"></script>
+    <p class="small-text">You can always revisit your report later using your registered email.</p>
+    <a href="/index.html" class="back-home-btn">Back to Home</a>
+  </div>
+
+  <script>
+    localStorage.setItem("paymentDone", "true");
+
+    document.getElementById("retakeTest").addEventListener("click", () => {
+      localStorage.removeItem("paymentDone");
+      window.location.href = "beforepg.html";
+    });
+  </script>
 </body>
 </html>
