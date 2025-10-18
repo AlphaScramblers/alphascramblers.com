@@ -3,10 +3,19 @@
     margin: 0;
 }
 main{
-    margin-top: 12vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+}
+td{
+    border: 1px solid black;
+    text-align: center;
+    width: 16vw;
+}
+table{
+    border-collapse: collapse;
+    width: 100%;
 }
 .heading{
     font-size: 2.5rem;
@@ -23,6 +32,7 @@ main{
     justify-content: center;
     font-family: "Mada", sans-serif;
     font-weight: 600;
+    height: 79vh;
 }
 .qtop{
     display: flex;
@@ -35,8 +45,8 @@ main{
 .ques{
     font-size: 1.2rem;
     padding: 1%;
-    padding-left: 0;
-    margin-bottom: 0.5%;
+    margin: 0.5%;
+    margin-bottom: 2%;
     height: auto;
 }
 .opt{
@@ -62,6 +72,8 @@ main{
     justify-content: center;
     width: 80vw;
     height: 5vh;
+    position: absolute;
+    bottom: 13vh;
 }
 .sbt,.sbt1{
     width: 20%;
