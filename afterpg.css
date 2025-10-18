@@ -1,4 +1,4 @@
-*
+/* *
 {
     margin: 0%;
     padding: 0%;
@@ -31,4 +31,97 @@ body {
     font-size: 22px;
     font-weight: bold;
     color: #28a745;
+} */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", "Inter", sans-serif;
+  background: linear-gradient(135deg, #a5d8ff, #e0f7fa);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.result-card {
+  width: 90%;
+  max-width: 550px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 25px;
+  padding: 40px 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  color: #1e293b;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.result-card h1 {
+  font-size: 2rem;
+  color: #0f172a;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.scores p {
+  font-size: 1.05rem;
+  color: #334155;
+  margin-bottom: 20px;
+}
+
+.recommend {
+  background: #dbeafe;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 600;
+  color: #1d4ed8;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.attract {
+  background: linear-gradient(135deg, #eef2ff, #e0f2fe);
+  border-left: 4px solid #2563eb;
+  padding: 16px 20px;
+  border-radius: 14px;
+  color: #1e3a8a;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 20px 0;
+}
+
+.razorpay-embed-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .result-card {
+    padding: 30px 20px;
+  }
+
+  .result-card h1 {
+    font-size: 1.6rem;
+  }
+
+  .attract {
+    font-size: 0.95rem;
+  }
+
+  .recommend {
+    font-size: 0.95rem;
+  }
 }
