@@ -536,9 +536,9 @@
                             <label><input type="radio" name="q20" value="1"><div class="opt1">Strongly Disagree</div></label>
                             </div>
                             <div class="subbtn"><div class="sbt">Submit</div></div>
-                            <div class="subbtn1"><a href="afterpg.html" class="sbt1">
+                            <!-- <div class="subbtn1"><a href="afterpg.html" class="sbt1">
                                 <div >Get Results</div>
-                            </a></div>
+                            </a></div> -->
                     </div>
                     </form>
                 </div>
@@ -843,7 +843,7 @@ submission.addEventListener("click", async () => {
         if (!res.ok) throw new Error("Failed to send data to server");
 
         // Redirect to result page
-        window.location.href = "/result.html";
+        window.location.href = "afterpg.html";
 
     } catch (error) {
         alert("Error submitting your result. Please try again.");
