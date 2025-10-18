@@ -76,7 +76,8 @@ d4.addEventListener("click",()=>{
     d3.style.backgroundColor="white";
     d4.style.backgroundColor="gray";
 })
-document.getElementsByClassName("strtbut").addEventListener("click", () => {
+psychobut = document.querySelector(".strtbut")
+psychobut.addEventListener("click", () => {
   const paymentDone = localStorage.getItem("paymentDone");
 
   if (paymentDone === "true") {
