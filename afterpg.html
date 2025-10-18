@@ -53,7 +53,7 @@ body {
         <p>Humanities Score: <span id="humanitiesScore">0</span></p>
     </div>
     <div class="recommend">
-        Recommended Stream: <span id="recommendedStream"></span>
+        Recommended Stream: <span id="maxStream">0</span>
     </div>
 </div>
 
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("scienceScore").textContent = localStorage.getItem("scienceScore");
     document.getElementById("commerceScore").textContent = localStorage.getItem("commerceScore");
     document.getElementById("humanitiesScore").textContent = localStorage.getItem("humanitiesScore");
-    document.getElementById("recommendedStream").textContent = localStorage.getItem("recommendedStream");
+    document.getElementById("maxStream").textContent = localStorage.getItem("maxStream");
 });
 </script>
 
