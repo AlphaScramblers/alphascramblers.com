@@ -36,7 +36,8 @@ main{
     font-size: 1.2rem;
     padding: 1%;
     padding-left: 0;
-    margin-bottom: 2%;
+    margin-bottom: 0.5%;
+    height: auto;
 }
 .opt{
     font-size: 1.2rem;
@@ -59,8 +60,8 @@ main{
     font-size: 1.2rem;
     display: flex;
     justify-content: center;
-    width: 60vw;
-    height: 6vh;
+    width: 80vw;
+    height: 5vh;
 }
 .sbt,.sbt1{
     width: 20%;
@@ -70,10 +71,11 @@ main{
     font-size: 1.3rem;
     cursor: pointer;
     font-weight: 700;
-    margin: 2%;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
 .sbt1{
     background-color: #4facfe;
@@ -96,7 +98,7 @@ main{
 }
 .progress-bar{
     height: 2vh;
-    width: 80vw;
+    width: 90vw;
     border-radius: 25px;
     border: 1px solid black;
 }
@@ -121,12 +123,13 @@ input[type="radio"]{
     padding: 2%;
     background-color: white;
     border-radius: 20px;
+    width: 80vw;
 }
 .pcal{
     display: flex;
     justify-content: space-between;
     margin-top: 0.5%;
-    width: 80vw;
+    width: 90vw;
     font-weight: 700;
 }
 .ppp{

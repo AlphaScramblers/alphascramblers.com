@@ -31,20 +31,21 @@ submit.addEventListener("click",()=>{
         showQuestion(currentIndex);
     }
     else{
+        currentIndex-=1
         submit.style.display="none"
         submit0.style.display="none"
         submit1.style.display="flex"
     }
     for(let i=0;i<10;i++){
         if(currentIndex<=10){
-            qh.innerHTML=`Question ${currentIndex+1} of 30`;
+            qh.innerHTML=`Question ${currentIndex+1} of 10`;
         }
-        if(currentIndex>=10 && currentIndex<=20){
-            qh.innerHTML=`Question ${currentIndex+1} of 30`;  
+        if(currentIndex>=10 && currentIndex<=30){
+            qh.innerHTML=`Question ${currentIndex-9} of 20`;  
             section.innerHTML="Behaviour" 
         }
-        if(currentIndex>=20 && currentIndex<=30){
-            qh.innerHTML=`Question ${currentIndex+1} of 30`;
+        if(currentIndex>=30 && currentIndex<=50){
+            qh.innerHTML=`Question ${currentIndex-29} of 20`;
             section.innerHTML="Mental & Psychology" 
         }
     }
