@@ -713,7 +713,7 @@
 <!-- <script src="/navregbot.js"></script> -->
 <script src="/psy.js"></script>
 <script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
-<script>
+<!-- <script>
 const submission = document.querySelector(".subbtn1");
 
 submission.addEventListener("click", async () => {
@@ -776,6 +776,80 @@ submission.addEventListener("click", async () => {
         }
     } catch (error) {
         console.error("Error sending stream result:", error);
+    }
+});
+</script> -->
+<script>
+const submission = document.querySelector(".subbtn1");
+
+submission.addEventListener("click", async () => {
+    let scienceScore = 0, commerceScore = 0, humanitiesScore = 0;
+
+    const allQuesTextDivs = document.querySelectorAll(".ques");
+    const totalQuestions = allQuesTextDivs.length;
+    const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+
+    if (answered < totalQuestions) {
+        alert("Please answer all questions before submitting!");
+        return;
+    }
+
+    allQuesTextDivs.forEach(quesDiv => {
+        const questionContainer = quesDiv.closest('.question');
+        const selectedRadio = questionContainer.querySelector('input[type="radio"]:checked');
+        if (!selectedRadio) return;
+
+        const value = parseInt(selectedRadio.value);
+        const classes = quesDiv.classList;
+
+        if (classes.contains('science')) scienceScore += value;
+        if (classes.contains('commerce')) commerceScore += value;
+        if (classes.contains('humanities')) humanitiesScore += value;
+        if (classes.contains('all') || classes.contains('apt')) {
+            scienceScore += value;
+            commerceScore += value;
+            humanitiesScore += value;
+        }
+    });
+
+    const streamScores = {
+        Science: scienceScore,
+        Commerce: commerceScore,
+        Humanities: humanitiesScore
+    };
+
+    const maxStream = Object.keys(streamScores).reduce((a, b) => 
+        streamScores[a] > streamScores[b] ? a : b
+    );
+
+    // Save to localStorage for result page display
+    localStorage.setItem("scienceScore", scienceScore);
+    localStorage.setItem("commerceScore", commerceScore);
+    localStorage.setItem("humanitiesScore", humanitiesScore);
+    localStorage.setItem("recommendedStream", maxStream);
+
+    submission.disabled = true;
+
+    try {
+        const id = localStorage.getItem("userId");
+        if (!id) throw new Error("User ID not found");
+
+        const res = await fetch("/api/testresult", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ maxStream, id }),
+        });
+
+        if (!res.ok) throw new Error("Failed to send data to server");
+
+        // Redirect to result page
+        window.location.href = "/result.html";
+
+    } catch (error) {
+        alert("Error submitting your result. Please try again.");
+        console.error("Error:", error);
+    } finally {
+        submission.disabled = false;
     }
 });
 </script>

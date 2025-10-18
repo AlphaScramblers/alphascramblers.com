@@ -6,7 +6,68 @@
     <title>Psychometric Test</title>
 </head>
 <body>
-    Completed
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Stream Result</title>
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f5f7fa;
+    color: #333;
+    text-align: center;
+    padding: 40px;
+}
+.result-card {
+    background: white;
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+.result-card h1 {
+    color: #0078d7;
+}
+.scores p {
+    font-size: 18px;
+    margin: 8px 0;
+}
+.recommend {
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #28a745;
+}
+</style>
+</head>
+<body>
+
+<div class="result-card">
+    <h1>Psychometric Test Result</h1>
+    <div class="scores">
+        <p>Science Score: <span id="scienceScore">0</span></p>
+        <p>Commerce Score: <span id="commerceScore">0</span></p>
+        <p>Humanities Score: <span id="humanitiesScore">0</span></p>
+    </div>
+    <div class="recommend">
+        Recommended Stream: <span id="recommendedStream"></span>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("scienceScore").textContent = localStorage.getItem("scienceScore");
+    document.getElementById("commerceScore").textContent = localStorage.getItem("commerceScore");
+    document.getElementById("humanitiesScore").textContent = localStorage.getItem("humanitiesScore");
+    document.getElementById("recommendedStream").textContent = localStorage.getItem("recommendedStream");
+});
+</script>
+
+</body>
+</html>
     <script src="psy.js"></script>
 </body>
 </html>
