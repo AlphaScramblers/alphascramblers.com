@@ -17,6 +17,13 @@ body{
     font-family: 'Segoe UI', sans-serif;
     padding-bottom: 1.5%;
 }
+#formMessage {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: 500;
+  color: #333;
+}
+
 .faqanim{
     width: 30vw;
     margin-top: 1%;
