@@ -22,6 +22,7 @@ h3{
 .topper{
     width: 100%;
     text-align: center;
+    margin-top: 0;
 }
 /* .tpc{
     border: 1px solid black;
