@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const isLoggedIn = localStorage.getItem("loggedIn");
       const paymentDone = localStorage.getItem("paymentDone");
-      if (!loggedIn) {
+      if (!isLoggedIn){
         e.preventDefault(); 
         alert("Please log in first to access the Psychometric Test page!");
       } else if (paymentDone === "true") {
