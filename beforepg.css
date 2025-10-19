@@ -8,6 +8,9 @@ main{
     margin-right: 0.5vw;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+header{
+    display: none;
+}
 h1{
     text-decoration: underline;
     margin-bottom: 3vh;
