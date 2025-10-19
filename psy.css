@@ -100,6 +100,14 @@ table{
 .subbtn1{
     display: none;
     margin-bottom: 1vh;
+
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    width: 80vw;
+    height: 5vh;
+    position: absolute;
+    bottom: 13vh;
 }
 .ipbar{
     height: 100%;
