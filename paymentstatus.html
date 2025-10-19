@@ -7,79 +7,75 @@
     <link rel="stylesheet" href="paymentstatus.css">
     <link rel="stylesheet" href="/homepage/alpha.css">
     <link rel="stylesheet" href="navregbot.css">
-       <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Mada:wght@200..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&family=Mada:wght@200..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&family=Baloo+Chettan+2:wght@400..800&family=Mada:wght@200..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Baloo+Bhaijaan+2:wght@400..800&family=Baloo+Chettan+2:wght@400..800&family=Mada:wght@200..900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="./images/Untitled design (3).png">
 </head>
 <body style="background-color: #E0F2FE;">
     <div class="card">
-    <h1>Payment Successful</h1>
-    <p>Thank you for completing your payment! You can now <strong>download your detailed Psychometric Test Report</strong>.  
-      If you made any mistake earlier, you can also retake the test anytime.</p>
+        <h1>Payment Successful</h1>
+        <p>Thank you for completing your payment! You can now <strong>download your detailed Psychometric Test Report</strong>.  
+        If you made any mistake earlier, you can also retake the test anytime.</p>
 
-    <div class="options">
-      <a id="downloadReport" href="your-report.pdf" class="btn btn-download" download>Download Report</a>
-      <button id="retakeTest" class="btn btn-retake">Retake Test</button>
+        <div class="options">
+            <button id="downloadReport" class="btn btn-download">Download Report</button>
+            <button id="retakeTest" class="btn btn-retake">Retake Test</button>
+        </div>
+        <p class="small-text">You can always revisit your report later using your registered email.</p>
+        <a href="/index.html" class="back-home-btn">Back to Home</a>
     </div>
-    <p class="small-text">You can always revisit your report later using your registered email.</p>
-    <a href="/index.html" class="back-home-btn">Back to Home</a>
-  </div>
-  <script>
+
+    <script>
+    // Mark payment as done
     localStorage.setItem("paymentDone", "true");
 
+    // Retake test button
     document.getElementById("retakeTest").addEventListener("click", () => {
-      localStorage.removeItem("paymentDone");
-      window.location.href = "beforepg.html";
+        localStorage.removeItem("paymentDone");
+        window.location.href = "beforepg.html";
     });
-  </script>
-  <script>
-  // When user clicks "Download Report"
-  document.getElementById("downloadReport").addEventListener("click", async (e) => {
-    e.preventDefault();
 
-    // Get scores and maxStream from localStorage
-    const name = localStorage.getItem("userName") || "Student";
-    const mobile = localStorage.getItem("userMobile") || "";
-    const email = localStorage.getItem("userEmail") || "";
-    const scienceScore = parseInt(localStorage.getItem("scienceScore")) || 0;
-    const commerceScore = parseInt(localStorage.getItem("commerceScore")) || 0;
-    const humanitiesScore = parseInt(localStorage.getItem("humanitiesScore")) || 0;
-    const maxStream = localStorage.getItem("maxStream") || "Science";
+    // Download report button
+      document.getElementById("downloadReport").addEventListener("click", async (e) => {
+      e.preventDefault();
 
-    try {
-      // Call the server to generate PDF
-      const res = await fetch("http://localhost:3000/generate-report", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, mobile, email, scienceScore, commerceScore, humanitiesScore, maxStream })
-      });
+      // Get user details from localStorage
+      const name = `${localStorage.getItem("firstName") || "Student"} ${localStorage.getItem("lastName") || ""}`;
+      const mobile = localStorage.getItem("no") || "";
+      const email = localStorage.getItem("email") || "";
+      const scienceScore = parseInt(localStorage.getItem("scienceScore")) || 0;
+      const commerceScore = parseInt(localStorage.getItem("commerceScore")) || 0;
+      const humanitiesScore = parseInt(localStorage.getItem("humanitiesScore")) || 0;
+      const maxStream = localStorage.getItem("maxStream") || "Science";
 
-      if (!res.ok) throw new Error("Failed to generate report");
+      try {
+          const res = await fetch("http://localhost:3000/generate-report", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name, mobile, email, scienceScore, commerceScore, humanitiesScore, maxStream })
+          });
 
-      // Get the PDF blob
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
+          if (!res.ok) throw new Error("Failed to generate report");
 
-      // Trigger download
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${name}_psychometric_report.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
 
-    } catch (err) {
-      console.error("Error downloading report:", err);
-      alert("Failed to download the report. Please try again.");
-    }
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `${name}_psychometric_report.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+
+      } catch (err) {
+          console.error("Error downloading report:", err);
+          alert("Failed to download the report. Please try again.");
+      }
   });
 </script>
 </body>
