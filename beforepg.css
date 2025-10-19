@@ -3,13 +3,10 @@
     padding: 0;
 }
 main{
-    /* margin-top: 13vh; */
+    margin-top: 5vh;
     margin-left: 0.5vw;
     margin-right: 0.5vw;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-.hed{
-    display: none;
 }
 h1{
     text-decoration: underline;
@@ -22,7 +19,6 @@ h3{
 .topper{
     width: 100%;
     text-align: center;
-    margin-top: 0;
 }
 /* .tpc{
     border: 1px solid black;
