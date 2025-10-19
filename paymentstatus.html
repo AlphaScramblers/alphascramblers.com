@@ -53,11 +53,12 @@
       const maxStream = localStorage.getItem("maxStream") || "Science";
 
       try {
-          const res = await fetch("http://localhost:3000/generate-report", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ name, mobile, email, scienceScore, commerceScore, humanitiesScore, maxStream })
-          });
+        const res = await fetch("/api/generate-report", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, mobile, email, scienceScore, commerceScore, humanitiesScore, maxStream })
+        });
+
 
           if (!res.ok) throw new Error("Failed to generate report");
 
