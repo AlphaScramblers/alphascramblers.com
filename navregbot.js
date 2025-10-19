@@ -501,14 +501,14 @@ let logpass2 = document.getElementById("logpass2");
     profile.style.display = "none";
     profile1.style.display = "none";
   }
-  const link = document.querySelector(".link1"); 
-  link.addEventListener("click", (e) => {
-    const loggedIn = localStorage.getItem("loggedIn");
-    if (!loggedIn) {
-      e.preventDefault(); 
-      alert("Please log in first to access the Psychometric Test page!");   
-    }
-  });
+  // const link = document.querySelector(".link1"); 
+  // link.addEventListener("click", (e) => {
+  //   const loggedIn = localStorage.getItem("loggedIn");
+  //   if (!loggedIn) {
+  //     e.preventDefault(); 
+  //     alert("Please log in first to access the Psychometric Test page!");   
+  //   }
+  // });
   const logoutbut=document.querySelector(".lgtBtn")
   logoutbut.addEventListener("click",() => {
     localStorage.removeItem("loggedIn")

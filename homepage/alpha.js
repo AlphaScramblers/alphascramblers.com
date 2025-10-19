@@ -78,13 +78,15 @@ d4.addEventListener("click",()=>{
 })
 document.addEventListener("DOMContentLoaded", () => {
   const psychobut = document.querySelector(".strtbut");
-
   if (psychobut) {
     psychobut.addEventListener("click", (e) => {
       e.preventDefault();
+      const isLoggedIn = localStorage.getItem("loggedIn");
       const paymentDone = localStorage.getItem("paymentDone");
-
-      if (paymentDone === "true") {
+      if (!loggedIn) {
+        e.preventDefault(); 
+        alert("Please log in first to access the Psychometric Test page!");
+      } else if (paymentDone === "true") {
         window.location.href = "psychomid.html";
       } else {
         window.location.href = "beforepg.html";
