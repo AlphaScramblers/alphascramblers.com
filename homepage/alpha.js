@@ -76,13 +76,19 @@ d4.addEventListener("click",()=>{
     d3.style.backgroundColor="white";
     d4.style.backgroundColor="gray";
 })
-psychobut = document.querySelector(".strtbut")
-psychobut.addEventListener("click", () => {
-  const paymentDone = localStorage.getItem("paymentDone");
+document.addEventListener("DOMContentLoaded", () => {
+  const psychobut = document.querySelector(".strtbut");
 
-  if (paymentDone === "true") {
-    window.location.href = "psychomid.html";
-  } else {
-    window.location.href = "beforepg.html";
+  if (psychobut) {
+    psychobut.addEventListener("click", (e) => {
+      e.preventDefault();
+      const paymentDone = localStorage.getItem("paymentDone");
+
+      if (paymentDone === "true") {
+        window.location.href = "psychomid.html";
+      } else {
+        window.location.href = "beforepg.html";
+      }
+    });
   }
 });
