@@ -224,6 +224,7 @@ body{
     background-color: red;
     margin-top: 2vh;
     font-size: 1.3rem;
+    cursor: pointer;
 }
 .psychotest{
     display: flex;
