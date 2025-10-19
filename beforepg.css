@@ -8,7 +8,7 @@ main{
     margin-right: 0.5vw;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-header{
+.hed{
     display: none;
 }
 h1{
