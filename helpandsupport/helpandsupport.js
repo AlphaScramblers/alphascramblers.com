@@ -110,15 +110,27 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 ) 
 });
+const email = localStorage.getItem("email");
+const firstname = localStorage.getItem("firstName");
+const lastname = localStorage.getItem("lastName");
+const contact = localStorage.getItem("no");
+
+if (!email || !firstname || !lastname || !contact) { 
+  document.getElementById("queryForm").style.display = "none";
+  document.getElementById("formMessage").textContent = "Please log in to submit a query.";
+  return;
+}
+
 document.getElementById('queryForm').addEventListener('submit', async function(event) {
   event.preventDefault();
 
   const form = event.target;
   const messageArea = document.getElementById('formMessage');
   messageArea.textContent = "Sending query...";
+  const userName = `${firstname} ${lastname}`;
+  const queryMessage = document.getElementById("queryContentId").value.trim();
+  const data = { userName, userEmail: email, userContact: contact, queryMessage };
 
-  const formData = new FormData(form);
-  const data = Object.fromEntries(formData.entries());
 
   try {
     const response = await fetch(form.action, {
@@ -128,51 +140,13 @@ document.getElementById('queryForm').addEventListener('submit', async function(e
     });
 
     if (response.ok) {
-      messageArea.textContent = " Query sent successfully!";
+      messageArea.textContent = "Query sent successfully!";
       document.getElementById("queryContentId").value = "";
     } else {
       const result = await response.json();
       messageArea.textContent = "Failed: " + (result.message || "Server error.");
     }
   } catch (error) {
-    messageArea.textContent = " Network error occurred.";
+    messageArea.textContent = "Network error occurred.";
   }
-});
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("queryForm");
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-
-    // Get email from localStorage
-    const email = localStorage.getItem("email");
-    if (!email) {
-      document.getElementById("formMessage").innerText = "User email not found!";
-      return;
-    }
-
-    // Send to backend as userEmail
-    data.userEmail = email;
-
-    try {
-      const response = await fetch("/api/sendquery", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-      console.log(result); // for debugging
-      document.getElementById("formMessage").innerText = result.message;
-
-      if (response.ok) form.reset();
-    } catch (err) {
-      console.error("Fetch failed:", err);
-      document.getElementById("formMessage").innerText =
-        "Failed to send query. Check console.";
-    }
-  });
 });

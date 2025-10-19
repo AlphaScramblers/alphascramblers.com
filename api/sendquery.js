@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { queryMessage, userEmail } = req.body;
+  const { queryMessage, userEmail, userName, userContact } = req.body;
 
   if (!queryMessage || !userEmail) {
     return res.status(400).json({ message: "Email or query missing" });
@@ -22,10 +22,14 @@ export default async function handler(req, res) {
 
   try {
     await transporter.sendMail({
-      from: userEmail,
+      from: process.env.MY_EMAIL,
       to: process.env.MY_EMAIL,
       subject: "New Query",
-      text: queryMessage,
+      text: `You received a new query from AlphaScramblers:\n
+      Name: ${userName}
+      Email: ${userEmail}
+      Contact: ${userContact}
+      \nMessage:\n${queryMessage}`,
     });
 
     res.status(200).json({ message: "Query sent successfully!" });
