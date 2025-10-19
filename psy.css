@@ -66,7 +66,7 @@ table{
 .opt1{
     margin-left: 2%;
 }
-.subbtn,.subbtn1{
+.subbtn{
     font-size: 1.2rem;
     display: flex;
     justify-content: center;
@@ -75,7 +75,7 @@ table{
     position: absolute;
     bottom: 13vh;
 }
-.sbt,.sbt1{
+.sbt{
     width: 20%;
     height: 100%;
     border-radius: 20px;
@@ -89,17 +89,29 @@ table{
     margin-top: 1%;
     margin-bottom: 1%;
 }
-.sbt1{
+.subbtn1,.sbt1{
+    display: none;
+    margin-bottom: 1vh;
     background-color: #4facfe;
-    width: 40%;
-    height: 40%;
+    height: 100%;
+    width: 20%;
     font-size: 1.5rem;
     color: darkblue;
     text-decoration: none;
+    border-radius: 20px;
+    cursor: pointer;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    outline: 1px solid black;
+    align-items: center;
 }
-.subbtn1{
-    display: none;
-    margin-bottom: 1vh;
+.resbut{
+    width: 80vw;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 12vh;
+    height: 5vh;
 }
 .ipbar{
     height: 100%;
