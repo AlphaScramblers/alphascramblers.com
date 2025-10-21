@@ -1,52 +1,40 @@
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
-import QuickChart from "quickchart-js";
-import fetch from "node-fetch";
+import { PDFDocument } from "pdf-lib";
+import fs from "fs";
+import path from "path";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
-
-  const { name, mobile, email, scienceScore, commerceScore, humanitiesScore, maxStream } = req.body;
+  if (req.method !== "POST")
+    return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([600, 800]);
-    const { height } = page.getSize();
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const { name, mobile, email, scienceScore, commerceScore, humanitiesScore, maxStream } = req.body;
+    const firstName = name.split(" ")[0];
+    const alpha = `Alpha ${firstName}`;
 
-    page.drawText("Alpha Scrambler - Psychometric Report", { x: 50, y: height - 50, size: 20, font, color: rgb(0.1, 0.1, 0.5) });
-    page.drawText(`Name: ${name}`, { x: 50, y: height - 90, size: 14, font });
-    page.drawText(`Mobile: ${mobile}`, { x: 50, y: height - 110, size: 14, font });
-    page.drawText(`Email: ${email}`, { x: 50, y: height - 130, size: 14, font });
-    page.drawText(`Recommended Stream: ${maxStream}`, { x: 50, y: height - 160, size: 16, font, color: rgb(0.8, 0.1, 0.1) });
+    // ✅ Load PDF template from filesystem (public folder)
+    const templatePath = path.join(process.cwd(), "streamtemplates", "ctemplate.pdf");
+    const existingPdfBytes = fs.readFileSync(templatePath);
 
-    const aboutText = `The student has shown interest in multiple streams. Science: ${scienceScore}, Commerce: ${commerceScore}, Humanities: ${humanitiesScore}. Recommended Stream: ${maxStream}.`;
-    page.drawText(aboutText, { x: 50, y: height - 200, size: 12, font, lineHeight: 16 });
+    const pdfDoc = await PDFDocument.load(existingPdfBytes);
+    const form = pdfDoc.getForm();
 
-    // Charts (optional)
-    try {
-      const barChartUrl = new QuickChart().setConfig({
-        type: "bar",
-        data: {
-          labels: ["Science", "Commerce", "Humanities"],
-          datasets: [{ label: "Scores", data: [scienceScore, commerceScore, humanitiesScore] }],
-        },
-      }).getUrl();
+    form.getTextField("name").setText(name);
+    form.getTextField("mobile").setText(mobile);
+    form.getTextField("email").setText(email);
+    form.getTextField("science").setText(scienceScore.toString());
+    form.getTextField("commerce").setText(commerceScore.toString());
+    form.getTextField("humanities").setText(humanitiesScore.toString());
+    form.getTextField("stream").setText(maxStream);
+    form.getTextField("alpha").setText(alpha);
 
-      const barRes = await fetch(barChartUrl);
-      const barBytes = await barRes.arrayBuffer();
-      const barImage = await pdfDoc.embedPng(barBytes);
-      page.drawImage(barImage, { x: 50, y: 300, width: 250, height: 200 });
-    } catch (err) {
-      console.log("Bar chart error, skipping:", err.message);
-    }
+    form.flatten();
 
     const pdfBytes = await pdfDoc.save();
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `attachment; filename=${name}_report.pdf`);
+    res.setHeader("Content-Disposition", `attachment; filename=${alpha}_Report.pdf`);
     res.send(Buffer.from(pdfBytes));
-
-  } catch (err) {
-    console.error("PDF generation error:", err);
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    res.status(500).json({ error: "Error generating PDF" });
   }
 }
