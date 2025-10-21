@@ -171,6 +171,30 @@ input[type="radio"]{
 {
     .heading
     {
-        font-size: 4rem;
+        font-size: 2rem;
+        text-align: center;
+    }
+    .qh{
+        font-size: 1rem;
+    }
+    .section{
+        font-size: 1rem;
+    }
+    .opt{
+        margin-top: 9px;
+    }
+    .question{
+        font-weight: 500;
+    }
+    .subbtn{
+        margin-bottom: 10vh;
+    }
+    .sbt{
+        width: 35vw;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+    .qbox{
+        height: 65vh;
     }
 }
