@@ -1,19 +1,22 @@
 import { PDFDocument } from "pdf-lib";
 import fs from "fs";
 import path from "path";
-import { createCanvas } from "canvas";
-import Chart from "chart.js/auto";
+import fetch from "node-fetch"; // ✅ lightweight fetch for QuickChart API
 
-//
-// ==========  🧠 Chart Generators  ==========
-//
+// ======================================================
+// 🌐 QuickChart.io graph generator (Vercel-safe)
+// ======================================================
+async function generateChartImage(config) {
+  const chartUrl = `https://quickchart.io/chart?c=${encodeURIComponent(
+    JSON.stringify(config)
+  )}`;
+  const response = await fetch(chartUrl);
+  return Buffer.from(await response.arrayBuffer());
+}
+
+// ========== 📊 Chart Creation Helpers ==========
 async function generateBarChart(title, labels, data) {
-  const width = 600;
-  const height = 400;
-  const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext("2d");
-
-  new Chart(ctx, {
+  const config = {
     type: "bar",
     data: {
       labels,
@@ -26,7 +29,6 @@ async function generateBarChart(title, labels, data) {
       ],
     },
     options: {
-      responsive: false,
       plugins: {
         title: {
           display: true,
@@ -35,23 +37,15 @@ async function generateBarChart(title, labels, data) {
         },
         legend: { display: false },
       },
-      scales: {
-        y: { beginAtZero: true, ticks: { precision: 0 } },
-      },
+      scales: { y: { beginAtZero: true } },
     },
-  });
-
-  return canvas.toBuffer("image/png");
+  };
+  return await generateChartImage(config);
 }
 
 async function generatePieChart(correct, total) {
   const wrong = total - correct;
-  const width = 500,
-    height = 400;
-  const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext("2d");
-
-  new Chart(ctx, {
+  const config = {
     type: "pie",
     data: {
       labels: ["Correct", "Incorrect"],
@@ -71,14 +65,13 @@ async function generatePieChart(correct, total) {
         },
       },
     },
-  });
-
-  return canvas.toBuffer("image/png");
+  };
+  return await generateChartImage(config);
 }
 
-//
-// ==========  📄 Main API Handler  ==========
-//
+// ======================================================
+// 📄 Main API Handler
+// ======================================================
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -101,7 +94,7 @@ export default async function handler(req, res) {
       totalAptitude,
     } = req.body;
 
-    // 🧩 Validate incoming data
+    // 🧩 Validation
     if (
       !name ||
       scienceScore == null ||
@@ -119,7 +112,7 @@ export default async function handler(req, res) {
     const alpha = `Alpha ${firstName}`;
     const stream = maxStream.trim().toLowerCase();
 
-    // 🧠 Pick correct template
+    // 🧠 Choose correct template
     let templateFile;
     switch (stream) {
       case "commerce":
@@ -136,7 +129,6 @@ export default async function handler(req, res) {
         templateFile = "ctemplate.pdf";
     }
 
-    // 🗂 Template path
     const templatePath = path.join(process.cwd(), "streamtemplates", templateFile);
     console.log("🧾 Using template:", templatePath);
 
@@ -147,12 +139,12 @@ export default async function handler(req, res) {
         .json({ error: `Template not found: ${templateFile}` });
     }
 
-    // 📄 Load and modify PDF
+    // 📄 Load PDF Template
     const existingPdfBytes = fs.readFileSync(templatePath);
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
     const form = pdfDoc.getForm();
 
-    // ✅ Fill basic fields
+    // ✍️ Fill basic fields
     form.getTextField("name")?.setText(String(name));
     form.getTextField("science")?.setText(String(scienceScore));
     form.getTextField("commerce")?.setText(String(commerceScore));
@@ -160,9 +152,9 @@ export default async function handler(req, res) {
     form.getTextField("stream")?.setText(maxStream);
     form.getTextField("alphaname")?.setText(alpha);
 
-    //
-    // ==========  📊 Generate Charts  ==========
-    //
+    // ======================================================
+    // 📊 Generate Graphs (using QuickChart)
+    // ======================================================
     const mentalGraph = await generateBarChart(
       "Mental and Psychology Scores",
       ["Science", "Commerce", "Humanities"],
@@ -180,9 +172,9 @@ export default async function handler(req, res) {
       totalAptitude
     );
 
-    //
-    // ==========  🖼 Embed Charts in PDF  ==========
-    //
+    // ======================================================
+    // 🖼 Embed Charts in PDF
+    // ======================================================
     const mentalImg = await pdfDoc.embedPng(mentalGraph);
     const behaviorImg = await pdfDoc.embedPng(behaviorGraph);
     const aptitudeImg = await pdfDoc.embedPng(aptitudeGraph);
@@ -212,12 +204,12 @@ export default async function handler(req, res) {
       height: 200,
     });
 
-    // Flatten form fields
+    // Flatten form
     form.flatten();
 
-    //
-    // ==========  📦 Send Final PDF  ==========
-    //
+    // ======================================================
+    // 📦 Return Final PDF
+    // ======================================================
     const pdfBytes = await pdfDoc.save();
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
