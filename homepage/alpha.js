@@ -76,24 +76,21 @@ d4.addEventListener("click",()=>{
     d3.style.backgroundColor="white";
     d4.style.backgroundColor="gray";
 })
-// document.addEventListener("DOMContentLoaded", () => {
-//   const psychobut = document.querySelector(".strtbut");
-//   if (psychobut) {
-//     psychobut.addEventListener("click", (e) => {
-//       e.preventDefault();
-//       const isLoggedIn = localStorage.getItem("loggedIn");
-//       const paymentDone = localStorage.getItem("paymentDone");
-//       if (!isLoggedIn){
-//         e.preventDefault(); 
-//         alert("Please log in first to access the Psychometric Test page!");
-//       } else if (paymentDone === "true") {
-//         window.location.href = "psychomid.html";
-//       } else {
-//         window.location.href = "beforepg.html";
-//       }
-//     });
-//   }
-// });
-psychobut.addEventListener("click",()=>{
-  window.location.href = "beforepg.html";
-})
+document.addEventListener("DOMContentLoaded", () => {
+  const psychobut = document.querySelector(".strtbut");
+  if (psychobut) {
+    psychobut.addEventListener("click", (e) => {
+      e.preventDefault();
+      const isLoggedIn = localStorage.getItem("loggedIn");
+      const paymentDone = localStorage.getItem("paymentDone");
+      if (!isLoggedIn){
+        e.preventDefault(); 
+        alert("Please log in first to access the Psychometric Test page!");
+      } else if (paymentDone === "true") {
+        window.location.href = "psychomid.html";
+      } else {
+        window.location.href = "beforepg.html";
+      }
+    });
+  }
+});
