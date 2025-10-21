@@ -588,126 +588,110 @@ submission.addEventListener("click", async () => {
     <script>
         const submission = document.querySelector(".subbtn1");
         submission.addEventListener("click", async (e) => {
-  e.preventDefault();
+        e.preventDefault();
 
-  let scienceScore = 0, commerceScore = 0, humanitiesScore = 0;
-  let behaviorScience = 0, behaviorCommerce = 0, behaviorHumanities = 0;
-  let mentalScience = 0, mentalCommerce = 0, mentalHumanities = 0;
-  let aptitudeScore = 0;
+        let scienceScore = 0, commerceScore = 0, humanitiesScore = 0;
+        let behaviorScience = 0, behaviorCommerce = 0, behaviorHumanities = 0;
+        let mentalScience = 0, mentalCommerce = 0, mentalHumanities = 0;
+        let aptitudeScore = 0;
 
-  const allQuesTextDivs = document.querySelectorAll(".ques");
+        const allQuesTextDivs = document.querySelectorAll(".ques");
 
-  allQuesTextDivs.forEach(quesDiv => {
-    const questionContainer = quesDiv.closest('.question');
-    const selectedRadio = questionContainer.querySelector('input[type="radio"]:checked');
-    if (!selectedRadio) return;
+        allQuesTextDivs.forEach(quesDiv => {
+            const questionContainer = quesDiv.closest('.question');
+            const selectedRadio = questionContainer.querySelector('input[type="radio"]:checked');
+            if (!selectedRadio) return;
 
-    const value = parseInt(selectedRadio.value);
-    const classes = questionContainer.classList;
+            const value = parseInt(selectedRadio.value);
+            const classes = questionContainer.classList;
 
-    // Helper function to check behavior/mental
-    const isBehavior = questionContainer.matches('.behaviour') || questionContainer.closest('.behaviour');
-    const isMental = questionContainer.matches('.mental') || questionContainer.closest('.mental');
+            // Stream scores
+            if (classes.contains('science')) {
+                scienceScore += value;
+                if (questionContainer.closest('.behaviour')) behaviorScience += value;
+                if (questionContainer.closest('.mental')) mentalScience += value;
+            }
+            if (classes.contains('commerce')) {
+                commerceScore += value;
+                if (questionContainer.closest('.behaviour')) behaviorCommerce += value;
+                if (questionContainer.closest('.mental')) mentalCommerce += value;
+            }
+            if (classes.contains('humanities')) {
+                humanitiesScore += value;
+                if (questionContainer.closest('.behaviour')) behaviorHumanities += value;
+                if (questionContainer.closest('.mental')) mentalHumanities += value;
+            }
 
-    // Stream-specific
-    if (classes.contains('science')) {
-      scienceScore += value;
-      if (isBehavior) behaviorScience += value;
-      if (isMental) mentalScience += value;
-    }
-    if (classes.contains('commerce')) {
-      commerceScore += value;
-      if (isBehavior) behaviorCommerce += value;
-      if (isMental) mentalCommerce += value;
-    }
-    if (classes.contains('humanities')) {
-      humanitiesScore += value;
-      if (isBehavior) behaviorHumanities += value;
-      if (isMental) mentalHumanities += value;
-    }
+            // 'All' questions count for all streams
+            if (classes.contains('all')) {
+                scienceScore += value;
+                commerceScore += value;
+                humanitiesScore += value;
 
-    // All streams (mutually exclusive)
-    if (classes.contains('all')) {
-      scienceScore += value;
-      commerceScore += value;
-      humanitiesScore += value;
+                if (questionContainer.closest('.behaviour')) {
+                    behaviorScience += value;
+                    behaviorCommerce += value;
+                    behaviorHumanities += value;
+                }
+                if (questionContainer.closest('.mental')) {
+                    mentalScience += value;
+                    mentalCommerce += value;
+                    mentalHumanities += value;
+                }
+            }
 
-      if (isBehavior) {
-        behaviorScience += value;
-        behaviorCommerce += value;
-        behaviorHumanities += value;
-      }
-      if (isMental) {
-        mentalScience += value;
-        mentalCommerce += value;
-        mentalHumanities += value;
-      }
-    }
+            // Aptitude questions
+            if (classes.contains('apt')) {
+                aptitudeScore += value; // Usually 1 mark per question
+            }
+        });
 
-    // Aptitude
-    if (classes.contains('apt')) aptitudeScore += value;
-  });
+        // Final total for each stream including behavior, mental, and aptitude
+        const finalScienceScore = scienceScore + behaviorScience + mentalScience + aptitudeScore;
+        const finalCommerceScore = commerceScore + behaviorCommerce + mentalCommerce + aptitudeScore;
+        const finalHumanitiesScore = humanitiesScore + behaviorHumanities + mentalHumanities + aptitudeScore;
 
-  // Final totals including aptitude
-  const finalScienceScore = scienceScore + behaviorScience + mentalScience + aptitudeScore;
-  const finalCommerceScore = commerceScore + behaviorCommerce + mentalCommerce + aptitudeScore;
-  const finalHumanitiesScore = humanitiesScore + behaviorHumanities + mentalHumanities + aptitudeScore;
+        const streamScores = {
+            'Science': finalScienceScore,
+            'Commerce': finalCommerceScore,
+            'Humanities': finalHumanitiesScore
+        };
 
-  const streamScores = {
-    'Science': finalScienceScore,
-    'Commerce': finalCommerceScore,
-    'Humanities': finalHumanitiesScore
-  };
+        const maxStream = Object.keys(streamScores).reduce((a, b) => streamScores[a] > streamScores[b] ? a : b);
 
-  const maxStream = Object.keys(streamScores).reduce((a, b) => streamScores[a] > streamScores[b] ? a : b);
+        // Store scores in localStorage
+        localStorage.setItem("scienceScore", finalScienceScore);
+        localStorage.setItem("commerceScore", finalCommerceScore);
+        localStorage.setItem("humanitiesScore", finalHumanitiesScore);
+        localStorage.setItem("maxStream", maxStream);
 
-  // Save to localStorage
-  localStorage.setItem("scienceScore", finalScienceScore);
-  localStorage.setItem("commerceScore", finalCommerceScore);
-  localStorage.setItem("humanitiesScore", finalHumanitiesScore);
-  localStorage.setItem("maxStream", maxStream);
+        localStorage.setItem("behaviorScience", behaviorScience);
+        localStorage.setItem("behaviorCommerce", behaviorCommerce);
+        localStorage.setItem("behaviorHumanities", behaviorHumanities);
 
-  localStorage.setItem("behaviorScience", behaviorScience);
-  localStorage.setItem("behaviorCommerce", behaviorCommerce);
-  localStorage.setItem("behaviorHumanities", behaviorHumanities);
+        localStorage.setItem("mentalScience", mentalScience);
+        localStorage.setItem("mentalCommerce", mentalCommerce);
+        localStorage.setItem("mentalHumanities", mentalHumanities);
 
-  localStorage.setItem("mentalScience", mentalScience);
-  localStorage.setItem("mentalCommerce", mentalCommerce);
-  localStorage.setItem("mentalHumanities", mentalHumanities);
+        localStorage.setItem("aptitudeScore", aptitudeScore);
 
-  localStorage.setItem("aptitudeScore", aptitudeScore);
+        try {
+            const id = localStorage.getItem("userId");
+            if (!id) throw new Error("User ID not found");
 
-  try {
-    const id = localStorage.getItem("userId");
-    if (!id) throw new Error("User ID not found");
+            const res = await fetch("/api/testresult", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ maxStream, id }),
+            });
 
-    const res = await fetch("/api/testresult", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id,
-        maxStream,
-        scienceScore: finalScienceScore,
-        commerceScore: finalCommerceScore,
-        humanitiesScore: finalHumanitiesScore,
-        behaviorScience,
-        behaviorCommerce,
-        behaviorHumanities,
-        mentalScience,
-        mentalCommerce,
-        mentalHumanities,
-        aptitudeScore
-      }),
+            if (!res.ok) console.error("Failed to send data:", res.status);
+        } catch (error) {
+            console.error("Error sending stream result:", error);
+        }
+
+        window.location.href = "afterpg.html";
     });
-
-    if (!res.ok) console.error("Failed to send data:", res.status);
-  } catch (error) {
-    console.error("Error sending stream result:", error);
-  }
-
-  window.location.href = "afterpg.html";
-});
-
     </script>
 </body>
 </html>
