@@ -55,16 +55,21 @@
       let pos = document.documentElement.scrollTop;
       let calcHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       let scrollValue = Math.round((pos * 100) / calcHeight);
-      if (scrollY>innerHeight/4) {
+      if(lap.matches){
+          if (scrollY>innerHeight/4) {
           scrollProgress.style.display = "flex";
-      }
-      if(scrollY<innerHeight/innerHeight){
+          }
+          if(scrollY<innerHeight/innerHeight){
           scrollProgress.style.display = "none";    
-      }
-      scrollProgress.addEventListener("click",()=>{
+          }
+          scrollProgress.addEventListener("click",()=>{
           document.documentElement.scrollTop = 0;
-      })
-      scrollProgress.style.background = `conic-gradient(#4d5bf9 ${scrollValue}%, #d7d7d7 ${scrollValue}%)`;
+          })
+          scrollProgress.style.background = `conic-gradient(#4d5bf9 ${scrollValue}%, #d7d7d7 ${scrollValue}%)`;
+      }
+      else{
+          scrollProgress.style.display = "none";
+      }
   }
   window.onscroll = calcScrollValue;
   window.onload = calcScrollValue;
