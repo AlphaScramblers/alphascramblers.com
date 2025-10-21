@@ -21,8 +21,8 @@ main{
 }
 .data{
     height: 70vh;
-    width: 50vw;
-    background-color: #093A81;
+    width: 100%;
+    background-image: url(../images/banner3bg.png);
     display: flex;
     flex-direction: column;
     gap: 7vh;
@@ -40,7 +40,7 @@ main{
     letter-spacing: 2px;
     text-align: justify;
     width: 80%;
-    line-height: 25px;
+    line-height: 30px;
     font-size: 1.3rem;
     margin-top: -4%;
 }
@@ -49,12 +49,14 @@ main{
     width: 50vw;
     object-fit: cover;
     overflow: hidden;
+    opacity: 25%;
 }
 .texta{
     font-family: "mada",sans-serif;
 }
 .image2{
     overflow: hidden;
+    display: none;
 }
 .animtext,.animtext2,.animtext3{
     display: flex;
