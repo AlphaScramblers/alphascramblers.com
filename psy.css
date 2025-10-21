@@ -32,7 +32,6 @@ table{
     justify-content: center;
     font-family: "Mada", sans-serif;
     font-weight: 600;
-    height: 79vh;
 }
 .qtop{
     display: flex;
@@ -71,9 +70,7 @@ table{
     display: flex;
     justify-content: center;
     width: 80vw;
-    height: 5vh;
-    position: absolute;
-    bottom: 13vh;
+    height: 5vh;    
 }
 .sbt{
     width: 20%;
