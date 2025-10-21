@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    const { name, mobile, email, scienceScore, commerceScore, humanitiesScore, maxStream } = req.body;
+    const { name, scienceScore, commerceScore, humanitiesScore, maxStream } = req.body;
     const firstName = name.split(" ")[0];
     const alpha = `Alpha ${firstName}`;
 
@@ -19,13 +19,11 @@ export default async function handler(req, res) {
     const form = pdfDoc.getForm();
 
     form.getTextField("name").setText(name);
-    form.getTextField("mobile").setText(mobile);
-    form.getTextField("email").setText(email);
     form.getTextField("science").setText(scienceScore.toString());
     form.getTextField("commerce").setText(commerceScore.toString());
     form.getTextField("humanities").setText(humanitiesScore.toString());
     form.getTextField("stream").setText(maxStream);
-    form.getTextField("alpha").setText(alpha);
+    form.getTextField("alphaname").setText(alpha);
 
     form.flatten();
 
