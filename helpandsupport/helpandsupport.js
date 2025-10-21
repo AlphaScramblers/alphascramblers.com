@@ -110,13 +110,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 ) 
 });
+const uploggedIn=localStorage.getItem("loggedIn");
 document.addEventListener("DOMContentLoaded",()=>{
   const email = localStorage.getItem("email");
   const firstname = localStorage.getItem("firstName");
   const lastname = localStorage.getItem("lastName");
   const contact = localStorage.getItem("no");
 
-  if (!email || !firstname || !lastname || !contact) { 
+  if (!uploggedIn) { 
     document.getElementById("queryForm").style.display = "none";
     document.getElementById("formMessage").textContent = "Please log in to submit a query.";
     return;
