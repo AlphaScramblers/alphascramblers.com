@@ -11,8 +11,23 @@ export default async function handler(req, res) {
     const firstName = name.split(" ")[0];
     const alpha = `Alpha ${firstName}`;
 
-    // ✅ Load PDF template from filesystem (public folder)
-    const templatePath = path.join(process.cwd(), "streamtemplates", "ctemplate.pdf");
+    // ✅ Determine template based on maxStream
+    let templateFile;
+    switch (maxStream.toLowerCase()) {
+      case "commerce":
+        templateFile = "ctemplate.pdf";
+        break;
+      case "science":
+        templateFile = "stemplate.pdf";
+        break;
+      case "humanities":
+        templateFile = "htemplate.pdf";
+        break;
+      default:
+        templateFile = "ctemplate.pdf"; // fallback
+    }
+
+    const templatePath = path.join(process.cwd(), "streamtemplates", templateFile);
     const existingPdfBytes = fs.readFileSync(templatePath);
 
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
