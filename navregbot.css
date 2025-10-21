@@ -1102,6 +1102,12 @@ login{
     .bottomlogo1{
         width: 35%;
     }
+    .progress{
+        display: none;  
+    }
+    .progress-value{
+        display: none;
+    }
 }
 @keyframes navconele{
     0%{padding-left:100%}
