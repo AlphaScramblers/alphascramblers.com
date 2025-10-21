@@ -586,7 +586,8 @@ submission.addEventListener("click", async () => {
 });
 </script> -->
 <script>
-submission.addEventListener("click", async (e) => {
+    const submission = document.querySelector(".subbtn1");
+    submission.addEventListener("click", async (e) => {
     e.preventDefault();
 
     let scienceScore = 0, commerceScore = 0, humanitiesScore = 0;
