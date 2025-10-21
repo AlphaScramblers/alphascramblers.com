@@ -25,7 +25,7 @@
       menu.classList.add("navcon-ele");
   }
   })
-  // overlay.style.height= document.documentElement.scrollHeight + "px";
+
   let cross= document.querySelector(".cross")
   let alphalogin = document.querySelector(".alphalogin");
   let reg = document.querySelectorAll(".r");
