@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     }
 
     // 🗂 Template path (Vercel/public-safe)
-    const templatePath = path.join(process.cwd(),"public","streamtemplates", templateFile);
+    const templatePath = path.join(process.cwd(),"streamtemplates", templateFile);
     console.log("🧾 Using template:", templatePath);
 
     if (!fs.existsSync(templatePath)) {
