@@ -188,6 +188,7 @@ input[type="radio"]{
     }
     .subbtn{
         margin-bottom: 1vh;
+        margin-top: 2vh;
     }
     .sbt{
         width: 35vw;
