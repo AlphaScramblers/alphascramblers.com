@@ -637,7 +637,7 @@ submission.addEventListener("click", async (e) => {
         const id = localStorage.getItem("userId");
         if (!id) throw new Error("User ID not found");
 
-        const res = await fetch("/api/testresult", {
+        const res = await fetch("/api/generate-report", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ maxStream, id }),
