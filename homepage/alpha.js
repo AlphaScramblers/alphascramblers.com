@@ -94,3 +94,6 @@ d4.addEventListener("click",()=>{
 //     });
 //   }
 // });
+psychobut.addEventListener("click",()=>{
+  window.location.href = "beforepg.html";
+})
