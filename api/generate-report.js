@@ -103,7 +103,7 @@ export default async function handler(req, res) {
           labels: ["Science", "Commerce", "Humanities"],
           datasets: [
             {
-              label: "Behavior Scores",
+              labels: ["Science", "Commerce", "Humanities"],
               data: [behaviorScience, behaviorCommerce, behaviorHumanities],
               backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"],
               borderColor: "rgba(54,162,235,1)",
@@ -122,7 +122,7 @@ export default async function handler(req, res) {
           labels: ["Science", "Commerce", "Humanities"],
           datasets: [
             {
-              label: "Mental Scores",
+              labels: ["Science", "Commerce", "Humanities"],
               data: [mentalScience, mentalCommerce, mentalHumanities],
               backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"],
               borderColor: "rgba(255,99,132,1)",
