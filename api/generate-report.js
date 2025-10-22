@@ -176,16 +176,15 @@ export default async function handler(req, res) {
     while (pages.length < 6) {
       pdfDoc.addPage();
     }
-    const page1 = pages[0]
+    const page1 = pages[0];
     const page4 = pages[3];
     const page5 = pages[4];
 
-    // Chart placements (adjust freely)
-    page1.drawImage(chart1Embed, { x: 300, y: 250, width: 300, height: 150 });
+    // === 3️⃣ Draw images on respective pages ===
+    page1.drawImage(chart1Embed, { x: 300, y: 150, width: 300, height: 150 });
     page4.drawImage(chart2Embed, { x: 50, y: 350, width: 250, height: 250 });
     page5.drawImage(chart3Embed, { x: 320, y: 350, width: 250, height: 250 });
     page5.drawImage(chart4Embed, { x: 200, y: 50, width: 200, height: 200 });
-
     // ---------- 📄 Save and Return PDF ----------
     const pdfBytes = await pdfDoc.save();
     res.setHeader("Content-Type", "application/pdf");
