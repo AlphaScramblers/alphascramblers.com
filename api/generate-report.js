@@ -168,20 +168,15 @@ export default async function handler(req, res) {
     page5.drawImage(chart3Embed, { x: 150, y: 440, width: 300, height: 300 });
     page5.drawImage(chart4Embed, { x: 150, y: 150, width: 300, height: 300 });
 
-    // ---------- Save silently ----------
-    const outputDir = path.join(process.cwd(), "generated-reports");
-    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
-
     const pdfBytes = await pdfDoc.save();
-    const outputPath = path.join(outputDir, `${alpha}_Report.pdf`);
-    await fs.promises.writeFile(outputPath, pdfBytes);
 
-    // ✅ Return success JSON
-    return res.status(200).json({
-      success: true,
-      message: `Report generated for ${name}`,
-      file: `${alpha}_Report.pdf`,
-    });
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${alpha}_Report.pdf"`
+    );
+    return res.end(Buffer.from(pdfBytes));
+
   } catch (error) {
     console.error("💥 Error generating PDF:", error);
     return res.status(500).json({ error: error.message || "Error generating PDF" });
