@@ -647,9 +647,9 @@ submission.addEventListener("click", async () => {
     });
 
     // Final total for each stream including behavior, mental, and aptitude
-    const finalScienceScore = scienceScore + behaviorScience + mentalScience + aptitudeScore;
-    const finalCommerceScore = commerceScore + behaviorCommerce + mentalCommerce + aptitudeScore;
-    const finalHumanitiesScore = humanitiesScore + behaviorHumanities + mentalHumanities + aptitudeScore;
+    const finalScienceScore = behaviorScience + mentalScience + aptitudeScore;
+    const finalCommerceScore = behaviorCommerce + mentalCommerce + aptitudeScore;
+    const finalHumanitiesScore = behaviorHumanities + mentalHumanities + aptitudeScore;
 
     const streamScores = {
         'Science': finalScienceScore,
