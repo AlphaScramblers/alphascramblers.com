@@ -1,12 +1,15 @@
 {
+  "redirects": [
+    {
+      "source": "/:page/:page.html",
+      "destination": "/:page",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/:page",
       "destination": "/:page/:page.html"
-    },
-    {
-      "source": "/:folder/:page",
-      "destination": "/:folder/:page/:page.html"
     }
   ],
   "functions": {
