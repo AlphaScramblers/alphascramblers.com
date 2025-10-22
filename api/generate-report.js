@@ -100,16 +100,21 @@ export default async function handler(req, res) {
       .setConfig({
         type: "bar",
         data: {
-          labels: ["Science", "Commerce", "Humanities"],
+          labels: ["Science", "Commerce", "Humanities"], // X-axis labels
           datasets: [
             {
-              labels: ["Science", "Commerce", "Humanities"],
               data: [behaviorScience, behaviorCommerce, behaviorHumanities],
               backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"],
-              borderColor: "rgba(54,162,235,1)",
-            },
-          ],
+              borderColor: ["#4CAF50", "#2196F3", "#FFC107"],
+              borderWidth: 1
+              // ❌ remove 'labels' from here
+            }
+          ]
         },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
       });
     const chart2Image = await chart2.toDataUrl();
 
@@ -119,18 +124,24 @@ export default async function handler(req, res) {
       .setConfig({
         type: "bar",
         data: {
-          labels: ["Science", "Commerce", "Humanities"],
+          labels: ["Science", "Commerce", "Humanities"], // X-axis labels
           datasets: [
             {
-              labels: ["Science", "Commerce", "Humanities"],
               data: [mentalScience, mentalCommerce, mentalHumanities],
               backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"],
-              borderColor: "rgba(255,99,132,1)",
-            },
-          ],
+              borderColor: ["#4CAF50", "#2196F3", "#FFC107"],
+              borderWidth: 1
+              // ❌ remove 'labels' from here
+            }
+          ]
         },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
       });
     const chart3Image = await chart3.toDataUrl();
+
 
     const totalAptitudeQs = 10;
     const chart4 = new QuickChart()
