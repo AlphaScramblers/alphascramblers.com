@@ -39,19 +39,45 @@
 
       // Get user details from localStorage
       const name = `${localStorage.getItem("firstName") || "Student"} ${localStorage.getItem("lastName") || ""}`;
-      const mobile = localStorage.getItem("no") || "";
-      const email = localStorage.getItem("email") || "";
-      const scienceScore = parseInt(localStorage.getItem("scienceScore")) || 0;
-      const commerceScore = parseInt(localStorage.getItem("commerceScore")) || 0;
-      const humanitiesScore = parseInt(localStorage.getItem("humanitiesScore")) || 0;
-      const maxStream = localStorage.getItem("maxStream") || "Science";
+        const mobile = localStorage.getItem("no") || "";
+        const email = localStorage.getItem("email") || "";
+
+        const scienceScore = parseInt(localStorage.getItem("scienceScore")) || 0;
+        const commerceScore = parseInt(localStorage.getItem("commerceScore")) || 0;
+        const humanitiesScore = parseInt(localStorage.getItem("humanitiesScore")) || 0;
+        const maxStream = localStorage.getItem("maxStream") || "Science";
+
+        const behaviorScience = parseInt(localStorage.getItem("behaviorScience")) || 0;
+        const behaviorCommerce = parseInt(localStorage.getItem("behaviorCommerce")) || 0;
+        const behaviorHumanities = parseInt(localStorage.getItem("behaviorHumanities")) || 0;
+
+        const mentalScience = parseInt(localStorage.getItem("mentalScience")) || 0;
+        const mentalCommerce = parseInt(localStorage.getItem("mentalCommerce")) || 0;
+        const mentalHumanities = parseInt(localStorage.getItem("mentalHumanities")) || 0;
+
+        const aptitudeScore = parseInt(localStorage.getItem("aptitudeScore")) || 0;
 
       try {
         const res = await fetch("/api/generate-report", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, mobile, email, scienceScore, commerceScore, humanitiesScore, maxStream })
-        });
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          mobile,
+          email,
+          scienceScore,
+          commerceScore,
+          humanitiesScore,
+          behaviorScience,
+          behaviorCommerce,
+          behaviorHumanities,
+          mentalScience,
+          mentalCommerce,
+          mentalHumanities,
+          aptitudeScore,
+          maxStream
+        }),
+      });
 
 
           if (!res.ok) throw new Error("Failed to generate report");
@@ -61,7 +87,7 @@
 
           const a = document.createElement("a");
           a.href = url;
-          a.download = `${name}_psychometric_report.pdf`;
+          a.download = `${name}_Psychometric_Report.pdf`;
           document.body.appendChild(a);
           a.click();
           a.remove();
