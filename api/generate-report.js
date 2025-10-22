@@ -31,7 +31,6 @@ export default async function handler(req, res) {
       humanitiesScore == null ||
       !maxStream
     ) {
-      console.error("❌ Missing fields in request body:", req.body);
       return res
         .status(400)
         .json({ error: "Missing required fields in request body" });
@@ -41,7 +40,7 @@ export default async function handler(req, res) {
     const alpha = `Alpha ${firstName}`;
     const stream = maxStream.trim().toLowerCase();
 
-    // Select correct PDF template
+    // Pick template
     let templateFile;
     switch (stream) {
       case "commerce":
@@ -54,24 +53,18 @@ export default async function handler(req, res) {
         templateFile = "htemplate.pdf";
         break;
       default:
-        console.warn(`⚠️ Unknown stream "${maxStream}", defaulting to commerce`);
         templateFile = "ctemplate.pdf";
     }
 
     const templatePath = path.join(process.cwd(), "streamtemplates", templateFile);
     if (!fs.existsSync(templatePath)) {
-      console.error("❌ Template file not found:", templatePath);
-      return res
-        .status(404)
-        .json({ error: `Template not found: ${templateFile}` });
+      return res.status(404).json({ error: `Template not found: ${templateFile}` });
     }
 
-    // Load PDF template
     const existingPdfBytes = fs.readFileSync(templatePath);
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
     const form = pdfDoc.getForm();
 
-    // Fill form fields
     form.getTextField("name")?.setText(String(name));
     form.getTextField("science")?.setText(String(scienceScore));
     form.getTextField("commerce")?.setText(String(commerceScore));
@@ -81,120 +74,116 @@ export default async function handler(req, res) {
 
     form.flatten();
 
-    // ---------- 🧠 Generate Charts ----------
-
-    // Chart 1: Bar chart for total scores
-    const chart1 = new QuickChart();
-    chart1.setWidth(600).setHeight(300).setBackgroundColor("white");
-    chart1.setConfig({
-      type: "pie",
-      data: {
-        labels: ["Science", "Commerce", "Humanities"],
-        datasets: [
-          {
-            label: "Total Scores",
-            data: [scienceScore, commerceScore, humanitiesScore],
-            backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"],
-          },
-        ],
-      },
-      options: {
-        plugins: { legend: { display: true } },
-        scales: { y: { beginAtZero: true } },
-      },
-    });
+    // ---------- Charts ----------
+    const chart1 = new QuickChart()
+      .setWidth(600)
+      .setHeight(300)
+      .setBackgroundColor("white")
+      .setConfig({
+        type: "bar",
+        data: {
+          labels: ["Science", "Commerce", "Humanities"],
+          datasets: [
+            {
+              label: "Total Scores",
+              data: [scienceScore, commerceScore, humanitiesScore],
+              backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"],
+            },
+          ],
+        },
+      });
     const chart1Image = await chart1.toDataUrl();
 
-    // Chart 2: Behavior Radar
-    const chart2 = new QuickChart();
-    chart2.setWidth(400).setHeight(400);
-    chart2.setConfig({
-      type: "radar",
-      data: {
-        labels: ["Science", "Commerce", "Humanities"],
-        datasets: [
-          {
-            label: "Behavior Scores",
-            data: [behaviorScience, behaviorCommerce, behaviorHumanities],
-            backgroundColor: "rgba(54,162,235,0.2)",
-            borderColor: "rgba(54,162,235,1)",
-            borderWidth: 2,
-          },
-        ],
-      },
-    });
+    const chart2 = new QuickChart()
+      .setWidth(400)
+      .setHeight(400)
+      .setConfig({
+        type: "radar",
+        data: {
+          labels: ["Science", "Commerce", "Humanities"],
+          datasets: [
+            {
+              label: "Behavior Scores",
+              data: [behaviorScience, behaviorCommerce, behaviorHumanities],
+              backgroundColor: "rgba(54,162,235,0.2)",
+              borderColor: "rgba(54,162,235,1)",
+            },
+          ],
+        },
+      });
     const chart2Image = await chart2.toDataUrl();
 
-    // Chart 3: Mental Radar
-    const chart3 = new QuickChart();
-    chart3.setWidth(400).setHeight(400);
-    chart3.setConfig({
-      type: "radar",
-      data: {
-        labels: ["Science", "Commerce", "Humanities"],
-        datasets: [
-          {
-            label: "Mental Scores",
-            data: [mentalScience, mentalCommerce, mentalHumanities],
-            backgroundColor: "rgba(255,99,132,0.2)",
-            borderColor: "rgba(255,99,132,1)",
-            borderWidth: 2,
-          },
-        ],
-      },
-    });
+    const chart3 = new QuickChart()
+      .setWidth(400)
+      .setHeight(400)
+      .setConfig({
+        type: "radar",
+        data: {
+          labels: ["Science", "Commerce", "Humanities"],
+          datasets: [
+            {
+              label: "Mental Scores",
+              data: [mentalScience, mentalCommerce, mentalHumanities],
+              backgroundColor: "rgba(255,99,132,0.2)",
+              borderColor: "rgba(255,99,132,1)",
+            },
+          ],
+        },
+      });
     const chart3Image = await chart3.toDataUrl();
 
-    // Chart 4: Aptitude Pie
-    const totalAptitudeQs = 10; // adjust as needed
-    const chart4 = new QuickChart();
-    chart4.setWidth(300).setHeight(300);
-    chart4.setConfig({
-      type: "pie",
-      data: {
-        labels: ["Correct", "Incorrect"],
-        datasets: [
-          {
-            data: [aptitudeScore, totalAptitudeQs - aptitudeScore],
-            backgroundColor: ["#4CAF50", "#F44336"],
-          },
-        ],
-      },
-    });
+    const totalAptitudeQs = 10;
+    const chart4 = new QuickChart()
+      .setWidth(300)
+      .setHeight(300)
+      .setConfig({
+        type: "pie",
+        data: {
+          labels: ["Correct", "Incorrect"],
+          datasets: [
+            {
+              data: [aptitudeScore, totalAptitudeQs - aptitudeScore],
+              backgroundColor: ["#4CAF50", "#F44336"],
+            },
+          ],
+        },
+      });
     const chart4Image = await chart4.toDataUrl();
 
-    // ---------- 🖼️ Embed Charts into PDF ----------
-
+    // ---------- Embed ----------
     const chart1Embed = await pdfDoc.embedPng(chart1Image);
     const chart2Embed = await pdfDoc.embedPng(chart2Image);
     const chart3Embed = await pdfDoc.embedPng(chart3Image);
     const chart4Embed = await pdfDoc.embedPng(chart4Image);
 
     const pages = pdfDoc.getPages();
+    while (pages.length < 6) pdfDoc.addPage();
 
-    // Ensure there are at least 6 pages
-    while (pages.length < 6) {
-      pdfDoc.addPage();
-    }
     const page1 = pages[0];
     const page4 = pages[3];
     const page5 = pages[4];
 
-    // === 3️⃣ Draw images on respective pages ===
     page1.drawImage(chart1Embed, { x: 375, y: 380, width: 250, height: 125 });
     page4.drawImage(chart2Embed, { x: 150, y: 20, width: 300, height: 300 });
     page5.drawImage(chart3Embed, { x: 150, y: 440, width: 300, height: 300 });
-    page5.drawImage(chart4Embed, { x: 200, y: 50, width: 200, height: 200 });
-    // ---------- 📄 Save and Return PDF ----------
+    page5.drawImage(chart4Embed, { x: 150, y: 150, width: 300, height: 300 });
+
+    // ---------- Save silently ----------
+    const outputDir = path.join(process.cwd(), "generated-reports");
+    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+
     const pdfBytes = await pdfDoc.save();
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=${alpha}_Report.pdf`
-    );
-    res.end(Buffer.from(pdfBytes));
+    const outputPath = path.join(outputDir, `${alpha}_Report.pdf`);
+    await fs.promises.writeFile(outputPath, pdfBytes);
+
+    // ✅ Return success JSON
+    return res.status(200).json({
+      success: true,
+      message: `Report generated for ${name}`,
+      file: `${alpha}_Report.pdf`,
+    });
   } catch (error) {
     console.error("💥 Error generating PDF:", error);
-    res.status(500).json({ error: error.message || "Error generating PDF" });
+    return res.status(500).json({ error: error.message || "Error generating PDF" });
   }
 }

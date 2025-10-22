@@ -30,53 +30,78 @@
     </div>
 
     <script>
-    // Mark payment as done
-    localStorage.setItem("paymentDone", "true");
+  // Mark payment as done
+  localStorage.setItem("paymentDone", "true");
 
-    // Retake test button
-    document.getElementById("retakeTest").addEventListener("click", () => {
-        localStorage.removeItem("paymentDone");
-        window.location.href = "beforepg.html";
-    });
+  // Retake test button
+  document.getElementById("retakeTest").addEventListener("click", () => {
+    localStorage.removeItem("paymentDone");
+    window.location.href = "beforepg.html";
+  });
 
-    // Download report button
-      document.getElementById("downloadReport").addEventListener("click", async (e) => {
-      e.preventDefault();
+  // Download report button
+  document.getElementById("downloadReport").addEventListener("click", async (e) => {
+    e.preventDefault();
 
-      // Get user details from localStorage
-      const name = `${localStorage.getItem("firstName") || "Student"} ${localStorage.getItem("lastName") || ""}`;
-      const mobile = localStorage.getItem("no") || "";
-      const email = localStorage.getItem("email") || "";
-      const scienceScore = parseInt(localStorage.getItem("scienceScore")) || 0;
-      const commerceScore = parseInt(localStorage.getItem("commerceScore")) || 0;
-      const humanitiesScore = parseInt(localStorage.getItem("humanitiesScore")) || 0;
-      const maxStream = localStorage.getItem("maxStream") || "Science";
+    // Get all details from localStorage
+    const name = `${localStorage.getItem("firstName") || "Student"} ${localStorage.getItem("lastName") || ""}`;
+    const mobile = localStorage.getItem("no") || "";
+    const email = localStorage.getItem("email") || "";
 
-      try {
-        const res = await fetch("/api/generate-report", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, mobile, email, scienceScore, commerceScore, humanitiesScore, maxStream })
-        });
+    const scienceScore = parseInt(localStorage.getItem("scienceScore")) || 0;
+    const commerceScore = parseInt(localStorage.getItem("commerceScore")) || 0;
+    const humanitiesScore = parseInt(localStorage.getItem("humanitiesScore")) || 0;
+    const maxStream = localStorage.getItem("maxStream") || "Science";
 
+    const behaviorScience = parseInt(localStorage.getItem("behaviorScience")) || 0;
+    const behaviorCommerce = parseInt(localStorage.getItem("behaviorCommerce")) || 0;
+    const behaviorHumanities = parseInt(localStorage.getItem("behaviorHumanities")) || 0;
 
-          if (!res.ok) throw new Error("Failed to generate report");
+    const mentalScience = parseInt(localStorage.getItem("mentalScience")) || 0;
+    const mentalCommerce = parseInt(localStorage.getItem("mentalCommerce")) || 0;
+    const mentalHumanities = parseInt(localStorage.getItem("mentalHumanities")) || 0;
 
-          const blob = await res.blob();
-          const url = window.URL.createObjectURL(blob);
+    const aptitudeScore = parseInt(localStorage.getItem("aptitudeScore")) || 0;
 
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = `${name}_psychometric_report.pdf`;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          window.URL.revokeObjectURL(url);
+    try {
+      // Call API to generate report (PDF with charts)
+      const res = await fetch("/api/generate-report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          mobile,
+          email,
+          scienceScore,
+          commerceScore,
+          humanitiesScore,
+          behaviorScience,
+          behaviorCommerce,
+          behaviorHumanities,
+          mentalScience,
+          mentalCommerce,
+          mentalHumanities,
+          aptitudeScore,
+          maxStream
+        }),
+      });
 
-      } catch (err) {
-          console.error("Error downloading report:", err);
-          alert("Failed to download the report. Please try again.");
-      }
+      if (!res.ok) throw new Error("Failed to generate report");
+
+      // Convert response to blob and trigger download
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${name}_Psychometric_Report.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Error downloading report:", err);
+      alert("Failed to download the report. Please try again.");
+    }
   });
 </script>
 </body>
