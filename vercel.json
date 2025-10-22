@@ -7,10 +7,7 @@
     }
   ],
   "rewrites": [
-    {
-      "source": "/:page",
-      "destination": "/:page/:page.html"
-    }
+    { "source": "/(.*)", "destination": "/" }
   ],
   "functions": {
     "api/generate-report.js": {
