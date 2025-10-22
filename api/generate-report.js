@@ -87,7 +87,7 @@ export default async function handler(req, res) {
     const chart1 = new QuickChart();
     chart1.setWidth(600).setHeight(300).setBackgroundColor("white");
     chart1.setConfig({
-      type: "bar",
+      type: "pie",
       data: {
         labels: ["Science", "Commerce", "Humanities"],
         datasets: [
@@ -181,7 +181,7 @@ export default async function handler(req, res) {
     const page5 = pages[4];
 
     // === 3️⃣ Draw images on respective pages ===
-    page1.drawImage(chart1Embed, { x: 300, y: 150, width: 300, height: 150 });
+    page1.drawImage(chart1Embed, { x: 300, y: 0, width: 200, height: 100 });
     page4.drawImage(chart2Embed, { x: 50, y: 350, width: 250, height: 250 });
     page5.drawImage(chart3Embed, { x: 320, y: 350, width: 250, height: 250 });
     page5.drawImage(chart4Embed, { x: 200, y: 50, width: 200, height: 200 });
