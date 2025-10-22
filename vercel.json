@@ -1,9 +1,13 @@
 {
   "rewrites": [
-    { "source": "/helpandsupport", "destination": "/helpandsupport/helpandsupport.html" },
-    { "source": "/about", "destination": "/about/about.html" },
-    { "source": "/contact", "destination": "/contact/contact.html" },
-    { "source": "/(.*)", "destination": "/" }
+    {
+      "source": "/:page",
+      "destination": "/:page/:page.html"
+    },
+    {
+      "source": "/:folder/:page",
+      "destination": "/:folder/:page/:page.html"
+    }
   ],
   "functions": {
     "api/generate-report.js": {
