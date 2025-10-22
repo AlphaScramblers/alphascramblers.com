@@ -182,7 +182,7 @@ export default async function handler(req, res) {
 
     // === 3️⃣ Draw images on respective pages ===
     page1.drawImage(chart1Embed, { x: 375, y: 380, width: 250, height: 125 });
-    page4.drawImage(chart2Embed, { x: 50, y: 350, width: 250, height: 250 });
+    page4.drawImage(chart2Embed, { x: 150, y: 150, width: 300, height: 300 });
     page5.drawImage(chart3Embed, { x: 320, y: 350, width: 250, height: 250 });
     page5.drawImage(chart4Embed, { x: 200, y: 50, width: 200, height: 200 });
     // ---------- 📄 Save and Return PDF ----------
