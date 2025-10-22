@@ -606,7 +606,6 @@ submission.addEventListener("click", async (e) => {
     const value = parseInt(selectedRadio.value);
     const classes = questionContainer.classList;
 
-    // Stream-specific scoring
     if (classes.contains('science')) {
       scienceScore += value;
       if (questionContainer.closest('.behaviour')) behaviorScience += value;
@@ -623,7 +622,6 @@ submission.addEventListener("click", async (e) => {
       if (questionContainer.closest('.mental')) mentalHumanities += value;
     }
 
-    // “All” category affects all streams
     if (classes.contains('all')) {
       scienceScore += value;
       commerceScore += value;
@@ -641,16 +639,14 @@ submission.addEventListener("click", async (e) => {
       }
     }
 
-    // Aptitude questions
     if (classes.contains('apt')) {
       aptitudeScore += value;
     }
   });
 
-  // Final totals
-  const finalScienceScore = scienceScore + behaviorScience + mentalScience + aptitudeScore;
-  const finalCommerceScore = commerceScore + behaviorCommerce + mentalCommerce + aptitudeScore;
-  const finalHumanitiesScore = humanitiesScore + behaviorHumanities + mentalHumanities + aptitudeScore;
+  const finalScienceScore = behaviorScience + mentalScience + aptitudeScore;
+  const finalCommerceScore = behaviorCommerce + mentalCommerce + aptitudeScore;
+  const finalHumanitiesScore = behaviorHumanities + mentalHumanities + aptitudeScore;
 
   const streamScores = {
     Science: finalScienceScore,
@@ -660,7 +656,6 @@ submission.addEventListener("click", async (e) => {
 
   const maxStream = Object.keys(streamScores).reduce((a, b) => streamScores[a] > streamScores[b] ? a : b);
 
-  // Save locally
   localStorage.setItem("scienceScore", finalScienceScore);
   localStorage.setItem("commerceScore", finalCommerceScore);
   localStorage.setItem("humanitiesScore", finalHumanitiesScore);
@@ -673,7 +668,6 @@ submission.addEventListener("click", async (e) => {
   localStorage.setItem("mentalHumanities", mentalHumanities);
   localStorage.setItem("aptitudeScore", aptitudeScore);
 
-  // Send test result to DB
   try {
     const id = localStorage.getItem("userId");
     if (!id) throw new Error("User ID not found");
@@ -687,11 +681,11 @@ submission.addEventListener("click", async (e) => {
     console.error("Error sending stream result:", error);
   }
 
-  // ✅ Generate PDF report with charts
+  // ✅ Generate PDF report silently (no download)
   try {
-    const name = localStorage.getItem("userName") || "Student"; // or however you store the user's name
+    const name = localStorage.getItem("userName") || "Student";
 
-    const res = await fetch("/api/generate-report", {
+    await fetch("/api/generate-report", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -710,23 +704,12 @@ submission.addEventListener("click", async (e) => {
       }),
     });
 
-    if (!res.ok) throw new Error("Failed to generate report");
-
-    // Download the PDF
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${name}_Report.pdf`;
-    a.click();
-    URL.revokeObjectURL(url);
+    // ✅ Redirect after report generation
+    window.location.href = "afterpg.html";
   } catch (error) {
     console.error("Error generating PDF:", error);
     alert("Failed to generate report. Please try again.");
   }
-
-  // Redirect after generation
-  window.location.href = "afterpg.html";
 });
 </script>
 </body>
