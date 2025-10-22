@@ -98,7 +98,7 @@ export default async function handler(req, res) {
       .setWidth(400)
       .setHeight(400)
       .setConfig({
-        type: "radar",
+        type: "bar",
         data: {
           labels: ["Science", "Commerce", "Humanities"],
           datasets: [
@@ -117,7 +117,7 @@ export default async function handler(req, res) {
       .setWidth(400)
       .setHeight(400)
       .setConfig({
-        type: "radar",
+        type: "bar",
         data: {
           labels: ["Science", "Commerce", "Humanities"],
           datasets: [
