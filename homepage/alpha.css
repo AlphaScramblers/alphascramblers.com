@@ -80,19 +80,19 @@ body{
     overflow: hidden;
 }
 .b1{
-    background-image: url(../images/Untitled\ design\ \(1\).png);
+    background-image: url(../images/banner1bg.svg);
     background-size: 100vw 60vh;
 }
 .b2{
-    background-image: url(../images/Untitled\ design\ \(2\).png);
+    background-image: url(../images/banner2bg.svg);
     background-size: 100vw 60vh;
 }
 .b3{
-    background-image: url(../images/banner3bg.png);
+    background-image: url(../images/banner3bg.svg);
     background-size: 100vw 60vh;
 }
 .b4{
-    background-image: url(../images/banner4bg.png);
+    background-image: url(../images/banner4bg.svg);
     background-size: 100vw 60vh;
 }
 .banimg{
