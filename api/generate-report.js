@@ -176,13 +176,13 @@ export default async function handler(req, res) {
     while (pages.length < 6) {
       pdfDoc.addPage();
     }
-    const page1 = pages[0]
+    const page1 = pages[1]
     const page5 = pages[4];
     const page6 = pages[5];
 
     // Chart placements (adjust freely)
     page1.drawImage(chart1Embed, { x: 50, y: 300, width: 300, height: 150 });
-    page6.drawImage(chart2Embed, { x: 50, y: 350, width: 250, height: 250 });
+    page5.drawImage(chart2Embed, { x: 50, y: 350, width: 250, height: 250 });
     page6.drawImage(chart3Embed, { x: 320, y: 350, width: 250, height: 250 });
     page6.drawImage(chart4Embed, { x: 200, y: 50, width: 200, height: 200 });
 
