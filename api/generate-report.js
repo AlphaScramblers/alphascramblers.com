@@ -10,7 +10,6 @@ export default async function handler(req, res) {
   try {
     const { name, scienceScore, commerceScore, humanitiesScore, maxStream } = req.body;
 
-    // 🧩 Validate incoming data
     if (!name || scienceScore == null || commerceScore == null || humanitiesScore == null || !maxStream) {
       console.error("❌ Missing fields in request body:", req.body);
       return res.status(400).json({ error: "Missing required fields in request body" });
@@ -20,7 +19,6 @@ export default async function handler(req, res) {
     const alpha = `Alpha ${firstName}`;
     const stream = maxStream.trim().toLowerCase();
 
-    // 🧠 Pick correct template
     let templateFile;
     switch (stream) {
       case "commerce":
@@ -37,7 +35,6 @@ export default async function handler(req, res) {
         templateFile = "ctemplate.pdf";
     }
 
-    // 🗂 Template path (Vercel/public-safe)
     const templatePath = path.join(process.cwd(),"streamtemplates", templateFile);
     console.log("🧾 Using template:", templatePath);
 
@@ -46,12 +43,10 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: `Template not found: ${templateFile}` });
     }
 
-    // 📄 Load and modify the PDF
     const existingPdfBytes = fs.readFileSync(templatePath);
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
     const form = pdfDoc.getForm();
 
-    // ✅ Check field existence
     const fields = ["name", "science", "commerce", "humanities", "stream", "alphaname"];
     fields.forEach((field) => {
       if (!form.getFieldMaybe(field)) {
@@ -59,7 +54,6 @@ export default async function handler(req, res) {
       }
     });
 
-    // ✍️ Fill fields safely
     form.getTextField("name")?.setText(String(name));
     form.getTextField("science")?.setText(String(scienceScore));
     form.getTextField("commerce")?.setText(String(commerceScore));
@@ -69,7 +63,6 @@ export default async function handler(req, res) {
 
     form.flatten();
 
-    // 📦 Send generated PDF
     const pdfBytes = await pdfDoc.save();
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
