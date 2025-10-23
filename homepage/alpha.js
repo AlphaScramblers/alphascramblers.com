@@ -94,3 +94,39 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const psychobut1 = document.querySelector(".bottompsycho");
+  if (psychobut1) {
+    psychobut1.addEventListener("click", (e) => {
+      e.preventDefault();
+      const isLoggedIn = localStorage.getItem("loggedIn");
+      const paymentDone = localStorage.getItem("paymentDone");
+      if (!isLoggedIn){
+        e.preventDefault(); 
+        alert("Please log in first to access the Psychometric Test page!");
+      } else if (paymentDone === "true") {
+        window.location.href = "psychomid.html";
+      } else {
+        window.location.href = "beforepg.html";
+      }
+    });
+  }
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const psychobut2 = document.querySelector(".bottompsycho1");
+  if (psychobut2) {
+    psychobut2.addEventListener("click", (e) => {
+      e.preventDefault();
+      const isLoggedIn = localStorage.getItem("loggedIn");
+      const paymentDone = localStorage.getItem("paymentDone");
+      if (!isLoggedIn){
+        e.preventDefault(); 
+        alert("Please log in first to access the Psychometric Test page!");
+      } else if (paymentDone === "true") {
+        window.location.href = "psychomid.html";
+      } else {
+        window.location.href = "beforepg.html";
+      }
+    });
+  }
+});

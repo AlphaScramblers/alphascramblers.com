@@ -14,20 +14,22 @@ main{
     padding: 2.5%;
 }
 .imgdata{
-    height: 70vh;
+    height: auto;
     display: flex;
     width: 100vw;
     flex-direction: row-reverse;
 }
 .data{
-    height: 70vh;
+    height: auto;
     width: 100%;
-    background-image: url(../images/banner3bg.png);
+    background-image: url(../images/banner2bg.svg);
+    background-size: cover;
     display: flex;
     flex-direction: column;
-    gap: 7vh;
     align-items: center;
     justify-content: center;
+    padding-top: 3%;
+    padding-bottom: 3%;
 }
 .datahead{
     font-family: "mada",sans-serif;
@@ -39,17 +41,10 @@ main{
     color: white;
     letter-spacing: 2px;
     text-align: justify;
-    width: 80%;
     line-height: 30px;
     font-size: 1.3rem;
-    margin-top: -4%;
-}
-.iu{
-    height: 70vh;
-    width: 50vw;
-    object-fit: cover;
-    overflow: hidden;
-    opacity: 25%;
+    width: 90%;
+    font-weight: 600;
 }
 .texta{
     font-family: "mada",sans-serif;
@@ -112,9 +107,7 @@ dotlottie-wc{
         font-size: 1.5rem;
     }
     .data{
-        width: 100%;
-        gap: 1vh;
-        height: 50vh;
+        height: auto;
         background-image: url(../images/banner1.png);
         font-weight: 600;
     }
@@ -124,16 +117,14 @@ dotlottie-wc{
     }
     .datadata{
         font-size: 0.8rem;
-        width: 89%;
         line-height: 20px;
         letter-spacing: 1px;
         text-align: justify;
-        margin-top: 1%;
         font-weight: 500;
     }
     .imgdata{
         flex-direction: column;
-        height: 40vh;
+        height: auto;
     }
     .image2{
         display: none;
@@ -142,13 +133,15 @@ dotlottie-wc{
         flex-direction: column;
         margin: 3%;
         background-color:#f9fbfd;
-        border: 1px solid #cfe0f5
+        border: 1px solid #cfe0f5;
+        padding: 1%;
     }
     .animtext2{
         flex-direction: column-reverse;
         margin: 3%;
         background-color:#f9fbfd;
-        border: 1px solid #cfe0f5
+        border: 1px solid #cfe0f5;
+        padding: 1%;
     }
     .text1{
         font-size: 1.3rem;
@@ -168,7 +161,7 @@ dotlottie-wc{
     }
     .texta{
         width: 100%;
-        margin-right: 2%;
+        margin-right: 0%;
     }
     .anim{
         width: 100%;
@@ -191,9 +184,8 @@ dotlottie-wc{
     }
     .blogoimg{
         scale: 1.5;
-    }
-    .social1{
-        margin-top: 5vw;
+        margin-top: 5%;
+        border: 1px solid #2F2C41;
     }
 }
 @media screen and (min-width: 700px) and (max-width: 1000px){

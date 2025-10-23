@@ -347,8 +347,10 @@ footer{
     margin-bottom: 10%;
     opacity: 0.7;
 }
-.bottompsycho{
+.bottompsycho,.bottompsycho1{
     margin-bottom: 7%;
+    cursor: pointer;
+    opacity: 0.7;
 }
 .bottomscience,.bottomcommerce,.bottomhumanities{
     margin-bottom: 15%;
@@ -871,6 +873,10 @@ login{
 }
 }
 @media screen and (min-width: 0px) and (max-width: 700px){
+    .ql,.features,.bottoms3,.cnt{
+        width: 18%;
+        margin-right: 0.5%;
+    }
     .bottomhead{
         font-size: 0.75rem;
         flex-direction: column;
@@ -961,8 +967,8 @@ login{
         margin-top: 2vh;
     }
     .contactuslogo{
-        width: 11%;
-        height: 6.2%;
+        width: 40px;
+        height: 40px;
         font-size: 1rem;
         right: 2%;
     }
