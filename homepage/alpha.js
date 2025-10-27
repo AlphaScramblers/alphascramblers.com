@@ -130,3 +130,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const explorebut = document.querySelector(".bannerpsycho");
+  if (explorebut) {
+    explorebut.addEventListener("click", (e) => {
+      e.preventDefault();
+      const isLoggedIn = localStorage.getItem("loggedIn");
+      const paymentDone = localStorage.getItem("paymentDone");
+      if (!isLoggedIn){
+        e.preventDefault(); 
+        alert("Please log in first to access the Psychometric Test page!");
+      } else if (paymentDone === "true") {
+        window.location.href = "psychomid.html";
+      } else {
+        window.location.href = "beforepg.html";
+      }
+    });
+  }
+});
