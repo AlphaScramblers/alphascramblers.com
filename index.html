@@ -416,7 +416,15 @@
                         <input type="password" placeholder="Password" id="logpass2">
                     </div>
                     <div class="fp">
-                        Forgot Password
+                       <form id="loginForm">
+  <input type="email" placeholder="Email" name="email" required />
+  <input type="password" placeholder="Password" name="password" required />
+  <button type="submit">Login</button>
+</form>
+
+<p style="text-align:center;">
+  <a href="/forgotpassword.html" class="forgot-link">Forgot Password?</a>
+</p>
                     </div>
                     <div class="error1"></div>
                     <div class="signin">
