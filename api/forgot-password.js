@@ -48,7 +48,7 @@ export default async function handler(req, res) {
     });
 
     await transporter.sendMail({
-      from: `"AlphaScramblers" <${process.env.EMAIL_USER}>`,
+      from: `"AlphaScramblers" <${process.env.MY_EMAIL}>`,
       to: email,
       subject: "Password Reset Link",
       html: `
