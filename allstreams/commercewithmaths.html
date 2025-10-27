@@ -690,21 +690,24 @@
                     <div class="error"></div>
                 </form>
             </div>
-            <div class="loginform">
+            <div class="loginform ">
                 <div class="acc">Welcome Back</div>
                 <div class="amem">
                     <div class="accdetails">Please Enter Your Account Details</div>
                 </div>
-                <form>
+                <div class="fp">
+                <form id="loginForm" >
                     <div class="name">
-                        <input type="text" placeholder="Email Id or Mobile No." id="logname">
+                        <input type="email" placeholder="Email Id or Mobile No." name="email" id="logname">
                     </div>
                     <div class="pass">
-                        <input type="password" placeholder="Password" id="logpass2">
+                        <input type="password" placeholder="Password" name="password" id="logpass2">
                     </div>
-                    <div class="fp">
-                        Forgot Password
-                    </div>
+                </form>
+                    <p class="fpnew">
+                    <a href="/password/forgotpassword.html" class="forgot-link">Forgot Password?</a>
+                    </p>
+                </div>
                     <div class="error1"></div>
                     <div class="signin">
                         <button class="logsignin">Sign In</button>

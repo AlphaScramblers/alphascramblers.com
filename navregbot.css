@@ -525,11 +525,18 @@ footer{
     margin-top: 0%;
 }
 .fp{
+    color: #4aa72d;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.fpnew{
     margin-left: 3%;
     color: #4aa72d;
     font-size: 0.9rem;
     text-decoration: underline;
     cursor: pointer;
+    margin-top: 1%;
 }
 .logsub{
     width: 20vw;
