@@ -403,22 +403,20 @@
                     <div class="error"></div>
                 </form>
             </div>
-            <div class="loginform">
+            <div class="loginform ">
                 <div class="acc">Welcome Back</div>
                 <div class="amem">
                     <div class="accdetails">Please Enter Your Account Details</div>
                 </div>
-                <form>
+                <div class="fp " >
+                <form id="loginForm" >
                     <div class="name">
-                        <input type="text" placeholder="Email Id or Mobile No." id="logname">
+                        <input type="email" placeholder="Email Id or Mobile No." name="email" id="logname">
                     </div>
                     <div class="pass">
-                        <input type="password" placeholder="Password" id="logpass2">
+                        <input type="password" placeholder="Password" name="password" id="logpass2">
                     </div>
-                    <div class="fp">
-                       <form id="loginForm">
-  <input type="email" placeholder="Email" name="email" required />
-  <input type="password" placeholder="Password" name="password" required />
+                    
   <button type="submit">Login</button>
 </form>
 
