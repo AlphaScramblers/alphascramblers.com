@@ -1040,7 +1040,7 @@ login{
         margin-left: 3.7vw;
         margin-top: 10vw;
         width: 100vw;
-        height: 100%;
+        height: auto;
     }
     .signup{
         width: 80vw;
