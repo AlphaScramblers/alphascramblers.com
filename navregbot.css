@@ -252,7 +252,7 @@ footer{
 .dis{
     display: none;
 }
-.crossct{
+.crossct {
     height: 5%;
     width: 5%;
     position: absolute;
@@ -261,6 +261,9 @@ footer{
     font-size: 1.2rem;
     cursor: pointer;
     color: white;
+
+    text-shadow: 0 0 0 white;
+    font-family: Arial, sans-serif;
 }
 footer{
     width: 100%;
@@ -1091,9 +1094,13 @@ login{
         width: 70vw;
         margin-left: 4vw;
     }
-    .fp{
-        margin-top: 2vh;
-        margin-left: 4vw;
+    .fpnew{
+        margin-left: 6%;
+        color: #4aa72d;
+        font-size: 0.9rem;
+        text-decoration: underline;
+        cursor: pointer;
+        margin-top: 2%;
     }
     .logsignin{
         margin-left: 4vw;
