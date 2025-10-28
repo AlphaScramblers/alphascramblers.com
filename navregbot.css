@@ -1132,6 +1132,11 @@ login{
     .progress-value{
         display: none;
     }
+    .error{
+        width: 80vw;
+        margin: 0;
+        margin-top: 2%;
+    }
 }
 @keyframes navconele{
     0%{padding-left:100%}
