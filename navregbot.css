@@ -256,8 +256,8 @@ footer{
     height: 5%;
     width: 5%;
     position: absolute;
-    right: -6%;
-    top: -6.5%;
+    right: -5%;
+    top: -5%;
     font-size: 1.2rem;
     cursor: pointer;
     color: white;
@@ -1019,8 +1019,8 @@ login{
         padding: 0;
     }
     .crossct{
-        right: -4%;
-        top: -4%;
+        right: -5%;
+        top: -2.5%;
     }
     .social{
         display: flex;
