@@ -49,5 +49,8 @@ submit.addEventListener("click",()=>{
             section.innerHTML="Mental & Psychology" 
         }
     }
+    if(progress==100){
+        bar.style.borderRadius = "10px"
+    }
 })
 showQuestion(currentIndex);

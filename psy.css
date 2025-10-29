@@ -101,13 +101,12 @@ table{
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     outline: 1px solid black;
     align-items: center;
+    margin-top: 1%;
 }
 .resbut{
     width: 80vw;
     display: flex;
     justify-content: center;
-    position: absolute;
-    bottom: 12vh;
     height: 5vh;
 }
 .ipbar{
@@ -190,7 +189,7 @@ input[type="radio"]{
         margin-bottom: 1vh;
         margin-top: 2vh;
     }
-    .sbt{
+    .sbt,.sbt1{
         width: 35vw;
         font-size: 1.2rem;
         font-weight: 600;
