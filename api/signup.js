@@ -126,13 +126,16 @@ export default async function handler(req, res) {
       password: hashed
     });
 
-    const token = jwt.sign({ id: newUser.insertedId }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign(
+      { id: newUser.insertedId },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
     return res.status(200).json({ success: true, token });
 
   } catch (err) {
+    console.error("SIGNUP ERROR:", err);
     return res.status(500).json({ success: false, message: "Server error" });
-  } finally {
-    client.close();
   }
 }

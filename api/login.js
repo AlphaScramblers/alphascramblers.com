@@ -109,10 +109,12 @@
 
 
 
+import { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import clientPromise from "../../lib/mongo";
-import { ObjectId } from "mongodb";
+
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -126,29 +128,28 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, message: "Email & Password required" });
     }
 
-    const client = await clientPromise;
+    await client.connect();
     const db = client.db("myDatabase");
     const users = db.collection("users");
 
-    const query = /^\d{10}$/.test(email) ? { mobileno: email } : { email };
-    const user = await users.findOne(query);
+    let query = /^\d{10}$/.test(email) ? { mobileno: email } : { email };
 
+    const user = await users.findOne(query);
     if (!user) return res.status(400).json({ success: false, message: "User not found" });
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid)
-      return res.status(400).json({ success: false, message: "Invalid credentials" });
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(400).json({ success: false, message: "Invalid credentials" });
 
     const token = jwt.sign(
-      { id: user._id.toString() },
+      { id: user._id },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
     return res.status(200).json({ success: true, token });
 
-  } catch (error) {
-    console.error("LOGIN ERROR:", error);
-    return res.status(500).json({ success: false, message: "Server error occurred" });
+  } catch (err) {
+    console.error("LOGIN ERROR:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 }

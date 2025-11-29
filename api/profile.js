@@ -20,8 +20,8 @@ export default async function handler(req, res) {
     const users = db.collection("users");
 
     const user = await users.findOne({ _id: new ObjectId(decoded.id) });
-
-    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+    if (!user)
+      return res.status(404).json({ success: false, message: "User not found" });
 
     return res.json({
       success: true,
@@ -34,8 +34,7 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
+    console.error("PROFILE ERROR:", err);
     return res.status(500).json({ success: false, message: "Invalid token" });
-  } finally {
-    client.close();
   }
 }
