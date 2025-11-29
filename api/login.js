@@ -63,12 +63,65 @@
 
 
 
+// import { MongoClient } from "mongodb";
+// import bcrypt from "bcryptjs";
+// import jwt from "jsonwebtoken";
+
+// const uri = process.env.MONGODB_URI;
+// const client = new MongoClient(uri);
+
+// export default async function handler(req, res) {
+//   if (req.method !== "POST") {
+//     return res.status(405).json({ success: false, message: "Method not allowed" });
+//   }
+
+//   try {
+//     const { email, password } = req.body;
+
+//     if (!email || !password) {
+//       return res.status(400).json({ success: false, message: "Email & Password required" });
+//     }
+
+//     await client.connect();
+//     const db = client.db("myDatabase");
+//     const users = db.collection("users");
+
+//     let query = /^\d{10}$/.test(email) ? { mobileno: email } : { email };
+
+//     const user = await users.findOne(query);
+//     if (!user) return res.status(400).json({ success: false, message: "User not found" });
+
+//     const match = await bcrypt.compare(password, user.password);
+//     if (!match) return res.status(400).json({ success: false, message: "Invalid credentials" });
+
+//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+//     return res.status(200).json({ success: true, token });
+
+//   } catch (err) {
+//     return res.status(500).json({ success: false, message: "Server error" });
+//   } finally {
+//     client.close();
+//   }
+// }
+
+
+
+
+
 import { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+let client;
+let clientPromise;
+
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
+
+if (!clientPromise) {
+  client = new MongoClient(uri, { useUnifiedTopology: true });
+  clientPromise = client.connect();
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -82,25 +135,33 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, message: "Email & Password required" });
     }
 
-    await client.connect();
-    const db = client.db("myDatabase");
+    const mongo = await clientPromise;
+    const db = mongo.db("myDatabase");
     const users = db.collection("users");
 
     let query = /^\d{10}$/.test(email) ? { mobileno: email } : { email };
 
     const user = await users.findOne(query);
-    if (!user) return res.status(400).json({ success: false, message: "User not found" });
+    if (!user) {
+      return res.status(400).json({ success: false, message: "User not found" });
+    }
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ success: false, message: "Invalid credentials" });
+    if (!match) {
+      return res.status(400).json({ success: false, message: "Invalid credentials" });
+    }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d"
+    });
 
-    return res.status(200).json({ success: true, token });
+    return res.status(200).json({
+      success: true,
+      token
+    });
 
   } catch (err) {
+    console.error("Login API ERROR →", err);
     return res.status(500).json({ success: false, message: "Server error" });
-  } finally {
-    client.close();
   }
 }
