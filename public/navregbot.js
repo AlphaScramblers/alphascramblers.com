@@ -227,172 +227,180 @@
       loginform.classList.add("logdis")
       loginform.style.display="none"
   })
-  let logfname = document.getElementById("logfname");
-  let loglname = document.getElementById("loglname");
-  let logmob = document.getElementById("logmob");
-  let logmail = document.getElementById("logmail");
-  let logpass1 = document.getElementById("logpass1");
-  let error1 = document.querySelector(".error")
-  let error2 = document.querySelector(".error1")
-  let logsub = document.querySelector(".logsub")
-  let profile = document.querySelector(".profile")
-  let profile1 = document.querySelector(".profile1")
-  let login = document.querySelector(".login")
-  let login1 = document.querySelector(".login1")
-  let logpass2 = document.getElementById("logpass2");
-  let logname = document.getElementById("logname");
-  let logsignin = document.querySelector(".logsignin");
-  let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
-  let mobile = window.matchMedia("(max-width: 700px)");
-  let lap = window.matchMedia("(min-width: 700px)");
-  let profilesection = document.querySelector(".profile-section");
-  logsub.addEventListener("click", async (e) => {
-      e.preventDefault();
-      cloader.style.display="flex";
-      alphalogin.style.opacity="0.3";
-      header.style.opacity="0";
-      main.style.opacity="0";
-      bottom.style.opacity="0";
-      overlay.classList.add("overlay1");
-      alphalogin.classList.remove("alphadis");
-      const firstNamerun = document.getElementById("logfname");
-      const lastNamerun = document.getElementById("loglname");
-      const emailrun = document.getElementById("logmail");
-      const mobilenorun = document.getElementById("logmob");
-      const passwordrun = document.getElementById("logpass1");
-      const firstName = firstNamerun.value;
-      const lastName = lastNamerun.value;
-      const email = emailrun.value;
-      const mobileno = mobilenorun.value;
-      const password = passwordrun.value;
-      try{
-          const res = await fetch("/api/signup", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ firstName, lastName, email, password,mobileno }),
-          });
-          const data = await res.json();
-          if (data.success) {
-              localStorage.setItem("firstName", firstName);
-      localStorage.setItem("lastName", lastName);
-      localStorage.setItem("email", email);
-      localStorage.setItem("no", mobileno);
-      localStorage.setItem("userId", data.userId); 
-              localStorage.setItem("loggedIn", "true");
-              logfname.readOnly = true
-              loglname.readOnly = true
-              logmail.readOnly = true
-              logmob.readOnly = true
-              logpass1.readOnly = true
-              logsub.disabled = true
-              logsub.innerHTML="Account Created"
-              error1.style.display = "none";
-              if(tab.matches){
-                  profile.style.display="block"
-              }
-              if(mobile.matches){
-                  profile1.style.display="block"  
-              }
-              if(lap.matches){
-                  profile.style.display="block"
-              }
-              login1.style.display="none";
-              login.style.display="none";
 
-          } else {
-              error1.innerHTML = data.message || "Something went wrong!";
-              error1.style.display = "block"; 
-              firstNamerun.value=""
-              lastNamerun.value=""
-              emailrun.value=""
-              mobilenorun.value=""
-              passwordrun.value=""
-          }
-      }
-      catch (err) {
-          alert("❌ Something went wrong.");
-      }
-      finally{
-          cloader.style.display = "none";
-          header.style.opacity="1";
-          main.style.opacity="1";
-          bottom.style.opacity="1";
-          overlay.classList.remove("overlay1");
-          alphalogin.style.opacity="1"
-          document.body.style.overflow="auto";
-          document.documentElement.style.overflow = "auto";
-          if(localStorage.getItem("loggedIn") === "true"){
-              window.location.reload();}
-      }
-    });
-    document.querySelector(".logsignin").addEventListener("click", async (e) => {
-      e.preventDefault();
-      cloader.style.display="flex";
-      alphalogin.style.opacity="0.3";
-      header.style.opacity="0";
-      main.style.opacity="0";
-      bottom.style.opacity="0";
-      overlay.classList.add("overlay1");
-      alphalogin.classList.remove("alphadis");
-      try{
-      const emailrun = document.getElementById("logname");
-      const passwordrun = document.getElementById("logpass2");
-      const email = emailrun.value;
-      const password= passwordrun.value;
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (data.success) {
-          localStorage.setItem("loggedIn", "true");
-              localStorage.setItem("firstName", data.profile.firstName);
-              localStorage.setItem("lastName", data.profile.lastName);
-              localStorage.setItem("email", data.profile.email);
-              localStorage.setItem("no", data.profile.mobileNumber); 
-          localStorage.setItem("loggedIn", "true");
+
+
+
+  // let logfname = document.getElementById("logfname");
+  // let loglname = document.getElementById("loglname");
+  // let logmob = document.getElementById("logmob");
+  // let logmail = document.getElementById("logmail");
+  // let logpass1 = document.getElementById("logpass1");
+  // let error1 = document.querySelector(".error")
+  // let error2 = document.querySelector(".error1")
+  // let logsub = document.querySelector(".logsub")
+  // let profile = document.querySelector(".profile")
+  // let profile1 = document.querySelector(".profile1")
+  // let login = document.querySelector(".login")
+  // let login1 = document.querySelector(".login1")
+  // let logpass2 = document.getElementById("logpass2");
+  // let logname = document.getElementById("logname");
+  // let logsignin = document.querySelector(".logsignin");
+  // let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
+  // let mobile = window.matchMedia("(max-width: 700px)");
+  // let lap = window.matchMedia("(min-width: 700px)");
+  // let profilesection = document.querySelector(".profile-section");
+  // logsub.addEventListener("click", async (e) => {
+  //     e.preventDefault();
+  //     cloader.style.display="flex";
+  //     alphalogin.style.opacity="0.3";
+  //     header.style.opacity="0";
+  //     main.style.opacity="0";
+  //     bottom.style.opacity="0";
+  //     overlay.classList.add("overlay1");
+  //     alphalogin.classList.remove("alphadis");
+  //     const firstNamerun = document.getElementById("logfname");
+  //     const lastNamerun = document.getElementById("loglname");
+  //     const emailrun = document.getElementById("logmail");
+  //     const mobilenorun = document.getElementById("logmob");
+  //     const passwordrun = document.getElementById("logpass1");
+  //     const firstName = firstNamerun.value;
+  //     const lastName = lastNamerun.value;
+  //     const email = emailrun.value;
+  //     const mobileno = mobilenorun.value;
+  //     const password = passwordrun.value;
+  //     try{
+  //         const res = await fetch("/api/signup", {
+  //             method: "POST",
+  //             headers: { "Content-Type": "application/json" },
+  //             body: JSON.stringify({ firstName, lastName, email, password,mobileno }),
+  //         });
+  //         const data = await res.json();
+  //         if (data.success) {
+  //             localStorage.setItem("firstName", firstName);
+  //     localStorage.setItem("lastName", lastName);
+  //     localStorage.setItem("email", email);
+  //     localStorage.setItem("no", mobileno);
+  //     localStorage.setItem("userId", data.userId); 
+  //             localStorage.setItem("loggedIn", "true");
+  //             logfname.readOnly = true
+  //             loglname.readOnly = true
+  //             logmail.readOnly = true
+  //             logmob.readOnly = true
+  //             logpass1.readOnly = true
+  //             logsub.disabled = true
+  //             logsub.innerHTML="Account Created"
+  //             error1.style.display = "none";
+  //             if(tab.matches){
+  //                 profile.style.display="block"
+  //             }
+  //             if(mobile.matches){
+  //                 profile1.style.display="block"  
+  //             }
+  //             if(lap.matches){
+  //                 profile.style.display="block"
+  //             }
+  //             login1.style.display="none";
+  //             login.style.display="none";
+
+  //         } else {
+  //             error1.innerHTML = data.message || "Something went wrong!";
+  //             error1.style.display = "block"; 
+  //             firstNamerun.value=""
+  //             lastNamerun.value=""
+  //             emailrun.value=""
+  //             mobilenorun.value=""
+  //             passwordrun.value=""
+  //         }
+  //     }
+  //     catch (err) {
+  //         alert("❌ Something went wrong.");
+  //     }
+  //     finally{
+  //         cloader.style.display = "none";
+  //         header.style.opacity="1";
+  //         main.style.opacity="1";
+  //         bottom.style.opacity="1";
+  //         overlay.classList.remove("overlay1");
+  //         alphalogin.style.opacity="1"
+  //         document.body.style.overflow="auto";
+  //         document.documentElement.style.overflow = "auto";
+  //         if(localStorage.getItem("loggedIn") === "true"){
+  //             window.location.reload();}
+  //     }
+  //   });
+  //   document.querySelector(".logsignin").addEventListener("click", async (e) => {
+  //     e.preventDefault();
+  //     cloader.style.display="flex";
+  //     alphalogin.style.opacity="0.3";
+  //     header.style.opacity="0";
+  //     main.style.opacity="0";
+  //     bottom.style.opacity="0";
+  //     overlay.classList.add("overlay1");
+  //     alphalogin.classList.remove("alphadis");
+  //     try{
+  //     const emailrun = document.getElementById("logname");
+  //     const passwordrun = document.getElementById("logpass2");
+  //     const email = emailrun.value;
+  //     const password= passwordrun.value;
+  //     const res = await fetch("/api/login", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ email, password }),
+  //     });
+  //     const data = await res.json();
+  //     if (data.success) {
+  //         localStorage.setItem("loggedIn", "true");
+  //             localStorage.setItem("firstName", data.profile.firstName);
+  //             localStorage.setItem("lastName", data.profile.lastName);
+  //             localStorage.setItem("email", data.profile.email);
+  //             localStorage.setItem("no", data.profile.mobileNumber); 
+  //         localStorage.setItem("loggedIn", "true");
           
-          error2.style.display = "none";
-          login.style.display="none";
-          login1.style.display="none";
-          if(tab.matches){
-              profile.style.display="block"
-        }
-          if(mobile.matches){
-              profile1.style.display="block"  
-          }
-          if(lap.matches){
-              profile.style.display="block"
-          } 
-          logsignin.innerHTML="Signed In Successfully"
-          logname.readOnly=true;
-          logpass2.readOnly=true;
-          logsignin.disabled=true;
-      } else {
-          error2.innerHTML = data.message || "Something went wrong!";
-          error2.style.display = "block";     
-          overlay.classList.add("overlay1");
-          emailrun.value="";
-          passwordrun.value="";
-      }
-      }
-      catch (err){
-          alert("❌ Something went wrong.");
-      }
-      finally{
-          cloader.style.display = "none";
-          header.style.opacity="1";
-          main.style.opacity="1";
-          bottom.style.opacity="1";
-          overlay.classList.remove("overlay1");
-          alphalogin.style.opacity="1"
-          document.body.style.overflow="auto";
-          document.documentElement.style.overflow = "auto";
-          if(localStorage.getItem("loggedIn") === "true"){
-              window.location.reload();}
-      }
-    });
+  //         error2.style.display = "none";
+  //         login.style.display="none";
+  //         login1.style.display="none";
+  //         if(tab.matches){
+  //             profile.style.display="block"
+  //       }
+  //         if(mobile.matches){
+  //             profile1.style.display="block"  
+  //         }
+  //         if(lap.matches){
+  //             profile.style.display="block"
+  //         } 
+  //         logsignin.innerHTML="Signed In Successfully"
+  //         logname.readOnly=true;
+  //         logpass2.readOnly=true;
+  //         logsignin.disabled=true;
+  //     } else {
+  //         error2.innerHTML = data.message || "Something went wrong!";
+  //         error2.style.display = "block";     
+  //         overlay.classList.add("overlay1");
+  //         emailrun.value="";
+  //         passwordrun.value="";
+  //     }
+  //     }
+  //     catch (err){
+  //         alert("❌ Something went wrong.");
+  //     }
+  //     finally{
+  //         cloader.style.display = "none";
+  //         header.style.opacity="1";
+  //         main.style.opacity="1";
+  //         bottom.style.opacity="1";
+  //         overlay.classList.remove("overlay1");
+  //         alphalogin.style.opacity="1"
+  //         document.body.style.overflow="auto";
+  //         document.documentElement.style.overflow = "auto";
+  //         if(localStorage.getItem("loggedIn") === "true"){
+  //             window.location.reload();}
+  //     }
+  //   });
+
+
+
+
   let state = "unvis";
   profile.addEventListener("click", (e) => {
     e.stopPropagation()
