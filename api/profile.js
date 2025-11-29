@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
-import { connectDB } from "@/lib/mongo";
+import { connectDB } from "../lib/mongo.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
