@@ -2,21 +2,6 @@
   "version": 2,
   "cleanUrls": true,
 
-  "rewrites": [
-    {
-      "source": "/aboutus",
-      "destination": "/AboutUs/Aboutus.html"
-    },
-    {
-      "source": "/helpandsupport",
-      "destination": "/helpandsupport/helpandsupport.html"
-    },
-    {
-      "source": "/psychometrictest",
-      "destination": "/Psychometric_Tests/psy.html"
-    }
-  ],
-
   "functions": {
     "api/generate-report.js": {
       "includeFiles": "streamtemplates/*"
