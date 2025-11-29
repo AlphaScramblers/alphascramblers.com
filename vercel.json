@@ -6,7 +6,7 @@
     { "src": "**/*.html", "use": "@vercel/static" }
   ],
 
-  "rewrites": [
+  "routes": [
     { "source": "/aboutus", "destination": "/AboutUs/Aboutus.html" },
     { "source": "/helpandsupport", "destination": "/helpandsupport/helpandsupport.html" },
     { "source": "/PsychometricTest", "destination": "/Psychometric_Tests/psy.html" }
