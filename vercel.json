@@ -1,4 +1,8 @@
 {
+  "builds": [
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "**/*.html", "use": "@vercel/static" }
+  ],
   "rewrites": [
     { "source": "/aboutus", "destination": "/AboutUs/Aboutus.html" },
     { "source": "/helpandsupport", "destination": "/helpandsupport/helpandsupport.html" },
