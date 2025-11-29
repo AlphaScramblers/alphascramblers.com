@@ -160,16 +160,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const queryForm = document.getElementById("queryForm");
   const messageArea = document.getElementById("formMessage");
 
-  // If not logged in → block form
   if (!token) {
     queryForm.style.display = "none";
     messageArea.textContent = "Please log in to submit a query.";
     return;
   }
 
-  // ---------------------------------------
-  // Fetch Profile Using Token
-  // ---------------------------------------
   let firstName, lastName, email, contact;
 
   try {
@@ -185,7 +181,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Extract user info
     firstName = data.profile.firstName;
     lastName = data.profile.lastName;
     email = data.profile.email;
@@ -196,21 +191,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // If profile loaded successfully → allow form submission
   queryForm.style.display = "block";
 
-  // ---------------------------------------
-  // SUBMIT QUERY
-  // ---------------------------------------
-  queryForm.addEventListener("submit", async function (event) {
+  queryForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-
     messageArea.textContent = "Sending query...";
 
     const userName = `${firstName} ${lastName}`;
     const queryMessage = document.getElementById("queryContentId").value.trim();
 
-    const data = {
+    const payload = {
       userName,
       userEmail: email,
       userContact: contact,
@@ -221,18 +211,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       const response = await fetch(queryForm.action, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
 
-      if (response.ok && result.success) {
+      if (response.ok) {
         messageArea.textContent = "Query sent successfully!";
         document.getElementById("queryContentId").value = "";
-      } 
-      else {
-        messageArea.textContent =
-          "Failed: " + (result.message || "Server error.");
+      } else {
+        messageArea.textContent = "Failed: " + (result.message || "Server error.");
       }
 
     } catch (error) {
