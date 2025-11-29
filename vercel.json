@@ -3,7 +3,7 @@
   "cleanUrls": true,
 
   "functions": {
-    "api/generate-report.js": {
+    "pages/api/generate-report.js": {
       "includeFiles": "streamtemplates/*"
     }
   }
