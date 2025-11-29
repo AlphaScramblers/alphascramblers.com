@@ -1,6 +1,9 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    { "source": "/(.*)", "destination": "/" },
+    { "source": "/aboutus", "destination": "/AboutUs/Aboutus.html" },
+    { "source": "/helpandsupport", "destination": "/helpandsupport/helpandsupport.html" },
+    { "source": "/PsychometricTest", "destination": "/Psychometric_Tests/psy.html" }
   ],
   "functions": {
     "api/generate-report.js": {
