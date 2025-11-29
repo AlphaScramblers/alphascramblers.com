@@ -113,14 +113,26 @@ import { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-let client;
-let clientPromise;
+let cached = global.mongo;
+if (!cached) cached = global.mongo = { conn: null, promise: null };
 
-const uri = process.env.MONGODB_URI;
+async function connectDB() {
+  if (cached.conn) return cached.conn;
 
-if (!clientPromise) {
-  client = new MongoClient(uri, { useUnifiedTopology: true });
-  clientPromise = client.connect();
+  const uri = process.env.MONGODB_URI;
+  if (!uri) throw new Error("Missing MONGODB_URI");
+
+  if (!cached.promise) {
+    cached.promise = MongoClient.connect(uri).then((client) => {
+      return {
+        client,
+        db: client.db("myDatabase")
+      };
+    });
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
 
 export default async function handler(req, res) {
@@ -132,14 +144,14 @@ export default async function handler(req, res) {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ success: false, message: "Email & Password required" });
+      return res.status(400).json({ success: false, message: "Email & Password are required" });
     }
 
-    const mongo = await clientPromise;
-    const db = mongo.db("myDatabase");
+    const { db } = await connectDB();
     const users = db.collection("users");
 
-    let query = /^\d{10}$/.test(email) ? { mobileno: email } : { email };
+    // email OR mobile login
+    const query = /^\d{10}$/.test(email) ? { mobileno: email } : { email };
 
     const user = await users.findOne(query);
     if (!user) {
@@ -151,9 +163,12 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d"
-    });
+    // generate JWT
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
     return res.status(200).json({
       success: true,
@@ -161,7 +176,7 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error("Login API ERROR →", err);
+    console.error("LOGIN ERROR:", err);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 }
