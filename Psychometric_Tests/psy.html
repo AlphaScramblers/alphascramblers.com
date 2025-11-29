@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Psychometric Test</title>
-    <link rel="stylesheet" href="psy.css">
+    <link rel="stylesheet" href="../Psychometric_Tests/psy.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
@@ -521,70 +521,8 @@
             </div>
         </div>
     </main>    
-<script src="/psy.js"></script>
+<script src="../Psychometric_Tests/psy.js"></script>
 <script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
-<!-- <script>
-const submission = document.querySelector(".subbtn1");
-
-submission.addEventListener("click", async () => {
-    let scienceScore = 0;
-    let commerceScore = 0;
-    let humanitiesScore = 0;
-
-   
-    const allQuesTextDivs = document.querySelectorAll(".ques");
-
-    allQuesTextDivs.forEach(quesDiv => {
-        const questionContainer = quesDiv.closest('.question');
-        const selectedRadio = questionContainer.querySelector('input[type="radio"]:checked');
-
-        if (selectedRadio) {
-            const value = parseInt(selectedRadio.value);
-            const classes = quesDiv.classList;
-
-            if (classes.contains('science')) scienceScore += value;
-            if (classes.contains('commerce')) commerceScore += value;
-            if (classes.contains('humanities')) humanitiesScore += value;
-            if (classes.contains('all')){
-                scienceScore+=value 
-                commerceScore+=value
-                humanitiesScore+=value
-            }
-            if (classes.contains('apt')){
-                scienceScore+=value 
-                commerceScore+=value
-                humanitiesScore+=value
-            }
-        }
-    });
-    const streamScores = {
-        'Science': scienceScore,
-        'Commerce': commerceScore,
-        'Humanities': humanitiesScore
-    };
-    const maxStream = Object.keys(streamScores).reduce(
-        (a, b) => streamScores[a] > streamScores[b] ? a : b
-    );
-    try {
-        const id = localStorage.getItem("userId");
-        if (!id) throw new Error("User ID not found");
-
-        const res = await fetch("/api/testresult", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ maxStream, id }),
-        });
-
-        if (!res.ok) {
-            console.error("Failed to send data:", res.status);
-        } else {
-            console.log("Result sent successfully!");
-        }
-    } catch (error) {
-        console.error("Error sending stream result:", error);
-    }
-});
-</script> -->
 <script>
     const submission = document.querySelector(".subbtn1");
     submission.addEventListener("click", async (e) => {
@@ -621,8 +559,6 @@ submission.addEventListener("click", async () => {
             if (questionContainer.closest('.behaviour')) behaviorHumanities += value;
             if (questionContainer.closest('.mental')) mentalHumanities += value;
         }
-
-        // 'All' questions count for all streams
         if (classes.contains('all')) {
             scienceScore += value;
             commerceScore += value;
@@ -642,11 +578,9 @@ submission.addEventListener("click", async () => {
 
         // Aptitude questions
         if (classes.contains('apt')) {
-            aptitudeScore += value; // Usually 1 mark per question
+            aptitudeScore += value;
         }
     });
-
-    // Final total for each stream including behavior, mental, and aptitude
     const finalScienceScore = behaviorScience + mentalScience + aptitudeScore;
     const finalCommerceScore = behaviorCommerce + mentalCommerce + aptitudeScore;
     const finalHumanitiesScore = behaviorHumanities + mentalHumanities + aptitudeScore;
@@ -659,7 +593,6 @@ submission.addEventListener("click", async () => {
 
     const maxStream = Object.keys(streamScores).reduce((a, b) => streamScores[a] > streamScores[b] ? a : b);
 
-    // Store scores in localStorage
     localStorage.setItem("scienceScore", finalScienceScore);
     localStorage.setItem("commerceScore", finalCommerceScore);
     localStorage.setItem("humanitiesScore", finalHumanitiesScore);
@@ -690,7 +623,7 @@ submission.addEventListener("click", async () => {
         console.error("Error sending stream result:", error);
     }
 
-    window.location.href = "afterpg.html";
+    window.location.href = "../Psychometric_Tests/afterpg.html";
 });
 </script>
 </body>
