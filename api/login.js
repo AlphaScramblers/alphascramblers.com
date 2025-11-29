@@ -132,13 +132,18 @@ export default async function handler(req, res) {
     const db = client.db("myDatabase");
     const users = db.collection("users");
 
+    // Allow login by email or mobile 10-digit
     let query = /^\d{10}$/.test(email) ? { mobileno: email } : { email };
 
     const user = await users.findOne(query);
-    if (!user) return res.status(400).json({ success: false, message: "User not found" });
+    if (!user) {
+      return res.status(400).json({ success: false, message: "User not found" });
+    }
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ success: false, message: "Invalid credentials" });
+    if (!match) {
+      return res.status(400).json({ success: false, message: "Invalid credentials" });
+    }
 
     const token = jwt.sign(
       { id: user._id },
@@ -151,5 +156,7 @@ export default async function handler(req, res) {
   } catch (err) {
     console.log("LOGIN ERROR:", err);
     return res.status(500).json({ success: false, message: "Server error" });
+  } finally {
+    await client.close();
   }
 }
