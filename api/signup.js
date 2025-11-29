@@ -88,12 +88,9 @@
 
 
 
-import { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
+import { connectDB } from "@/lib/mongo";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -107,8 +104,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, message: "All fields required" });
     }
 
-    await client.connect();
-    const db = client.db("myDatabase");
+    const { db } = await connectDB();
     const users = db.collection("users");
 
     const exists = await users.findOne({ email });
@@ -118,7 +114,7 @@ export default async function handler(req, res) {
 
     const hashed = await bcrypt.hash(password, 10);
 
-    const newUser = await users.insertOne({
+    const user = await users.insertOne({
       firstName,
       lastName,
       email,
@@ -127,7 +123,7 @@ export default async function handler(req, res) {
     });
 
     const token = jwt.sign(
-      { id: newUser.insertedId },
+      { id: user.insertedId },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );

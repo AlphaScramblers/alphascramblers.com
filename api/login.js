@@ -109,12 +109,9 @@
 
 
 
-import { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
+import { connectDB } from "@/lib/mongo";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -128,17 +125,20 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, message: "Email & Password required" });
     }
 
-    await client.connect();
-    const db = client.db("myDatabase");
+    const { db } = await connectDB();
     const users = db.collection("users");
 
-    let query = /^\d{10}$/.test(email) ? { mobileno: email } : { email };
-
+    const query = /^\d{10}$/.test(email) ? { mobileno: email } : { email };
     const user = await users.findOne(query);
-    if (!user) return res.status(400).json({ success: false, message: "User not found" });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: "User not found" });
+    }
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ success: false, message: "Invalid credentials" });
+    if (!match) {
+      return res.status(400).json({ success: false, message: "Invalid credentials" });
+    }
 
     const token = jwt.sign(
       { id: user._id },

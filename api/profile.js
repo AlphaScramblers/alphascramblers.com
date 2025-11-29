@@ -1,8 +1,6 @@
 import jwt from "jsonwebtoken";
-import { MongoClient, ObjectId } from "mongodb";
-
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
+import { ObjectId } from "mongodb";
+import { connectDB } from "@/lib/mongo";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -10,20 +8,21 @@ export default async function handler(req, res) {
   }
 
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ success: false, message: "No token" });
+    const auth = req.headers.authorization;
+    if (!auth) return res.status(401).json({ success: false, message: "No token" });
 
+    const token = auth.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    await client.connect();
-    const db = client.db("myDatabase");
+    const { db } = await connectDB();
     const users = db.collection("users");
 
     const user = await users.findOne({ _id: new ObjectId(decoded.id) });
+
     if (!user)
       return res.status(404).json({ success: false, message: "User not found" });
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       profile: {
         firstName: user.firstName,
