@@ -110,46 +110,134 @@ for(let i=1;i<=10;i++){
 //   }
 // ) 
 // });
-const uploggedIn=localStorage.getItem("loggedIn");
-document.addEventListener("DOMContentLoaded",()=>{
-  const email = localStorage.getItem("email");
-  const firstname = localStorage.getItem("firstName");
-  const lastname = localStorage.getItem("lastName");
-  const contact = localStorage.getItem("no");
+// const uploggedIn=localStorage.getItem("loggedIn");
+// document.addEventListener("DOMContentLoaded",()=>{
+//   const email = localStorage.getItem("email");
+//   const firstname = localStorage.getItem("firstName");
+//   const lastname = localStorage.getItem("lastName");
+//   const contact = localStorage.getItem("no");
 
-  if (!uploggedIn) { 
-    document.getElementById("queryForm").style.display = "none";
-    document.getElementById("formMessage").textContent = "Please log in to submit a query.";
+//   if (!uploggedIn) { 
+//     document.getElementById("queryForm").style.display = "none";
+//     document.getElementById("formMessage").textContent = "Please log in to submit a query.";
+//     return;
+//   }
+
+//   document.getElementById('queryForm').addEventListener('submit', async function(event) {
+//     event.preventDefault();
+
+//     const form = event.target;
+//     const messageArea = document.getElementById('formMessage');
+//     messageArea.textContent = "Sending query...";
+//     const userName = `${firstname} ${lastname}`;
+//     const queryMessage = document.getElementById("queryContentId").value.trim();
+//     const data = { userName, userEmail: email, userContact: contact, queryMessage };
+
+
+//     try {
+//       const response = await fetch(form.action, {
+//         method: 'POST',
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(data),
+//       });
+
+//       if (response.ok) {
+//         messageArea.textContent = "Query sent successfully!";
+//         document.getElementById("queryContentId").value = "";
+//       } else {
+//         const result = await response.json();
+//         messageArea.textContent = "Failed: " + (result.message || "Server error.");
+//       }
+//     } catch (error) {
+//       messageArea.textContent = "Network error occurred.";
+//     }
+//   });
+// })
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const token = localStorage.getItem("token");
+  const queryForm = document.getElementById("queryForm");
+  const messageArea = document.getElementById("formMessage");
+
+  // If not logged in → block form
+  if (!token) {
+    queryForm.style.display = "none";
+    messageArea.textContent = "Please log in to submit a query.";
     return;
   }
 
-  document.getElementById('queryForm').addEventListener('submit', async function(event) {
+  // ---------------------------------------
+  // Fetch Profile Using Token
+  // ---------------------------------------
+  let firstName, lastName, email, contact;
+
+  try {
+    const res = await fetch("/api/profile", {
+      headers: { Authorization: "Bearer " + token }
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      queryForm.style.display = "none";
+      messageArea.textContent = "Please log in to submit a query.";
+      return;
+    }
+
+    // Extract user info
+    firstName = data.profile.firstName;
+    lastName = data.profile.lastName;
+    email = data.profile.email;
+    contact = data.profile.mobileNumber;
+
+  } catch (err) {
+    messageArea.textContent = "Could not load user info.";
+    return;
+  }
+
+  // If profile loaded successfully → allow form submission
+  queryForm.style.display = "block";
+
+  // ---------------------------------------
+  // SUBMIT QUERY
+  // ---------------------------------------
+  queryForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const form = event.target;
-    const messageArea = document.getElementById('formMessage');
     messageArea.textContent = "Sending query...";
-    const userName = `${firstname} ${lastname}`;
-    const queryMessage = document.getElementById("queryContentId").value.trim();
-    const data = { userName, userEmail: email, userContact: contact, queryMessage };
 
+    const userName = `${firstName} ${lastName}`;
+    const queryMessage = document.getElementById("queryContentId").value.trim();
+
+    const data = {
+      userName,
+      userEmail: email,
+      userContact: contact,
+      queryMessage
+    };
 
     try {
-      const response = await fetch(form.action, {
-        method: 'POST',
+      const response = await fetch(queryForm.action, {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (response.ok && result.success) {
         messageArea.textContent = "Query sent successfully!";
         document.getElementById("queryContentId").value = "";
-      } else {
-        const result = await response.json();
-        messageArea.textContent = "Failed: " + (result.message || "Server error.");
+      } 
+      else {
+        messageArea.textContent =
+          "Failed: " + (result.message || "Server error.");
       }
+
     } catch (error) {
       messageArea.textContent = "Network error occurred.";
     }
   });
-})
+
+});
