@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     service: "gmail",
     auth: {
       user: process.env.MY_EMAIL,       // your Gmail
-      pass: process.env.MY_EMAIL_PASS,  // Gmail App Password, no spaces
+      pass: process.env.MY_EMAIL_PASS,  // Gmail App Password
     },
   });
 
@@ -26,15 +26,26 @@ export default async function handler(req, res) {
       to: process.env.MY_EMAIL,
       subject: "New Query",
       text: `You received a new query from AlphaScramblers:\n
-      Name: ${userName}
-      Email: ${userEmail}
-      Contact: ${userContact}
-      \nMessage:\n${queryMessage}`,
+Name: ${userName}
+Email: ${userEmail}
+Contact: ${userContact}
+
+Message:
+${queryMessage}`,
     });
 
-    res.status(200).json({ message: "Query sent successfully!" });
+    // FIX: return success = true
+    res.status(200).json({
+      success: true,
+      message: "Query sent successfully!"
+    });
+
   } catch (error) {
     console.error("Nodemailer error:", error);
-    res.status(500).json({ message: "Failed to send query", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Failed to send query",
+      error: error.message
+    });
   }
 }
