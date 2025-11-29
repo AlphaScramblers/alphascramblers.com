@@ -524,8 +524,10 @@
 <script src="../Psychometric_Tests/psy.js"></script>
 <script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
 <script>
-    const submission = document.querySelector(".subbtn1");
-    submission.addEventListener("click", async (e) => {
+document.addEventListener("DOMContentLoaded", () => {
+  const submission = document.querySelector(".subbtn1");
+
+  submission.addEventListener("click", async (e) => {
     e.preventDefault();
 
     let scienceScore = 0, commerceScore = 0, humanitiesScore = 0;
@@ -535,63 +537,69 @@
 
     const allQuesTextDivs = document.querySelectorAll(".ques");
 
-    allQuesTextDivs.forEach(quesDiv => {
-        const questionContainer = quesDiv.closest('.question');
-        const selectedRadio = questionContainer.querySelector('input[type="radio"]:checked');
-        if (!selectedRadio) return;
+    allQuesTextDivs.forEach((quesDiv) => {
+      const questionContainer = quesDiv.closest(".question");
+      const selectedRadio = questionContainer.querySelector(
+        'input[type="radio"]:checked'
+      );
+      if (!selectedRadio) return;
 
-        const value = parseInt(selectedRadio.value);
-        const classes = questionContainer.classList;
+      const value = parseInt(selectedRadio.value);
+      const classes = questionContainer.classList;
 
-        // Stream scores
-        if (classes.contains('science')) {
-            scienceScore += value;
-            if (questionContainer.closest('.behaviour')) behaviorScience += value;
-            if (questionContainer.closest('.mental')) mentalScience += value;
-        }
-        if (classes.contains('commerce')) {
-            commerceScore += value;
-            if (questionContainer.closest('.behaviour')) behaviorCommerce += value;
-            if (questionContainer.closest('.mental')) mentalCommerce += value;
-        }
-        if (classes.contains('humanities')) {
-            humanitiesScore += value;
-            if (questionContainer.closest('.behaviour')) behaviorHumanities += value;
-            if (questionContainer.closest('.mental')) mentalHumanities += value;
-        }
-        if (classes.contains('all')) {
-            scienceScore += value;
-            commerceScore += value;
-            humanitiesScore += value;
+      // Stream scores
+      if (classes.contains("science")) {
+        scienceScore += value;
+        if (questionContainer.closest(".behaviour")) behaviorScience += value;
+        if (questionContainer.closest(".mental")) mentalScience += value;
+      }
+      if (classes.contains("commerce")) {
+        commerceScore += value;
+        if (questionContainer.closest(".behaviour")) behaviorCommerce += value;
+        if (questionContainer.closest(".mental")) mentalCommerce += value;
+      }
+      if (classes.contains("humanities")) {
+        humanitiesScore += value;
+        if (questionContainer.closest(".behaviour")) behaviorHumanities += value;
+        if (questionContainer.closest(".mental")) mentalHumanities += value;
+      }
 
-            if (questionContainer.closest('.behaviour')) {
-                behaviorScience += value;
-                behaviorCommerce += value;
-                behaviorHumanities += value;
-            }
-            if (questionContainer.closest('.mental')) {
-                mentalScience += value;
-                mentalCommerce += value;
-                mentalHumanities += value;
-            }
-        }
+      if (classes.contains("all")) {
+        scienceScore += value;
+        commerceScore += value;
+        humanitiesScore += value;
 
-        // Aptitude questions
-        if (classes.contains('apt')) {
-            aptitudeScore += value;
+        if (questionContainer.closest(".behaviour")) {
+          behaviorScience += value;
+          behaviorCommerce += value;
+          behaviorHumanities += value;
         }
+        if (questionContainer.closest(".mental")) {
+          mentalScience += value;
+          mentalCommerce += value;
+          mentalHumanities += value;
+        }
+      }
+
+      if (classes.contains("apt")) {
+        aptitudeScore += value;
+      }
     });
+
     const finalScienceScore = behaviorScience + mentalScience + aptitudeScore;
     const finalCommerceScore = behaviorCommerce + mentalCommerce + aptitudeScore;
-    const finalHumanitiesScore = behaviorHumanities + mentalHumanities + aptitudeScore;
+    const finalHumanitiesScore =
+      behaviorHumanities + mentalHumanities + aptitudeScore;
 
     const streamScores = {
-        'Science': finalScienceScore,
-        'Commerce': finalCommerceScore,
-        'Humanities': finalHumanitiesScore
+      Science: finalScienceScore,
+      Commerce: finalCommerceScore,
+      Humanities: finalHumanitiesScore,
     };
 
-    const maxStream = Object.keys(streamScores).reduce((a, b) => streamScores[a] > streamScores[b] ? a : b);
+    const maxStream = Object.keys(streamScores).reduce((a, b) =>
+      streamScores[a] > streamScores[b] ? a : b
+    );
 
     localStorage.setItem("scienceScore", finalScienceScore);
     localStorage.setItem("commerceScore", finalCommerceScore);
@@ -608,22 +616,38 @@
 
     localStorage.setItem("aptitudeScore", aptitudeScore);
 
+    // ---------------------------
+    // ✅ NEW PART — FETCH USER ID USING TOKEN
+    // ---------------------------
     try {
-        const id = localStorage.getItem("userId");
-        if (!id) throw new Error("User ID not found");
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token missing");
 
-        const res = await fetch("/api/testresult", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ maxStream, id }),
-        });
+      const profileRes = await fetch("/api/profile", {
+        headers: { Authorization: "Bearer " + token },
+      });
 
-        if (!res.ok) console.error("Failed to send data:", res.status);
+      const profileData = await profileRes.json();
+      if (!profileData.success) throw new Error("Profile load failed");
+
+      const id = profileData.profile.id; // <-- ✔ REAL USER ID
+
+      // ---------------------------
+      // SEND RESULT TO BACKEND
+      // ---------------------------
+      const res = await fetch("/api/testresult", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ maxStream, id }),
+      });
+
+      if (!res.ok) console.error("Failed to send result:", res.status);
     } catch (error) {
-        console.error("Error sending stream result:", error);
+      console.error("Error sending stream result:", error);
     }
 
     window.location.href = "../Psychometric_Tests/afterpg.html";
+  });
 });
 </script>
 </body>
