@@ -36,70 +36,100 @@
     </div>
   </div>
   <script>
-    document.getElementById("downloadReport").addEventListener("click", async (e) => {
-      e.preventDefault();
+document.getElementById("downloadReport").addEventListener("click", async (e) => {
+    e.preventDefault();
 
-      // Get user details from localStorage
-      const name = `${localStorage.getItem("firstName") || "Student"} ${localStorage.getItem("lastName") || ""}`;
-        const mobile = localStorage.getItem("no") || "";
-        const email = localStorage.getItem("email") || "";
+    // Get token
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert("Please login first to download your report.");
+        return;
+    }
 
-        const scienceScore = parseInt(localStorage.getItem("scienceScore")) || 0;
-        const commerceScore = parseInt(localStorage.getItem("commerceScore")) || 0;
-        const humanitiesScore = parseInt(localStorage.getItem("humanitiesScore")) || 0;
-        const maxStream = localStorage.getItem("maxStream") || "Science";
+    // 1️⃣ FETCH USER PROFILE USING TOKEN
+    let firstName = "Student";
+    let lastName = "";
+    let email = "";
+    let mobile = "";
 
-        const behaviorScience = parseInt(localStorage.getItem("behaviorScience")) || 0;
-        const behaviorCommerce = parseInt(localStorage.getItem("behaviorCommerce")) || 0;
-        const behaviorHumanities = parseInt(localStorage.getItem("behaviorHumanities")) || 0;
+    try {
+        const profileRes = await fetch("/api/profile", {
+            headers: { Authorization: "Bearer " + token }
+        });
 
-        const mentalScience = parseInt(localStorage.getItem("mentalScience")) || 0;
-        const mentalCommerce = parseInt(localStorage.getItem("mentalCommerce")) || 0;
-        const mentalHumanities = parseInt(localStorage.getItem("mentalHumanities")) || 0;
+        const profileData = await profileRes.json();
 
-        const aptitudeScore = parseInt(localStorage.getItem("aptitudeScore")) || 0;
+        if (profileData.success) {
+            firstName = profileData.profile.firstName || "Student";
+            lastName = profileData.profile.lastName || "";
+            email = profileData.profile.email || "";
+            mobile = profileData.profile.mobileNumber || "";
+        }
+    } catch (err) {
+        console.log("Profile fetch error:", err);
+        alert("Unable to fetch profile. Please login again.");
+        return;
+    }
 
-      try {
+    const name = `${firstName} ${lastName}`.trim();
+
+    // 2️⃣ FETCH SCORES FROM LOCAL STORAGE (your old logic still valid)
+    const scienceScore = parseInt(localStorage.getItem("scienceScore")) || 0;
+    const commerceScore = parseInt(localStorage.getItem("commerceScore")) || 0;
+    const humanitiesScore = parseInt(localStorage.getItem("humanitiesScore")) || 0;
+    const maxStream = localStorage.getItem("maxStream") || "Science";
+
+    const behaviorScience = parseInt(localStorage.getItem("behaviorScience")) || 0;
+    const behaviorCommerce = parseInt(localStorage.getItem("behaviorCommerce")) || 0;
+    const behaviorHumanities = parseInt(localStorage.getItem("behaviorHumanities")) || 0;
+
+    const mentalScience = parseInt(localStorage.getItem("mentalScience")) || 0;
+    const mentalCommerce = parseInt(localStorage.getItem("mentalCommerce")) || 0;
+    const mentalHumanities = parseInt(localStorage.getItem("mentalHumanities")) || 0;
+
+    const aptitudeScore = parseInt(localStorage.getItem("aptitudeScore")) || 0;
+
+    // 3️⃣ SEND DATA TO BACKEND AND DOWNLOAD PDF
+    try {
         const res = await fetch("/api/generate-report", {
             method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          mobile,
-          email,
-          scienceScore,
-          commerceScore,
-          humanitiesScore,
-          behaviorScience,
-          behaviorCommerce,
-          behaviorHumanities,
-          mentalScience,
-          mentalCommerce,
-          mentalHumanities,
-          aptitudeScore,
-          maxStream
-        }),
-      });
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name,
+                mobile,
+                email,
+                scienceScore,
+                commerceScore,
+                humanitiesScore,
+                behaviorScience,
+                behaviorCommerce,
+                behaviorHumanities,
+                mentalScience,
+                mentalCommerce,
+                mentalHumanities,
+                aptitudeScore,
+                maxStream
+            }),
+        });
 
+        if (!res.ok) throw new Error("Failed to generate report");
 
-          if (!res.ok) throw new Error("Failed to generate report");
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
 
-          const blob = await res.blob();
-          const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${name}_Psychometric_Report.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
 
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = `${name}_Psychometric_Report.pdf`;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          window.URL.revokeObjectURL(url);
-
-      } catch (err) {
-          console.error("Error downloading report:", err);
-          alert("Failed to download the report. Please try again.");
-      }
-  });
-  </script>
+    } catch (err) {
+        console.error("Error downloading report:", err);
+        alert("Failed to download the report. Please try again.");
+    }
+});
+</script>
 </body>
 </html>
