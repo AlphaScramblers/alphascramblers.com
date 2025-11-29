@@ -25,6 +25,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       success: true,
       profile: {
+        id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
