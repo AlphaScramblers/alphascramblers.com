@@ -1,0 +1,5 @@
+RewriteEngine On
+
+RewriteRule ^aboutus$ AboutUs/Aboutus.html [L]
+RewriteRule ^contact$ pages/contact.html [L]
+RewriteRule ^services$ pages/services.html [L]
