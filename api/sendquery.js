@@ -33,8 +33,6 @@ Contact: ${userContact}
 Message:
 ${queryMessage}`,
     });
-
-    // FIX: return success = true
     res.status(200).json({
       success: true,
       message: "Query sent successfully!"
