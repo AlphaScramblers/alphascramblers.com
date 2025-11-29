@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const password = logpass2.value.trim();
 
             cloader.style.display = "flex";
-            alphalogin.style.opacity = "0.3";
+            alphalogin.style.opacity = "1";
             overlay.classList.add("overlay1");
 
             try {
