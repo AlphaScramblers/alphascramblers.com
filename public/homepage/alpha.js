@@ -77,74 +77,35 @@ d4.addEventListener("click",()=>{
     d4.style.backgroundColor="gray";
 })
 document.addEventListener("DOMContentLoaded", () => {
-  const psychobut = document.querySelector(".strtbut");
-  if (psychobut) {
-    psychobut.addEventListener("click", (e) => {
-      e.preventDefault();
-      const isLoggedIn = localStorage.getItem("loggedIn");
-      const paymentDone = localStorage.getItem("paymentDone");
-      if (!isLoggedIn){
-        e.preventDefault(); 
-        alert("Please log in first to access the Psychometric Test page!");
-      } else if (paymentDone === "true") {
-        window.location.href = "../Psychometric_Tests/psychomid.html";
-      } else {
-        window.location.href = "../Psychometric_Tests/beforepg.html";
-      }
-    });
+
+  function handleClick(e) {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token"); // NEW LOGIN CHECK
+    const paymentDone = localStorage.getItem("paymentDone");
+
+    if (!token) {
+      alert("Please log in first to access the Psychometric Test page!");
+      return;
+    }
+
+    if (paymentDone === "true") {
+      window.location.href = "../Psychometric_Tests/psychomid.html";
+    } else {
+      window.location.href = "../Psychometric_Tests/beforepg.html";
+    }
   }
-});
-document.addEventListener("DOMContentLoaded", () => {
-  const psychobut1 = document.querySelector(".bottompsycho");
-  if (psychobut1) {
-    psychobut1.addEventListener("click", (e) => {
-      e.preventDefault();
-      const isLoggedIn = localStorage.getItem("loggedIn");
-      const paymentDone = localStorage.getItem("paymentDone");
-      if (!isLoggedIn){
-        e.preventDefault(); 
-        alert("Please log in first to access the Psychometric Test page!");
-      } else if (paymentDone === "true") {
-        window.location.href = "../Psychometric_Tests/psychomid.html";
-      } else {
-        window.location.href = "../Psychometric_Tests/beforepg.html";
-      }
-    });
-  }
-});
-document.addEventListener("DOMContentLoaded", () => {
-  const psychobut2 = document.querySelector(".bottompsycho1");
-  if (psychobut2) {
-    psychobut2.addEventListener("click", (e) => {
-      e.preventDefault();
-      const isLoggedIn = localStorage.getItem("loggedIn");
-      const paymentDone = localStorage.getItem("paymentDone");
-      if (!isLoggedIn){
-        e.preventDefault(); 
-        alert("Please log in first to access the Psychometric Test page!");
-      } else if (paymentDone === "true") {
-        window.location.href = "../Psychometric_Tests/psychomid.html";
-      } else {
-        window.location.href = "../Psychometric_Tests/beforepg.html";
-      }
-    });
-  }
-});
-document.addEventListener("DOMContentLoaded", () => {
-  const explorebut = document.querySelector(".bannerpsycho");
-  if (explorebut) {
-    explorebut.addEventListener("click", (e) => {
-      e.preventDefault();
-      const isLoggedIn = localStorage.getItem("loggedIn");
-      const paymentDone = localStorage.getItem("paymentDone");
-      if (!isLoggedIn){
-        e.preventDefault(); 
-        alert("Please log in first to access the Psychometric Test page!");
-      } else if (paymentDone === "true") {
-        window.location.href = "../Psychometric_Tests/psychomid.html";
-      } else {
-        window.location.href = "../Psychometric_Tests/beforepg.html";
-      }
-    });
-  }
+
+  const buttons = [
+    ".strtbut",
+    ".bottompsycho",
+    ".bottompsycho1",
+    ".bannerpsycho"
+  ];
+
+  buttons.forEach(selector => {
+    const btn = document.querySelector(selector);
+    if (btn) btn.addEventListener("click", handleClick);
+  });
+
 });
