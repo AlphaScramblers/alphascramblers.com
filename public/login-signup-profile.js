@@ -162,6 +162,9 @@ document.addEventListener("DOMContentLoaded", () => {
             cloader.style.display = "flex";
             alphalogin.style.opacity = "1";
             overlay.classList.add("overlay1");
+            header.style.opacity="0";
+            main.style.opacity="0";
+            bottom.style.opacity="0";
 
             try {
                 const res = await fetch("/api/login", {
