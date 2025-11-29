@@ -39,9 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const lap = window.matchMedia("(min-width: 1000px)");
 
     // LOADER + OVERLAY
-    const cloader = document.querySelector(".centerloader");
+    const cloader = document.querySelector(".contactloader");
     const alphalogin = document.querySelector(".alphalogin");
-    const overlay = document.querySelector(".overlaybg");
+    const overlay = document.querySelector(".overlay");
     const header = document.querySelector("header");
     const main = document.querySelector("main");
     const bottom = document.querySelector("footer");
