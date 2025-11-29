@@ -6,6 +6,9 @@
   let menu = document.querySelector(".navcon-ele");
   let bottom = document.querySelector(".bottom");
   let currstat="unvis";
+  let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
+  let mobile = window.matchMedia("(max-width: 700px)");
+  let lap = window.matchMedia("(min-width: 700px)");
   window.addEventListener("load", () => {
       document.querySelector(".preloader").style.display = "none";
       document.querySelector("header").style.display = "block";
@@ -246,9 +249,6 @@
   // let logpass2 = document.getElementById("logpass2");
   // let logname = document.getElementById("logname");
   // let logsignin = document.querySelector(".logsignin");
-  // let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
-  // let mobile = window.matchMedia("(max-width: 700px)");
-  // let lap = window.matchMedia("(min-width: 700px)");
   // let profilesection = document.querySelector(".profile-section");
   // logsub.addEventListener("click", async (e) => {
   //     e.preventDefault();
