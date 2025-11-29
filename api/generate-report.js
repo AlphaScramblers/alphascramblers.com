@@ -36,7 +36,7 @@ export default async function handler(req, res) {
         .json({ error: "Missing required fields in request body" });
     }
 
-    const firstName = name.split(" ")[0];
+    const firstName = name.split("")[0];
     const alpha = `Alpha ${firstName}`;
     const stream = maxStream.trim().toLowerCase();
 
