@@ -37,43 +37,37 @@
   </div>
   <script>
 document.getElementById("downloadReport").addEventListener("click", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // Get token
+  try {
+    // -----------------------------------------
+    // 1. Get token from localStorage
+    // -----------------------------------------
     const token = localStorage.getItem("token");
     if (!token) {
-        alert("Please login first to download your report.");
-        return;
+      alert("Please log in first.");
+      return;
     }
 
-    // 1️⃣ FETCH USER PROFILE USING TOKEN
-    let firstName = "Student";
-    let lastName = "";
-    let email = "";
-    let mobile = "";
+    // -----------------------------------------
+    // 2. Fetch Profile Details
+    // -----------------------------------------
+    const profileRes = await fetch("/api/profile", {
+      headers: { Authorization: "Bearer " + token }
+    });
 
-    try {
-        const profileRes = await fetch("/api/profile", {
-            headers: { Authorization: "Bearer " + token }
-        });
-
-        const profileData = await profileRes.json();
-
-        if (profileData.success) {
-            firstName = profileData.profile.firstName || "Student";
-            lastName = profileData.profile.lastName || "";
-            email = profileData.profile.email || "";
-            mobile = profileData.profile.mobileNumber || "";
-        }
-    } catch (err) {
-        console.log("Profile fetch error:", err);
-        alert("Unable to fetch profile. Please login again.");
-        return;
+    const profileData = await profileRes.json();
+    if (!profileData.success) {
+      alert("Session expired, please login again.");
+      return;
     }
 
-    const name = `${firstName} ${lastName}`.trim();
+    const { firstName, lastName, email, mobileNumber } = profileData.profile;
+    const name = `${firstName} ${lastName}`;
 
-    // 2️⃣ FETCH SCORES FROM LOCAL STORAGE (your old logic still valid)
+    // -----------------------------------------
+    // 3. Get Stored Scores from LocalStorage
+    // -----------------------------------------
     const scienceScore = parseInt(localStorage.getItem("scienceScore")) || 0;
     const commerceScore = parseInt(localStorage.getItem("commerceScore")) || 0;
     const humanitiesScore = parseInt(localStorage.getItem("humanitiesScore")) || 0;
@@ -89,46 +83,51 @@ document.getElementById("downloadReport").addEventListener("click", async (e) =>
 
     const aptitudeScore = parseInt(localStorage.getItem("aptitudeScore")) || 0;
 
-    // 3️⃣ SEND DATA TO BACKEND AND DOWNLOAD PDF
-    try {
-        const res = await fetch("/api/generate-report", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                name,
-                mobile,
-                email,
-                scienceScore,
-                commerceScore,
-                humanitiesScore,
-                behaviorScience,
-                behaviorCommerce,
-                behaviorHumanities,
-                mentalScience,
-                mentalCommerce,
-                mentalHumanities,
-                aptitudeScore,
-                maxStream
-            }),
-        });
+    // -----------------------------------------
+    // 4. Send Data to /api/generate-report
+    // -----------------------------------------
+    const res = await fetch("/api/generate-report", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        mobile: mobileNumber,
+        email,
+        scienceScore,
+        commerceScore,
+        humanitiesScore,
+        behaviorScience,
+        behaviorCommerce,
+        behaviorHumanities,
+        mentalScience,
+        mentalCommerce,
+        mentalHumanities,
+        aptitudeScore,
+        maxStream
+      })
+    });
 
-        if (!res.ok) throw new Error("Failed to generate report");
+    if (!res.ok) throw new Error("Failed to generate report");
 
-        const blob = await res.blob();
-        const url = window.URL.createObjectURL(blob);
+    // -----------------------------------------
+    // 5. Download the PDF File
+    // -----------------------------------------
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
 
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${name}_Psychometric_Report.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${name}_Psychometric_Report.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
 
-    } catch (err) {
-        console.error("Error downloading report:", err);
-        alert("Failed to download the report. Please try again.");
-    }
+    window.URL.revokeObjectURL(url);
+
+  } catch (err) {
+    console.error("Error downloading report:", err);
+    alert("Failed to download the report. Please try again.");
+  }
 });
 </script>
 </body>
