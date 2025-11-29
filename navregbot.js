@@ -278,9 +278,7 @@
       localStorage.setItem("email", email);
       localStorage.setItem("no", mobileno);
       localStorage.setItem("userId", data.userId); 
-      
               localStorage.setItem("loggedIn", "true");
-            
               logfname.readOnly = true
               loglname.readOnly = true
               logmail.readOnly = true
@@ -326,7 +324,6 @@
           if(localStorage.getItem("loggedIn") === "true"){
               window.location.reload();}
       }
-
     });
     document.querySelector(".logsignin").addEventListener("click", async (e) => {
       e.preventDefault();
@@ -506,14 +503,7 @@
       profile.style.display = "none";
       profile1.style.display = "none";
     }
-    // const link = document.querySelector(".link1"); 
-    // link.addEventListener("click", (e) => {
-    //   const loggedIn = localStorage.getItem("loggedIn");
-    //   if (!loggedIn) {
-    //     e.preventDefault(); 
-    //     alert("Please log in first to access the Psychometric Test page!");   
-    //   }
-    // });
+
     const logoutbut=document.querySelector(".lgtBtn")
     logoutbut.addEventListener("click",() => {
       localStorage.removeItem("loggedIn")

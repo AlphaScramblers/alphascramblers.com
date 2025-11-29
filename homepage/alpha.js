@@ -87,9 +87,9 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault(); 
         alert("Please log in first to access the Psychometric Test page!");
       } else if (paymentDone === "true") {
-        window.location.href = "psychomid.html";
+        window.location.href = "../Psychometric_Tests/psychomid.html";
       } else {
-        window.location.href = "beforepg.html";
+        window.location.href = "../Psychometric_Tests/beforepg.html";
       }
     });
   }
@@ -105,9 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault(); 
         alert("Please log in first to access the Psychometric Test page!");
       } else if (paymentDone === "true") {
-        window.location.href = "psychomid.html";
+        window.location.href = "../Psychometric_Tests/psychomid.html";
       } else {
-        window.location.href = "beforepg.html";
+        window.location.href = "../Psychometric_Tests/beforepg.html";
       }
     });
   }
@@ -123,9 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault(); 
         alert("Please log in first to access the Psychometric Test page!");
       } else if (paymentDone === "true") {
-        window.location.href = "psychomid.html";
+        window.location.href = "../Psychometric_Tests/psychomid.html";
       } else {
-        window.location.href = "beforepg.html";
+        window.location.href = "../Psychometric_Tests/beforepg.html";
       }
     });
   }
@@ -141,9 +141,9 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault(); 
         alert("Please log in first to access the Psychometric Test page!");
       } else if (paymentDone === "true") {
-        window.location.href = "psychomid.html";
+        window.location.href = "../Psychometric_Tests/psychomid.html";
       } else {
-        window.location.href = "beforepg.html";
+        window.location.href = "../Psychometric_Tests/beforepg.html";
       }
     });
   }
