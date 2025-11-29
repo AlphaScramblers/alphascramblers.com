@@ -36,4 +36,4 @@ export default async function handler(req, res) {
     console.error("PROFILE ERROR:", err);
     return res.status(500).json({ success: false, message: "Invalid token" });
   }
-}
+}   
