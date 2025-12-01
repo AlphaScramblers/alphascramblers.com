@@ -78,6 +78,7 @@ d4.addEventListener("click",()=>{
 })
 
 let cloader = document.querySelector(".contactloader");
+
 document.addEventListener("DOMContentLoaded", () => {
 
   async function handleClick(e) {
@@ -89,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // SHOW LOADER
     cloader.style.display = "flex";
 
     try {
@@ -102,11 +104,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!data.success) {
         alert("Something went wrong. Please login again.");
+
+        // HIDE LOADER because NOT redirecting
+        cloader.style.display = "none";
         return;
       }
 
       const paymentDone = data.paymentDone;
 
+      // REDIRECT — DO NOT HIDE LOADER HERE
       if (paymentDone) {
         window.location.href = "../Psychometric_Tests/psychomid.html";
       } else {
@@ -117,8 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Network error! Please try again.");
       console.error(err);
 
-    } finally {
+      // ERROR — HIDE LOADER
       cloader.style.display = "none";
+
     }
   }
 
