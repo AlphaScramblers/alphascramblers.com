@@ -1,4 +1,5 @@
 import { connectDB } from "../lib/mongo.js";
+import { ObjectId } from "mongodb";   // <-- REQUIRED IMPORT
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -15,8 +16,8 @@ export default async function handler(req, res) {
     const { db } = await connectDB();
     const users = db.collection("users");
 
-    await users.updateOne(
-      { _id: new ObjectId(id) },
+    const updated = await users.updateOne(
+      { _id: new ObjectId(id) },   // <--- VALID OBJECT ID
       {
         $set: {
           lastTestResult: {
@@ -28,6 +29,11 @@ export default async function handler(req, res) {
         }
       }
     );
+
+    // OPTIONAL: Check matched user
+    if (updated.matchedCount === 0) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
 
     return res.status(200).json({ success: true, message: "Results saved" });
 
