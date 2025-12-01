@@ -22,6 +22,12 @@
 </head>
 <body style="background-color: #E0F2FE;">
 <body>
+  <div class="reportloader" style="display:none;">
+    <div class="loader-box">
+      <div class="center-loader"></div>
+      <p class="loader-text">Generating Report… Please wait</p>
+    </div>
+  </div>
   <div class="status-card">
     <h1>You've Already Taken the Test 🎯</h1>
     <p class="desc">Great job completing your Psychometric Test! You can download your report below to explore your results and recommendations.</p>
@@ -35,141 +41,45 @@
       If you feel your previous responses weren’t accurate or want to explore a different approach, you can retake the test once more.
     </div>
   </div>
-  <!-- <script>
-document.getElementById("downloadReport").addEventListener("click", async (e) => {
-  e.preventDefault();
-
-  try {
-    // -----------------------------------------
-    // 1. Get token from localStorage
-    // -----------------------------------------
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Please log in first.");
-      return;
-    }
-
-    // -----------------------------------------
-    // 2. Fetch Profile Details
-    // -----------------------------------------
-    const profileRes = await fetch("/api/profile", {
-      headers: { Authorization: "Bearer " + token }
-    });
-
-    const profileData = await profileRes.json();
-    if (!profileData.success) {
-      alert("Session expired, please login again.");
-      return;
-    }
-
-    const { firstName, lastName, email, mobileNumber } = profileData.profile;
-    const name = `${firstName} ${lastName}`;
-
-    // -----------------------------------------
-    // 3. Get Stored Scores from LocalStorage
-    // -----------------------------------------
-    const scienceScore = parseInt(localStorage.getItem("scienceScore")) || 0;
-    const commerceScore = parseInt(localStorage.getItem("commerceScore")) || 0;
-    const humanitiesScore = parseInt(localStorage.getItem("humanitiesScore")) || 0;
-    const maxStream = localStorage.getItem("maxStream") || "Science";
-
-    const behaviorScience = parseInt(localStorage.getItem("behaviorScience")) || 0;
-    const behaviorCommerce = parseInt(localStorage.getItem("behaviorCommerce")) || 0;
-    const behaviorHumanities = parseInt(localStorage.getItem("behaviorHumanities")) || 0;
-
-    const mentalScience = parseInt(localStorage.getItem("mentalScience")) || 0;
-    const mentalCommerce = parseInt(localStorage.getItem("mentalCommerce")) || 0;
-    const mentalHumanities = parseInt(localStorage.getItem("mentalHumanities")) || 0;
-
-    const aptitudeScore = parseInt(localStorage.getItem("aptitudeScore")) || 0;
-
-    // -----------------------------------------
-    // 4. Send Data to /api/generateReport
-    // -----------------------------------------
-    const res = await fetch("/api/generateReport", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        mobile: mobileNumber,
-        email,
-        scienceScore,
-        commerceScore,
-        humanitiesScore,
-        behaviorScience,
-        behaviorCommerce,
-        behaviorHumanities,
-        mentalScience,
-        mentalCommerce,
-        mentalHumanities,
-        aptitudeScore,
-        maxStream
-      })
-    });
-
-    if (!res.ok) throw new Error("Failed to generate report");
-
-    // -----------------------------------------
-    // 5. Download the PDF File
-    // -----------------------------------------
-    const blob = await res.blob();
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${name}_Psychometric_Report.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    window.URL.revokeObjectURL(url);
-
-  } catch (err) {
-    console.error("Error downloading report:", err);
-    alert("Failed to download the report. Please try again.");
-  }
-});
-</script> -->
 <script>
+const rloader = document.querySelector(".reportloader");
+
 document.getElementById("downloadReport").addEventListener("click", async (e) => {
   e.preventDefault();
 
   try {
-    // -----------------------------------------
+    // SHOW LOADER
+    rloader.style.display = "flex";
+
     // 1. Get token
-    // -----------------------------------------
     const token = localStorage.getItem("token");
     if (!token) {
       alert("Please log in first.");
+      rloader.style.display = "none";
       return;
     }
 
-    // -----------------------------------------
-    // 2. Call NEW PDF API (only send token)
-    // -----------------------------------------
+    // 2. Call PDF API
     const res = await fetch("/api/generateReport", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token })   // <--- ONLY TOKEN NEEDED
+      body: JSON.stringify({ token })
     });
 
     if (!res.ok) {
       alert("Could not generate report. Try again.");
+      rloader.style.display = "none";
       return;
     }
 
-    // -----------------------------------------
-    // 3. Convert result to a PDF Blob
-    // -----------------------------------------
+    // 3. Convert result to PDF Blob
     const blob = await res.blob();
     const url = window.URL.createObjectURL(blob);
 
-    // -----------------------------------------
     // 4. Auto-download PDF
-    // -----------------------------------------
     const a = document.createElement("a");
     a.href = url;
-    a.download = "Psychometric_Report.pdf"; // backend generates name inside PDF
+    a.download = "Psychometric_Report.pdf";
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -180,6 +90,9 @@ document.getElementById("downloadReport").addEventListener("click", async (e) =>
     console.error("PDF Error:", err);
     alert("Error downloading the report. Please try again.");
   }
+
+  // HIDE loader after download trigger
+  rloader.style.display = "none";
 });
 </script>
 </body>
