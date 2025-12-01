@@ -84,9 +84,9 @@ document.getElementById("downloadReport").addEventListener("click", async (e) =>
     const aptitudeScore = parseInt(localStorage.getItem("aptitudeScore")) || 0;
 
     // -----------------------------------------
-    // 4. Send Data to /api/generate-report
+    // 4. Send Data to /api/generateReport
     // -----------------------------------------
-    const res = await fetch("/api/generate-report", {
+    const res = await fetch("/api/generateReport", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -147,7 +147,7 @@ document.getElementById("downloadReport").addEventListener("click", async (e) =>
     // -----------------------------------------
     // 2. Call NEW PDF API (only send token)
     // -----------------------------------------
-    const res = await fetch("/api/generate-report", {
+    const res = await fetch("/api/generateReport", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token })   // <--- ONLY TOKEN NEEDED
