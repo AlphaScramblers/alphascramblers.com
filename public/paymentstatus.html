@@ -29,7 +29,7 @@
         <a href="/index.html" class="back-home-btn">Back to Home</a>
     </div>
 
-    <script>
+    <!-- <script>
     // Mark payment as done
     localStorage.setItem("paymentDone", "true");
 
@@ -103,6 +103,96 @@
           console.error("Error downloading report:", err);
           alert("Failed to download the report. Please try again.");
       }
+  });
+</script> -->
+<script>
+  // -----------------------------------------
+  // ✅ 1. Mark payment as done (Mongo + Local)
+  // -----------------------------------------
+  (async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      await fetch("/api/update-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token,
+          paymentDone: true
+        })
+      });
+    }
+
+    // Also store locally for UI
+    localStorage.setItem("paymentDone", "true");
+  })();
+
+
+  // -----------------------------------------
+  // ✅ 2. Retake Test Button
+  // -----------------------------------------
+  document.getElementById("retakeTest").addEventListener("click", async () => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      await fetch("/api/update-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token,
+          paymentDone: false
+        })
+      });
+    }
+
+    localStorage.removeItem("paymentDone");
+    window.location.href = "../Psychometric_Tests/beforepg.html";
+  });
+
+
+  // -----------------------------------------
+  // ✅ 3. Download Report Button
+  // NOW PDF loads data ONLY from MongoDB
+  // -----------------------------------------
+  document.getElementById("downloadReport").addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Please log in first.");
+        return;
+      }
+
+      // -----------------------------------------
+      // Fetch PDF from server (no score data sent)
+      // -----------------------------------------
+      const res = await fetch("/api/generatepdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token })
+      });
+
+      if (!res.ok) throw new Error("Failed to generate report");
+
+      // -----------------------------------------
+      // Convert response to Blob + download
+      // -----------------------------------------
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Psychometric_Report.pdf"; // name set inside PDF
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      window.URL.revokeObjectURL(url);
+
+    } catch (err) {
+      console.error("Error downloading report:", err);
+      alert("Failed to download the report. Please try again.");
+    }
   });
 </script>
 </body>

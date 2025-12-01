@@ -523,7 +523,7 @@
     </main>    
 <script src="../Psychometric_Tests/psy.js"></script>
 <script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
-<script>
+<!-- <script>
 document.addEventListener("DOMContentLoaded", () => {
   const submission = document.querySelector(".subbtn1");
 
@@ -646,6 +646,150 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error sending stream result:", error);
     }
 
+    window.location.href = "../Psychometric_Tests/afterpg.html";
+  });
+});
+</script> -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const submission = document.querySelector(".subbtn1");
+
+  submission.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    // ---------------- SCORES ----------------
+    let scienceScore = 0, commerceScore = 0, humanitiesScore = 0;
+    let behaviorScience = 0, behaviorCommerce = 0, behaviorHumanities = 0;
+    let mentalScience = 0, mentalCommerce = 0, mentalHumanities = 0;
+    let aptitudeScore = 0;
+
+    const allQuesTextDivs = document.querySelectorAll(".ques");
+
+    allQuesTextDivs.forEach((quesDiv) => {
+      const questionContainer = quesDiv.closest(".question");
+      const selectedRadio = questionContainer.querySelector('input[type="radio"]:checked');
+      if (!selectedRadio) return;
+
+      const value = parseInt(selectedRadio.value);
+      const classes = questionContainer.classList;
+
+      // STREAM SPECIFIC QUESTIONS
+      if (classes.contains("science")) {
+        scienceScore += value;
+        if (questionContainer.closest(".behaviour")) behaviorScience += value;
+        if (questionContainer.closest(".mental")) mentalScience += value;
+      }
+
+      if (classes.contains("commerce")) {
+        commerceScore += value;
+        if (questionContainer.closest(".behaviour")) behaviorCommerce += value;
+        if (questionContainer.closest(".mental")) mentalCommerce += value;
+      }
+
+      if (classes.contains("humanities")) {
+        humanitiesScore += value;
+        if (questionContainer.closest(".behaviour")) behaviorHumanities += value;
+        if (questionContainer.closest(".mental")) mentalHumanities += value;
+      }
+
+      // QUESTIONS THAT AFFECT ALL STREAMS
+      if (classes.contains("all")) {
+        scienceScore += value;
+        commerceScore += value;
+        humanitiesScore += value;
+
+        if (questionContainer.closest(".behaviour")) {
+          behaviorScience += value;
+          behaviorCommerce += value;
+          behaviorHumanities += value;
+        }
+        if (questionContainer.closest(".mental")) {
+          mentalScience += value;
+          mentalCommerce += value;
+          mentalHumanities += value;
+        }
+      }
+
+      // APTITUDE QUESTIONS
+      if (classes.contains("apt")) {
+        aptitudeScore += value;
+      }
+    });
+
+    // FINAL STREAM SCORES
+    const finalScienceScore = behaviorScience + mentalScience + aptitudeScore;
+    const finalCommerceScore = behaviorCommerce + mentalCommerce + aptitudeScore;
+    const finalHumanitiesScore = behaviorHumanities + mentalHumanities + aptitudeScore;
+
+    const streamScores = {
+      Science: finalScienceScore,
+      Commerce: finalCommerceScore,
+      Humanities: finalHumanitiesScore,
+    };
+
+    const maxStream = Object.keys(streamScores).reduce((a, b) =>
+      streamScores[a] > streamScores[b] ? a : b
+    );
+
+    // ---------------------------------------------------------------
+    // FETCH LOGGED-IN USER DETAILS USING JWT TOKEN
+    // ---------------------------------------------------------------
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token missing");
+
+      const profileRes = await fetch("/api/profile", {
+        headers: { Authorization: "Bearer " + token },
+      });
+
+      const profileData = await profileRes.json();
+      if (!profileData.success) throw new Error("Could not load profile");
+
+      const id = profileData.profile.id;
+      const name = profileData.profile.firstName + " " + profileData.profile.lastName;
+      const email = profileData.profile.email;
+
+      // ---------------------------------------------------------------
+      // SAVE RESULT IN MONGODB (NO MORE LOCALSTORAGE DEPENDENCE)
+      // ---------------------------------------------------------------
+      const saveRes = await fetch("/api/saveresult", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          id,
+          name,
+          email,
+          results: {
+            scienceScore: finalScienceScore,
+            commerceScore: finalCommerceScore,
+            humanitiesScore: finalHumanitiesScore,
+
+            behaviorScience,
+            behaviorCommerce,
+            behaviorHumanities,
+
+            mentalScience,
+            mentalCommerce,
+            mentalHumanities,
+
+            aptitudeScore,
+            maxStream
+          }
+        }),
+      });
+
+      if (!saveRes.ok) {
+        console.error("Failed to save results in DB:", saveRes.status);
+      }
+
+    } catch (err) {
+      console.error("Error in saving results:", err);
+    }
+
+    // REDIRECT TO REPORT PAGE
     window.location.href = "../Psychometric_Tests/afterpg.html";
   });
 });

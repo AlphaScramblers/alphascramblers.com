@@ -76,20 +76,74 @@ d4.addEventListener("click",()=>{
     d3.style.backgroundColor="white";
     d4.style.backgroundColor="gray";
 })
+// document.addEventListener("DOMContentLoaded", () => {
+
+//   function handleClick(e) {
+//     e.preventDefault();
+
+//     const token = localStorage.getItem("token"); // NEW LOGIN CHECK
+//     const paymentDone = localStorage.getItem("paymentDone");
+
+//     if (!token) {
+//       alert("Please log in first to access the Psychometric Test page!");
+//       return;
+//     }
+
+//     if (paymentDone === "true") {
+//       window.location.href = "../Psychometric_Tests/psychomid.html";
+//     } else {
+//       window.location.href = "../Psychometric_Tests/beforepg.html";
+//     }
+//   }
+
+//   const buttons = [
+//     ".strtbut",
+//     ".bottompsycho",
+//     ".bottompsycho1",
+//     ".bannerpsycho"
+//   ];
+
+//   buttons.forEach(selector => {
+//     const btn = document.querySelector(selector);
+//     if (btn) btn.addEventListener("click", handleClick);
+//   });
+
+// });
 document.addEventListener("DOMContentLoaded", () => {
 
-  function handleClick(e) {
+  async function handleClick(e) {
     e.preventDefault();
 
-    const token = localStorage.getItem("token"); // NEW LOGIN CHECK
-    const paymentDone = localStorage.getItem("paymentDone");
+    const token = localStorage.getItem("token");
 
+    // Login check
     if (!token) {
       alert("Please log in first to access the Psychometric Test page!");
       return;
     }
 
-    if (paymentDone === "true") {
+    // -----------------------------------------
+    // 🔥 Always check PAYMENT status from MongoDB
+    // -----------------------------------------
+    const res = await fetch("/api/check-payment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token })
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      alert("Something went wrong. Please login again.");
+      return;
+    }
+
+    const paymentDone = data.paymentDone;
+
+    // -----------------------------------------
+    // 🔥 Redirect Based on REAL MongoDB payment status
+    // -----------------------------------------
+    if (paymentDone) {
       window.location.href = "../Psychometric_Tests/psychomid.html";
     } else {
       window.location.href = "../Psychometric_Tests/beforepg.html";
