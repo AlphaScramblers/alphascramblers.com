@@ -81,6 +81,11 @@ let waitloader = document.querySelector(".waitloader");
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  // 🟢 FIX: Hide loader if coming back via browser back button
+  window.addEventListener("pageshow", () => {
+    waitloader.style.display = "none";
+  });
+
   async function handleClick(e) {
     e.preventDefault();
 
@@ -104,15 +109,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!data.success) {
         alert("Something went wrong. Please login again.");
-
-        // HIDE LOADER because NOT redirecting
         waitloader.style.display = "none";
         return;
       }
 
       const paymentDone = data.paymentDone;
 
-      // REDIRECT — DO NOT HIDE LOADER HERE
       if (paymentDone) {
         window.location.href = "../Psychometric_Tests/psychomid.html";
       } else {
@@ -122,10 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       alert("Network error! Please try again.");
       console.error(err);
-
-      // ERROR — HIDE LOADER
       waitloader.style.display = "none";
-
     }
   }
 
