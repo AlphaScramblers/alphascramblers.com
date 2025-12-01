@@ -77,7 +77,7 @@ d4.addEventListener("click",()=>{
     d4.style.backgroundColor="gray";
 })
 
-let cloader = document.querySelector(".contactloader");
+let waitloader = document.querySelector(".waitloader");
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // SHOW LOADER
-    cloader.style.display = "flex";
+    waitloader.style.display = "flex";
 
     try {
       const res = await fetch("/api/check-payment", {
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Something went wrong. Please login again.");
 
         // HIDE LOADER because NOT redirecting
-        cloader.style.display = "none";
+        waitloader.style.display = "none";
         return;
       }
 
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(err);
 
       // ERROR — HIDE LOADER
-      cloader.style.display = "none";
+      waitloader.style.display = "none";
 
     }
   }
