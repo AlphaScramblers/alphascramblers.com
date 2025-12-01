@@ -147,7 +147,7 @@ document.getElementById("downloadReport").addEventListener("click", async (e) =>
     // -----------------------------------------
     // 2. Call NEW PDF API (only send token)
     // -----------------------------------------
-    const res = await fetch("../api/generateReport", {
+    const res = await fetch("/api/generateReport", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token })   // <--- ONLY TOKEN NEEDED
