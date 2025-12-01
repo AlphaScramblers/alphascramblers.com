@@ -752,7 +752,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // ---------------------------------------------------------------
       // SAVE RESULT IN MONGODB (NO MORE LOCALSTORAGE DEPENDENCE)
       // ---------------------------------------------------------------
-      const saveRes = await fetch("/api/saveresult", {
+      const saveRes = await fetch("/api/save-result", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
