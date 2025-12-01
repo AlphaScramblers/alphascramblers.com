@@ -120,8 +120,6 @@ export default async function handler(req, res) {
       email,
       mobileno,
       password,
-      paymentdone: false,
-      lastTestResult: {}
     });
 
     const token = jwt.sign(
