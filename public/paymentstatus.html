@@ -166,7 +166,7 @@
       // -----------------------------------------
       // Fetch PDF from server (no score data sent)
       // -----------------------------------------
-      const res = await fetch("/api/generate-report", {
+      const res = await fetch("/api/generate-report.js", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token })
