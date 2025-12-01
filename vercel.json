@@ -1,7 +1,9 @@
 {
+  "version": 2,
+  "cleanUrls": true,
   "functions": {
-    "api/*.js": {
-      "runtime": "nodejs20.x"
+    "api/generateReport.js": {
+      "includeFiles": "streamtemplates/**"
     }
   }
 }
