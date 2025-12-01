@@ -119,7 +119,7 @@ export default async function handler(req, res) {
       lastName,
       email,
       mobileno,
-      password,
+      password: hashed,
     });
 
     const token = jwt.sign(
