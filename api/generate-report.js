@@ -651,8 +651,7 @@ export default async function handler(req, res) {
 
     // ---------------------- USER DETAILS ----------------------
     const name = `${user.firstName} ${user.lastName}`;
-    const firstName = user.firstName?.charAt(0) || "A";
-    const alpha = `Alpha ${firstName}`;
+    const alpha = `Alpha ${user.firstName}`;
 
     // ---------------------- TEST RESULTS WITH SAFE FALLBACKS ----------------------
     const scienceScore = result.scienceScore ?? 0;
