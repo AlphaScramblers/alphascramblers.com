@@ -1,5 +1,5 @@
 import { connectDB } from "../lib/mongo.js";
-import { ObjectId } from "mongodb";   // <-- REQUIRED IMPORT
+import { ObjectId } from "mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -16,8 +16,13 @@ export default async function handler(req, res) {
     const { db } = await connectDB();
     const users = db.collection("users");
 
+    // SUPPORT BOTH string _id and ObjectId _id
+    const query = {
+      _id: ObjectId.isValid(id) ? new ObjectId(id) : id
+    };
+
     const updated = await users.updateOne(
-      { _id: new ObjectId(id) },   // <--- VALID OBJECT ID
+      query,
       {
         $set: {
           lastTestResult: {
@@ -30,7 +35,6 @@ export default async function handler(req, res) {
       }
     );
 
-    // OPTIONAL: Check matched user
     if (updated.matchedCount === 0) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
