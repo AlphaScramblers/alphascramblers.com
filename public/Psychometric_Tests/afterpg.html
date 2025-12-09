@@ -55,7 +55,45 @@
             rzp && rzp.init && rzp.init()}})();
     </script>
     </div>
+    <div class="special-code-box" style="margin-top:20px; padding:15px; background:#fff; border-radius:10px;">
+        <label for="schoolCode" style="font-weight:600;">Have a Special School Code?</label>
+        <input id="schoolCode" type="text" placeholder="Enter code here" 
+            style="width:95%; margin-top:8px; padding:10px; border-radius:6px; border:1px solid #ccc;">
+        
+        <button onclick="applySchoolCode()" 
+                style="margin-top:10px; width:100%; padding:10px; background:#0a58ca; color:#fff; border:none; border-radius:6px; cursor:pointer;">
+            Apply Code
+        </button>
+
+        <p id="codeMessage" style="font-size:14px; margin-top:10px; color:red; display:none;"></p>
+    </div>
 </div>
+<script>
+    function applySchoolCode() {
+        const enteredCode = document.getElementById("schoolCode").value.trim();
+        const correctCode = "SPECIALSTUDENTACCESS";
+        const message = document.getElementById("codeMessage");
+
+        if (enteredCode === correctCode) {
+            message.style.display = "block";
+            message.style.color = "green";
+            message.innerText = "Code Applied Successfully! Redirecting to your free report...";
+
+            // Hide payment button
+            document.querySelector(".razorpay-embed-btn").style.display = "none";
+
+            // Redirect to download page after 1 second
+            setTimeout(() => {
+                window.location.href = "paymentstatus.html";
+            }, 1000);
+
+        } else {
+            message.style.display = "block";
+            message.style.color = "red";
+            message.innerText = "Invalid code. Please try again.";
+        }
+    }
+</script>
 </body>
 </html>
     <script src="psy.js"></script>
