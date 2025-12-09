@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Student Access</title>
+    <link rel="stylesheet" href="paymentstatus.css">
+    <link rel="stylesheet" href="/homepage/alpha.css">
+    <link rel="stylesheet" href="navregbot.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body style="background-color: #E0F2FE;">
+
+    <!-- LOADER -->
+    <div class="reportloader" style="display:none;">
+        <div class="loader-box">
+            <div class="center-loader"></div>
+            <p class="loader-text">Generating Report… Please wait</p>
+        </div>
+    </div>
+
+    <div class="card" style="text-align:center;">
+        <h1 style="color:#0a58ca;">🎓 Special Student Access Granted</h1>
+
+        <p style="margin-top:10px; font-size:16px;">
+            Congratulations! You have unlocked <strong>Special School Access</strong> provided by 
+            <strong>AlphaScramblers Expert Team</strong>.
+        </p>
+
+        <p style="margin-top:15px; font-size:16px;">
+            You can now <strong>download your complete Psychometric Report for FREE</strong> without any payment.
+            This access is exclusively given to selected school students.
+        </p>
+
+        <div class="options" style="margin-top:25px;">
+            <button id="downloadReport" class="btn btn-download">Download Report</button>
+            <button id="retakeTest" class="btn btn-retake">Retake Test</button>
+        </div>
+
+        <p class="small-text" style="margin-top:20px;">You can always revisit your report later using your registered email.</p>
+
+        <a href="/index.html" class="back-home-btn" style="margin-top:20px;">Back to Home</a>
+    </div>
+
+<script>
+    const rloader = document.querySelector(".reportloader");
+
+    // Mark as free-access internally (optional)
+    localStorage.setItem("paymentDone", "true");
+
+    // RETAKE TEST
+    document.getElementById("retakeTest").addEventListener("click", async () => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            await fetch("/api/update-payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    token,
+                    paymentDone: false
+                })
+            });
+        }
+
+        localStorage.removeItem("paymentDone");
+        window.location.href = "../Psychometric_Tests/beforepg.html";
+    });
+
+    // DOWNLOAD REPORT (same logic you use)
+    document.getElementById("downloadReport").addEventListener("click", async (e) => {
+        e.preventDefault();
+        rloader.style.display = "flex"; 
+
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("Please log in first.");
+                rloader.style.display = "none";
+                return;
+            }
+
+            const res = await fetch("/api/generateReport", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token })
+            });
+
+            if (!res.ok) throw new Error("Failed to generate report");
+
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "Psychometric_Report.pdf";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            window.URL.revokeObjectURL(url);
+
+        } catch (err) {
+            console.error("Error downloading report:", err);
+            alert("Failed to download the report. Please try again.");
+        }
+
+        rloader.style.display = "none";
+    });
+</script>
+</body>
+</html>
