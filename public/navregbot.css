@@ -162,20 +162,6 @@ footer{
     cursor: pointer;
     z-index: 9999999;
 }
-.langBtn{
-    background-color: #3b5998;
-    position: fixed;
-    top: 12vh;
-    right: 0;
-    margin: 1%;
-    height: 8vh;
-    width: 8vh;
-    align-items: center;
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
-    cursor: pointer;
-    z-index: 9999999;
-}
 .progress-value{
     display: block;
     height: calc(100% - 15px);

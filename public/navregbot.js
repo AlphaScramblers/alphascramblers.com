@@ -230,20 +230,8 @@
       loginform.classList.add("logdis")
       loginform.style.display="none"
   })
-let hindi = document.querySelectorAll(".hi");
-let english = document.querySelectorAll(".en");
-let currentLang = "en";
 
-document.querySelector(".langBtn").addEventListener("click", () => {
-  if (currentLang === "en") {
-    hindi.forEach(el => el.style.display = "block");
-    english.forEach(el => el.style.display = "none");
-    document.querySelector(".langBtn").innerText = "English";
-    currentLang = "hi";
-  } else {
-    hindi.forEach(el => el.style.display = "none");
-    english.forEach(el => el.style.display = "block");
-    document.querySelector(".langBtn").innerText = "हिंदी";
-    currentLang = "en";
-  }
-});
+
+
+
+ 
