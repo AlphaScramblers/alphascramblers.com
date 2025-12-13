@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us</title>
     <link rel="stylesheet" href="./AboutUs/aboutus.css">
-    <link rel="stylesheet" href="/navregbot.css">
+    <link rel="stylesheet" href="navregbot.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
@@ -27,79 +27,120 @@
     <header>
         <div class="navbar">
             <div class="image">
-                <a href="../index.html"><img class="img" src="../images/Broad Logo/2.svg" alt="" srcset=""></a>
+                <a href="./index.html"><img class="img" src="./images/Broad Logo/2.svg" alt="" srcset=""></a>
             </div>
             <div class="navcon"><i class="fa-solid fa-bars fa-lg"></i></div>
             <div class="rightnav">
-                <div class="home"><a href="../index.html" class="link">HOME</a></div>
-                <div class="about"><a href="./Aboutus.html" class="link">ABOUT US</a></div>
-                <div class="help"><a href="./helpandsupport.html" class="link">HELP AND SUPPORT</a>
+                <div class="home en"><a href="../index.html" class="link en">HOME</a></div>
+                <div class="home hi"><a href="../index.html" class="link hi">होम</a></div>
+                <div class="about en"><a href="./Aboutus.html" class="link en">ABOUT US</a></div>
+                <div class="about hi"><a href="./Aboutus.html" class="link hi">हमारे बारे में</a></div>
+                <div class="help en"><a href="./helpandsupport.html" class="link en">HELP AND SUPPORT</a>
                 </div>
-                <div class="login r">LOGIN/SIGN UP</div>
+                <div class="help hi"><a href="./helpandsupport.html" class="link hi">सहायता और समर्थन</a>
+                </div>
+                <div class="login r"><p class="en">LOGIN/SIGN UP</p></div>
+                <div class="login r"><p class="hi">लॉगइन/साइनअप</p></div>
                 <div class="profile"><div class="avatar1"></div></div>
             </div>
         </div>
         <div class="navcon-ele">
             <a href="../index.html" class="link">
-                <div class="home1">HOME</div>
+                <div class="home1 en">HOME</div>
+                <div class="home1 hi">होम</div>
             </a>
             <a href="./Aboutus.html" class="link">
-                <div class="about1">ABOUT US</div>
+                <div class="about1 en">ABOUT US</div>
+                <div class="about1 hi">हमारे बारे में</div>
             </a>
             <a href="./helpandsupport.html" class="link">
-                <div class="help1">HELP AND SUPPORT</div>
+                <div class="help1 en">HELP AND SUPPORT</div>
+                <div class="help1 hi">सहायता और समर्थन</div>
             </a>
-            <div class="login1 r">LOGIN/SIGN UP</div>
-            <div class="profile1">PROFILE</div>
+            <div class="login1 r en">LOGIN/SIGN UP</div>
+            <div class="login1 r hi">लॉगइन/साइनअप</div>
+            <div class="profile1 en">PROFILE</div>
+            <div class="profile1 hi">प्रोफ़ाइल</div>
         </div>
+        <button class="langBtn"
+            style="background: #ffffff;border: 1px solid #d8e1f0;font-family: Arial, sans-serif;font-size: 13.5px;font-weight: 500;color: #1a73e8;cursor: pointer;border-radius: 16px;transition: all 0.2s ease;"
+            onmouseover="this.style.background='#f4f8ff'; this.style.borderColor='#c6d8ff'"
+            onmouseout="this.style.background='#ffffff'; this.style.borderColor='#d8e1f0'">
+            हिंदी
+        </button>
         <div class="progress">
             <span class="progress-value">&#x1F815</span>
         </div>
     </header>
     <main>
-        <h1 class="headtext">
-            About Us
-        </h1>
+        <h1 class="headtext en">About Us</h1>
+        <h1 class="headtext hi">हमारे बारे में</h1>
         <div class="imgdata">
             <div class="image2">
                 <img src="./images/Untitled design (2).png" class="iu" alt="">
             </div>
             <div class="data">
-                <div class="datahead">What we do?</div><br>
-                <div class="datadata">At AlphaScramblers, we empower students to make informed and confident academic and career choices at every key stage of their journey. Whether it’s helping Class 10 students choose the right stream, guiding Class 12 students toward the most suitable degree programs, or assisting graduates in exploring career and higher education opportunities — our approach is both scientific and personalized. Using advanced psychometric assessments, personality profiling, and manual exploration tools, we help students understand their interests, strengths, and learning styles. Our specialties include data-driven insights, individualized counseling, and globally recognized models like Holland’s RIASEC, ensuring each recommendation is clear, reliable, and tailored to the student’s goals. At AlphaScramblers, we combine psychology with purpose — helping every learner discover their true potential and take confident steps toward a fulfilling future.</div>
+                <div class="datahead en">What we do?</div>
+                <div class="datahead hi">हम क्या करते हैं?</div><br>
+                <div class="datadata en">At AlphaScramblers, we empower students to make informed and confident academic and career choices at every key stage of their journey. Whether it’s helping Class 10 students choose the right stream, guiding Class 12 students toward the most suitable degree programs, or assisting graduates in exploring career and higher education opportunities — our approach is both scientific and personalized. Using advanced psychometric assessments, personality profiling, and manual exploration tools, we help students understand their interests, strengths, and learning styles. Our specialties include data-driven insights, individualized counseling, and globally recognized models like Holland’s RIASEC, ensuring each recommendation is clear, reliable, and tailored to the student’s goals. At AlphaScramblers, we combine psychology with purpose — helping every learner discover their true potential and take confident steps toward a fulfilling future.</div>
+                <div class="datadata hi">AlphaScramblers में, हम छात्रों को उनकी शिक्षा और करियर के हर महत्वपूर्ण पड़ाव पर सोच-समझकर और आत्मविश्वास से भरे निर्णय लेने में सक्षम बनाते हैं। चाहे कक्षा 10 के छात्रों को सही स्ट्रीम चुनने में मदद करना हो, कक्षा 12 के छात्रों को सबसे उपयुक्त डिग्री प्रोग्राम की ओर मार्गदर्शन करना हो, या स्नातकों को करियर और उच्च शिक्षा के अवसरों को खोजने में सहायता करना हो - हमारा दृष्टिकोण वैज्ञानिक और व्यक्तिगत दोनों है। उन्नत साइकोमेट्रिक आकलन, व्यक्तित्व प्रोफाइलिंग और मैनुअल एक्सप्लोरेशन टूल्स का उपयोग करके, हम छात्रों को उनकी रुचियों, क्षमताओं और सीखने की शैलियों को समझने में मदद करते हैं। हमारी विशेषज्ञताओं में डेटा-आधारित अंतर्दृष्टि, व्यक्तिगत परामर्श और हॉलैंड के RIASEC जैसे विश्व स्तर पर मान्यता प्राप्त मॉडल शामिल हैं, जो यह सुनिश्चित करते हैं कि प्रत्येक अनुशंसा स्पष्ट, विश्वसनीय और छात्र के लक्ष्यों के अनुरूप हो। अल्फास्क्रैम्बलर्स में, हम मनोविज्ञान को उद्देश्य के साथ जोड़ते हैं - प्रत्येक शिक्षार्थी को अपनी वास्तविक क्षमता को खोजने और एक सफल भविष्य की ओर आत्मविश्वास से कदम बढ़ाने में मदद करते हैं।</div>
             </div>
         </div>
-        <h1 class="headtext">
-            OUR GOALS
-        </h1>
+        <h1 class="headtext en">OUR GOALS</h1>
+<h1 class="headtext hi">हमारे उद्देश्य</h1>
     <div class="fullanim">
         <div class="animtext">
             <div class="anim">
                 <img src="../images/Helping a partner-rafiki.svg" class="aboutimg">
             </div>
             <div class="texta">
-                <div class="text1">Understand You</div>
-                <div class="text2">Scientific interest mapping using psychometric testing.</div>
-                <div class="text3">
-                <ul>
-                <li>Aims to help individuals discover their true potential by evaluating personality, aptitude, interests, and emotional intelligence.</li>
-                <li>Designed to guide students and young professionals toward the most suitable academic and career paths.</li>
-                <li>Acts as a stepping stone toward building a meaningful, passion-driven, and successful journey.</li>
-                </ul>
-            </div>
+                <div class="text1 en">Understand You</div>
+<div class="text1 hi">आपको समझना</div>
+
+<div class="text2 en">Scientific interest mapping using psychometric testing.</div>
+<div class="text2 hi">साइकोमेट्रिक परीक्षण द्वारा वैज्ञानिक रुचि विश्लेषण</div>
+
+<div class="text3 en">
+<ul>
+<li>Aims to help individuals discover their true potential by evaluating personality, aptitude, interests, and emotional intelligence.</li>
+<li>Designed to guide students and young professionals toward the most suitable academic and career paths.</li>
+<li>Acts as a stepping stone toward building a meaningful, passion-driven, and successful journey.</li>
+</ul>
+</div>
+
+<div class="text3 hi">
+<ul>
+<li>व्यक्तित्व, अभिरुचि, योग्यता और भावनात्मक बुद्धिमत्ता के माध्यम से वास्तविक क्षमता को पहचानने में सहायता करता है।</li>
+<li>छात्रों और युवाओं को सही शिक्षा और करियर पथ चुनने में मार्गदर्शन देता है।</li>
+<li>एक उद्देश्यपूर्ण और सफल भविष्य की दिशा में पहला कदम बनता है।</li>
+</ul>
+</div>
             </div>
         </div>
         <div class="animtext2">
             <div class="texta">
-                <div class="text1">Choose With Confidence</div>
-                <div class="text2">Personalized suggestions for streams, degrees, and careers.</div>
-                <div class="text3">
-                <ul>
-                    <li>Our goal is to help students step forward confidently, knowing they’re on the right path.</li>
-                    <li>Removes confusion and replaces it with clarity and direction. Hence guidance without guesswork.</li>
-                    <li>Each student receives tailored suggestions based on their unique strengths and preferences.</li>
-                </ul>
-                </div>
+                <div class="text1 en">Choose With Confidence</div>
+<div class="text1 hi">आत्मविश्वास के साथ चयन</div>
+
+<div class="text2 en">Personalized suggestions for streams, degrees, and careers.</div>
+<div class="text2 hi">स्ट्रीम, डिग्री और करियर के लिए व्यक्तिगत सुझाव</div>
+
+<div class="text3 en">
+<ul>
+<li>Our goal is to help students step forward confidently, knowing they’re on the right path.</li>
+<li>Removes confusion and replaces it with clarity and direction.</li>
+<li>Each student receives tailored suggestions based on their strengths.</li>
+</ul>
+</div>
+
+<div class="text3 hi">
+<ul>
+<li>छात्रों को यह विश्वास दिलाना कि वे सही दिशा में आगे बढ़ रहे हैं।</li>
+<li>भ्रम को दूर कर स्पष्टता और दिशा प्रदान करता है।</li>
+<li>हर छात्र को उसकी क्षमताओं के अनुसार सुझाव मिलते हैं।</li>
+</ul>
+</div>
+
             </div>
             <div class="anim">
                 <img src="../images/Customer Survey-rafiki.svg" class="aboutimg">
@@ -110,15 +151,27 @@
                 <img src="../images/Yes or no-pana.svg" class="aboutimg">
         </div>
             <div class="texta">
-                <div class="text1">Bridge the Confusion Gap</div>
-                <div class="text2">From uncertainty to clarity</div>
-                <div class="text3">
-                <ul>
-                    <li>A powerful combination that balances guided insight with personal discovery.</li>
-                    <li>Our tools give students the confidence to choose what truly suits them.</li>
-                    <li>Whether it’s a stream, a degree, or a job — we help connect students to the right path.</li>
-                </ul>
-                </div>
+                <div class="text1 en">Bridge the Confusion Gap</div>
+<div class="text1 hi">भ्रम की खाई को पाटना</div>
+
+<div class="text2 en">From uncertainty to clarity</div>
+<div class="text2 hi">अनिश्चितता से स्पष्टता तक</div>
+
+<div class="text3 en">
+<ul>
+<li>A balance of guided insight and self-discovery.</li>
+<li>Tools that help students choose what truly fits them.</li>
+<li>Connecting students to the right stream, degree, or career.</li>
+</ul>
+</div>
+
+<div class="text3 hi">
+<ul>
+<li>मार्गदर्शन और आत्म-खोज का संतुलन।</li>
+<li>छात्रों को वही चुनने में मदद करता है जो उनके लिए सही हो।</li>
+<li>सही स्ट्रीम, डिग्री या करियर से जोड़ता है।</li>
+</ul>
+</div>
             </div>
     </div>
 </div>
@@ -356,7 +409,7 @@
             </div>
         </profile>
 <script src="./AboutUs/aboutus.js"></script>
-<script src="/navregbot.js"></script>
+<script src="navregbot.js"></script>
 <script src="./login-signup-profile.js"></script>
 <script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
 <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>

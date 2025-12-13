@@ -13,6 +13,9 @@ main{
     color: #05445E;
     padding: 2.5%;
 }
+.hi{
+    display: none;
+}
 .imgdata{
     height: auto;
     display: flex;
