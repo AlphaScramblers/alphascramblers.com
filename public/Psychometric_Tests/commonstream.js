@@ -240,6 +240,57 @@
 // });
 document.addEventListener("DOMContentLoaded", async () => {
 
+  const loader = document.getElementById("pageLoader");
+  const testUI = document.getElementById("testContainer");
+
+  const stream = document.body.dataset.stream;
+  const testId = document.body.dataset.testId;
+  const token = localStorage.getItem("token");
+
+  // Safety fallback
+  if (!loader || !testUI) return;
+
+  if (!stream || !testId) {
+    loader.style.display = "none";
+    testUI.style.display = "block";
+    return;
+  }
+
+  if (!token) {
+    alert("Please login first");
+    window.location.href = "/login.html";
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/stream-report?testId=${testId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    // ✅ If test already submitted → go to report
+    if (data.success) {
+      window.location.href =
+        `/Psychometric_Tests/stream-report.html?testId=${testId}`;
+      return;
+    }
+
+    // ❌ Test not submitted → show test UI
+    loader.style.display = "none";
+    testUI.style.display = "block";
+
+  } catch (err) {
+    console.error("Test check failed:", err);
+    loader.style.display = "none";
+    testUI.style.display = "block";
+  }
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+
   const stream = document.body.dataset.stream;
   const testId = document.body.dataset.testId;
   const token = localStorage.getItem("token");

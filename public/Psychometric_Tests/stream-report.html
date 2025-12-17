@@ -220,8 +220,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   document.getElementById("retakeBtn").onclick = () => {
-    window.location.href = `/Psychometric_Tests/${testId}.html`;
+
+  const testFileMap = {
+    PCM_test: "PCMpsy.html",
+    PCB_test: "PCBpsy.html",
+    humanities_test: "humanitiespsy.html",
+    withmaths_test: "withmathspsy.html",
+    withoutmaths_test: "withoutmathspsy.html"
   };
+
+  const fileName = testFileMap[testId];
+
+  if (!fileName) {
+    alert("Test file not found");
+    return;
+  }
+
+  window.location.href = `/Psychometric_Tests/${fileName}`;
+};
 });
 </script>
 
