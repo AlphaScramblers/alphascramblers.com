@@ -39,54 +39,58 @@ export default async function handler(req, res) {
     ====================== */
     if (req.method === "POST") {
 
-      const {
-        stream,
+  const { stream, testId, scores } = req.body;
+
+  if (!Array.isArray(scores)) {
+    return res.status(400).json({
+      success: false,
+      message: "Scores array is required"
+    });
+  }
+
+  // ✅ Calculate totalScore from scores array
+  const totalScore = scores.reduce(
+    (sum, s) => sum + Number(s.score || 0),
+    0
+  );
+
+  // ✅ Fetch user details (source of truth)
+  const user = await users.findOne({
+    _id: new ObjectId(decoded.id)
+  });
+
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found"
+    });
+  }
+
+  await reports.updateOne(
+    {
+      userId: decoded.id,
+      testId
+    },
+    {
+      $set: {
+        userId: decoded.id,
         testId,
-        aptitudeScore,
-        behaviorScore,
-        mentalScore,
-        totalScore
-      } = req.body;
+        stream,
 
-      // ✅ Fetch user details from DB (source of truth)
-      const user = await users.findOne({
-        _id: new ObjectId(decoded.id)
-      });
+        username: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+        email: user.email || null,
+        mobile: user.mobileno || null,
 
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          message: "User not found"
-        });
+        scores,                 // ✅ NEW STRUCTURE
+        totalScore,             // ✅ recalculated every time
+        lastGivenAt: new Date() // ✅ updated on retake
       }
+    },
+    { upsert: true }           // ✅ overwrite on retake
+  );
 
-      await reports.updateOne(
-        { userId: decoded.id, testId },
-        {
-          $set: {
-            userId: decoded.id,
-            testId,
-            stream,
-
-            username: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
-            email: user.email || null,
-            mobile: user.mobileno || null,
-
-            scores: [
-              { section: "aptitude", score: aptitudeScore },
-              { section: "behavior", score: behaviorScore },
-              { section: "mental", score: mentalScore }
-            ],
-
-            totalScore,
-            lastGivenAt: new Date()
-          }
-        },
-        { upsert: true }
-      );
-
-      return res.status(200).json({ success: true });
-    }
+  return res.status(200).json({ success: true });
+}
 
     /* ======================
        GET REPORT

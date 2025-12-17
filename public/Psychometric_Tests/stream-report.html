@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   const res = await fetch(`/api/stream-report?testId=${testId}`, {
-    headers: { "Authorization": `Bearer ${token}` }
+    headers: { Authorization: `Bearer ${token}` }
   });
 
   const data = await res.json();
@@ -180,15 +180,42 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const { stream, scores, totalScore, lastGivenAt } = data.report;
+  const {
+    stream,
+    scores,
+    aptitudeScore,
+    behaviorScore,
+    mentalScore,
+    totalScore,
+    lastGivenAt
+  } = data.report;
 
-  const behaviorScore = scores.find(s => s.section === "behavior")?.score || 0;
-  const mentalScore   = scores.find(s => s.section === "mental")?.score || 0;
-  const aptitudeScore = scores.find(s => s.section === "aptitude")?.score || 0;
+  /* ===============================
+     BACKWARD + FORWARD COMPATIBLE
+  ================================ */
 
-  document.getElementById("behaviorScore").innerText = behaviorScore;
-  document.getElementById("mentalScore").innerText = mentalScore;
-  document.getElementById("aptitudeScore").innerText = aptitudeScore;
+  const behavior =
+    scores?.find(s => s.section === "behavior")?.score ??
+    behaviorScore ??
+    0;
+
+  const mental =
+    scores?.find(s => s.section === "mental")?.score ??
+    mentalScore ??
+    0;
+
+  const aptitude =
+    scores?.find(s => s.section === "aptitude")?.score ??
+    aptitudeScore ??
+    0;
+
+  /* ===============================
+     UPDATE UI
+  ================================ */
+
+  document.getElementById("behaviorScore").innerText = behavior;
+  document.getElementById("mentalScore").innerText = mental;
+  document.getElementById("aptitudeScore").innerText = aptitude;
   document.getElementById("totalScore").innerText = totalScore;
 
   document.querySelector(".subtitle").innerText =
@@ -211,12 +238,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     tag.className = "tag green";
   }
 
+  /* ===============================
+     CHARTS
+  ================================ */
+
   new Chart(document.getElementById("pieChart"), {
     type: "pie",
     data: {
       labels: ["Behavior", "Mental", "Aptitude"],
       datasets: [{
-        data: [behaviorScore, mentalScore, aptitudeScore],
+        data: [behavior, mental, aptitude],
         backgroundColor: ["#0984e3", "#6c5ce7", "#00b894"]
       }]
     }
@@ -228,7 +259,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       labels: ["Behavior", "Mental", "Aptitude"],
       datasets: [{
         label: "Scores",
-        data: [behaviorScore, mentalScore, aptitudeScore],
+        data: [behavior, mental, aptitude],
         backgroundColor: ["#74b9ff", "#a29bfe", "#55efc4"],
         borderRadius: 8
       }]
@@ -238,25 +269,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  /* ===============================
+     RETAKE BUTTON
+  ================================ */
+
   document.getElementById("retakeBtn").onclick = () => {
 
-  const testFileMap = {
-    PCM_test: "PCMpsy.html",
-    PCB_test: "PCBpsy.html",
-    humanities_test: "humanitiespsy.html",
-    withmaths_test: "withmathspsy.html",
-    withoutmaths_test: "withoutmathspsy.html"
+    const testFileMap = {
+      PCM_test: "PCMpsy.html",
+      PCB_test: "PCBpsy.html",
+      humanities_test: "humanitiespsy.html",
+      withmaths_test: "withmathspsy.html",
+      withoutmaths_test: "withoutmathspsy.html"
+    };
+
+    const fileName = testFileMap[testId];
+    if (!fileName) return alert("Test file not found");
+
+    window.location.href = `/Psychometric_Tests/${fileName}?retake=true`;
   };
 
-  const fileName = testFileMap[testId];
-
-  if (!fileName) {
-    alert("Test file not found");
-    return;
-  }
-
-  window.location.href = `/Psychometric_Tests/${fileName}?retake=true`;
-};
 });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
