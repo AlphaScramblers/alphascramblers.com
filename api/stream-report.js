@@ -48,7 +48,7 @@ export default async function handler(req, res) {
       } = req.body;
 
       await collection.updateOne(
-        { userId: decoded.id, testId },
+        { userId: decoded.id, testId, stream },
         {
           $set: {
             userId: decoded.id,
@@ -77,10 +77,10 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
       const { testId } = req.query;
 
-      const report = await collection.findOne({
-        userId: decoded.id,
-        testId
-      });
+      const report = await collection.findOne(
+        { userId: decoded.id, testId },
+        { sort: { lastGivenAt: -1 } }
+      );
 
       if (!report) {
         return res.json({ success: false });

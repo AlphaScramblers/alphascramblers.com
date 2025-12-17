@@ -353,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem(`${stream}_${testId}_totalScore`, totalScore);
 
     try {
-      await fetch("/api/stream-report", {
+      const res = await fetch("/api/stream-report", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -368,10 +368,21 @@ document.addEventListener("DOMContentLoaded", () => {
           totalScore
         })
       });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        alert("Failed to save test. Please try again.");
+        return;
+      }
+
     } catch (err) {
-      console.error("Failed to save report, redirecting anyway");
+      alert("Network error. Please check your internet.");
+      return;
     }
+
     window.location.href = `/Psychometric_Tests/stream-report.html?testId=${testId}`;
+
   });
 
 });

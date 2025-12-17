@@ -137,14 +137,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   const testId = new URLSearchParams(window.location.search).get("testId");
   if (!testId) return alert("Invalid report");
 
-  const res = await fetch(`/api/stream-report?testId=${testId}`, {
-    headers: {
-      "Authorization": `Bearer ${localStorage.getItem("token")}`
+ const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login again to view your report.");
+      window.location.href = "/login.html";
+      return;
     }
-  });
+
+    const res = await fetch(`/api/stream-report?testId=${testId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+  if (!res.ok) {
+    alert("Session expired or server error. Please login again.");
+    return;
+  }
 
   const data = await res.json();
-  if (!data.success) return alert("Report not found");
+
+  if (!data.success) {
+    alert("Report not found. Please submit the test first.");
+    return;
+  }
 
   const {
     stream,
@@ -155,10 +171,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     lastGivenAt
   } = data.report;
 
-  behaviorScoreEl.innerText = behaviorScore;
-  mentalScoreEl.innerText = mentalScore;
-  aptitudeScoreEl.innerText = aptitudeScore;
-  totalScoreEl.innerText = totalScore;
+  document.getElementById("behaviorScore").innerText = behaviorScore;
+  document.getElementById("mentalScore").innerText = mentalScore;
+  document.getElementById("aptitudeScore").innerText = aptitudeScore;
+  document.getElementById("totalScore").innerText = totalScore;
 
   let tag = document.getElementById("resultTag");
   let msg = document.getElementById("resultMessage");
@@ -181,7 +197,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `Last given on ${new Date(lastGivenAt).toLocaleDateString("en-IN")}`;
 
   document.getElementById("retakeBtn").onclick = () => {
-    window.location.href = `/${stream}/${testId}.html`;
+    window.location.href = `/Psychometric_Tests/${testId}.html`;
   };
 });
 </script>
