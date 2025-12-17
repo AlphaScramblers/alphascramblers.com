@@ -28,13 +28,11 @@
     text-align: center;
     color: #34495e;
     font-size: 28px;
-    margin-bottom: 5px;
   }
 
   .subtitle {
     text-align: center;
     color: #636e72;
-    font-size: 16px;
     margin-bottom: 25px;
   }
 
@@ -49,20 +47,12 @@
     padding: 20px;
     border-radius: 12px;
     border-left: 6px solid #0984e3;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-  }
-
-  .score-card h3 {
-    margin: 0;
-    font-size: 16px;
-    color: #2d3436;
   }
 
   .score-value {
     font-size: 28px;
     font-weight: 700;
     color: #0984e3;
-    margin-top: 8px;
   }
 
   .result-box {
@@ -74,34 +64,16 @@
     border-left: 8px solid #6c5ce7;
   }
 
-  #resultMessage {
-    font-size: 20px;
-    font-weight: 600;
-    color: #2d3436;
-  }
-
   .tag {
-    display: inline-block;
     padding: 8px 16px;
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: 600;
     border-radius: 10px;
     color: #fff;
+    font-weight: 600;
   }
 
   .green { background: #2ecc71; }
   .orange { background: #f39c12; }
   .red { background: #e74c3c; }
-
-  .charts {
-    margin-top: 40px;
-  }
-
-  canvas {
-    margin: 20px auto;
-    display: block;
-  }
 
   .actions {
     margin-top: 30px;
@@ -114,13 +86,9 @@
     font-weight: 600;
     border-radius: 10px;
     border: none;
-    cursor: pointer;
     background: #0984e3;
     color: #fff;
-  }
-
-  .retake-btn:hover {
-    background: #0766b3;
+    cursor: pointer;
   }
 </style>
 </head>
@@ -131,43 +99,33 @@
   <h1>Stream Selection – Final Report</h1>
   <div class="subtitle">Loading report...</div>
 
-  <!-- Scores -->
   <div class="score-section">
     <div class="score-card">
-      <h3>Behavior Score</h3>
+      <h3>Behavior</h3>
       <div class="score-value" id="behaviorScore">0</div>
     </div>
-
     <div class="score-card">
-      <h3>Mental Ability Score</h3>
+      <h3>Mental</h3>
       <div class="score-value" id="mentalScore">0</div>
     </div>
-
     <div class="score-card">
-      <h3>Aptitude Score</h3>
+      <h3>Aptitude</h3>
       <div class="score-value" id="aptitudeScore">0</div>
     </div>
-
-    <div class="score-card" style="border-left-color:#2ecc71;">
-      <h3>Total Score</h3>
+    <div class="score-card">
+      <h3>Total</h3>
       <div class="score-value" id="totalScore">0</div>
     </div>
   </div>
 
-  <!-- Result -->
   <div class="result-box">
-    <div id="resultMessage">—</div>
-    <div class="tag" id="resultTag">—</div>
+    <div id="resultMessage"></div>
+    <div class="tag" id="resultTag"></div>
   </div>
 
-  <!-- Charts -->
-  <div class="charts">
-    <h2 style="text-align:center;">Score Distribution</h2>
-    <canvas id="pieChart"></canvas>
-    <canvas id="barChart"></canvas>
-  </div>
+  <canvas id="pieChart"></canvas>
+  <canvas id="barChart"></canvas>
 
-  <!-- Actions -->
   <div class="actions">
     <button class="retake-btn" id="retakeBtn">Retake Test</button>
   </div>
@@ -176,110 +134,55 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
 
-  const params = new URLSearchParams(window.location.search);
-  const testId = params.get("testId");
+  const testId = new URLSearchParams(window.location.search).get("testId");
+  if (!testId) return alert("Invalid report");
 
-  if (!testId) {
-    alert("Invalid report link");
-    return;
+  const res = await fetch(`/api/stream-report?testId=${testId}`, {
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    }
+  });
+
+  const data = await res.json();
+  if (!data.success) return alert("Report not found");
+
+  const {
+    stream,
+    aptitudeScore,
+    behaviorScore,
+    mentalScore,
+    totalScore,
+    lastGivenAt
+  } = data.report;
+
+  behaviorScoreEl.innerText = behaviorScore;
+  mentalScoreEl.innerText = mentalScore;
+  aptitudeScoreEl.innerText = aptitudeScore;
+  totalScoreEl.innerText = totalScore;
+
+  let tag = document.getElementById("resultTag");
+  let msg = document.getElementById("resultMessage");
+
+  if (totalScore <= 40) {
+    msg.innerText = "Not suitable for this stream.";
+    tag.className = "tag red";
+    tag.innerText = "Not Suitable";
+  } else if (totalScore <= 70) {
+    msg.innerText = "Average suitability.";
+    tag.className = "tag orange";
+    tag.innerText = "Average";
+  } else {
+    msg.innerText = "Highly suitable!";
+    tag.className = "tag green";
+    tag.innerText = "Highly Suitable";
   }
 
-  try {
-    const res = await fetch(`/api/get-stream-report?testId=${testId}`, {
-      headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
-      }
-    });
+  document.querySelector(".subtitle").innerText =
+    `Last given on ${new Date(lastGivenAt).toLocaleDateString("en-IN")}`;
 
-    const data = await res.json();
-    if (!data.success) {
-      alert("Report not found");
-      return;
-    }
-
-    const {
-      stream,
-      aptitudeScore,
-      behaviorScore,
-      mentalScore,
-      totalScore,
-      lastGivenAt
-    } = data.report;
-
-    // Scores
-    document.getElementById("behaviorScore").innerText = behaviorScore;
-    document.getElementById("mentalScore").innerText = mentalScore;
-    document.getElementById("aptitudeScore").innerText = aptitudeScore;
-    document.getElementById("totalScore").innerText = totalScore;
-
-    // Result logic
-    let message = "";
-    let tag = document.getElementById("resultTag");
-
-    if (totalScore <= 40) {
-      message = "You are NOT suitable for this stream.";
-      tag.innerText = "Not Suitable";
-      tag.className = "tag red";
-    } else if (totalScore <= 70) {
-      message = "You have AVERAGE suitability. You MAY take this stream.";
-      tag.innerText = "Average Suitable";
-      tag.className = "tag orange";
-    } else {
-      message = "You are HIGHLY SUITABLE for this stream!";
-      tag.innerText = "Highly Suitable";
-      tag.className = "tag green";
-    }
-
-    document.getElementById("resultMessage").innerText = message;
-
-    // Date
-    const date = new Date(lastGivenAt);
-    document.querySelector(".subtitle").innerText =
-      `Last given on ${date.toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-      })}`;
-
-    // Charts
-    new Chart(document.getElementById("pieChart"), {
-      type: "pie",
-      data: {
-        labels: ["Behavior", "Mental Ability", "Aptitude"],
-        datasets: [{
-          data: [behaviorScore, mentalScore, aptitudeScore],
-          backgroundColor: ["#0984e3", "#6c5ce7", "#00b894"]
-        }]
-      }
-    });
-
-    new Chart(document.getElementById("barChart"), {
-      type: "bar",
-      data: {
-        labels: ["Behavior", "Mental", "Aptitude"],
-        datasets: [{
-          label: "Scores",
-          data: [behaviorScore, mentalScore, aptitudeScore],
-          backgroundColor: ["#74b9ff", "#a29bfe", "#55efc4"],
-          borderRadius: 8
-        }]
-      },
-      options: {
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
-    });
-
-    // Retake
-    document.getElementById("retakeBtn").onclick = () => {
-      window.location.href = `/tests/${testId}.html`;
-    };
-
-  } catch (err) {
-    console.error(err);
-    alert("Failed to load report");
-  }
+  document.getElementById("retakeBtn").onclick = () => {
+    window.location.href = `/${stream}/${testId}.html`;
+  };
 });
 </script>
 
