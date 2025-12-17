@@ -362,13 +362,14 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({
           stream,
           testId,
-          aptitudeScore,
-          behaviorScore,
-          mentalScore,
-          totalScore
+          scores: [
+            { section: "aptitude", score: aptitudeScore },
+            { section: "behavior", score: behaviorScore },
+            { section: "mental", score: mentalScore }
+          ]
         })
       });
-
+      
       const data = await res.json();
 
       if (!res.ok || !data.success) {

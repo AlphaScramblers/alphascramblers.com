@@ -21,7 +21,7 @@
     background: #fff;
     padding: 30px;
     border-radius: 16px;
-    box-shadow: 0 5px 22px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 22px rgba(0,0,0,0.1);
   }
 
   h1 {
@@ -38,7 +38,7 @@
 
   .score-section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
     gap: 20px;
   }
 
@@ -69,11 +69,19 @@
     border-radius: 10px;
     color: #fff;
     font-weight: 600;
+    display: inline-block;
+    margin-top: 10px;
   }
 
   .green { background: #2ecc71; }
   .orange { background: #f39c12; }
   .red { background: #e74c3c; }
+
+  canvas {
+    margin: 30px auto;
+    display: block;
+    max-width: 400px;
+  }
 
   .actions {
     margin-top: 30px;
@@ -135,66 +143,81 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
   const testId = new URLSearchParams(window.location.search).get("testId");
-  if (!testId) return alert("Invalid report");
+  const token = localStorage.getItem("token");
 
- const token = localStorage.getItem("token");
-
-    if (!token) {
-      alert("Please login again to view your report.");
-      window.location.href = "/login.html";
-      return;
-    }
-
-    const res = await fetch(`/api/stream-report?testId=${testId}`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
-  if (!res.ok) {
-    alert("Session expired or server error. Please login again.");
+  if (!testId || !token) {
+    alert("Please login again.");
+    window.location.href = "/login.html";
     return;
   }
+
+  const res = await fetch(`/api/stream-report?testId=${testId}`, {
+    headers: { "Authorization": `Bearer ${token}` }
+  });
 
   const data = await res.json();
-
   if (!data.success) {
-    alert("Report not found. Please submit the test first.");
+    alert("Report not found");
     return;
   }
 
-  const {
-    stream,
-    aptitudeScore,
-    behaviorScore,
-    mentalScore,
-    totalScore,
-    lastGivenAt
-  } = data.report;
+  const { stream, scores, totalScore, lastGivenAt } = data.report;
+
+  const behaviorScore = scores.find(s => s.section === "behavior")?.score || 0;
+  const mentalScore   = scores.find(s => s.section === "mental")?.score || 0;
+  const aptitudeScore = scores.find(s => s.section === "aptitude")?.score || 0;
 
   document.getElementById("behaviorScore").innerText = behaviorScore;
   document.getElementById("mentalScore").innerText = mentalScore;
   document.getElementById("aptitudeScore").innerText = aptitudeScore;
   document.getElementById("totalScore").innerText = totalScore;
 
-  let tag = document.getElementById("resultTag");
-  let msg = document.getElementById("resultMessage");
+  document.querySelector(".subtitle").innerText =
+    `Last given on ${new Date(lastGivenAt).toLocaleDateString("en-IN")}`;
+
+  const msg = document.getElementById("resultMessage");
+  const tag = document.getElementById("resultTag");
 
   if (totalScore <= 40) {
     msg.innerText = "Not suitable for this stream.";
-    tag.className = "tag red";
     tag.innerText = "Not Suitable";
+    tag.className = "tag red";
   } else if (totalScore <= 70) {
     msg.innerText = "Average suitability.";
-    tag.className = "tag orange";
     tag.innerText = "Average";
+    tag.className = "tag orange";
   } else {
     msg.innerText = "Highly suitable!";
-    tag.className = "tag green";
     tag.innerText = "Highly Suitable";
+    tag.className = "tag green";
   }
 
-  document.querySelector(".subtitle").innerText =
-    `Last given on ${new Date(lastGivenAt).toLocaleDateString("en-IN")}`;
+  new Chart(document.getElementById("pieChart"), {
+    type: "pie",
+    data: {
+      labels: ["Behavior", "Mental", "Aptitude"],
+      datasets: [{
+        data: [behaviorScore, mentalScore, aptitudeScore],
+        backgroundColor: ["#0984e3", "#6c5ce7", "#00b894"]
+      }]
+    }
+  });
+
+  new Chart(document.getElementById("barChart"), {
+    type: "bar",
+    data: {
+      labels: ["Behavior", "Mental", "Aptitude"],
+      datasets: [{
+        label: "Scores",
+        data: [behaviorScore, mentalScore, aptitudeScore],
+        backgroundColor: ["#74b9ff", "#a29bfe", "#55efc4"],
+        borderRadius: 8
+      }]
+    },
+    options: {
+      scales: { y: { beginAtZero: true } }
+    }
+  });
 
   document.getElementById("retakeBtn").onclick = () => {
     window.location.href = `/Psychometric_Tests/${testId}.html`;
