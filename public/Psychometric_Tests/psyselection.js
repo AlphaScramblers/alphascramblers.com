@@ -34,3 +34,34 @@ document.addEventListener("click", async function (e) {
     alert("Network error. Please try again.");
   }
 });
+
+document.addEventListener("click", (e) => {
+
+  const btn = e.target.closest(".btn");
+  if (!btn) return;
+
+  if (btn.classList.contains("mtest")) {
+    window.location.href = "/Psychometric_Tests/PCBpsy.html";
+    return;
+  }
+
+  if (btn.classList.contains("nmtest")) {
+    window.location.href = "/Psychometric_Tests/PCMpsy.html";
+    return;
+  }
+
+  if (btn.classList.contains("cwithmtest")) {
+    window.location.href = "/Psychometric_Tests/withmathspsy.html";
+    return;
+  }
+
+  if (btn.classList.contains("cwithoutmtest")) {
+    window.location.href = "/Psychometric_Tests/withoutmathspsy.html";
+    return;
+  }
+
+  if (btn.classList.contains("htest")) {
+    window.location.href = "/Psychometric_Tests/humanitiespsy.html";
+    return;
+  }
+});
