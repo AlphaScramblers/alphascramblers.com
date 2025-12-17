@@ -98,6 +98,9 @@
     color: #fff;
     cursor: pointer;
   }
+  #downloadBtn {
+  background: #2d3436;
+}
 </style>
 </head>
 
@@ -105,6 +108,12 @@
 
 <div class="report-container">
   <h1>Stream Selection – Final Report</h1>
+  <div style="text-align:right; margin-bottom:15px;">
+    <button class="retake-btn" id="downloadBtn">
+      Download Report (PDF)
+    </button>
+  </div>
+
   <div class="subtitle">Loading report...</div>
 
   <div class="score-section">
@@ -236,10 +245,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  window.location.href = `/Psychometric_Tests/${fileName}`;
+  window.location.href = `/Psychometric_Tests/${fileName}?retake=true`;
 };
 });
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+<script>
+document.getElementById("downloadBtn").onclick = () => {
+
+  const report = document.querySelector(".report-container");
+
+  html2pdf().set({
+    margin: 0.5,
+    filename: "Stream_Report.pdf",
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
+  }).from(report).save();
+
+};
+</script>
 </body>
 </html>
