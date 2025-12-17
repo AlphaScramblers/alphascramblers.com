@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("/api/check-payment", {
+      const res = await fetch("../api/check-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -23,9 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // 🔀 Redirect based on payment status
       if (data.paymentDone) {
-        window.location.href = "../Psychometric_Tests/psychomid.html";
+        window.location.href = "psychomid.html";
       } else {
-        window.location.href = "../Psychometric_Tests/beforepg.html";
+        window.location.href = "beforepg.html";
       }
 
     } catch (err) {
