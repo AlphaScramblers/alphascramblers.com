@@ -238,6 +238,43 @@
 //   });
 
 // });
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const stream = document.body.dataset.stream;
+  const testId = document.body.dataset.testId;
+  const token = localStorage.getItem("token");
+
+  if (!stream || !testId) return;
+
+  if (!token) {
+    alert("Please login first");
+    window.location.href = "/login.html";
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/stream-report?testId=${testId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    // ✅ TEST ALREADY GIVEN → REDIRECT TO REPORT
+    if (data.success) {
+      window.location.href =
+        `/Psychometric_Tests/stream-report.html?testId=${testId}`;
+      return;
+    }
+
+    // ❌ If not given → test continues normally
+
+  } catch (err) {
+    console.error("Test check failed", err);
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =======================
@@ -369,7 +406,7 @@ document.addEventListener("DOMContentLoaded", () => {
           ]
         })
       });
-      
+
       const data = await res.json();
 
       if (!res.ok || !data.success) {
