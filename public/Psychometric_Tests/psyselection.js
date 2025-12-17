@@ -1,37 +1,36 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("click", async function (e) {
 
-  const testBtn = document.querySelector(".psycho-test-1");
-  if (!testBtn) return;
+  const btn = e.target.closest(".psycho-test-1");
+  if (!btn) return;
 
-  testBtn.addEventListener("click", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const res = await fetch("../api/check-payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
+  const token = localStorage.getItem("token"); // already logged in
 
-      const data = await res.json();
+  try {
+    const res = await fetch("/api/check-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ token })
+    });
 
-      if (!data.success) {
-        alert("Something went wrong. Please try again.");
-        return;
-      }
+    const data = await res.json();
 
-      // 🔀 Redirect based on payment status
-      if (data.paymentDone) {
-        window.location.href = "psychomid.html";
-      } else {
-        window.location.href = "beforepg.html";
-      }
-
-    } catch (err) {
-      console.error(err);
-      alert("Network error. Please try again.");
+    if (!data.success) {
+      alert("Something went wrong. Please refresh the page.");
+      return;
     }
-  });
 
+    if (data.paymentDone) {
+      window.location.href = "/Psychometric_Tests/psychomid.html";
+    } else {
+      window.location.href = "/Psychometric_Tests/beforepg.html";
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Network error. Please try again.");
+  }
 });
