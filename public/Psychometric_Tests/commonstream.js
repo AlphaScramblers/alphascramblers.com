@@ -371,9 +371,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error("Failed to save report, redirecting anyway");
     }
-
-    // Redirect to unified report page
-    window.location.href = `/stream-report.html?testId=${testId}`;
+    window.location.href = `/Psychometric_Tests/stream-report.html?testId=${testId}`;
   });
 
 });
