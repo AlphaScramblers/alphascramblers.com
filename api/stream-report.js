@@ -1,45 +1,23 @@
-import mongoose from "mongoose";
+import { MongoClient } from "mongodb";
 import jwt from "jsonwebtoken";
+
+const uri = process.env.MONGODB_URI;
+let client;
+let clientPromise;
 
 /* ======================
    MongoDB Connection
 ====================== */
-if (!mongoose.connection.readyState) {
-  await mongoose.connect(process.env.MONGODB_URI);
-}
+async function connectToDatabase() {
+  if (client) return client;
 
-/* ======================
-   Schema
-====================== */
-const StreamReportSchema = new mongoose.Schema({
-  userId: mongoose.Schema.Types.ObjectId,
-
-  username: String,
-  email: String,
-  mobile: String,
-
-  stream: String,
-  testId: String,
-
-  aptitudeScore: Number,
-  behaviorScore: Number,
-  mentalScore: Number,
-  totalScore: Number,
-
-  lastGivenAt: {
-    type: Date,
-    default: Date.now
+  if (!clientPromise) {
+    clientPromise = MongoClient.connect(uri);
   }
-});
 
-StreamReportSchema.index(
-  { userId: 1, testId: 1 },
-  { unique: true }
-);
-
-const StreamReport =
-  mongoose.models.StreamReport ||
-  mongoose.model("StreamReport", StreamReportSchema);
+  client = await clientPromise;
+  return client;
+}
 
 /* ======================
    API HANDLER
@@ -47,9 +25,14 @@ const StreamReport =
 export default async function handler(req, res) {
   try {
     const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ success: false });
+    if (!token) {
+      return res.status(401).json({ success: false, message: "No token" });
+    }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const client = await connectToDatabase();
+    const db = client.db("myDatabase"); // change if needed
+    const collection = db.collection("streamReports");
 
     /* ======================
        SAVE / UPDATE REPORT
@@ -64,10 +47,11 @@ export default async function handler(req, res) {
         totalScore
       } = req.body;
 
-      await StreamReport.updateOne(
+      await collection.updateOne(
         { userId: decoded.id, testId },
         {
           $set: {
+            userId: decoded.id,
             username: decoded.username,
             email: decoded.email,
             mobile: decoded.mobile,
@@ -77,13 +61,14 @@ export default async function handler(req, res) {
             behaviorScore,
             mentalScore,
             totalScore,
+
             lastGivenAt: new Date()
           }
         },
         { upsert: true }
       );
 
-      return res.json({ success: true });
+      return res.status(200).json({ success: true });
     }
 
     /* ======================
@@ -92,7 +77,7 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
       const { testId } = req.query;
 
-      const report = await StreamReport.findOne({
+      const report = await collection.findOne({
         userId: decoded.id,
         testId
       });
@@ -109,8 +94,12 @@ export default async function handler(req, res) {
 
     return res.status(405).json({ success: false });
 
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ success: false });
+  } catch (error) {
+    console.error("Stream report API error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message
+    });
   }
 }
