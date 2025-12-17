@@ -321,140 +321,49 @@
             </div>
         </div>
     </main>    
-<script src="../Psychometric_Tests/psy.js"></script>
+<script src="../Psychometric_Tests/PCBpsy.js"></script>
 <script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+
   const submission = document.querySelector(".subbtn1");
 
-  submission.addEventListener("click", async (e) => {
+  submission.addEventListener("click", (e) => {
     e.preventDefault();
 
-    // ---------------- SCORES ----------------
-    let scienceScore = 0, commerceScore = 0, humanitiesScore = 0;
-    let behaviorScience = 0, behaviorCommerce = 0, behaviorHumanities = 0;
-    let mentalScience = 0, mentalCommerce = 0, mentalHumanities = 0;
     let aptitudeScore = 0;
+    let behaviorScore = 0;
+    let mentalScore = 0;
 
-    const allQuesTextDivs = document.querySelectorAll(".ques");
-
-    allQuesTextDivs.forEach((quesDiv) => {
-      const questionContainer = quesDiv.closest(".question");
-      const selectedRadio = questionContainer.querySelector('input[type="radio"]:checked');
-      if (!selectedRadio) return;
-
-      const value = parseInt(selectedRadio.value);
-      const classes = questionContainer.classList;
-
-      // STREAM SPECIFIC QUESTIONS
-      if (classes.contains("science")) {
-        scienceScore += value;
-        if (questionContainer.closest(".behaviour")) behaviorScience += value;
-        if (questionContainer.closest(".mental")) mentalScience += value;
-      }
-
-      if (classes.contains("commerce")) {
-        commerceScore += value;
-        if (questionContainer.closest(".behaviour")) behaviorCommerce += value;
-        if (questionContainer.closest(".mental")) mentalCommerce += value;
-      }
-
-      if (classes.contains("humanities")) {
-        humanitiesScore += value;
-        if (questionContainer.closest(".behaviour")) behaviorHumanities += value;
-        if (questionContainer.closest(".mental")) mentalHumanities += value;
-      }
-
-      // QUESTIONS THAT AFFECT ALL STREAMS
-      if (classes.contains("all")) {
-        scienceScore += value;
-        commerceScore += value;
-        humanitiesScore += value;
-
-        if (questionContainer.closest(".behaviour")) {
-          behaviorScience += value;
-          behaviorCommerce += value;
-          behaviorHumanities += value;
-        }
-        if (questionContainer.closest(".mental")) {
-          mentalScience += value;
-          mentalCommerce += value;
-          mentalHumanities += value;
-        }
-      }
-
-      // APTITUDE QUESTIONS
-      if (classes.contains("apt")) {
-        aptitudeScore += value;
-      }
+    const aptitudeQuestions = document.querySelectorAll(".Aptitude .question");
+    aptitudeQuestions.forEach(q => {
+        const selected = q.querySelector("input:checked");
+        if (selected) aptitudeScore += Number(selected.value);
     });
 
-    // FINAL STREAM SCORES
-    const finalScienceScore = behaviorScience + mentalScience + aptitudeScore;
-    const finalCommerceScore = behaviorCommerce + mentalCommerce + aptitudeScore;
-    const finalHumanitiesScore = behaviorHumanities + mentalHumanities + aptitudeScore;
+    const behaviorQuestions = document.querySelectorAll(".behaviour .question");
+    behaviorQuestions.forEach(q => {
+        const selected = q.querySelector("input:checked");
+        if (selected) behaviorScore += Number(selected.value);
+    });
 
-    const streamScores = {
-      Science: finalScienceScore,
-      Commerce: finalCommerceScore,
-      Humanities: finalHumanitiesScore,
-    };
+    const mentalQuestions = document.querySelectorAll(".mental .question");
+    mentalQuestions.forEach(q => {
+        const selected = q.querySelector("input:checked");
+        if (selected) mentalScore += Number(selected.value);
+    });
 
-    const maxStream = Object.keys(streamScores).reduce((a, b) =>
-      streamScores[a] > streamScores[b] ? a : b
-    );
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Token missing");
+    const totalScore = aptitudeScore + behaviorScore + mentalScore;
 
-      const profileRes = await fetch("/api/profile", {
-        headers: { Authorization: "Bearer " + token },
-      });
+    localStorage.setItem("PCMaptitudeScore", aptitudeScore);
+    localStorage.setItem("PCMbehaviorScore", behaviorScore);
+    localStorage.setItem("PCMmentalScore", mentalScore);
+    localStorage.setItem("PCMtotalScore", totalScore);
 
-      const profileData = await profileRes.json();
-      if (!profileData.success) throw new Error("Could not load profile");
+    window.location.href = "PCBstreamreport.html";
 
-      const id = profileData.profile.id;
-      const name = profileData.profile.firstName + " " + profileData.profile.lastName;
-      const email = profileData.profile.email;
-      const saveRes = await fetch("/api/save-result", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({
-          id,
-          name,
-          email,
-          results: {
-            scienceScore: finalScienceScore,
-            commerceScore: finalCommerceScore,
-            humanitiesScore: finalHumanitiesScore,
-
-            behaviorScience,
-            behaviorCommerce,
-            behaviorHumanities,
-
-            mentalScience,
-            mentalCommerce,
-            mentalHumanities,
-
-            aptitudeScore,
-            maxStream
-          }
-        }),
-      });
-
-      if (!saveRes.ok) {
-        console.error("Failed to save results in DB:", saveRes.status);
-      }
-
-    } catch (err) {
-      console.error("Error in saving results:", err);
-    }
-    window.location.href = "../Psychometric_Tests/afterpg.html";
   });
+
 });
 </script>
 <script>
