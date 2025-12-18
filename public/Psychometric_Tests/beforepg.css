@@ -19,6 +19,7 @@ h3{
 .topper{
     width: 100%;
     text-align: center;
+    margin-bottom: 0%;
 }
 /* .tpc{
     border: 1px solid black;
@@ -33,7 +34,9 @@ h3{
     height: 56vh;
     overflow-y: scroll;
     padding: 0.5%;
-    border-radius: 25px;
+    border-radius: 10px;
+    border-color: black;
+
 }
 .ts{
     margin-top: 2vh;
