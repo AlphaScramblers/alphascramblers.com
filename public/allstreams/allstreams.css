@@ -47,8 +47,6 @@ body{
     padding: 1vw;
     width: 42vw;
     background-color: 	#e2effa;
-    border-radius: 5%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 .s7{
     margin: 1vw;
@@ -56,7 +54,6 @@ body{
     height: 40vh;
     width: 88vw;
     background-color: 	#e2effa;
-    
 }
 .head{
     color: #05445E;
@@ -140,8 +137,6 @@ body{
     padding: 1vw;
     width: 88vw;
     background-color: #e2effa;
-    border-radius: 1.5%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 h3{
     margin-top: 5vh;
