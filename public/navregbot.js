@@ -1,237 +1,220 @@
-  let header = document.querySelector("header");
-  let main = document.querySelector("main");
-  let footer = document.querySelector("footer");
-  let overlay=document.querySelector(".overlay");
-  let bars = document.querySelector(".navcon");
-  let menu = document.querySelector(".navcon-ele");
-  let bottom = document.querySelector(".bottom");
-  let currstat="unvis";
-  let tab = window.matchMedia("(min-width: 700px) and (max-width: 1000px)");
-  let mobile = window.matchMedia("(max-width: 700px)");
-  let lap = window.matchMedia("(min-width: 700px)");
-  window.addEventListener("load", () => {
-      document.querySelector(".preloader").style.display = "none";
-      document.querySelector("header").style.display = "block";
-      document.querySelector("main").style.display = "block";
-      document.querySelector("footer").style.display = "block";
-      button.style.display = "flex";
+/* =========================
+   BASIC ELEMENTS
+========================= */
+const header = document.querySelector("header");
+const main = document.querySelector("main");
+const footer = document.querySelector("footer");
+const overlay = document.querySelector(".overlay");
+const bottom = document.querySelector(".bottom");
+
+const bars = document.querySelector(".navcon");
+const menu = document.querySelector(".navcon-ele");
+const button = document.querySelector(".contactuslogo");
+
+const lap = window.matchMedia("(min-width: 700px)");
+
+let currstat = "unvis";
+
+/* =========================
+   PRELOADER (GO LIVE SAFE)
+========================= */
+function hideLoader() {
+  const preloader = document.querySelector(".preloader");
+  if (!preloader) return;
+
+  preloader.style.opacity = "0";
+  preloader.style.transition = "opacity 0.4s ease";
+
+  setTimeout(() => {
+    preloader.style.display = "none";
+    header.style.display = "block";
+    main.style.display = "block";
+    footer.style.display = "block";
+    if (button) button.style.display = "flex";
+  }, 400);
+}
+
+/* Fires in Go Live */
+document.addEventListener("DOMContentLoaded", hideLoader);
+
+/* Fires in production */
+window.addEventListener("load", hideLoader);
+
+/* Absolute failsafe */
+setTimeout(hideLoader, 2000);
+
+/* =========================
+   MOBILE NAV
+========================= */
+if (bars && menu) {
+  bars.addEventListener("click", () => {
+    currstat === "unvis"
+      ? (currstat = "vis",
+        menu.classList.replace("navcon-ele", "navcon-ele-new"))
+      : (currstat = "unvis",
+        menu.classList.replace("navcon-ele-new", "navcon-ele"));
   });
-  bars.addEventListener("click",()=>{
-  if(currstat=="unvis"){
-      currstat="vis"
-      menu.classList.remove("navcon-ele");
-      menu.classList.add("navcon-ele-new");
-  }
-  else{
-      currstat="unvis"
-      menu.classList.remove("navcon-ele-new");
-      menu.classList.add("navcon-ele");
-  }
-  })
+}
 
-  let cross= document.querySelector(".cross")
-  let alphalogin = document.querySelector(".alphalogin");
-  let reg = document.querySelectorAll(".r");
-  reg.forEach(r=>{
-      r.addEventListener("click",()=>{
-      alphalogin.classList.remove("alphadis");
-      header.style.opacity="1";
-      main.style.opacity="0.3";
-      bottom.style.opacity="0.3";
-      overlay.classList.add("overlay1");
-      document.body.style.overflow="hidden";
-      document.documentElement.style.overflow = "hidden";
-  })
-  })
-  cross.addEventListener("click",()=>{
-      alphalogin.classList.add("alphadis");
-      header.style.opacity="1";
-      main.style.opacity="1";
-      bottom.style.opacity="1";
-      overlay.classList.remove("overlay1");
-      document.body.style.overflow="auto";
-      document.documentElement.style.overflow = "auto";
-  })
-  let calcScrollValue = () => {
-      let scrollProgress = document.querySelector(".progress");
-      let progressValue = document.querySelector(".progress-value");
-      let pos = document.documentElement.scrollTop;
-      let calcHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      let scrollValue = Math.round((pos * 100) / calcHeight);
-      if(lap.matches){
-          if (scrollY>innerHeight/4) {
-          scrollProgress.style.display = "flex";
-          }
-          if(scrollY<innerHeight/innerHeight){
-          scrollProgress.style.display = "none";    
-          }
-          scrollProgress.addEventListener("click",()=>{
-          document.documentElement.scrollTop = 0;
-          })
-          scrollProgress.style.background = `conic-gradient(#4d5bf9 ${scrollValue}%, #d7d7d7 ${scrollValue}%)`;
-      }
-      else{
-          scrollProgress.style.display = "none";
-      }
-  }
-  window.onscroll = calcScrollValue;
-  window.onload = calcScrollValue;
-  let contactus=document.querySelector(".contactus")
-  let contactus1=document.querySelector(".cntus")
-  let contactus2=document.querySelector(".cntus1")
-  let crossct = document.querySelector(".crossct")
-  crossct.addEventListener("click",()=>{
-      contactus.classList.add("dis");
-      header.style.opacity="1";
-      main.style.opacity="1";
-      bottom.style.opacity="1";
-      overlay.classList.remove("overlay1");
-  })
-  let button = document.querySelector(".contactuslogo");
-  let offsetX;
-  let offsetY;
-  let isdragging = false;
-  let hasmoved= false;
-  button.addEventListener("click",(e)=>{
-      if(hasmoved){
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          hasmoved=false;
-          return;
-      }
-      contactus.classList.remove("dis");
-      header.style.opacity="1";
-      main.style.opacity="0.3";
-      bottom.style.opacity="0.3";
-      overlay.classList.add("overlay1");
-  })
-  contactus1.addEventListener("click",(e)=>{
-      if(hasmoved){
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          hasmoved=false;
-          return;
-      }
-      contactus.classList.remove("dis");
-      header.style.opacity="1";
-      main.style.opacity="0.3";
-      bottom.style.opacity="0.3";
-      overlay.classList.add("overlay1");
-  })
-  contactus2.addEventListener("click",(e)=>{
-      if(hasmoved){
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          hasmoved=false;
-          return;
-      }
-      contactus.classList.remove("dis");
-      header.style.opacity="1";
-      main.style.opacity="0.3";
-      bottom.style.opacity="0.3";
-      overlay.classList.add("overlay1");
-  })
-  if(window.matchMedia("(pointer: coarse)").matches){
-      console.log("Touch device");
-  }
-  else{
-      button.addEventListener("mousedown",(e)=>{
-          hasmoved=false
-          isdragging = true;
-          offsetX = e.clientX - button.offsetLeft;
-          offsetY = e.clientY - button.offsetTop;
-      
-          button.style.cursor = "grabbing"
-      })
-      document.addEventListener("mousemove",(e)=>{
-          if(isdragging){
-              hasmoved=true;
-              let x = e.clientX - offsetX;
-              let y = e.clientY - offsetY;
-      
-              button.style.top = y + "px"
-              button.style.left = x + "px"
-          }
-      })
-      document.addEventListener("mouseup",(e)=>{
-          isdragging = false;
-          button.style.cursor = "pointer"
-          hasmoved = false    
-          let screenmiddle = window.innerWidth/2;
-          let rect = button.getBoundingClientRect();
-          if(rect.left<screenmiddle){
-              button.style.left = "10px"
-          }
-          else{
-              button.style.left = (window.innerWidth-rect.width-20) + "px";
-          }
-      })
-  }
-  let talk = document.querySelector(".ct");
-  let namect = document.querySelector("#namect");
-  let mailct = document.querySelector("#mailct");
-  let contactct = document.querySelector("#contactct");
-  let cloader = document.querySelector(".contactloader");
-  document.getElementById("contactForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      cloader.style.display="flex";
-      contactus.style.opacity="0.3";
-      header.style.opacity="0";
-      main.style.opacity="0";
-      bottom.style.opacity="0";
-      const formData = {
-        name: document.getElementById("namect").value,
-        mail: document.getElementById("mailct").value,
-        contact: document.getElementById("contactct").value
-      };
-      
-      try{
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      });
+/* =========================
+   LOGIN / SIGNUP MODAL
+========================= */
+const cross = document.querySelector(".cross");
+const alphalogin = document.querySelector(".alphalogin");
+const regBtns = document.querySelectorAll(".r");
 
-      const data = await res.json();
-      if (data.success) {
-        talk.innerHTML="Query Submitted";
-        talk.disabled = true;
-        namect.disabled = true;
-        mailct.disabled = true;
-        contactct.disabled = true;
-      } else {
-        alert("❌ Error: " + data.error);
-      }
-      }
-      catch (err) {
-          alert("❌ Something went wrong.");
-      } 
-      finally {
-          cloader.style.display = "none";
-          contactus.classList.add("dis");
-          header.style.opacity="1";
-          main.style.opacity="1";
-          bottom.style.opacity="1";
-          overlay.classList.remove("overlay1");
-          contactus.style.opacity="1"
-      }
+regBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    alphalogin?.classList.remove("alphadis");
+    main.style.opacity = bottom.style.opacity = "0.3";
+    overlay?.classList.add("overlay1");
+    document.body.style.overflow = "hidden";
   });
-  let loginform = document.querySelector(".loginform");
-  let signup = document.querySelector(".signup");
-  let caa = document.querySelector(".caa");
-  let log = document.querySelector(".log");
-  log.addEventListener("click",()=>{
-      signup.classList.add("signdis");
-      loginform.classList.remove("logdis");
-      loginform.style.display="flex"
-  })
-  caa.addEventListener("click",()=>{
-      signup.classList.remove("signdis");
-      loginform.classList.add("logdis")
-      loginform.style.display="none"
-  })
+});
 
+cross?.addEventListener("click", () => {
+  alphalogin?.classList.add("alphadis");
+  main.style.opacity = bottom.style.opacity = "1";
+  overlay?.classList.remove("overlay1");
+  document.body.style.overflow = "auto";
+});
 
+/* =========================
+   SCROLL TO TOP PROGRESS
+========================= */
+const scrollProgress = document.querySelector(".progress");
 
+scrollProgress?.addEventListener("click", () => {
+  document.documentElement.scrollTop = 0;
+});
 
- 
+function calcScrollValue() {
+  if (!scrollProgress || !lap.matches) {
+    if (scrollProgress) scrollProgress.style.display = "none";
+    return;
+  }
+
+  const pos = document.documentElement.scrollTop;
+  const height =
+    document.documentElement.scrollHeight -
+    document.documentElement.clientHeight;
+
+  const percent = Math.round((pos * 100) / height);
+
+  scrollProgress.style.display =
+    pos > innerHeight / 4 ? "flex" : "none";
+
+  scrollProgress.style.background =
+    `conic-gradient(#4d5bf9 ${percent}%, #d7d7d7 ${percent}%)`;
+}
+
+window.addEventListener("scroll", calcScrollValue);
+window.addEventListener("load", calcScrollValue);
+
+/* =========================
+   CONTACT MODAL
+========================= */
+const contactus = document.querySelector(".contactus");
+const contactBtns = document.querySelectorAll(".cntus, .cntus1");
+const crossct = document.querySelector(".crossct");
+
+contactBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    contactus?.classList.remove("dis");
+    main.style.opacity = bottom.style.opacity = "0.3";
+    overlay?.classList.add("overlay1");
+  });
+});
+
+crossct?.addEventListener("click", () => {
+  contactus?.classList.add("dis");
+  main.style.opacity = bottom.style.opacity = "1";
+  overlay?.classList.remove("overlay1");
+});
+
+/* =========================
+   DRAGGABLE CONTACT BUTTON
+========================= */
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+if (button && !window.matchMedia("(pointer: coarse)").matches) {
+  button.addEventListener("mousedown", e => {
+    isDragging = true;
+    offsetX = e.clientX - button.offsetLeft;
+    offsetY = e.clientY - button.offsetTop;
+    button.style.cursor = "grabbing";
+  });
+
+  document.addEventListener("mousemove", e => {
+    if (!isDragging) return;
+    button.style.left = e.clientX - offsetX + "px";
+    button.style.top = e.clientY - offsetY + "px";
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (!isDragging) return;
+    isDragging = false;
+    button.style.cursor = "pointer";
+
+    const mid = window.innerWidth / 2;
+    const rect = button.getBoundingClientRect();
+    button.style.left =
+      rect.left < mid ? "10px" : `${window.innerWidth - rect.width - 20}px`;
+  });
+}
+
+/* =========================
+   CONTACT FORM SUBMIT
+========================= */
+const contactForm = document.getElementById("contactForm");
+const cloader = document.querySelector(".contactloader");
+
+contactForm?.addEventListener("submit", async e => {
+  e.preventDefault();
+  cloader.style.display = "flex";
+
+  const data = {
+    name: namect.value,
+    mail: mailct.value,
+    contact: contactct.value
+  };
+
+  try {
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+    if (!result.success) throw new Error(result.error);
+
+  } catch {
+    alert("❌ Something went wrong.");
+  } finally {
+    cloader.style.display = "none";
+    contactus.classList.add("dis");
+    main.style.opacity = bottom.style.opacity = "1";
+    overlay.classList.remove("overlay1");
+  }
+});
+
+/* =========================
+   LOGIN / SIGNUP TOGGLE
+========================= */
+const loginform = document.querySelector(".loginform");
+const signup = document.querySelector(".signup");
+const caa = document.querySelector(".caa");
+const log = document.querySelector(".log");
+
+log?.addEventListener("click", () => {
+  signup.classList.add("signdis");
+  loginform.style.display = "flex";
+});
+
+caa?.addEventListener("click", () => {
+  signup.classList.remove("signdis");
+  loginform.style.display = "none";
+});
