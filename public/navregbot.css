@@ -13,7 +13,7 @@ html,body{
 body{
     min-height: 100vh;
 }
-header{
+/* header{
     display: none;
 }
 main{
@@ -21,7 +21,7 @@ main{
 }
 footer{
     display: none;
-}
+} */
 .preloader{
     top: 0;
     left: 0;
