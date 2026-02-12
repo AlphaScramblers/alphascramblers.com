@@ -8,7 +8,8 @@ const nextBtn = document.querySelector(".school-next");
 let schoolIndex = 0;
 
 function updateSchoolSlider() {
-    schoolsTrack.style.transform = `translateX(-${schoolIndex * 100}%)`;
+    const slideWidth = schoolSlides[0].offsetWidth;
+    schoolsTrack.style.transform = `translateX(-${schoolIndex * slideWidth}px)`;
 }
 
 nextBtn.addEventListener("click", () => {
