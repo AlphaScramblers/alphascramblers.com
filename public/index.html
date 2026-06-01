@@ -38,12 +38,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
 </head>
+<!-- ChatAgent Widget -->
 <script src="https://chatbot-gurp.onrender.com/widget/chat-widget.js" defer></script>
 <script defer>
   document.addEventListener("DOMContentLoaded", function() {
     ChatWidget.init({
       websiteId: "alphascramblers",
-      apiUrl: "https://chatbot-gurp.onrender.com"
+      apiUrl: "https://chatbot-gurp.onrender.com",
+      title: "AlphaScramblers",
+      welcomeMessage: "Hi! I can answer questions about AlphaScramblers. What would you like to know?",
+      primaryColor: "#6c63ff"
     });
   });
 </script>
