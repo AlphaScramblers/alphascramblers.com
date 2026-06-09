@@ -42,120 +42,143 @@
          SESSION BANNER STYLES — AlphaScramblers Admin
     ═══════════════════════════════════════════════ -->
     <style>
+    /* ── BANNER WRAPPER ── */
     #as-session-section {
         display: none;
-        padding: 0 24px;
-        margin: 28px auto;
-        max-width: 1100px;
+        padding: 0 30px;
+        margin: 0 auto 10px auto;
+        max-width: 1200px;
     }
     #as-session-section.as-visible {
         display: block;
     }
+
+    /* ── BANNER CARD — white, blue left border, matches site ── */
     #as-banner {
-        background: linear-gradient(135deg, #1a1e28 0%, #13161e 100%);
-        border: 1px solid rgba(124, 111, 255, 0.4);
-        border-radius: 14px;
-        padding: 20px 24px;
+        background: #ffffff;
+        border: 1.5px solid #e0e7f0;
+        border-left: 5px solid #1a56db;
+        border-radius: 12px;
+        padding: 18px 24px;
         display: flex;
         align-items: center;
         gap: 18px;
         flex-wrap: wrap;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 4px 24px rgba(124, 111, 255, 0.12);
+        box-shadow: 0 2px 16px rgba(26, 86, 219, 0.08);
     }
-    #as-banner::before {
+
+    /* blue glow top-right */
+    #as-banner::after {
         content: '';
         position: absolute;
-        top: -40px; right: -40px;
-        width: 180px; height: 180px;
-        background: radial-gradient(circle, rgba(124,111,255,.15) 0%, transparent 70%);
+        top: -30px; right: -30px;
+        width: 140px; height: 140px;
+        background: radial-gradient(circle, rgba(26,86,219,.06) 0%, transparent 70%);
         pointer-events: none;
     }
+
+    /* animated blue dot */
     .as-pulse {
-        width: 11px; height: 11px;
+        width: 10px; height: 10px;
         border-radius: 50%;
-        background: #7c6fff;
+        background: #1a56db;
         flex-shrink: 0;
         animation: as-pulse 2s infinite;
     }
     @keyframes as-pulse {
         0%, 100% { opacity: 1; transform: scale(1); }
-        50%       { opacity: .5; transform: scale(1.3); }
+        50%       { opacity: .45; transform: scale(1.35); }
     }
+
+    .as-icon {
+        width: 42px; height: 42px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 20px; flex-shrink: 0;
+    }
+
     .as-info { flex: 1; min-width: 200px; }
+
     .as-eyebrow {
         font-size: 10px;
         text-transform: uppercase;
-        letter-spacing: 1.2px;
-        color: #7c6fff;
+        letter-spacing: 1.3px;
+        color: #1a56db;
         font-weight: 700;
-        margin-bottom: 4px;
-        font-family: 'Inter', sans-serif;
+        margin-bottom: 3px;
+        font-family: 'Lato', sans-serif;
     }
     .as-title {
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 700;
-        color: #f0f2f8;
-        margin-bottom: 5px;
+        color: #1a202c;
+        margin-bottom: 4px;
         line-height: 1.3;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Lato', sans-serif;
     }
     .as-meta {
         font-size: 13px;
-        color: #8891a8;
+        color: #6b7280;
         line-height: 1.5;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Lato', sans-serif;
     }
     .as-seats {
         display: inline-block;
         font-size: 11px;
-        background: rgba(79,163,255,.12);
-        color: #4fa3ff;
-        border: 1px solid rgba(79,163,255,.25);
+        background: #eff6ff;
+        color: #1a56db;
+        border: 1px solid #bfdbfe;
         border-radius: 4px;
         padding: 1px 7px;
         margin-left: 6px;
-        font-weight: 600;
+        font-weight: 700;
     }
+
+    /* Book Now button — matches site's green CTA */
     .as-bookbtn {
-        background: #7c6fff;
+        background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%);
         color: #fff;
         border: none;
-        border-radius: 10px;
-        padding: 12px 26px;
+        border-radius: 8px;
+        padding: 12px 28px;
         font-size: 14px;
         font-weight: 700;
         cursor: pointer;
         white-space: nowrap;
-        transition: background .2s, transform .1s;
-        font-family: 'Inter', sans-serif;
+        transition: opacity .2s, transform .1s;
+        font-family: 'Lato', sans-serif;
         flex-shrink: 0;
         letter-spacing: 0.3px;
+        box-shadow: 0 3px 12px rgba(26, 86, 219, 0.3);
     }
-    .as-bookbtn:hover  { background: #a599ff; }
+    .as-bookbtn:hover  { opacity: .88; }
     .as-bookbtn:active { transform: scale(.97); }
 
-    /* ── MODAL ── */
+    /* ── MODAL OVERLAY ── */
     .as-overlay {
         position: fixed; inset: 0;
-        background: rgba(0,0,0,.82);
+        background: rgba(15, 23, 42, 0.75);
         display: flex; align-items: center; justify-content: center;
         z-index: 999999; padding: 20px;
     }
+
+    /* Modal — white card matching site */
     .as-modal {
-        background: #13161e;
-        border: 1px solid rgba(124,111,255,.35);
+        background: #ffffff;
+        border: 1.5px solid #e0e7f0;
         border-radius: 16px;
         padding: 32px;
         width: 100%; max-width: 440px;
-        color: #f0f2f8;
-        font-family: 'Inter', sans-serif;
-        box-shadow: 0 20px 60px rgba(0,0,0,.65);
+        color: #1a202c;
+        font-family: 'Lato', sans-serif;
+        box-shadow: 0 20px 60px rgba(0,0,0,.18);
         animation: as-slidein .22s ease;
     }
     @keyframes as-slidein {
-        from { transform: translateY(16px); opacity: 0; }
+        from { transform: translateY(14px); opacity: 0; }
         to   { transform: translateY(0);    opacity: 1; }
     }
     .as-mhead {
@@ -164,80 +187,104 @@
     }
     .as-meyebrow {
         font-size: 10px; text-transform: uppercase;
-        letter-spacing: 1px; color: #7c6fff;
+        letter-spacing: 1px; color: #1a56db;
         margin-bottom: 4px; font-weight: 700;
+        font-family: 'Lato', sans-serif;
     }
-    .as-mtitle { font-size: 16px; font-weight: 600; line-height: 1.3; }
+    .as-mtitle {
+        font-size: 17px; font-weight: 700;
+        line-height: 1.3; color: #1a202c;
+    }
     .as-mclose {
-        background: none; border: none; color: #555e75;
+        background: none; border: none; color: #9ca3af;
         font-size: 22px; cursor: pointer; padding: 2px;
         line-height: 1; transition: color .15s; flex-shrink: 0;
     }
-    .as-mclose:hover { color: #ff5a5a; }
+    .as-mclose:hover { color: #ef4444; }
+
     .as-err {
         display: none;
-        background: rgba(255,90,90,.1);
-        border: 1px solid rgba(255,90,90,.25);
+        background: #fef2f2;
+        border: 1px solid #fecaca;
         border-radius: 8px; padding: 10px 13px;
-        font-size: 13px; color: #ff5a5a;
+        font-size: 13px; color: #dc2626;
         margin-bottom: 13px; line-height: 1.5;
     }
+
+    /* Inputs — clean white with blue focus */
     .as-fi {
         width: 100%;
-        background: #1a1e28;
-        border: 1px solid rgba(255,255,255,.08);
+        background: #f9fafb;
+        border: 1.5px solid #e5e7eb;
         border-radius: 8px;
         padding: 11px 13px;
-        color: #f0f2f8;
-        font-family: 'Inter', sans-serif;
+        color: #1a202c;
+        font-family: 'Lato', sans-serif;
         font-size: 14px;
         margin-bottom: 10px;
         outline: none;
-        transition: border-color .2s;
+        transition: border-color .2s, box-shadow .2s;
         box-sizing: border-box;
     }
-    .as-fi:focus       { border-color: #7c6fff; }
-    .as-fi::placeholder { color: #555e75; }
+    .as-fi:focus {
+        border-color: #1a56db;
+        box-shadow: 0 0 0 3px rgba(26,86,219,.1);
+        background: #fff;
+    }
+    .as-fi::placeholder { color: #9ca3af; }
     textarea.as-fi { resize: vertical; }
+
     .as-sublabel {
-        font-size: 11px; color: #555e75;
-        margin-bottom: 13px; line-height: 1.55;
+        font-size: 11.5px; color: #9ca3af;
+        margin-bottom: 14px; line-height: 1.6;
+        font-family: 'Lato', sans-serif;
     }
+
+    /* Submit button */
     .as-subbtn {
-        width: 100%; background: #7c6fff; color: #fff;
-        border: none; border-radius: 8px; padding: 12px;
-        font-size: 14px; font-weight: 600; cursor: pointer;
-        font-family: 'Inter', sans-serif; transition: background .2s;
+        width: 100%;
+        background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%);
+        color: #fff; border: none; border-radius: 8px;
+        padding: 12px; font-size: 14px; font-weight: 700;
+        cursor: pointer; font-family: 'Lato', sans-serif;
+        transition: opacity .2s;
+        box-shadow: 0 3px 12px rgba(26,86,219,.25);
     }
-    .as-subbtn:hover    { background: #a599ff; }
-    .as-subbtn:disabled { opacity: .6; cursor: not-allowed; }
+    .as-subbtn:hover    { opacity: .88; }
+    .as-subbtn:disabled { opacity: .55; cursor: not-allowed; }
 
     /* ── SUCCESS ── */
     .as-success {
-        background: #13161e;
-        border: 1px solid rgba(34,200,122,.3);
+        background: #ffffff;
+        border: 1.5px solid #d1fae5;
         border-radius: 16px; padding: 40px 32px;
-        text-align: center; color: #f0f2f8;
-        font-family: 'Inter', sans-serif;
+        text-align: center; color: #1a202c;
+        font-family: 'Lato', sans-serif;
         max-width: 380px; width: 100%;
+        box-shadow: 0 20px 60px rgba(0,0,0,.15);
         animation: as-slidein .22s ease;
     }
     .as-success-ic    { font-size: 48px; margin-bottom: 14px; }
-    .as-success-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
-    .as-success-sub   { font-size: 13px; color: #8891a8; line-height: 1.65; margin-bottom: 20px; }
+    .as-success-title { font-size: 19px; font-weight: 700; margin-bottom: 8px; color: #1a202c; }
+    .as-success-sub   { font-size: 13.5px; color: #6b7280; line-height: 1.7; margin-bottom: 22px; }
     .as-success-close {
-        background: #222637; border: 1px solid rgba(255,255,255,.1);
-        color: #f0f2f8; border-radius: 8px; padding: 9px 22px;
-        font-family: 'Inter', sans-serif; font-size: 13px; cursor: pointer;
+        background: #f3f4f6; border: 1.5px solid #e5e7eb;
+        color: #374151; border-radius: 8px; padding: 9px 24px;
+        font-family: 'Lato', sans-serif; font-size: 13px;
+        cursor: pointer; font-weight: 600;
+        transition: background .15s;
     }
+    .as-success-close:hover { background: #e5e7eb; }
 
-    /* Mobile */
-    @media (max-width: 600px) {
-        #as-session-section { padding: 0 14px; margin: 18px auto; }
-        #as-banner { padding: 16px 16px; gap: 14px; }
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+        #as-session-section { padding: 0 14px; }
+        #as-banner { padding: 15px 15px; gap: 12px; border-left-width: 4px; }
         .as-title  { font-size: 15px; }
-        .as-bookbtn { width: 100%; text-align: center; padding: 11px 16px; }
-        .as-modal   { padding: 24px 18px; }
+        .as-meta   { font-size: 12px; }
+        .as-bookbtn { width: 100%; text-align: center; padding: 11px 16px; margin-top: 4px; }
+        .as-icon   { display: none; }
+        .as-modal  { padding: 24px 16px; }
     }
     </style>
 </head>
@@ -390,8 +437,9 @@
         <div id="as-session-section">
             <div id="as-banner">
                 <div class="as-pulse"></div>
+                <div class="as-icon">🗓️</div>
                 <div class="as-info">
-                    <div class="as-eyebrow">Upcoming Session</div>
+                    <div class="as-eyebrow">📌 Upcoming Session</div>
                     <div class="as-title" id="as-title">Loading…</div>
                     <div class="as-meta"  id="as-meta"></div>
                 </div>
