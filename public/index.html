@@ -838,7 +838,7 @@
     <script type="module">
     import { initializeApp }
       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getDatabase, ref, onValue, push, set, get }
+    import { getDatabase, ref, onValue }
       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
     const FIREBASE_CONFIG = {
@@ -889,14 +889,17 @@
       } catch { return null; }
     }
 
-    // ── Check if user already registered for a session (Firebase) ──
+    // ── Check if user already registered for a session (MongoDB) ──
     async function alreadyRegistered(sessionId, userEmail) {
       try {
-        const snap = await get(ref(db, 'bookings'));
-        if (!snap.val()) return false;
-        return Object.values(snap.val()).some(
-          b => b.sid === sessionId && b.email === userEmail
-        );
+        const token = localStorage.getItem('token');
+        if (!token) return false;
+        const res  = await fetch('/api/get-bookings?sessionId=' + encodeURIComponent(sessionId), {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (!data.success) return false;
+        return (data.registrations || []).some(r => r.email === userEmail);
       } catch { return false; }
     }
 
@@ -1105,31 +1108,45 @@
       btn.textContent = 'Confirming…'; btn.disabled = true; err.style.display = 'none';
 
       try {
-        // Double-check not already registered
-        const done = await alreadyRegistered(session.id, user.email);
-        if (done) {
+        const token = localStorage.getItem('token');
+        if (!token) { openLoginPrompt(); return; }
+
+        const res = await fetch('/api/book-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({
+            sessionId:       session.id,
+            sessionTitle:    session.title,
+            sessionDate:     session.date  || '',
+            sessionTime:     session.time  || '',
+            sessionDuration: session.duration || '',
+            fee:             session.fee   || '0',
+            message:         m
+          })
+        });
+
+        const data = await res.json();
+
+        // Already registered (409) — treat same as success
+        if (res.status === 409 || data.message === 'Already registered') {
           saveBookedLocally(session.id, user.email);
           document.getElementById('as-overlay').remove();
           setRegisteredBtn(document.getElementById('as-bookbtn'));
           return;
         }
 
-        await set(push(ref(db, 'bookings')), {
-          name:    user.firstName + ' ' + user.lastName,
-          email:   user.email,
-          phone:   user.mobileNumber || '',
-          message: m,
-          sid:     session.id,
-          stitle:  session.title,
-          fee:     session.fee || '0',
-          wpAdded: false,
-          at:      new Date().toISOString()
-        });
+        if (!data.success) {
+          err.style.display = 'block';
+          err.textContent = data.message || 'Something went wrong. Please try again.';
+          btn.textContent = 'Confirm Registration →'; btn.disabled = false;
+          return;
+        }
 
-        // Save to localStorage per user — banner shows "registered" instantly on every future visit
+        // ── Success ──
         saveBookedLocally(session.id, user.email);
-
-        // Update banner button state
         setRegisteredBtn(document.getElementById('as-bookbtn'));
 
         const fee = formatFee(session.fee);
