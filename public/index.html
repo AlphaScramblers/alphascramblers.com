@@ -857,19 +857,24 @@
     let currentSession = null;
     const section = document.getElementById('as-session-section');
 
-    // ── LocalStorage helpers ──
-    const LS_KEY = 'as_booked_sessions';
-    function isBookedLocally(sessionId) {
+    // ── LocalStorage helpers — keyed per user email so logout clears state ──
+    function lsKey(userEmail) {
+      return 'as_booked_' + btoa(userEmail).replace(/=/g, '');
+    }
+    function isBookedLocally(sessionId, userEmail) {
+      if (!userEmail) return false; // never show "registered" for logged-out users
       try {
-        const arr = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+        const arr = JSON.parse(localStorage.getItem(lsKey(userEmail)) || '[]');
         return arr.includes(sessionId);
       } catch { return false; }
     }
-    function saveBookedLocally(sessionId) {
+    function saveBookedLocally(sessionId, userEmail) {
+      if (!userEmail) return;
       try {
-        const arr = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+        const key = lsKey(userEmail);
+        const arr = JSON.parse(localStorage.getItem(key) || '[]');
         if (!arr.includes(sessionId)) arr.push(sessionId);
-        localStorage.setItem(LS_KEY, JSON.stringify(arr));
+        localStorage.setItem(key, JSON.stringify(arr));
       } catch {}
     }
 
@@ -903,11 +908,22 @@
       return { label: '₹' + fee, originalPrice: null, paid: true };
     }
 
-    // ── Set button to "already registered" state ──
+    // ── Set button to "already registered" state (with price display) ──
     function setRegisteredBtn(btn) {
-      btn.textContent = '✓ Already Registered';
+      btn.innerHTML = '✓ Registered &nbsp;<s style="opacity:.6;font-weight:400">₹99</s>&nbsp;FREE';
       btn.classList.add('as-registered');
       btn.disabled = true;
+    }
+
+    // ── Set button to "book" state with price ──
+    function setBookBtn(btn, fee) {
+      if (fee.paid) {
+        btn.textContent = 'Book Now · ' + fee.label + ' →';
+      } else {
+        btn.innerHTML = 'Book Now &nbsp;<s style="opacity:.7;font-weight:400">₹99</s>&nbsp;FREE →';
+      }
+      btn.classList.remove('as-registered');
+      btn.disabled = false;
     }
 
     // ── Listen for sessions ──
@@ -949,29 +965,27 @@
 
       const btn = document.getElementById('as-bookbtn');
 
-      // ── Check localStorage FIRST (instant, no network needed) ──
-      if (isBookedLocally(s.id)) {
+      // ── Check logged-in user first (needed for user-scoped localStorage) ──
+      const user = await getLoggedInUser();
+
+      // ── Check localStorage (instant, per-user — won't fire if logged out) ──
+      if (user && isBookedLocally(s.id, user.email)) {
         setRegisteredBtn(btn);
         section.classList.add('as-visible');
         return;
       }
 
-      // ── Then check logged-in user + Firebase ──
-      const user = await getLoggedInUser();
+      // ── Check Firebase ──
       if (user) {
         const done = await alreadyRegistered(s.id, user.email);
         if (done) {
-          saveBookedLocally(s.id); // sync to localStorage for next time
+          saveBookedLocally(s.id, user.email); // cache for next time
           setRegisteredBtn(btn);
         } else {
-          btn.textContent = 'Book Now →';
-          btn.classList.remove('as-registered');
-          btn.disabled = false;
+          setBookBtn(btn, fee);
         }
       } else {
-        btn.textContent = 'Book Now →';
-        btn.classList.remove('as-registered');
-        btn.disabled = false;
+        setBookBtn(btn, fee);
       }
 
       section.classList.add('as-visible');
@@ -984,7 +998,7 @@
       if (!user) { openLoginPrompt(); return; }
       const done = await alreadyRegistered(currentSession.id, user.email);
       if (done) {
-        saveBookedLocally(currentSession.id);
+        saveBookedLocally(currentSession.id, user.email);
         setRegisteredBtn(document.getElementById('as-bookbtn'));
         return;
       }
@@ -1094,7 +1108,7 @@
         // Double-check not already registered
         const done = await alreadyRegistered(session.id, user.email);
         if (done) {
-          saveBookedLocally(session.id);
+          saveBookedLocally(session.id, user.email);
           document.getElementById('as-overlay').remove();
           setRegisteredBtn(document.getElementById('as-bookbtn'));
           return;
@@ -1112,8 +1126,8 @@
           at:      new Date().toISOString()
         });
 
-        // Save to localStorage — banner will show "registered" instantly on every future visit
-        saveBookedLocally(session.id);
+        // Save to localStorage per user — banner shows "registered" instantly on every future visit
+        saveBookedLocally(session.id, user.email);
 
         // Update banner button state
         setRegisteredBtn(document.getElementById('as-bookbtn'));
