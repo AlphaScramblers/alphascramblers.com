@@ -38,48 +38,64 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
 
-    <!-- ═══════════════════════════════════════════════
-         SESSION BANNER STYLES — AlphaScramblers Admin
-    ═══════════════════════════════════════════════ -->
+    <!-- SESSION BANNER STYLES -->
     <style>
-    /* ── BANNER WRAPPER ── */
+    /* ── WRAPPER ── */
     #as-session-section {
         display: none;
         padding: 0 30px;
         margin: 36px auto 36px auto;
         max-width: 1100px;
     }
-    #as-session-section.as-visible {
-        display: block;
-    }
+    #as-session-section.as-visible { display: block; }
 
-    /* ── BANNER CARD — white, blue left border, matches site ── */
+    /* ── BANNER CARD ── */
     #as-banner {
-        background: #ffffff;
-        border: 1.5px solid #e0e7f0;
+        background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+        border: 1.5px solid #bfdbfe;
         border-left: 5px solid #1a56db;
-        border-radius: 12px;
-        padding: 18px 24px;
+        border-radius: 14px;
+        padding: 20px 26px;
         display: flex;
         align-items: center;
-        gap: 18px;
+        gap: 16px;
         flex-wrap: wrap;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 2px 16px rgba(26, 86, 219, 0.08);
+        box-shadow: 0 4px 20px rgba(26,86,219,0.1);
     }
-
-    /* blue glow top-right */
     #as-banner::after {
         content: '';
         position: absolute;
-        top: -30px; right: -30px;
-        width: 140px; height: 140px;
-        background: radial-gradient(circle, rgba(26,86,219,.06) 0%, transparent 70%);
+        top: -20px; right: -20px;
+        width: 120px; height: 120px;
+        background: radial-gradient(circle, rgba(26,86,219,.07) 0%, transparent 70%);
         pointer-events: none;
     }
 
-    /* animated blue dot */
+    /* fee badge on banner */
+    .as-fee-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 20px;
+        margin-left: 8px;
+        font-family: 'Lato', sans-serif;
+    }
+    .as-fee-free {
+        background: #dcfce7;
+        color: #16a34a;
+        border: 1px solid #bbf7d0;
+    }
+    .as-fee-paid {
+        background: #fef9c3;
+        color: #b45309;
+        border: 1px solid #fde68a;
+    }
+
     .as-pulse {
         width: 10px; height: 10px;
         border-radius: 50%;
@@ -88,141 +104,170 @@
         animation: as-pulse 2s infinite;
     }
     @keyframes as-pulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50%       { opacity: .45; transform: scale(1.35); }
+        0%,100% { opacity:1; transform:scale(1); }
+        50%      { opacity:.4; transform:scale(1.4); }
     }
-
     .as-icon {
-        width: 42px; height: 42px;
-        border-radius: 10px;
+        width: 44px; height: 44px;
+        border-radius: 11px;
         background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%);
         display: flex; align-items: center; justify-content: center;
-        font-size: 20px; flex-shrink: 0;
+        font-size: 21px; flex-shrink: 0;
+        box-shadow: 0 3px 10px rgba(26,86,219,.25);
     }
-
     .as-info { flex: 1; min-width: 200px; }
-
     .as-eyebrow {
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 1.3px;
-        color: #1a56db;
-        font-weight: 700;
-        margin-bottom: 3px;
+        font-size: 10px; text-transform: uppercase;
+        letter-spacing: 1.3px; color: #1a56db;
+        font-weight: 700; margin-bottom: 3px;
         font-family: 'Lato', sans-serif;
     }
     .as-title {
-        font-size: 17px;
-        font-weight: 700;
-        color: #1a202c;
-        margin-bottom: 4px;
-        line-height: 1.3;
-        font-family: 'Lato', sans-serif;
+        font-size: 17px; font-weight: 700;
+        color: #1a202c; margin-bottom: 4px;
+        line-height: 1.3; font-family: 'Lato', sans-serif;
     }
     .as-meta {
-        font-size: 13px;
-        color: #6b7280;
-        line-height: 1.5;
-        font-family: 'Lato', sans-serif;
+        font-size: 13px; color: #6b7280;
+        line-height: 1.5; font-family: 'Lato', sans-serif;
     }
     .as-seats {
-        display: inline-block;
-        font-size: 11px;
-        background: #eff6ff;
-        color: #1a56db;
-        border: 1px solid #bfdbfe;
-        border-radius: 4px;
-        padding: 1px 7px;
-        margin-left: 6px;
-        font-weight: 700;
+        display: inline-block; font-size: 11px;
+        background: #eff6ff; color: #1a56db;
+        border: 1px solid #bfdbfe; border-radius: 4px;
+        padding: 1px 7px; margin-left: 6px; font-weight: 700;
     }
-
-    /* Book Now button — matches site's green CTA */
     .as-bookbtn {
         background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 28px;
-        font-size: 14px;
-        font-weight: 700;
-        cursor: pointer;
-        white-space: nowrap;
+        color: #fff; border: none; border-radius: 9px;
+        padding: 12px 28px; font-size: 14px; font-weight: 700;
+        cursor: pointer; white-space: nowrap;
         transition: opacity .2s, transform .1s;
-        font-family: 'Lato', sans-serif;
-        flex-shrink: 0;
-        letter-spacing: 0.3px;
-        box-shadow: 0 3px 12px rgba(26, 86, 219, 0.3);
+        font-family: 'Lato', sans-serif; flex-shrink: 0;
+        box-shadow: 0 4px 14px rgba(26,86,219,.35);
     }
     .as-bookbtn:hover  { opacity: .88; }
     .as-bookbtn:active { transform: scale(.97); }
+    /* already registered state */
+    .as-bookbtn.as-registered {
+        background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+        box-shadow: 0 4px 14px rgba(22,163,74,.3);
+        cursor: default;
+    }
 
-    /* ── MODAL OVERLAY ── */
+    /* ── OVERLAY ── */
     .as-overlay {
         position: fixed; inset: 0;
-        background: rgba(15, 23, 42, 0.75);
+        background: rgba(15,23,42,.72);
         display: flex; align-items: center; justify-content: center;
         z-index: 999999; padding: 20px;
+        backdrop-filter: blur(3px);
     }
-
-    /* Modal — white card matching site */
+    /* ── MODAL ── */
     .as-modal {
-        background: #ffffff;
+        background: #fff;
         border: 1.5px solid #e0e7f0;
-        border-radius: 16px;
-        padding: 32px;
-        width: 100%; max-width: 440px;
+        border-radius: 18px;
+        padding: 0;
+        width: 100%; max-width: 450px;
         color: #1a202c;
         font-family: 'Lato', sans-serif;
-        box-shadow: 0 20px 60px rgba(0,0,0,.18);
+        box-shadow: 0 24px 70px rgba(0,0,0,.18);
         animation: as-slidein .22s ease;
+        overflow: hidden;
     }
     @keyframes as-slidein {
-        from { transform: translateY(14px); opacity: 0; }
+        from { transform: translateY(16px); opacity: 0; }
         to   { transform: translateY(0);    opacity: 1; }
     }
-    .as-mhead {
-        display: flex; justify-content: space-between;
-        align-items: flex-start; margin-bottom: 20px;
+    /* modal header band */
+    .as-modal-header {
+        background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%);
+        padding: 20px 24px 18px;
+        position: relative;
     }
-    .as-meyebrow {
+    .as-modal-header-eyebrow {
         font-size: 10px; text-transform: uppercase;
-        letter-spacing: 1px; color: #1a56db;
-        margin-bottom: 4px; font-weight: 700;
-        font-family: 'Lato', sans-serif;
+        letter-spacing: 1.2px; color: rgba(255,255,255,.75);
+        font-weight: 700; margin-bottom: 4px;
     }
-    .as-mtitle {
+    .as-modal-header-title {
         font-size: 17px; font-weight: 700;
-        line-height: 1.3; color: #1a202c;
+        color: #fff; line-height: 1.3;
+        padding-right: 30px;
+    }
+    /* fee pill inside header */
+    .as-modal-fee {
+        display: inline-flex; align-items: center; gap: 5px;
+        margin-top: 8px; font-size: 12px; font-weight: 700;
+        padding: 4px 12px; border-radius: 20px;
+    }
+    .as-modal-fee.free {
+        background: rgba(255,255,255,.2);
+        color: #fff; border: 1px solid rgba(255,255,255,.3);
+    }
+    .as-modal-fee.paid {
+        background: #fef9c3; color: #b45309;
+        border: 1px solid #fde68a;
     }
     .as-mclose {
-        background: none; border: none; color: #9ca3af;
-        font-size: 22px; cursor: pointer; padding: 2px;
-        line-height: 1; transition: color .15s; flex-shrink: 0;
+        position: absolute; top: 14px; right: 16px;
+        background: rgba(255,255,255,.2); border: none;
+        color: #fff; font-size: 18px; cursor: pointer;
+        width: 28px; height: 28px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        transition: background .15s; line-height: 1;
     }
-    .as-mclose:hover { color: #ef4444; }
-
+    .as-mclose:hover { background: rgba(255,255,255,.35); }
+    .as-modal-body { padding: 22px 24px; }
     .as-err {
         display: none;
-        background: #fef2f2;
-        border: 1px solid #fecaca;
+        background: #fef2f2; border: 1px solid #fecaca;
         border-radius: 8px; padding: 10px 13px;
         font-size: 13px; color: #dc2626;
         margin-bottom: 13px; line-height: 1.5;
     }
-
-    /* Inputs — clean white with blue focus */
-    .as-fi {
-        width: 100%;
-        background: #f9fafb;
-        border: 1.5px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 11px 13px;
-        color: #1a202c;
+    /* user card inside modal */
+    .as-user-card {
+        background: #f0f7ff;
+        border: 1.5px solid #bfdbfe;
+        border-radius: 10px;
+        padding: 13px 15px;
+        margin-bottom: 16px;
+        display: flex; align-items: center; gap: 12px;
+    }
+    .as-user-av {
+        width: 40px; height: 40px; border-radius: 50%;
+        background: linear-gradient(135deg,#1a56db,#3b82f6);
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; font-weight: 700; font-size: 14px; flex-shrink: 0;
+    }
+    .as-user-name { font-weight: 700; font-size: 14px; color: #1a202c; }
+    .as-user-sub  { font-size: 12px; color: #6b7280; margin-top: 2px; }
+    .as-verified  {
+        margin-left: auto; font-size: 11px;
+        background: #dcfce7; color: #16a34a;
+        border: 1px solid #bbf7d0; border-radius: 4px;
+        padding: 2px 8px; font-weight: 700; flex-shrink: 0;
+    }
+    /* session detail row inside modal */
+    .as-session-detail {
+        display: flex; gap: 8px; flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+    .as-detail-chip {
+        display: inline-flex; align-items: center; gap: 5px;
+        font-size: 12px; color: #374151; font-weight: 500;
+        background: #f3f4f6; border: 1px solid #e5e7eb;
+        border-radius: 6px; padding: 4px 10px;
         font-family: 'Lato', sans-serif;
-        font-size: 14px;
-        margin-bottom: 10px;
-        outline: none;
+    }
+    .as-fi {
+        width: 100%; background: #f9fafb;
+        border: 1.5px solid #e5e7eb; border-radius: 8px;
+        padding: 11px 13px; color: #1a202c;
+        font-family: 'Lato', sans-serif; font-size: 14px;
+        margin-bottom: 10px; outline: none;
         transition: border-color .2s, box-shadow .2s;
         box-sizing: border-box;
     }
@@ -233,58 +278,53 @@
     }
     .as-fi::placeholder { color: #9ca3af; }
     textarea.as-fi { resize: vertical; }
-
     .as-sublabel {
         font-size: 11.5px; color: #9ca3af;
         margin-bottom: 14px; line-height: 1.6;
-        font-family: 'Lato', sans-serif;
     }
-
-    /* Submit button */
     .as-subbtn {
         width: 100%;
         background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%);
-        color: #fff; border: none; border-radius: 8px;
-        padding: 12px; font-size: 14px; font-weight: 700;
+        color: #fff; border: none; border-radius: 9px;
+        padding: 13px; font-size: 14px; font-weight: 700;
         cursor: pointer; font-family: 'Lato', sans-serif;
         transition: opacity .2s;
-        box-shadow: 0 3px 12px rgba(26,86,219,.25);
+        box-shadow: 0 4px 14px rgba(26,86,219,.28);
     }
     .as-subbtn:hover    { opacity: .88; }
     .as-subbtn:disabled { opacity: .55; cursor: not-allowed; }
 
     /* ── SUCCESS ── */
     .as-success {
-        background: #ffffff;
-        border: 1.5px solid #d1fae5;
-        border-radius: 16px; padding: 40px 32px;
+        background: #fff; border: 1.5px solid #d1fae5;
+        border-radius: 18px; padding: 44px 32px;
         text-align: center; color: #1a202c;
         font-family: 'Lato', sans-serif;
-        max-width: 380px; width: 100%;
-        box-shadow: 0 20px 60px rgba(0,0,0,.15);
+        max-width: 400px; width: 100%;
+        box-shadow: 0 24px 70px rgba(0,0,0,.15);
         animation: as-slidein .22s ease;
     }
-    .as-success-ic    { font-size: 48px; margin-bottom: 14px; }
-    .as-success-title { font-size: 19px; font-weight: 700; margin-bottom: 8px; color: #1a202c; }
-    .as-success-sub   { font-size: 13.5px; color: #6b7280; line-height: 1.7; margin-bottom: 22px; }
+    .as-success-ic    { font-size: 52px; margin-bottom: 14px; }
+    .as-success-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .as-success-sub   { font-size: 13.5px; color: #6b7280; line-height: 1.75; margin-bottom: 22px; }
     .as-success-close {
         background: #f3f4f6; border: 1.5px solid #e5e7eb;
-        color: #374151; border-radius: 8px; padding: 9px 24px;
+        color: #374151; border-radius: 8px; padding: 10px 26px;
         font-family: 'Lato', sans-serif; font-size: 13px;
-        cursor: pointer; font-weight: 600;
-        transition: background .15s;
+        cursor: pointer; font-weight: 600; transition: background .15s;
     }
     .as-success-close:hover { background: #e5e7eb; }
 
     /* ── MOBILE ── */
     @media (max-width: 640px) {
-        #as-session-section { padding: 0 14px; }
-        #as-banner { padding: 15px 15px; gap: 12px; border-left-width: 4px; }
+        #as-session-section { padding: 0 14px; margin: 22px auto; }
+        #as-banner { padding: 15px; gap: 12px; }
         .as-title  { font-size: 15px; }
         .as-meta   { font-size: 12px; }
-        .as-bookbtn { width: 100%; text-align: center; padding: 11px 16px; margin-top: 4px; }
+        .as-bookbtn { width: 100%; text-align: center; padding: 11px; margin-top: 6px; }
         .as-icon   { display: none; }
-        .as-modal  { padding: 24px 16px; }
+        .as-modal  { max-width: 100%; }
+        .as-modal-body { padding: 18px 16px; }
     }
     </style>
 </head>
@@ -430,10 +470,7 @@
             <div class="d4"></div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════
-             SESSION BANNER — appears only when admin
-             has published a session. Hidden otherwise.
-        ═══════════════════════════════════════════════ -->
+        <!-- SESSION BANNER — hidden until admin publishes a session -->
         <div id="as-session-section">
             <div id="as-banner">
                 <div class="as-pulse"></div>
@@ -446,7 +483,6 @@
                 <button class="as-bookbtn" id="as-bookbtn">Book Now →</button>
             </div>
         </div>
-        <!-- ═══════════════════════════════════════════════ -->
 
         <div class="psychotest">
             <div class="psychohead">
@@ -544,7 +580,7 @@
             </div>
         </div>
         <div class="blogs">
-            <div class="bloghead">Blogs & Articles</div>
+            <div class="bloghead">Blogs &amp; Articles</div>
             <div class="blogbox">
                 <div class="blogbox1">
                     <div class="blogbox11"></div>
@@ -640,7 +676,7 @@
         <a href="https://www.linkedin.com/company/alphascramblers" target="_blank"><i class="fa-brands fa-linkedin fa-2xl"></i></a>
         <a href="https://www.facebook.com/profile.php?id=61581582834501" target="_blank"><i class="fa-brands fa-facebook fa-2xl"></i></a>
         <a href="https://x.com/AScramblers" target="_blank"><i class="fa-brands fa-x-twitter fa-2xl"></i></a>
-                        <a href="https://www.youtube.com/@AlphaScramblers" target="_blank"><i class="fa-brands fa-youtube fa-2xl"></i></a>
+        <a href="https://www.youtube.com/@AlphaScramblers" target="_blank"><i class="fa-brands fa-youtube fa-2xl"></i></a>
     </div>
     <div class="trademark">
             <div class="copyright">
@@ -798,16 +834,11 @@
     <script src="./navregbot.js"></script>
     <script src="./login-signup-profile.js"></script>
 
-    <!-- ═══════════════════════════════════════════════
-         SESSION BANNER SCRIPT — AlphaScramblers Admin
-         - Auto-fetches logged-in user details from /api/profile
-         - Login is compulsory to book a session
-         - Firebase syncs sessions + saves bookings in real-time
-    ═══════════════════════════════════════════════ -->
+    <!-- SESSION BANNER SCRIPT -->
     <script type="module">
     import { initializeApp }
       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getDatabase, ref, onValue, push, set }
+    import { getDatabase, ref, onValue, push, set, get }
       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
     const FIREBASE_CONFIG = {
@@ -826,24 +857,61 @@
     let currentSession = null;
     const section = document.getElementById('as-session-section');
 
-    // ── Fetch logged-in user profile from MongoDB ──
+    // ── LocalStorage helpers ──
+    const LS_KEY = 'as_booked_sessions';
+    function isBookedLocally(sessionId) {
+      try {
+        const arr = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+        return arr.includes(sessionId);
+      } catch { return false; }
+    }
+    function saveBookedLocally(sessionId) {
+      try {
+        const arr = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+        if (!arr.includes(sessionId)) arr.push(sessionId);
+        localStorage.setItem(LS_KEY, JSON.stringify(arr));
+      } catch {}
+    }
+
+    // ── Fetch logged-in user from MongoDB ──
     async function getLoggedInUser() {
       const token = localStorage.getItem('token');
       if (!token) return null;
       try {
-        const res = await fetch('/api/profile', {
-          headers: { Authorization: 'Bearer ' + token }
-        });
+        const res  = await fetch('/api/profile', { headers: { Authorization: 'Bearer ' + token } });
         const data = await res.json();
-        if (!data.success) return null;
-        return data.profile; // { firstName, lastName, email, mobileNumber }
-      } catch {
-        return null;
-      }
+        return data.success ? data.profile : null;
+      } catch { return null; }
     }
 
-    // ── Listen for sessions in real-time ──
-    onValue(ref(db, 'sessions'), snap => {
+    // ── Check if user already registered for a session (Firebase) ──
+    async function alreadyRegistered(sessionId, userEmail) {
+      try {
+        const snap = await get(ref(db, 'bookings'));
+        if (!snap.val()) return false;
+        return Object.values(snap.val()).some(
+          b => b.sid === sessionId && b.email === userEmail
+        );
+      } catch { return false; }
+    }
+
+    // ── Format fee — shows strikethrough ₹99 → FREE when free ──
+    function formatFee(fee) {
+      if (!fee || fee == 0 || fee === '0') {
+        return { label: 'FREE', originalPrice: '₹99', paid: false };
+      }
+      return { label: '₹' + fee, originalPrice: null, paid: true };
+    }
+
+    // ── Set button to "already registered" state ──
+    function setRegisteredBtn(btn) {
+      btn.textContent = '✓ Already Registered';
+      btn.classList.add('as-registered');
+      btn.disabled = true;
+    }
+
+    // ── Listen for sessions ──
+    onValue(ref(db, 'sessions'), async snap => {
       const data = snap.val();
       if (!data) { section.classList.remove('as-visible'); return; }
 
@@ -862,95 +930,151 @@
       const d = new Date(s.date + 'T' + s.time);
       const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
       const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
+      const fee = formatFee(s.fee);
 
       document.getElementById('as-title').textContent = s.title;
+
+      // Fee pill — show ~~₹99~~ FREE when discounted to 0
+      const feePillHtml = fee.paid
+        ? `<span class="as-fee-badge as-fee-paid">💰 ${fee.label}</span>`
+        : `<span class="as-fee-badge as-fee-free">
+             <s style="opacity:.55;font-weight:500">${fee.originalPrice}</s>&nbsp;🆓 FREE
+           </span>`;
+
       let meta = dateStr + ' at ' + timeStr + ' · ' + (s.duration || '1 hour');
       if (s.topic) meta += ' · ' + s.topic;
-      document.getElementById('as-meta').innerHTML =
-        meta + (s.seats ? `<span class="as-seats">${s.seats} seats</span>` : '');
+      if (s.seats)  meta += `<span class="as-seats">${s.seats} seats</span>`;
+      meta += feePillHtml;
+      document.getElementById('as-meta').innerHTML = meta;
+
+      const btn = document.getElementById('as-bookbtn');
+
+      // ── Check localStorage FIRST (instant, no network needed) ──
+      if (isBookedLocally(s.id)) {
+        setRegisteredBtn(btn);
+        section.classList.add('as-visible');
+        return;
+      }
+
+      // ── Then check logged-in user + Firebase ──
+      const user = await getLoggedInUser();
+      if (user) {
+        const done = await alreadyRegistered(s.id, user.email);
+        if (done) {
+          saveBookedLocally(s.id); // sync to localStorage for next time
+          setRegisteredBtn(btn);
+        } else {
+          btn.textContent = 'Book Now →';
+          btn.classList.remove('as-registered');
+          btn.disabled = false;
+        }
+      } else {
+        btn.textContent = 'Book Now →';
+        btn.classList.remove('as-registered');
+        btn.disabled = false;
+      }
 
       section.classList.add('as-visible');
     });
 
-    // ── Book Now button ──
+    // ── Book Now click ──
     document.getElementById('as-bookbtn').addEventListener('click', async () => {
       if (!currentSession) return;
-
-      // Check login first
       const user = await getLoggedInUser();
-      if (!user) {
-        openLoginPrompt();
+      if (!user) { openLoginPrompt(); return; }
+      const done = await alreadyRegistered(currentSession.id, user.email);
+      if (done) {
+        saveBookedLocally(currentSession.id);
+        setRegisteredBtn(document.getElementById('as-bookbtn'));
         return;
       }
       openModal(currentSession, user);
     });
 
-    // ── Not logged in — prompt to login ──
+    // ── Login prompt ──
     function openLoginPrompt() {
       const old = document.getElementById('as-overlay');
       if (old) old.remove();
       const ov = document.createElement('div');
       ov.className = 'as-overlay'; ov.id = 'as-overlay';
       ov.innerHTML = `
-        <div class="as-modal" style="text-align:center;max-width:380px">
-          <button class="as-mclose" id="as-mclose" style="position:absolute;top:16px;right:18px">✕</button>
-          <div style="font-size:46px;margin-bottom:14px">🔒</div>
-          <div style="font-size:17px;font-weight:700;color:#1a202c;margin-bottom:8px">Login Required</div>
-          <div style="font-size:13.5px;color:#6b7280;line-height:1.7;margin-bottom:22px">
-            You need to be logged in to book a session.<br/>
-            Your details will be filled automatically from your account.
+        <div class="as-modal" style="overflow:hidden">
+          <div class="as-modal-header" style="text-align:center">
+            <button class="as-mclose" id="as-mclose">✕</button>
+            <div style="font-size:44px;margin-bottom:10px">🔒</div>
+            <div class="as-modal-header-title">Login Required</div>
+            <div style="font-size:12.5px;color:rgba(255,255,255,.8);margin-top:6px;line-height:1.6">
+              Log in to book a session.<br/>Your details will be filled automatically.
+            </div>
           </div>
-          <button class="as-subbtn" id="as-goto-login">Login / Sign Up →</button>
+          <div class="as-modal-body" style="text-align:center">
+            <button class="as-subbtn" id="as-goto-login">Login / Sign Up →</button>
+          </div>
         </div>`;
-      ov.style.position = 'fixed';
       document.body.appendChild(ov);
       ov.addEventListener('click', e => { if (e.target === ov) ov.remove(); });
       document.getElementById('as-mclose').addEventListener('click', () => ov.remove());
       document.getElementById('as-goto-login').addEventListener('click', () => {
         ov.remove();
-        // Trigger the existing login modal on the page
         const loginBtn = document.querySelector('.login') || document.querySelector('.login1');
         if (loginBtn) loginBtn.click();
       });
     }
 
-    // ── Booking modal — details auto-filled from MongoDB ──
+    // ── Booking modal ──
     function openModal(session, user) {
       const old = document.getElementById('as-overlay');
       if (old) old.remove();
-      const fullName = user.firstName + ' ' + user.lastName;
+      const fee = formatFee(session.fee);
+      const d = new Date(session.date + 'T' + session.time);
+      const dateStr = d.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'long', year:'numeric' });
+      const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
+
+      // Fee display in modal header — shows strikethrough original price when free
+      const modalFeeHtml = fee.paid
+        ? `<div class="as-modal-fee paid">💰 Fee: ${fee.label}</div>`
+        : `<div class="as-modal-fee free">
+             <s style="opacity:.7;font-weight:400">${fee.originalPrice}</s>&nbsp;→&nbsp;🆓 FREE — Limited Offer!
+           </div>`;
+
       const ov = document.createElement('div');
       ov.className = 'as-overlay'; ov.id = 'as-overlay';
       ov.innerHTML = `
         <div class="as-modal">
-          <div class="as-mhead">
-            <div>
-              <div class="as-meyebrow">Register for session</div>
-              <div class="as-mtitle">${esc(session.title)}</div>
-            </div>
+          <div class="as-modal-header">
             <button class="as-mclose" id="as-mclose">✕</button>
+            <div class="as-modal-header-eyebrow">Confirm Registration</div>
+            <div class="as-modal-header-title">${esc(session.title)}</div>
+            ${modalFeeHtml}
           </div>
-          <div class="as-err" id="as-err"></div>
+          <div class="as-modal-body">
+            <div class="as-err" id="as-err"></div>
 
-          <!-- User info card — pulled from MongoDB account -->
-          <div style="background:#f0f7ff;border:1.5px solid #bfdbfe;border-radius:10px;padding:13px 15px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
-            <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#3b82f6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">
-              ${esc(user.firstName[0])}${esc(user.lastName[0])}
+            <!-- Session info chips -->
+            <div class="as-session-detail">
+              <span class="as-detail-chip">📅 ${esc(dateStr)}</span>
+              <span class="as-detail-chip">🕐 ${esc(timeStr)}</span>
+              <span class="as-detail-chip">⏱ ${esc(session.duration || '1 hour')}</span>
+              ${session.seats ? `<span class="as-detail-chip">👥 ${esc(session.seats)} seats</span>` : ''}
             </div>
-            <div>
-              <div style="font-weight:700;font-size:14px;color:#1a202c">${esc(fullName)}</div>
-              <div style="font-size:12px;color:#6b7280;margin-top:1px">${esc(user.email)} · +91 ${esc(user.mobileNumber || '')}</div>
+
+            <!-- User card pulled from MongoDB -->
+            <div class="as-user-card">
+              <div class="as-user-av">${esc(user.firstName[0])}${esc(user.lastName[0])}</div>
+              <div>
+                <div class="as-user-name">${esc(user.firstName + ' ' + user.lastName)}</div>
+                <div class="as-user-sub">${esc(user.email)}<br/>+91 ${esc(user.mobileNumber || '')}</div>
+              </div>
+              <div class="as-verified">✓ Verified</div>
             </div>
-            <div style="margin-left:auto;font-size:11px;background:#dcfce7;color:#16a34a;border:1px solid #bbf7d0;border-radius:4px;padding:2px 8px;font-weight:600">✓ Verified</div>
-          </div>
 
-          <div style="font-size:12px;color:#9ca3af;margin-bottom:14px;line-height:1.6">
-            📋 Your details above will be used for registration. Add a message below if needed.
+            <textarea class="as-fi" id="as-m" rows="2" placeholder="Anything you'd like us to know? (optional)"></textarea>
+            <div class="as-sublabel">
+              📱 We'll add you to the WhatsApp group for updates after registration.
+              ${fee.paid ? '<br/>💳 Payment details will be shared on WhatsApp.' : ''}
+            </div>
+            <button class="as-subbtn" id="as-sub">Confirm Registration →</button>
           </div>
-
-          <textarea class="as-fi" id="as-m" rows="2" placeholder="Anything you'd like us to know? (optional)"></textarea>
-          <div class="as-sublabel">By registering, you agree to be added to our WhatsApp group for session updates.</div>
-          <button class="as-subbtn" id="as-sub">Confirm Registration →</button>
         </div>`;
       document.body.appendChild(ov);
       ov.addEventListener('click', e => { if (e.target === ov) ov.remove(); });
@@ -958,7 +1082,7 @@
       document.getElementById('as-sub').addEventListener('click', () => submitBooking(session, user));
     }
 
-    // ── Submit booking with MongoDB user data ──
+    // ── Submit ──
     async function submitBooking(session, user) {
       const m   = document.getElementById('as-m').value.trim();
       const err = document.getElementById('as-err');
@@ -967,6 +1091,15 @@
       btn.textContent = 'Confirming…'; btn.disabled = true; err.style.display = 'none';
 
       try {
+        // Double-check not already registered
+        const done = await alreadyRegistered(session.id, user.email);
+        if (done) {
+          saveBookedLocally(session.id);
+          document.getElementById('as-overlay').remove();
+          setRegisteredBtn(document.getElementById('as-bookbtn'));
+          return;
+        }
+
         await set(push(ref(db, 'bookings')), {
           name:    user.firstName + ' ' + user.lastName,
           email:   user.email,
@@ -974,21 +1107,31 @@
           message: m,
           sid:     session.id,
           stitle:  session.title,
+          fee:     session.fee || '0',
           wpAdded: false,
           at:      new Date().toISOString()
         });
 
+        // Save to localStorage — banner will show "registered" instantly on every future visit
+        saveBookedLocally(session.id);
+
+        // Update banner button state
+        setRegisteredBtn(document.getElementById('as-bookbtn'));
+
+        const fee = formatFee(session.fee);
         document.getElementById('as-overlay').innerHTML = `
           <div class="as-success">
             <div class="as-success-ic">🎉</div>
             <div class="as-success-title">You're registered!</div>
             <div class="as-success-sub">
               Thanks, <strong>${esc(user.firstName)}</strong>!<br/>
-              We'll add you to the WhatsApp group for<br/>
-              <strong>${esc(session.title)}</strong> very soon.<br/>
-              Keep an eye on your phone. 📱
+              You're in for <strong>${esc(session.title)}</strong>.<br/>
+              ${fee.paid
+                ? '💳 Payment info will be shared on WhatsApp shortly.<br/>'
+                : ''}
+              We'll add you to the WhatsApp group soon. 📱
             </div>
-            <button class="as-success-close" onclick="document.getElementById('as-overlay').remove()">Close</button>
+            <button class="as-success-close" onclick="document.getElementById('as-overlay').remove()">Done</button>
           </div>`;
       } catch (ex) {
         err.style.display = 'block';
@@ -1001,7 +1144,6 @@
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
     </script>
-    <!-- ═══════════════════════════════════════════════ -->
 
 <script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
