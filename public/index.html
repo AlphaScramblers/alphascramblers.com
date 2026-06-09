@@ -800,8 +800,9 @@
 
     <!-- ═══════════════════════════════════════════════
          SESSION BANNER SCRIPT — AlphaScramblers Admin
-         Firebase connects and shows banner automatically.
-         If no session is published, nothing shows.
+         - Auto-fetches logged-in user details from /api/profile
+         - Login is compulsory to book a session
+         - Firebase syncs sessions + saves bookings in real-time
     ═══════════════════════════════════════════════ -->
     <script type="module">
     import { initializeApp }
@@ -825,12 +826,27 @@
     let currentSession = null;
     const section = document.getElementById('as-session-section');
 
-    // Listen for sessions in real-time
+    // ── Fetch logged-in user profile from MongoDB ──
+    async function getLoggedInUser() {
+      const token = localStorage.getItem('token');
+      if (!token) return null;
+      try {
+        const res = await fetch('/api/profile', {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (!data.success) return null;
+        return data.profile; // { firstName, lastName, email, mobileNumber }
+      } catch {
+        return null;
+      }
+    }
+
+    // ── Listen for sessions in real-time ──
     onValue(ref(db, 'sessions'), snap => {
       const data = snap.val();
       if (!data) { section.classList.remove('as-visible'); return; }
 
-      // Pick the soonest session
       const all = Object.entries(data)
         .map(([id, v]) => ({ id, ...v }))
         .sort((a, b) => {
@@ -856,15 +872,53 @@
       section.classList.add('as-visible');
     });
 
-    // Book Now button
-    document.getElementById('as-bookbtn').addEventListener('click', () => {
+    // ── Book Now button ──
+    document.getElementById('as-bookbtn').addEventListener('click', async () => {
       if (!currentSession) return;
-      openModal(currentSession);
+
+      // Check login first
+      const user = await getLoggedInUser();
+      if (!user) {
+        openLoginPrompt();
+        return;
+      }
+      openModal(currentSession, user);
     });
 
-    function openModal(session) {
+    // ── Not logged in — prompt to login ──
+    function openLoginPrompt() {
       const old = document.getElementById('as-overlay');
       if (old) old.remove();
+      const ov = document.createElement('div');
+      ov.className = 'as-overlay'; ov.id = 'as-overlay';
+      ov.innerHTML = `
+        <div class="as-modal" style="text-align:center;max-width:380px">
+          <button class="as-mclose" id="as-mclose" style="position:absolute;top:16px;right:18px">✕</button>
+          <div style="font-size:46px;margin-bottom:14px">🔒</div>
+          <div style="font-size:17px;font-weight:700;color:#1a202c;margin-bottom:8px">Login Required</div>
+          <div style="font-size:13.5px;color:#6b7280;line-height:1.7;margin-bottom:22px">
+            You need to be logged in to book a session.<br/>
+            Your details will be filled automatically from your account.
+          </div>
+          <button class="as-subbtn" id="as-goto-login">Login / Sign Up →</button>
+        </div>`;
+      ov.style.position = 'fixed';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', e => { if (e.target === ov) ov.remove(); });
+      document.getElementById('as-mclose').addEventListener('click', () => ov.remove());
+      document.getElementById('as-goto-login').addEventListener('click', () => {
+        ov.remove();
+        // Trigger the existing login modal on the page
+        const loginBtn = document.querySelector('.login') || document.querySelector('.login1');
+        if (loginBtn) loginBtn.click();
+      });
+    }
+
+    // ── Booking modal — details auto-filled from MongoDB ──
+    function openModal(session, user) {
+      const old = document.getElementById('as-overlay');
+      if (old) old.remove();
+      const fullName = user.firstName + ' ' + user.lastName;
       const ov = document.createElement('div');
       ov.className = 'as-overlay'; ov.id = 'as-overlay';
       ov.innerHTML = `
@@ -877,46 +931,51 @@
             <button class="as-mclose" id="as-mclose">✕</button>
           </div>
           <div class="as-err" id="as-err"></div>
-          <input class="as-fi" id="as-n" type="text"  placeholder="Full Name *"       autocomplete="name"/>
-          <input class="as-fi" id="as-e" type="email" placeholder="Email Address *"   autocomplete="email"/>
-          <input class="as-fi" id="as-p" type="tel"   placeholder="WhatsApp Number *" autocomplete="tel"/>
-          <textarea class="as-fi" id="as-m" rows="2"  placeholder="Anything else? (optional)"></textarea>
+
+          <!-- User info card — pulled from MongoDB account -->
+          <div style="background:#f0f7ff;border:1.5px solid #bfdbfe;border-radius:10px;padding:13px 15px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
+            <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#3b82f6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">
+              ${esc(user.firstName[0])}${esc(user.lastName[0])}
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:14px;color:#1a202c">${esc(fullName)}</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:1px">${esc(user.email)} · +91 ${esc(user.mobileNumber || '')}</div>
+            </div>
+            <div style="margin-left:auto;font-size:11px;background:#dcfce7;color:#16a34a;border:1px solid #bbf7d0;border-radius:4px;padding:2px 8px;font-weight:600">✓ Verified</div>
+          </div>
+
+          <div style="font-size:12px;color:#9ca3af;margin-bottom:14px;line-height:1.6">
+            📋 Your details above will be used for registration. Add a message below if needed.
+          </div>
+
+          <textarea class="as-fi" id="as-m" rows="2" placeholder="Anything you'd like us to know? (optional)"></textarea>
           <div class="as-sublabel">By registering, you agree to be added to our WhatsApp group for session updates.</div>
-          <button class="as-subbtn" id="as-sub">Register →</button>
+          <button class="as-subbtn" id="as-sub">Confirm Registration →</button>
         </div>`;
       document.body.appendChild(ov);
       ov.addEventListener('click', e => { if (e.target === ov) ov.remove(); });
       document.getElementById('as-mclose').addEventListener('click', () => ov.remove());
-      document.getElementById('as-sub').addEventListener('click', () => submitBooking(session));
-      setTimeout(() => document.getElementById('as-n').focus(), 60);
+      document.getElementById('as-sub').addEventListener('click', () => submitBooking(session, user));
     }
 
-    async function submitBooking(session) {
-      const n   = document.getElementById('as-n').value.trim();
-      const e   = document.getElementById('as-e').value.trim();
-      const p   = document.getElementById('as-p').value.trim();
+    // ── Submit booking with MongoDB user data ──
+    async function submitBooking(session, user) {
       const m   = document.getElementById('as-m').value.trim();
       const err = document.getElementById('as-err');
       const btn = document.getElementById('as-sub');
 
-      if (!n || !e || !p) {
-        err.style.display = 'block';
-        err.textContent = 'Please fill in your name, email and WhatsApp number.';
-        return;
-      }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) {
-        err.style.display = 'block';
-        err.textContent = 'Please enter a valid email address.';
-        return;
-      }
-
-      btn.textContent = 'Submitting…'; btn.disabled = true; err.style.display = 'none';
+      btn.textContent = 'Confirming…'; btn.disabled = true; err.style.display = 'none';
 
       try {
         await set(push(ref(db, 'bookings')), {
-          name: n, email: e, phone: p, message: m,
-          sid: session.id, stitle: session.title,
-          wpAdded: false, at: new Date().toISOString()
+          name:    user.firstName + ' ' + user.lastName,
+          email:   user.email,
+          phone:   user.mobileNumber || '',
+          message: m,
+          sid:     session.id,
+          stitle:  session.title,
+          wpAdded: false,
+          at:      new Date().toISOString()
         });
 
         document.getElementById('as-overlay').innerHTML = `
@@ -924,7 +983,7 @@
             <div class="as-success-ic">🎉</div>
             <div class="as-success-title">You're registered!</div>
             <div class="as-success-sub">
-              Thanks, <strong>${esc(n)}</strong>!<br/>
+              Thanks, <strong>${esc(user.firstName)}</strong>!<br/>
               We'll add you to the WhatsApp group for<br/>
               <strong>${esc(session.title)}</strong> very soon.<br/>
               Keep an eye on your phone. 📱
@@ -934,7 +993,7 @@
       } catch (ex) {
         err.style.display = 'block';
         err.textContent = 'Something went wrong. Please try again.';
-        btn.textContent = 'Register →'; btn.disabled = false;
+        btn.textContent = 'Confirm Registration →'; btn.disabled = false;
       }
     }
 
