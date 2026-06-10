@@ -326,7 +326,7 @@
         .as-modal  { max-width: 100%; }
         .as-modal-body { padding: 18px 16px; }
     }
-    </style>e>
+    </style>
 </head>
 <body>
     <div class="preloader">
@@ -580,7 +580,7 @@
             </div>
         </div>
         <div class="blogs">
-            <div class="bloghead">Blogs & Articles</div>
+            <div class="bloghead">Blogs &amp; Articles</div>
             <div class="blogbox">
                 <div class="blogbox1">
                     <div class="blogbox11"></div>
@@ -676,7 +676,7 @@
         <a href="https://www.linkedin.com/company/alphascramblers" target="_blank"><i class="fa-brands fa-linkedin fa-2xl"></i></a>
         <a href="https://www.facebook.com/profile.php?id=61581582834501" target="_blank"><i class="fa-brands fa-facebook fa-2xl"></i></a>
         <a href="https://x.com/AScramblers" target="_blank"><i class="fa-brands fa-x-twitter fa-2xl"></i></a>
-                        <a href="https://www.youtube.com/@AlphaScramblers" target="_blank"><i class="fa-brands fa-youtube fa-2xl"></i></a>
+        <a href="https://www.youtube.com/@AlphaScramblers" target="_blank"><i class="fa-brands fa-youtube fa-2xl"></i></a>
     </div>
     <div class="trademark">
             <div class="copyright">
@@ -838,7 +838,7 @@
     <script type="module">
     import { initializeApp }
       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getDatabase, ref, onValue, push, set, get }
+    import { getDatabase, ref, onValue }
       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
     const FIREBASE_CONFIG = {
@@ -857,6 +857,27 @@
     let currentSession = null;
     const section = document.getElementById('as-session-section');
 
+    // ── LocalStorage helpers — keyed per user email so logout clears state ──
+    function lsKey(userEmail) {
+      return 'as_booked_' + btoa(userEmail).replace(/=/g, '');
+    }
+    function isBookedLocally(sessionId, userEmail) {
+      if (!userEmail) return false; // never show "registered" for logged-out users
+      try {
+        const arr = JSON.parse(localStorage.getItem(lsKey(userEmail)) || '[]');
+        return arr.includes(sessionId);
+      } catch { return false; }
+    }
+    function saveBookedLocally(sessionId, userEmail) {
+      if (!userEmail) return;
+      try {
+        const key = lsKey(userEmail);
+        const arr = JSON.parse(localStorage.getItem(key) || '[]');
+        if (!arr.includes(sessionId)) arr.push(sessionId);
+        localStorage.setItem(key, JSON.stringify(arr));
+      } catch {}
+    }
+
     // ── Fetch logged-in user from MongoDB ──
     async function getLoggedInUser() {
       const token = localStorage.getItem('token');
@@ -868,22 +889,44 @@
       } catch { return null; }
     }
 
-    // ── Check if user already registered — reads from Firebase ──
+    // ── Check if user already registered for a session (MongoDB) ──
     async function alreadyRegistered(sessionId, userEmail) {
       try {
-        const { ref: fbRef, get } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js');
-        const snap = await get(fbRef(db, 'bookings'));
-        if (!snap.val()) return false;
-        return Object.values(snap.val()).some(
-          b => b.sid === sessionId && b.email === userEmail
-        );
+        const token = localStorage.getItem('token');
+        if (!token) return false;
+        const res  = await fetch('/api/get-bookings?sessionId=' + encodeURIComponent(sessionId), {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (!data.success) return false;
+        return (data.registrations || []).some(r => r.email === userEmail);
       } catch { return false; }
     }
 
-    // ── Format fee ──
+    // ── Format fee — shows strikethrough ₹99 → FREE when free ──
     function formatFee(fee) {
-      if (!fee || fee == 0 || fee === '0') return { label: 'FREE', paid: false };
-      return { label: '₹' + fee, paid: true };
+      if (!fee || fee == 0 || fee === '0') {
+        return { label: 'FREE', originalPrice: '₹99', paid: false };
+      }
+      return { label: '₹' + fee, originalPrice: null, paid: true };
+    }
+
+    // ── Set button to "already registered" state (with price display) ──
+    function setRegisteredBtn(btn) {
+      btn.innerHTML = '✓ Registered &nbsp;<s style="opacity:.6;font-weight:400">₹99</s>&nbsp;FREE';
+      btn.classList.add('as-registered');
+      btn.disabled = true;
+    }
+
+    // ── Set button to "book" state with price ──
+    function setBookBtn(btn, fee) {
+      if (fee.paid) {
+        btn.textContent = 'Book Now · ' + fee.label + ' →';
+      } else {
+        btn.innerHTML = 'Book Now &nbsp;<s style="opacity:.7;font-weight:400">₹99</s>&nbsp;FREE →';
+      }
+      btn.classList.remove('as-registered');
+      btn.disabled = false;
     }
 
     // ── Listen for sessions ──
@@ -910,30 +953,42 @@
 
       document.getElementById('as-title').textContent = s.title;
 
+      // Fee pill — show ~~₹99~~ FREE when discounted to 0
+      const feePillHtml = fee.paid
+        ? `<span class="as-fee-badge as-fee-paid">💰 ${fee.label}</span>`
+        : `<span class="as-fee-badge as-fee-free">
+             <s style="opacity:.55;font-weight:500">${fee.originalPrice}</s>&nbsp;🆓 FREE
+           </span>`;
+
       let meta = dateStr + ' at ' + timeStr + ' · ' + (s.duration || '1 hour');
       if (s.topic) meta += ' · ' + s.topic;
       if (s.seats)  meta += `<span class="as-seats">${s.seats} seats</span>`;
-      meta += `<span class="as-fee-badge ${fee.paid ? 'as-fee-paid' : 'as-fee-free'}">${fee.paid ? '💰' : '🆓'} ${fee.label}</span>`;
+      meta += feePillHtml;
       document.getElementById('as-meta').innerHTML = meta;
 
-      // Check if already registered
+      const btn = document.getElementById('as-bookbtn');
+
+      // ── Check logged-in user first (needed for user-scoped localStorage) ──
       const user = await getLoggedInUser();
-      const btn  = document.getElementById('as-bookbtn');
+
+      // ── Check localStorage (instant, per-user — won't fire if logged out) ──
+      if (user && isBookedLocally(s.id, user.email)) {
+        setRegisteredBtn(btn);
+        section.classList.add('as-visible');
+        return;
+      }
+
+      // ── Check Firebase ──
       if (user) {
         const done = await alreadyRegistered(s.id, user.email);
         if (done) {
-          btn.textContent = '✓ Already Registered';
-          btn.classList.add('as-registered');
-          btn.disabled = true;
+          saveBookedLocally(s.id, user.email); // cache for next time
+          setRegisteredBtn(btn);
         } else {
-          btn.textContent = 'Book Now →';
-          btn.classList.remove('as-registered');
-          btn.disabled = false;
+          setBookBtn(btn, fee);
         }
       } else {
-        btn.textContent = 'Book Now →';
-        btn.classList.remove('as-registered');
-        btn.disabled = false;
+        setBookBtn(btn, fee);
       }
 
       section.classList.add('as-visible');
@@ -945,7 +1000,11 @@
       const user = await getLoggedInUser();
       if (!user) { openLoginPrompt(); return; }
       const done = await alreadyRegistered(currentSession.id, user.email);
-      if (done) return; // already registered — button should be disabled anyway
+      if (done) {
+        saveBookedLocally(currentSession.id, user.email);
+        setRegisteredBtn(document.getElementById('as-bookbtn'));
+        return;
+      }
       openModal(currentSession, user);
     });
 
@@ -988,6 +1047,13 @@
       const dateStr = d.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'long', year:'numeric' });
       const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
 
+      // Fee display in modal header — shows strikethrough original price when free
+      const modalFeeHtml = fee.paid
+        ? `<div class="as-modal-fee paid">💰 Fee: ${fee.label}</div>`
+        : `<div class="as-modal-fee free">
+             <s style="opacity:.7;font-weight:400">${fee.originalPrice}</s>&nbsp;→&nbsp;🆓 FREE — Limited Offer!
+           </div>`;
+
       const ov = document.createElement('div');
       ov.className = 'as-overlay'; ov.id = 'as-overlay';
       ov.innerHTML = `
@@ -996,9 +1062,7 @@
             <button class="as-mclose" id="as-mclose">✕</button>
             <div class="as-modal-header-eyebrow">Confirm Registration</div>
             <div class="as-modal-header-title">${esc(session.title)}</div>
-            <div class="as-modal-fee ${fee.paid ? 'paid' : 'free'}">
-              ${fee.paid ? '💰 Fee: ' + fee.label : '🆓 FREE Session'}
-            </div>
+            ${modalFeeHtml}
           </div>
           <div class="as-modal-body">
             <div class="as-err" id="as-err"></div>
@@ -1035,7 +1099,7 @@
       document.getElementById('as-sub').addEventListener('click', () => submitBooking(session, user));
     }
 
-    // ── Submit — saves directly to Firebase (no backend needed) ──
+    // ── Submit ──
     async function submitBooking(session, user) {
       const m   = document.getElementById('as-m').value.trim();
       const err = document.getElementById('as-err');
@@ -1044,43 +1108,44 @@
       btn.textContent = 'Confirming…'; btn.disabled = true; err.style.display = 'none';
 
       try {
-        // Check localStorage first (instant)
-        if (isBookedLocally(session.id, user.email)) {
+        const token = localStorage.getItem('token');
+        if (!token) { openLoginPrompt(); return; }
+
+        const res = await fetch('/api/book-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({
+            sessionId:       session.id,
+            sessionTitle:    session.title,
+            sessionDate:     session.date  || '',
+            sessionTime:     session.time  || '',
+            sessionDuration: session.duration || '',
+            fee:             session.fee   || '0',
+            message:         m
+          })
+        });
+
+        const data = await res.json();
+
+        // Already registered (409) — treat same as success
+        if (res.status === 409 || data.message === 'Already registered') {
+          saveBookedLocally(session.id, user.email);
           document.getElementById('as-overlay').remove();
           setRegisteredBtn(document.getElementById('as-bookbtn'));
           return;
         }
 
-        // Save booking directly to Firebase Realtime Database
-        const bookingData = {
-          name:            user.firstName + ' ' + user.lastName,
-          firstName:       user.firstName,
-          lastName:        user.lastName,
-          email:           user.email,
-          phone:           user.mobileNumber || user.mobileno || '',
-          message:         m,
-          sid:             session.id,
-          stitle:          session.title,
-          sessionDate:     session.date     || '',
-          sessionTime:     session.time     || '',
-          sessionDuration: session.duration || '',
-          fee:             session.fee      || '0',
-          wpAdded:         false,
-          at:              new Date().toISOString()
-        };
+        if (!data.success) {
+          err.style.display = 'block';
+          err.textContent = data.message || 'Something went wrong. Please try again.';
+          btn.textContent = 'Confirm Registration →'; btn.disabled = false;
+          return;
+        }
 
-        // Generate a unique key and write to Firebase
-        const bookingId = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-        await new Promise((resolve, reject) => {
-          import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js')
-            .then(({ ref: fbRef, set }) => {
-              return set(fbRef(db, 'bookings/' + bookingId), bookingData);
-            })
-            .then(resolve)
-            .catch(reject);
-        });
-
-        // Mark booked locally so button stays green on refresh
+        // ── Success ──
         saveBookedLocally(session.id, user.email);
         setRegisteredBtn(document.getElementById('as-bookbtn'));
 
@@ -1092,19 +1157,20 @@
             <div class="as-success-sub">
               Thanks, <strong>${esc(user.firstName)}</strong>!<br/>
               You're in for <strong>${esc(session.title)}</strong>.<br/>
-              ${fee.paid ? '💳 Payment info will be shared on WhatsApp shortly.<br/>' : ''}
+              ${fee.paid
+                ? '💳 Payment info will be shared on WhatsApp shortly.<br/>'
+                : ''}
               We'll add you to the WhatsApp group soon. 📱
             </div>
             <button class="as-success-close" onclick="document.getElementById('as-overlay').remove()">Done</button>
           </div>`;
-
       } catch (ex) {
-        console.error('Booking error:', ex);
         err.style.display = 'block';
         err.textContent = 'Something went wrong. Please try again.';
         btn.textContent = 'Confirm Registration →'; btn.disabled = false;
       }
     }
+
     function esc(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
