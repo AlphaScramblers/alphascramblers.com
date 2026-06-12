@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AlphaScramblers — Admin Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--bg2:#13161e;--bg3:#1a1e28;--bg4:#222637;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --text:#f0f2f8;--t2:#8891a8;--t3:#555e75;
+  --ac:#7c6fff;--ac2:#a599ff;--ac-bg:rgba(124,111,255,.1);--ac-br:rgba(124,111,255,.3);
+  --gr:#22c87a;--gr-bg:rgba(34,200,122,.1);
+  --rd:#ff5a5a;--rd-bg:rgba(255,90,90,.1);
+  --am:#ffb547;--am-bg:rgba(255,181,71,.1);
+  --bl:#4fa3ff;--bl-bg:rgba(79,163,255,.1);
+  --r:10px;--rl:14px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+
+/* LOGIN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden}
+#login-screen::before{content:'';position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(124,111,255,.1) 0%,transparent 65%);top:-150px;left:50%;transform:translateX(-50%);pointer-events:none}
+.lcard{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);padding:46px 42px;width:410px;position:relative;z-index:1;box-shadow:0 8px 40px rgba(0,0,0,.4)}
+.llogo{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:4px}.llogo span{color:var(--ac2)}
+.lsub{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--t3);margin-bottom:34px;font-weight:600}
+.fg{margin-bottom:16px}
+.fl{display:block;font-size:11px;color:var(--t2);margin-bottom:7px;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+.fi{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:11px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s}
+.fi:focus{border-color:var(--ac)}.fi::placeholder{color:var(--t3)}
+select.fi{cursor:pointer}textarea.fi{resize:vertical}
+.lerr{background:var(--rd-bg);border:1px solid rgba(255,90,90,.25);border-radius:var(--r);padding:9px 13px;font-size:13px;color:var(--rd);margin-bottom:14px;display:none}
+.lbtn{width:100%;background:var(--ac);color:#fff;border:none;border-radius:var(--r);padding:12px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:.2s;margin-top:4px}
+.lbtn:hover{background:var(--ac2)}.lbtn:active{transform:scale(.98)}
+.lhint{margin-top:18px;font-size:12px;color:var(--t3);text-align:center;line-height:1.7}
+
+/* SHELL */
+#dashboard{display:none;min-height:100vh}
+.sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;overflow-y:auto}
+.slogo{font-family:'DM Serif Display',serif;font-size:17px;padding:22px 20px;border-bottom:1px solid var(--border);color:var(--text);flex-shrink:0}.slogo span{color:var(--ac2)}
+.sbadge{font-size:9px;background:var(--ac-bg);color:var(--ac2);border:1px solid var(--ac-br);border-radius:4px;padding:1px 6px;font-family:inherit;font-weight:600;letter-spacing:.5px;margin-left:5px;vertical-align:middle}
+.nsec{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);padding:14px 20px 5px;font-weight:700}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 20px;cursor:pointer;color:var(--t2);font-size:13px;border-left:3px solid transparent;transition:all .13s;user-select:none}
+.ni:hover{color:var(--text);background:var(--bg3)}
+.ni.active{color:var(--ac2);background:var(--ac-bg);border-left-color:var(--ac);font-weight:500}
+.nic{font-size:15px;width:18px;text-align:center}
+.sfooter{margin-top:auto;padding:14px 18px;border-top:1px solid var(--border);flex-shrink:0}
+.achip{display:flex;align-items:center;gap:9px}
+.aav{width:30px;height:30px;border-radius:50%;background:var(--ac-bg);border:1px solid var(--ac-br);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--ac2);flex-shrink:0}
+.ainfo{flex:1;min-width:0}.aname{font-size:12.5px;font-weight:500}.aemail{font-size:11px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logbtn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:17px;padding:3px;transition:color .15s;line-height:1}.logbtn:hover{color:var(--rd)}
+.main{margin-left:220px;min-height:100vh}
+.topbar{height:58px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 26px;background:var(--bg);position:sticky;top:0;z-index:50}
+.ptitle{font-size:15px;font-weight:500}
+.blive{background:var(--gr-bg);border:1px solid rgba(34,200,122,.22);color:var(--gr);border-radius:20px;padding:3px 10px;font-size:11.5px;font-weight:500}
+.blive::before{content:'● ';font-size:7px;vertical-align:1px}
+.syncing{font-size:11px;color:var(--t3);margin-left:8px}
+.content{padding:26px}
+.section{display:none}.section.active{display:block}
+
+/* CARD */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:20px 22px;margin-bottom:16px}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;flex-wrap:wrap;gap:10px}
+.ct{font-size:14px;font-weight:500}.cs{font-size:12px;color:var(--t3);margin-top:2px}
+
+/* BUTTONS */
+.btn{border-radius:var(--r);padding:9px 16px;font-family:inherit;font-size:13px;cursor:pointer;transition:all .15s;border:1px solid transparent}
+.btn-sec{background:var(--bg3);border-color:var(--border2);color:var(--text)}.btn-sec:hover{border-color:var(--ac);color:var(--ac2)}
+.btn-ac{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:500}.btn-ac:hover{background:var(--ac2)}
+.btn-rd{background:var(--rd-bg);border-color:rgba(255,90,90,.25);color:var(--rd)}.btn-rd:hover{background:rgba(255,90,90,.2)}
+.btn-am{background:var(--am-bg);border-color:rgba(255,181,71,.25);color:var(--am)}.btn-am:hover{background:rgba(255,181,71,.2)}
+.sm{padding:5px 11px;font-size:12px;border-radius:6px}
+
+/* BADGES */
+.b{display:inline-block;font-size:11px;padding:2px 7px;border-radius:4px;font-weight:500}
+.bg{background:var(--gr-bg);color:var(--gr)}.ba{background:var(--am-bg);color:var(--am)}
+.bb{background:var(--bl-bg);color:var(--bl)}.bp{background:var(--ac-bg);color:var(--ac2)}
+
+/* SESSION FORM */
+.sform{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.sform .fg{margin-bottom:0}.fw{grid-column:1/-1}
+.frow{display:flex;gap:9px;justify-content:flex-end}
+
+/* SESSION CARDS */
+.slist{display:flex;flex-direction:column;gap:12px}
+.scard{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.scard.live-card{border-color:rgba(34,200,122,.3)}
+.sc-head{display:flex;align-items:center;gap:14px;padding:14px 16px;cursor:pointer;user-select:none;transition:background .12s}
+.sc-head:hover{background:rgba(255,255,255,.03)}
+.sc-date-block{text-align:center;min-width:42px;flex-shrink:0}
+.sc-mon{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);font-weight:600}
+.sc-day{font-size:20px;font-weight:700;line-height:1.1}
+.sc-divider{width:1px;height:36px;background:var(--border2);flex-shrink:0}
+.sc-info{flex:1;min-width:0}
+.sc-title{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-meta{font-size:11.5px;color:var(--t2);margin-top:2px}
+.sc-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.pill{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;white-space:nowrap}
+.pill-live{background:var(--gr-bg);color:var(--gr);border:1px solid rgba(34,200,122,.25)}
+.pill-up{background:var(--bl-bg);color:var(--bl);border:1px solid rgba(79,163,255,.25)}
+.pill-past{background:var(--bg4);color:var(--t3);border:1px solid var(--border)}
+.sc-chevron{font-size:11px;color:var(--t3);transition:transform .2s;margin-left:2px}
+.sc-chevron.open{transform:rotate(90deg)}
+.sc-body{display:none;border-top:1px solid var(--border)}
+.sc-body.open{display:block}
+.sc-body-inner{padding:14px 16px}
+.sc-reg-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sc-reg-title{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);font-weight:700}
+.reg-count{font-size:11px;background:var(--ac-bg);color:var(--ac2);border:1px solid var(--ac-br);border-radius:4px;padding:1px 7px;font-weight:600}
+.reg-list{display:flex;flex-direction:column;gap:1px}
+.reg-row{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:8px;transition:background .1s}
+.reg-row:hover{background:var(--bg4)}
+.uav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.avp{background:var(--ac-bg);color:var(--ac2)}.avg{background:var(--gr-bg);color:var(--gr)}
+.avb{background:var(--bl-bg);color:var(--bl)}.ava{background:var(--am-bg);color:var(--am)}
+.reg-name{font-size:13px;font-weight:500;min-width:0;flex:1}
+.reg-email{font-size:11.5px;color:var(--t3)}
+.reg-phone{font-size:12px;color:var(--t2);min-width:110px}
+.reg-date{font-size:11px;color:var(--t3);min-width:80px;text-align:right}
+.wptick{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:4px 9px;border-radius:7px;border:1.5px solid var(--border2);background:transparent;transition:all .15s;flex-shrink:0}
+.wptick:hover{background:var(--bg4)}.wptick.done{border-color:rgba(34,200,122,.4);background:var(--gr-bg)}
+.wptick-box{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--border2);background:transparent;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.wptick.done .wptick-box{background:var(--gr);border-color:var(--gr)}
+.wptick-box svg{display:none;width:9px;height:9px}.wptick.done .wptick-box svg{display:block}
+.wptick-label{font-size:11px;font-weight:500;color:var(--t2);white-space:nowrap}.wptick.done .wptick-label{color:var(--gr)}
+.sc-empty{text-align:center;padding:24px;font-size:12.5px;color:var(--t3)}
+.sc-del-row{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-top:1px solid var(--border)}
+
+/* USERS */
+.fbar{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap}
+.fsearch{flex:1;min-width:180px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:8px 13px;color:var(--text);font-family:inherit;font-size:13px;outline:none;transition:border-color .2s}
+.fsearch:focus{border-color:var(--ac)}.fsearch::placeholder{color:var(--t3)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:1px solid var(--border)}
+th{text-align:left;padding:9px 13px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);white-space:nowrap}
+td{padding:11px 13px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr:last-child td{border-bottom:none}
+.uchip{display:flex;align-items:center;gap:9px}
+.uname{font-weight:500}.uemail{font-size:11.5px;color:var(--t3)}
+.user-sessions-cell{display:flex;flex-wrap:wrap;gap:4px}
+.session-tag{font-size:10.5px;background:var(--bg4);border:1px solid var(--border2);border-radius:4px;padding:2px 7px;color:var(--t2);white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}
+
+/* PUBLISH */
+.pcard{background:var(--bg3);border:1px solid var(--ac-br);border-radius:var(--rl);padding:18px;margin-bottom:16px}
+.plabel{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin-bottom:9px;font-weight:700}
+.pbanner{background:var(--bg4);border:1px solid var(--border2);border-radius:var(--r);padding:13px 15px;display:flex;align-items:flex-start;gap:11px}
+.picon{width:34px;height:34px;border-radius:7px;background:var(--ac-bg);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ptit2{font-weight:500;font-size:13px;margin-bottom:3px}.pbody2{font-size:11.5px;color:var(--t2);line-height:1.5}
+
+/* EDIT MODAL */
+.edit-overlay{position:fixed;inset:0;background:rgba(10,15,30,.8);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;backdrop-filter:blur(4px)}
+.edit-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);width:100%;max-width:540px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:em-in .18s ease}
+@keyframes em-in{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+.edit-modal-top{background:var(--bg3);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.edit-modal-title{font-size:13px;font-weight:600}
+.edit-modal-close{background:none;border:none;color:var(--t3);font-size:18px;cursor:pointer;line-height:1;padding:2px 6px;transition:color .15s}.edit-modal-close:hover{color:var(--rd)}
+.edit-modal-body{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px;max-height:65vh;overflow-y:auto}
+.edit-modal-body .fg{margin-bottom:0}.edit-modal-body .fw{grid-column:1/-1}
+.edit-modal-foot{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+
+/* FIREBASE STATUS */
+.fb-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);margin-bottom:10px}
+.fb-dot{width:6px;height:6px;border-radius:50%;background:var(--t3);flex-shrink:0;transition:background .3s}
+.fb-dot.on{background:var(--gr)}.fb-dot.err{background:var(--rd)}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--bg2);border:1px solid rgba(34,200,122,.3);border-radius:var(--r);padding:11px 17px;font-size:13px;color:var(--gr);z-index:99999;display:flex;align-items:center;gap:9px;box-shadow:0 4px 20px rgba(0,0,0,.5);transform:translateY(70px);opacity:0;transition:all .28s ease;pointer-events:none;max-width:340px}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* EMPTY / SPIN */
+.empty{text-align:center;padding:44px 20px}.empty-ic{font-size:34px;margin-bottom:9px}.empty-tx{font-size:13px;color:var(--t2)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--ac2);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.users-loading{display:flex;align-items:center;justify-content:center;padding:40px;font-size:13px;color:var(--t2)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="lcard">
+    <div class="llogo">Alpha<span>Scramblers</span></div>
+    <div class="lsub">Admin Portal</div>
+    <div class="lerr" id="lerr">Incorrect email or password.</div>
+    <div class="fg"><label class="fl">Admin Email</label><input class="fi" type="email" id="ae" placeholder="admin@alphascramblers.com"/></div>
+    <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="ap" placeholder="••••••••"/></div>
+    <button class="lbtn" id="lbtn">Sign In →</button>
+    <p class="lhint">Restricted to authorised AlphaScramblers admins only.</p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <nav class="sidebar">
+    <div class="slogo">Alpha<span>Scramblers</span><span class="sbadge">ADMIN</span></div>
+    <div class="nsec">Manage</div>
+    <div class="ni active" data-tab="sessions"><span class="nic">📅</span>Sessions</div>
+    <div class="ni" data-tab="users"><span class="nic">👥</span>All Users</div>
+    <div class="nsec">Actions</div>
+    <div class="ni" data-tab="publish"><span class="nic">📢</span>Publish Session</div>
+    <div class="sfooter">
+      <div class="fb-status"><div class="fb-dot" id="fbdot"></div><span id="fbstatus">Connecting…</span></div>
+      <div class="achip">
+        <div class="aav" id="aav">AD</div>
+        <div class="ainfo"><div class="aname" id="aname">Admin</div><div class="aemail" id="aemail">—</div></div>
+        <button class="logbtn" id="logbtn" title="Sign out">✕</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="ptitle" id="ptitle">Sessions</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="blive">Live</span>
+        <span class="syncing" id="syncmsg"></span>
+      </div>
+    </div>
+    <div class="content">
+
+      <!-- SESSIONS TAB -->
+      <div class="section active" id="tab-sessions">
+        <div class="card">
+          <div class="ch">
+            <div><div class="ct">All Sessions</div><div class="cs">Click a session to see who registered</div></div>
+            <button class="btn btn-ac sm" id="go-publish-btn">+ Publish New</button>
+          </div>
+          <div class="slist" id="sess-list"></div>
+        </div>
+      </div>
+
+      <!-- USERS TAB -->
+      <div class="section" id="tab-users">
+        <div class="card">
+          <div class="ch">
+            <div><div class="ct">All Users</div><div class="cs">Everyone signed up on AlphaScramblers — from MongoDB</div></div>
+            <button class="btn btn-sec sm" id="refresh-users-btn">↻ Refresh</button>
+          </div>
+          <div class="fbar"><input class="fsearch" type="search" id="usearch" placeholder="Search by name, email or phone…"/></div>
+          <div id="users-container"><div class="users-loading"><span class="spin"></span>Loading users…</div></div>
+        </div>
+      </div>
+
+      <!-- PUBLISH TAB -->
+      <div class="section" id="tab-publish">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+          <div class="card">
+            <div class="ch"><div><div class="ct">Schedule a New Session</div><div class="cs">Goes live on your website immediately</div></div></div>
+            <div class="sform">
+              <div class="fg fw"><label class="fl">Session Title *</label><input class="fi" id="st" type="text" placeholder="e.g. Career Counselling — Batch 4"/></div>
+              <div class="fg"><label class="fl">Topic / Focus</label><input class="fi" id="sto" type="text" placeholder="e.g. Stream Selection"/></div>
+              <div class="fg"><label class="fl">Date *</label><input class="fi" id="sd" type="date"/></div>
+              <div class="fg"><label class="fl">Time *</label><input class="fi" id="stm" type="time"/></div>
+              <div class="fg"><label class="fl">Duration</label><select class="fi" id="sdu"><option>30 minutes</option><option selected>1 hour</option><option>1.5 hours</option><option>2 hours</option><option>3 hours</option></select></div>
+              <div class="fg"><label class="fl">Max Seats</label><input class="fi" id="sseat" type="number" placeholder="e.g. 25" min="1"/></div>
+              <div class="fg fw"><label class="fl">Fee (₹) — leave 0 for free</label><input class="fi" id="sfee" type="number" placeholder="0" min="0" value="0"/></div>
+              <div class="fg fw"><label class="fl">Description</label><textarea class="fi" id="sdesc" rows="3" placeholder="What will this session cover?"></textarea></div>
+              <div class="fg fw frow"><button class="btn btn-sec" id="clearbtn">Clear</button><button class="btn btn-ac" id="pubbtn">🚀 Publish Session</button></div>
+            </div>
+          </div>
+          <div>
+            <div class="pcard">
+              <div class="plabel">Live preview — what students see</div>
+              <div class="pbanner">
+                <div class="picon">🗓️</div>
+                <div><div class="ptit2" id="prtit">Session title will appear here</div><div class="pbody2" id="prbod">Fill the form to preview.</div></div>
+              </div>
+            </div>
+            <div class="card" style="margin-top:0">
+              <div class="ct" style="margin-bottom:8px">How it works</div>
+              <p style="font-size:12.5px;color:var(--t2);line-height:1.7">Sessions publish instantly to your website via Firebase. Registrations appear in real-time under each session card here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="toast-ic">✓</span><span id="toast-msg">Done</span></div>
+
+<script type="module">
+// ═══════════════════════════════════════════
+// CONFIG — update credentials here
+// ═══════════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCHcVfXAMA-kBkD4BbX4HG6HhDpHUOhzmo",
+  authDomain: "alphascramblers-3b9b3.firebaseapp.com",
+  databaseURL: "https://alphascramblers-3b9b3-default-rtdb.firebaseio.com",
+  projectId: "alphascramblers-3b9b3",
+  storageBucket: "alphascramblers-3b9b3.firebasestorage.app",
+  messagingSenderId: "826735666486",
+  appId: "1:826735666486:web:5f060671faf03769087f97"
+};
+
+const ADMINS = [
+  { email: 'admin1@alphascramblers.com', password: 'Admin@123', name: 'Admin One' },
+  { email: 'admin2@alphascramblers.com', password: 'Admin@456', name: 'Admin Two' },
+  { email: 'admin3@alphascramblers.com', password: 'Admin@789', name: 'Admin Three' },
+];
+
+// ═══════════════════════════════════════════
+// FIREBASE — single get() on load, direct set/remove for writes
+// NO onValue listeners — they cause race conditions with writes
+// ═══════════════════════════════════════════
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, set, get, remove, update, push }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+let db = null;
+let sessions = [];
+let bookings  = [];
+
+function setFbStatus(ok, msg) {
+  const dot = Q('#fbdot'), txt = Q('#fbstatus');
+  dot.className = 'fb-dot ' + (ok === true ? 'on' : ok === false ? 'err' : '');
+  txt.textContent = msg;
+}
+
+try {
+  const app = initializeApp(FIREBASE_CONFIG);
+  db = getDatabase(app);
+  setFbStatus(null, 'Connecting…');
+} catch(e) {
+  setFbStatus(false, 'Firebase error: ' + e.message);
+}
+
+// Load all data once on login
+async function loadAllData() {
+  if (!db) { setFbStatus(false, 'No DB'); return; }
+  try {
+    setFbStatus(null, 'Loading…');
+    const [ss, bb] = await Promise.all([
+      get(ref(db, 'sessions')),
+      get(ref(db, 'bookings'))
+    ]);
+    sessions = ss.val() ? Object.entries(ss.val()).map(([id,v]) => ({id,...v})) : [];
+    bookings  = bb.val() ? Object.entries(bb.val()).map(([id,v]) => ({id,...v})) : [];
+    setFbStatus(true, 'Firebase connected');
+    renderSessions();
+  } catch(e) {
+    setFbStatus(false, 'Load failed: ' + e.message);
+    toast('Failed to load data: ' + e.message, 'rd');
+  }
+}
+
+// Direct Firebase write helpers — no guards, errors shown in toast
+async function fbSet(path, data) {
+  try { await set(ref(db, path), data); }
+  catch(e) { toast('Write failed: ' + e.message, 'rd'); throw e; }
+}
+async function fbRemove(path) {
+  try { await remove(ref(db, path)); }
+  catch(e) { toast('Delete failed: ' + e.message, 'rd'); throw e; }
+}
+async function fbUpdate(path, data) {
+  try { await update(ref(db, path), data); }
+  catch(e) { toast('Update failed: ' + e.message, 'rd'); throw e; }
+}
+
+// ═══════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════
+let currentAdmin = null;
+const saved = sessionStorage.getItem('as_admin');
+if (saved) { currentAdmin = JSON.parse(saved); showDashboard(); }
+
+Q('#lbtn').addEventListener('click', doLogin);
+Q('#ap').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
+
+function doLogin() {
+  const em = Q('#ae').value.trim().toLowerCase();
+  const pw = Q('#ap').value;
+  const admin = ADMINS.find(a => a.email===em && a.password===pw);
+  if (!admin) { Q('#lerr').style.display='block'; return; }
+  Q('#lerr').style.display='none';
+  currentAdmin = admin;
+  sessionStorage.setItem('as_admin', JSON.stringify(admin));
+  showDashboard();
+}
+
+Q('#logbtn').addEventListener('click', () => {
+  sessionStorage.clear(); currentAdmin = null;
+  Q('#dashboard').style.display='none';
+  Q('#login-screen').style.display='flex';
+});
+
+function showDashboard() {
+  Q('#login-screen').style.display='none';
+  Q('#dashboard').style.display='block';
+  Q('#aav').textContent  = ini2(currentAdmin.name);
+  Q('#aname').textContent  = currentAdmin.name;
+  Q('#aemail').textContent = currentAdmin.email;
+  loadAllData();
+  loadMongoUsers();
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+const TITLES = { sessions:'Sessions', users:'All Users', publish:'Publish Session' };
+Q('.sidebar').addEventListener('click', e => {
+  const ni = e.target.closest('.ni');
+  if (!ni || !ni.dataset.tab) return;
+  switchTab(ni.dataset.tab);
+});
+function switchTab(tab) {
+  document.querySelectorAll('.ni').forEach(n => n.classList.toggle('active', n.dataset.tab===tab));
+  document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id==='tab-'+tab));
+  Q('#ptitle').textContent = TITLES[tab]||'';
+}
+Q('#go-publish-btn').addEventListener('click', () => switchTab('publish'));
+
+// ═══════════════════════════════════════════
+// SESSIONS — render with dropdown registrants
+// ═══════════════════════════════════════════
+const avcs = ['avp','avg','avb','ava'];
+
+function renderSessions() {
+  const el = Q('#sess-list');
+  if (!sessions.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-ic">📅</div><div class="empty-tx">No sessions yet. Use "Publish Session" to create one.</div></div>';
+    return;
+  }
+  const now = new Date();
+  const sorted = [...sessions].sort((a,b) => new Date(a.date+'T'+a.time) - new Date(b.date+'T'+b.time));
+
+  el.innerHTML = sorted.map(s => {
+    const dt = new Date(s.date+'T'+s.time);
+    const past = dt < now;
+    const live = !past && (dt - now) < 3600000;
+    const pc = past ? 'pill-past' : live ? 'pill-live' : 'pill-up';
+    const pl = past ? 'Past' : live ? '● Live' : 'Upcoming';
+    const mon = dt.toLocaleString('en',{month:'short'}).toUpperCase();
+    const day = dt.getDate();
+    const regs = bookings.filter(b => b.sid === s.id);
+
+    const regRows = regs.length
+      ? regs.map((b,i) => `
+        <div class="reg-row">
+          <div class="uav ${avcs[i%4]}">${ini2(b.name)}</div>
+          <div style="flex:1;min-width:0">
+            <div class="reg-name">${esc(b.name)}</div>
+            <div class="reg-email">${esc(b.email||'—')}</div>
+          </div>
+          <div class="reg-phone">${esc(b.phone||'—')}</div>
+          <div class="reg-date">${fmtDate(b.at)}</div>
+          <button class="wptick ${b.wpAdded?'done':''}" data-bid="${b.id}">
+            <div class="wptick-box"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="wptick-label">${b.wpAdded?'WP Added':'Add to WP'}</span>
+          </button>
+        </div>`).join('')
+      : '<div class="sc-empty">No registrations yet.</div>';
+
+    return `
+      <div class="scard ${live?'live-card':''}" data-sid="${s.id}">
+        <div class="sc-head">
+          <div class="sc-date-block"><div class="sc-mon">${mon}</div><div class="sc-day">${day}</div></div>
+          <div class="sc-divider"></div>
+          <div class="sc-info">
+            <div class="sc-title">${esc(s.title)}</div>
+            <div class="sc-meta">${fmtTime(s.time)} · ${esc(s.duration||'1 hr')}${s.seats?' · '+s.seats+' seats':''}${s.fee&&s.fee!='0'?' · ₹'+s.fee:' · Free'}${s.topic?' · '+esc(s.topic):''}</div>
+          </div>
+          <div class="sc-right">
+            <span class="b bb">${regs.length} registered</span>
+            <span class="pill ${pc}">${pl}</span>
+            <span class="sc-chevron">▶</span>
+          </div>
+        </div>
+        <div class="sc-body">
+          <div class="sc-body-inner">
+            <div class="sc-reg-header">
+              <div class="sc-reg-title">Registered Students</div>
+              <span class="reg-count">${regs.length}</span>
+            </div>
+            <div class="reg-list">${regRows}</div>
+          </div>
+          <div class="sc-del-row">
+            <button class="btn btn-am sm edit-sess">✏️ Edit</button>
+            <button class="btn btn-rd sm del-sess">Remove Session</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Toggle dropdown
+  el.querySelectorAll('.sc-head').forEach(head => {
+    head.addEventListener('click', () => {
+      const card = head.closest('.scard');
+      const body = card.querySelector('.sc-body');
+      const chev = head.querySelector('.sc-chevron');
+      const wasOpen = body.classList.contains('open');
+      el.querySelectorAll('.sc-body').forEach(b => b.classList.remove('open'));
+      el.querySelectorAll('.sc-chevron').forEach(c => c.classList.remove('open'));
+      if (!wasOpen) { body.classList.add('open'); chev.classList.add('open'); }
+    });
+  });
+
+  // WP tick
+  el.querySelectorAll('.wptick').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.stopPropagation();
+      const bid = btn.dataset.bid;
+      const bk = bookings.find(b => b.id===bid);
+      if (!bk) return;
+      bk.wpAdded = !bk.wpAdded;
+      try {
+        await fbUpdate('bookings/'+bid, { wpAdded: bk.wpAdded, wpBy: currentAdmin.name, wpAt: new Date().toISOString() });
+        renderSessions();
+        toast(bk.wpAdded ? '✓ Marked added to WP' : 'Unmarked', bk.wpAdded?'gr':'am');
+      } catch(e) { bk.wpAdded = !bk.wpAdded; } // revert on fail
+    });
+  });
+
+  // Remove session
+  el.querySelectorAll('.del-sess').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.stopPropagation();
+      const sid = btn.closest('[data-sid]').dataset.sid;
+      if (!confirm('Remove this session from the website?')) return;
+      btn.textContent = 'Removing…'; btn.disabled = true;
+      try {
+        await fbRemove('sessions/'+sid);           // delete from Firebase first
+        sessions = sessions.filter(s => s.id!==sid); // then update local array
+        renderSessions();
+        toast('Session removed', 'rd');
+      } catch(e) { btn.textContent='Remove Session'; btn.disabled=false; }
+    });
+  });
+
+  // Edit session
+  el.querySelectorAll('.edit-sess').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const sid = btn.closest('[data-sid]').dataset.sid;
+      const s = sessions.find(x => x.id===sid);
+      if (s) openEditModal(s);
+    });
+  });
+}
+
+// ═══════════════════════════════════════════
+// EDIT SESSION MODAL
+// ═══════════════════════════════════════════
+function openEditModal(s) {
+  const old = document.getElementById('edit-overlay');
+  if (old) old.remove();
+
+  const durOptions = ['30 minutes','1 hour','1.5 hours','2 hours','3 hours'];
+  const durOpts = durOptions.map(d => `<option${d===s.duration?' selected':''}>${d}</option>`).join('');
+
+  const ov = document.createElement('div');
+  ov.className = 'edit-overlay'; ov.id = 'edit-overlay';
+  ov.innerHTML = `
+    <div class="edit-modal">
+      <div class="edit-modal-top">
+        <div class="edit-modal-title">✏️ Edit Session</div>
+        <button class="edit-modal-close" id="edit-close">✕</button>
+      </div>
+      <div class="edit-modal-body">
+        <div class="fg fw"><label class="fl">Session Title *</label><input class="fi" id="e-title"/></div>
+        <div class="fg"><label class="fl">Topic / Focus</label><input class="fi" id="e-topic"/></div>
+        <div class="fg"><label class="fl">Date *</label><input class="fi" type="date" id="e-date"/></div>
+        <div class="fg"><label class="fl">Time *</label><input class="fi" type="time" id="e-time"/></div>
+        <div class="fg"><label class="fl">Duration</label><select class="fi" id="e-dur">${durOpts}</select></div>
+        <div class="fg"><label class="fl">Max Seats</label><input class="fi" type="number" id="e-seats" min="1"/></div>
+        <div class="fg fw"><label class="fl">Fee (₹) — 0 for free</label><input class="fi" type="number" id="e-fee" min="0"/></div>
+        <div class="fg fw"><label class="fl">Description</label><textarea class="fi" id="e-desc" rows="3"></textarea></div>
+      </div>
+      <div class="edit-modal-foot">
+        <button class="btn btn-sec" id="edit-cancel">Cancel</button>
+        <button class="btn btn-ac" id="edit-save">Save Changes</button>
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+
+  // Populate with .value — no HTML encoding
+  document.getElementById('e-title').value = s.title    || '';
+  document.getElementById('e-topic').value = s.topic    || '';
+  document.getElementById('e-date').value  = s.date     || '';
+  document.getElementById('e-time').value  = s.time     || '';
+  document.getElementById('e-seats').value = s.seats    || '';
+  document.getElementById('e-fee').value   = s.fee      || '0';
+  document.getElementById('e-desc').value  = s.desc     || '';
+
+  const closeModal = () => ov.remove();
+  ov.addEventListener('click', e => { if (e.target===ov) closeModal(); });
+  document.getElementById('edit-close').addEventListener('click', closeModal);
+  document.getElementById('edit-cancel').addEventListener('click', closeModal);
+
+  document.getElementById('edit-save').addEventListener('click', async () => {
+    const title = document.getElementById('e-title').value.trim();
+    const date  = document.getElementById('e-date').value;
+    const time  = document.getElementById('e-time').value;
+    if (!title||!date||!time) { toast('Title, Date and Time are required', 'rd'); return; }
+
+    const saveBtn = document.getElementById('edit-save');
+    saveBtn.textContent = 'Saving…'; saveBtn.disabled = true;
+
+    const updated = {
+      id:       s.id,
+      title,
+      topic:    document.getElementById('e-topic').value.trim(),
+      date,
+      time,
+      duration: document.getElementById('e-dur').value,
+      seats:    document.getElementById('e-seats').value,
+      fee:      document.getElementById('e-fee').value || '0',
+      desc:     document.getElementById('e-desc').value.trim(),
+      by:       s.by || currentAdmin.name,
+      at:       s.at || new Date().toISOString(),
+      editedBy: currentAdmin.name,
+      editedAt: new Date().toISOString()
+    };
+
+    try {
+      await fbSet('sessions/'+s.id, updated);        // write to Firebase first
+      const idx = sessions.findIndex(x => x.id===s.id);
+      if (idx > -1) sessions[idx] = updated;         // then update local array
+      closeModal();
+      renderSessions();
+      toast('✓ Session updated — live on website', 'gr');
+    } catch(e) {
+      saveBtn.textContent = 'Save Changes'; saveBtn.disabled = false;
+    }
+  });
+}
+
+// ═══════════════════════════════════════════
+// MONGO USERS
+// ═══════════════════════════════════════════
+let mongoUsers = [];
+let usersLoaded = false;
+
+async function loadMongoUsers() {
+  const container = Q('#users-container');
+  container.innerHTML = '<div class="users-loading"><span class="spin"></span>Loading users…</div>';
+  try {
+    await fetch('/api/users-admin', { headers: { 'x-admin-secret': 'alphascramblers_admin_2025' } })
+      .then(r => r.json())
+      .then(data => {
+        if (!data.success) throw new Error(data.message||'Failed');
+        mongoUsers = data.users || [];
+        usersLoaded = true;
+        renderUsers();
+      });
+  } catch(e) {
+    container.innerHTML = `<div class="empty"><div class="empty-ic">⚠️</div><div class="empty-tx">Could not load users.<br/><span style="font-size:11px;color:var(--t3)">${e.message}</span></div></div>`;
+  }
+}
+
+Q('#refresh-users-btn').addEventListener('click', loadMongoUsers);
+Q('#usearch').addEventListener('input', renderUsers);
+
+function renderUsers() {
+  const container = Q('#users-container');
+  if (!usersLoaded) return;
+  const q = Q('#usearch').value.toLowerCase();
+
+  let users = mongoUsers.map(u => {
+    const fbBks = bookings.filter(b => b.email === u.email);
+    return { ...u, sessionTitles: fbBks.map(b => b.stitle||'Session') };
+  });
+
+  if (q) users = users.filter(u =>
+    ((u.firstName||'')+' '+(u.lastName||'')).toLowerCase().includes(q) ||
+    (u.email||'').toLowerCase().includes(q) ||
+    (u.mobileno||'').includes(q)
+  );
+
+  if (!users.length) {
+    container.innerHTML = '<div class="empty"><div class="empty-ic">👥</div><div class="empty-tx">No users found</div></div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="tw"><table>
+      <thead><tr><th>Student</th><th>Email</th><th>Mobile</th><th>Sessions Booked</th></tr></thead>
+      <tbody>${users.map((u,i) => {
+        const name = ((u.firstName||'')+' '+(u.lastName||'')).trim()||'—';
+        const sessHtml = u.sessionTitles.length
+          ? u.sessionTitles.map(t=>`<span class="session-tag" title="${esc(t)}">${esc(t)}</span>`).join('')
+          : '<span style="color:var(--t3);font-size:12px">—</span>';
+        return `<tr>
+          <td><div class="uchip"><div class="uav ${avcs[i%4]}">${ini2(name)}</div><div><div class="uname">${esc(name)}</div><div class="uemail">${esc(u.email||'—')}</div></div></div></td>
+          <td style="color:var(--t2)">${esc(u.email||'—')}</td>
+          <td style="color:var(--t2)">${esc(u.mobileno||'—')}</td>
+          <td><div class="user-sessions-cell">${sessHtml}</div></td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>
+    <div style="padding:12px 4px 0;font-size:11.5px;color:var(--t3)">${users.length} user${users.length!==1?'s':''}</div>`;
+}
+
+// ═══════════════════════════════════════════
+// PUBLISH SESSION
+// ═══════════════════════════════════════════
+['st','sd','stm','sto'].forEach(id => Q('#'+id).addEventListener('input', updatePreview));
+function updatePreview() {
+  const t = Q('#st').value||'Session title';
+  const d = Q('#sd').value, tm = Q('#stm').value, to = Q('#sto').value;
+  Q('#prtit').textContent = t;
+  Q('#prbod').textContent = (d&&tm ? fmtDateStr(d)+' at '+fmtTime(tm) : 'Date & time TBD')+(to?' · '+to:'');
+}
+
+Q('#pubbtn').addEventListener('click', async () => {
+  const title = Q('#st').value.trim();
+  const date  = Q('#sd').value;
+  const time  = Q('#stm').value;
+  if (!title||!date||!time) { toast('Fill in Title, Date and Time', 'rd'); return; }
+  const id = genId();
+  const sess = { id, title, topic:Q('#sto').value.trim(), date, time,
+    duration:Q('#sdu').value, seats:Q('#sseat').value, fee:Q('#sfee').value||'0',
+    desc:Q('#sdesc').value.trim(), by:currentAdmin.name, at:new Date().toISOString() };
+  Q('#pubbtn').textContent='Publishing…'; Q('#pubbtn').disabled=true;
+  try {
+    await fbSet('sessions/'+id, sess);
+    sessions.unshift(sess);
+    clearForm();
+    renderSessions();
+    toast('🚀 Session is now live!', 'gr');
+    switchTab('sessions');
+  } catch(e){}
+  Q('#pubbtn').textContent='🚀 Publish Session'; Q('#pubbtn').disabled=false;
+});
+
+Q('#clearbtn').addEventListener('click', clearForm);
+function clearForm() {
+  ['st','sto','sd','stm','sseat','sdesc'].forEach(id=>Q('#'+id).value='');
+  Q('#sdu').value='1 hour'; Q('#sfee').value='0';
+  updatePreview();
+}
+
+// ═══════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════
+function Q(sel)  { return document.querySelector(sel); }
+function esc(s)  { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function genId() { return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function ini2(n) { return String(n||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?'; }
+function fmtDate(iso){ return iso?new Date(iso).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—'; }
+function fmtTime(t){
+  if(!t) return '—';
+  const [h,m]=t.split(':'); const hr=parseInt(h);
+  return (hr>12?hr-12:hr||12)+':'+m+' '+(hr>=12?'PM':'AM');
+}
+function fmtDateStr(d){ return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}); }
+
+let tt;
+function toast(msg, type='gr'){
+  const t=Q('#toast'),ic=Q('#toast-ic'),m=Q('#toast-msg');
+  const cols={gr:'rgba(34,200,122,.3)',rd:'rgba(255,90,90,.3)',am:'rgba(255,181,71,.3)'};
+  const txts={gr:'var(--gr)',rd:'var(--rd)',am:'var(--am)'};
+  t.style.borderColor=cols[type]||cols.gr; t.style.color=txts[type]||txts.gr;
+  ic.textContent={gr:'✓',rd:'✗',am:'!'}[type]||'✓'; m.textContent=msg;
+  t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),3200);
+}
+let stt;
+function syncMsg(msg){ const el=Q('#syncmsg'); el.textContent=msg; clearTimeout(stt); stt=setTimeout(()=>el.textContent='',2500); }
+</script>
+</body>
+</html>
