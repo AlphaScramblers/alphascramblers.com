@@ -5,15 +5,11 @@ import { adminAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 
-// GET /api/sessions — all sessions
+// GET /api/sessions — all sessions (public)
 router.get("/", async (req, res) => {
   try {
     const { db } = await connectDB();
-    const sessions = await db
-      .collection("sessions")
-      .find({})
-      .sort({ date: 1, time: 1 })
-      .toArray();
+    const sessions = await db.collection("sessions").find({}).sort({ date: 1, time: 1 }).toArray();
     return res.json({ success: true, sessions });
   } catch (err) {
     console.error("GET SESSIONS ERROR:", err);
@@ -21,7 +17,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST /api/sessions — create a new session (admin only)
+// POST /api/sessions — create session (admin only)
 router.post("/", adminAuth, async (req, res) => {
   try {
     const { title, topic, date, time, duration, seats, fee, desc } = req.body;
@@ -30,18 +26,13 @@ router.post("/", adminAuth, async (req, res) => {
 
     const { db } = await connectDB();
     const session = {
-      title,
-      topic:    topic    || "",
-      date,
-      time,
+      title, topic: topic || "", date, time,
       duration: duration || "1 hour",
-      seats:    seats    || "",
-      fee:      fee      || "0",
-      desc:     desc     || "",
-      by:       req.admin.name,
-      at:       new Date().toISOString(),
+      seats: seats || "", fee: fee || "0", desc: desc || "",
+      bookings: [],   // array of userIds
+      by: req.admin.name,
+      at: new Date().toISOString(),
     };
-
     const result = await db.collection("sessions").insertOne(session);
     return res.json({ success: true, session: { ...session, _id: result.insertedId } });
   } catch (err) {
@@ -50,7 +41,72 @@ router.post("/", adminAuth, async (req, res) => {
   }
 });
 
-// PUT /api/sessions/:id — update a session (admin only)
+// POST /api/sessions/:id/book — student books a session
+router.post("/:id/book", async (req, res) => {
+  try {
+    const { userId, name, firstName, lastName, email, phone } = req.body;
+    if (!userId || !email)
+      return res.status(400).json({ success: false, message: "userId and email required" });
+
+    const { db } = await connectDB();
+    const sessions = db.collection("sessions");
+    const bookings = db.collection("bookings");
+
+    const session = await sessions.findOne({ _id: new ObjectId(req.params.id) });
+    if (!session)
+      return res.status(404).json({ success: false, message: "Session not found" });
+
+    // Check if already booked
+    const existing = await bookings.findOne({ sid: req.params.id, userId });
+    if (existing)
+      return res.status(400).json({ success: false, message: "Already registered for this session" });
+
+    // Add userId to session's bookings array
+    await sessions.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $addToSet: { bookings: userId } }
+    );
+
+    // Save full booking details in bookings collection
+    await bookings.insertOne({
+      sid:         req.params.id,
+      stitle:      session.title,
+      userId,
+      name,
+      firstName,
+      lastName,
+      email,
+      phone:       phone || "",
+      sessionDate: session.date || "",
+      sessionTime: session.time || "",
+      duration:    session.duration || "",
+      fee:         session.fee || "0",
+      wpAdded:     false,
+      at:          new Date().toISOString(),
+    });
+
+    return res.json({ success: true, message: "Booking confirmed" });
+  } catch (err) {
+    console.error("BOOK SESSION ERROR:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// GET /api/sessions/:id/booked/:userId — check if user already booked
+router.get("/:id/booked/:userId", async (req, res) => {
+  try {
+    const { db } = await connectDB();
+    const booking = await db.collection("bookings").findOne({
+      sid: req.params.id,
+      userId: req.params.userId
+    });
+    return res.json({ success: true, booked: !!booking });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// PUT /api/sessions/:id — update session (admin only)
 router.put("/:id", adminAuth, async (req, res) => {
   try {
     const { title, topic, date, time, duration, seats, fee, desc } = req.body;
@@ -61,21 +117,16 @@ router.put("/:id", adminAuth, async (req, res) => {
     const update = {
       title, topic: topic || "", date, time,
       duration: duration || "1 hour",
-      seats: seats || "",
-      fee: fee || "0",
-      desc: desc || "",
+      seats: seats || "", fee: fee || "0", desc: desc || "",
       editedBy: req.admin.name,
       editedAt: new Date().toISOString(),
     };
-
     const result = await db.collection("sessions").updateOne(
       { _id: new ObjectId(req.params.id) },
       { $set: update }
     );
-
     if (result.matchedCount === 0)
       return res.status(404).json({ success: false, message: "Session not found" });
-
     return res.json({ success: true, session: { _id: req.params.id, ...update } });
   } catch (err) {
     console.error("UPDATE SESSION ERROR:", err);
@@ -83,7 +134,7 @@ router.put("/:id", adminAuth, async (req, res) => {
   }
 });
 
-// DELETE /api/sessions/:id — delete a session (admin only)
+// DELETE /api/sessions/:id — delete session (admin only)
 router.delete("/:id", adminAuth, async (req, res) => {
   try {
     const { db } = await connectDB();

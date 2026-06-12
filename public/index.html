@@ -1029,337 +1029,308 @@
     <script src="./homepage/alpha.js"></script>
     <script src="./navregbot.js"></script>
     <script src="./login-signup-profile.js"></script>
+    
+    <!-- SESSION BANNER SCRIPT — replace the existing <script type="module"> block with this -->
+<script>
+const API = 'https://alphascramblers-com.onrender.com';
 
-    <!-- SESSION BANNER SCRIPT -->
-    <script type="module">
-    import { initializeApp }
-      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getDatabase, ref, onValue, push, set, get }
-      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+let currentSession = null;
+const section = document.getElementById('as-session-section');
 
-    const FIREBASE_CONFIG = {
-      apiKey: "AIzaSyCHcVfXAMA-kBkD4BbX4HG6HhDpHUOhzmo",
-      authDomain: "alphascramblers-3b9b3.firebaseapp.com",
-      databaseURL: "https://alphascramblers-3b9b3-default-rtdb.firebaseio.com",
-      projectId: "alphascramblers-3b9b3",
-      storageBucket: "alphascramblers-3b9b3.firebasestorage.app",
-      messagingSenderId: "826735666486",
-      appId: "1:826735666486:web:5f060671faf03769087f97"
-    };
+// ── localStorage helpers ──
+function lsKey(userId) { return 'as_reg_' + userId; }
+function isBookedLocally(sid, userId) {
+  try { return JSON.parse(localStorage.getItem(lsKey(userId)) || '[]').includes(sid); }
+  catch { return false; }
+}
+function saveBookedLocally(sid, userId) {
+  try {
+    const arr = JSON.parse(localStorage.getItem(lsKey(userId)) || '[]');
+    if (!arr.includes(sid)) arr.push(sid);
+    localStorage.setItem(lsKey(userId), JSON.stringify(arr));
+  } catch {}
+}
 
-    const app = initializeApp(FIREBASE_CONFIG);
-    const db  = getDatabase(app);
-    let currentSession = null;
-    const section = document.getElementById('as-session-section');
+// ── Get logged-in user ──
+async function getLoggedInUser() {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  try {
+    const res  = await fetch('/api/profile', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    return data.success ? data.profile : null;
+  } catch { return null; }
+}
 
-    // ── localStorage helpers — per user email ──
-    function lsKey(email) { return 'as_reg_' + btoa(email).replace(/=/g,''); }
-    function isBookedLocally(sid, email) {
-      if (!email) return false;
-      try { return JSON.parse(localStorage.getItem(lsKey(email)) || '[]').includes(sid); }
-      catch { return false; }
-    }
-    function saveBookedLocally(sid, email) {
-      if (!email) return;
-      try {
-        const arr = JSON.parse(localStorage.getItem(lsKey(email)) || '[]');
-        if (!arr.includes(sid)) arr.push(sid);
-        localStorage.setItem(lsKey(email), JSON.stringify(arr));
-      } catch {}
-    }
+// ── Fee helpers ──
+function formatFee(fee) {
+  if (!fee || fee == 0 || fee === '0') return { label: 'Free', originalPrice: '99', paid: false };
+  return { label: fee, originalPrice: null, paid: true };
+}
 
-    // ── Get logged-in user from MongoDB ──
-    async function getLoggedInUser() {
-      const token = localStorage.getItem('token');
-      if (!token) return null;
-      try {
-        const res  = await fetch('/api/profile', { headers: { Authorization: 'Bearer ' + token } });
-        const data = await res.json();
-        return data.success ? data.profile : null;
-      } catch { return null; }
-    }
+// ── Button state helpers ──
+function setRegisteredBtn(btn) {
+  btn.textContent = 'Registered ✓';
+  btn.classList.add('as-registered');
+  btn.disabled = true;
+}
+function setBookBtn(btn) {
+  btn.textContent = 'Book Your Seat';
+  btn.classList.remove('as-registered');
+  btn.disabled = false;
+}
 
-    // ── Check Firebase for existing booking ──
-    async function alreadyRegistered(sid, email) {
-      try {
-        const snap = await get(ref(db, 'bookings'));
-        if (!snap.val()) return false;
-        return Object.values(snap.val()).some(b => b.sid === sid && b.email === email);
-      } catch { return false; }
-    }
-
-    // ── Fee helpers ──
-    function formatFee(fee) {
-      if (!fee || fee == 0 || fee === '0') return { label: 'Free', originalPrice: '99', paid: false };
-      return { label: fee, originalPrice: null, paid: true };
+// ── Load sessions from Express backend ──
+async function loadSessions() {
+  try {
+    const res  = await fetch(`${API}/api/sessions`);
+    const data = await res.json();
+    if (!data.success || !data.sessions.length) {
+      section.classList.remove('as-visible');
+      return;
     }
 
-    // ── Button state helpers ──
-    function setRegisteredBtn(btn) {
-      btn.textContent = 'Registered';
-      btn.classList.add('as-registered');
-      btn.disabled = true;
-    }
-    function setBookBtn(btn) {
-      btn.textContent = 'Book Your Seat';
-      btn.classList.remove('as-registered');
-      btn.disabled = false;
-    }
+    // Pick the next upcoming session
+    const now  = new Date();
+    const upcoming = data.sessions
+      .filter(s => s.date && s.time && new Date(s.date + 'T' + s.time) > now)
+      .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
 
-    // ── Listen for sessions ──
-    onValue(ref(db, 'sessions'), async snap => {
-      const data = snap.val();
-      if (!data) { section.classList.remove('as-visible'); return; }
+    if (!upcoming.length) { section.classList.remove('as-visible'); return; }
 
-      const all = Object.entries(data)
-        .map(([id, v]) => ({ id, ...v }))
-        .sort((a, b) => {
-          const ta = a.date && a.time ? new Date(a.date+'T'+a.time) : new Date(a.at||0);
-          const tb = b.date && b.time ? new Date(b.date+'T'+b.time) : new Date(b.at||0);
-          return ta - tb;
-        });
-      if (!all.length) { section.classList.remove('as-visible'); return; }
+    currentSession = upcoming[0];
+    const s  = currentSession;
+    const d  = new Date(s.date + 'T' + s.time);
+    const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
 
-      currentSession = all[0];
-      const s = currentSession;
-      const d = new Date(s.date + 'T' + s.time);
-      const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-      const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
+    document.getElementById('as-title').textContent = s.title;
+    let meta = dateStr + ' at ' + timeStr + ' &nbsp;|&nbsp; ' + (s.duration || '1 hour');
+    if (s.topic) meta += ' &nbsp;|&nbsp; ' + s.topic;
+    if (s.seats) meta += ' &nbsp;|&nbsp; ' + s.seats + ' seats';
+    document.getElementById('as-meta').innerHTML = meta;
 
-      document.getElementById('as-title').textContent = s.title;
-      let meta = dateStr + ' at ' + timeStr + ' &nbsp;|&nbsp; ' + (s.duration || '1 hour');
-      if (s.topic) meta += ' &nbsp;|&nbsp; ' + s.topic;
-      if (s.seats) meta += ' &nbsp;|&nbsp; ' + s.seats + ' seats';
-      document.getElementById('as-meta').innerHTML = meta;
+    // Check if user already booked
+    const btn  = document.getElementById('as-bookbtn');
+    const user = await getLoggedInUser();
+    const sid  = s._id.toString();
 
-      const btn = document.getElementById('as-bookbtn');
-      const user = await getLoggedInUser();
-      if (user && isBookedLocally(s.id, user.email)) { setRegisteredBtn(btn); }
-      else if (user) {
-        const done = await alreadyRegistered(s.id, user.email);
-        if (done) { saveBookedLocally(s.id, user.email); setRegisteredBtn(btn); }
-        else setBookBtn(btn);
-      } else setBookBtn(btn);
-
-      section.classList.add('as-visible');
-    });
-
-    // ── Book Now click ──
-    document.getElementById('as-bookbtn').addEventListener('click', async () => {
-      if (!currentSession) return;
-      const user = await getLoggedInUser();
-      if (!user) { openLoginPrompt(); return; }
-      if (isBookedLocally(currentSession.id, user.email)) return;
-      const done = await alreadyRegistered(currentSession.id, user.email);
-      if (done) { saveBookedLocally(currentSession.id, user.email); setRegisteredBtn(document.getElementById('as-bookbtn')); return; }
-      openModal(currentSession, user);
-    });
-
-    // ── Login prompt ──
-    function openLoginPrompt() {
-      removeOverlay();
-      const ov = document.createElement('div');
-      ov.className = 'as-overlay'; ov.id = 'as-overlay';
-      ov.innerHTML = `
-        <div class="as-login-modal">
-          <div class="as-login-header">
-            <div class="as-login-icon"><i class="fa-solid fa-lock"></i></div>
-            <div class="as-login-title">Login Required</div>
-            <div class="as-login-sub">You need to be logged in to book a session. Your details will be filled in automatically from your account.</div>
-          </div>
-          <div class="as-login-body">
-            <button class="as-login-btn" id="as-goto-login">Login / Sign Up</button>
-          </div>
-        </div>`;
-      document.body.appendChild(ov);
-      ov.addEventListener('click', e => { if (e.target === ov) removeOverlay(); });
-      document.getElementById('as-goto-login').addEventListener('click', () => {
-        removeOverlay();
-        const loginBtn = document.querySelector('.login') || document.querySelector('.login1');
-        if (loginBtn) loginBtn.click();
-      });
-    }
-
-    // ── Booking modal — two column ──
-    function openModal(session, user) {
-      removeOverlay();
-      const fee = formatFee(session.fee);
-      const d = new Date(session.date + 'T' + session.time);
-      const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-      const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
-      const ini = (user.firstName[0] + user.lastName[0]).toUpperCase();
-
-      const feeValueHtml = fee.paid
-        ? `<span class="as-fee-value paid">Rs. ${fee.label}</span><span class="as-fee-tag paid">PAID</span>`
-        : `<span class="as-fee-value">Free</span><span class="as-fee-original">Rs. ${fee.originalPrice}</span><span class="as-fee-tag">LIMITED OFFER</span>`;
-
-      const confirmNote = fee.paid
-        ? 'Payment details will be shared with you on WhatsApp after registration.'
-        : 'This is a free session. You will be added to the WhatsApp group after registration.';
-
-      const ov = document.createElement('div');
-      ov.className = 'as-overlay'; ov.id = 'as-overlay';
-      ov.innerHTML = `
-        <div class="as-modal">
-          <div class="as-modal-topbar">
-            <div class="as-modal-topbar-title">Session Registration</div>
-            <button class="as-mclose" id="as-mclose">&#10005;</button>
-          </div>
-          <div class="as-modal-body">
-
-            <!-- LEFT: Session Details -->
-            <div class="as-modal-left">
-              <div class="as-modal-section-label">Session Details</div>
-              <div class="as-session-name">${esc(session.title)}</div>
-
-              <div class="as-detail-row">
-                <div class="as-detail-icon"><i class="fa-regular fa-calendar"></i></div>
-                <div>
-                  <div class="as-detail-label">Date</div>
-                  <div class="as-detail-value">${esc(dateStr)}</div>
-                </div>
-              </div>
-              <div class="as-detail-row">
-                <div class="as-detail-icon"><i class="fa-regular fa-clock"></i></div>
-                <div>
-                  <div class="as-detail-label">Time</div>
-                  <div class="as-detail-value">${esc(timeStr)}</div>
-                </div>
-              </div>
-              <div class="as-detail-row">
-                <div class="as-detail-icon"><i class="fa-solid fa-hourglass-half"></i></div>
-                <div>
-                  <div class="as-detail-label">Duration</div>
-                  <div class="as-detail-value">${esc(session.duration || '1 hour')}</div>
-                </div>
-              </div>
-              ${session.seats ? `
-              <div class="as-detail-row">
-                <div class="as-detail-icon"><i class="fa-solid fa-users"></i></div>
-                <div>
-                  <div class="as-detail-label">Seats Available</div>
-                  <div class="as-detail-value">${esc(session.seats)}</div>
-                </div>
-              </div>` : ''}
-              ${session.topic ? `
-              <div class="as-detail-row">
-                <div class="as-detail-icon"><i class="fa-solid fa-tag"></i></div>
-                <div>
-                  <div class="as-detail-label">Topic</div>
-                  <div class="as-detail-value">${esc(session.topic)}</div>
-                </div>
-              </div>` : ''}
-
-              <div class="as-fee-block">
-                <div class="as-fee-label">Registration Fee</div>
-                <div>${feeValueHtml}</div>
-              </div>
-            </div>
-
-            <!-- RIGHT: Personal Details + Confirm -->
-            <div class="as-modal-right">
-              <div class="as-modal-section-label">Your Details</div>
-              <div class="as-err" id="as-err"></div>
-
-              <div class="as-user-block">
-                <div class="as-user-avatar-row">
-                  <div class="as-user-av">${esc(ini)}</div>
-                  <div>
-                    <div class="as-user-fullname">${esc(user.firstName + ' ' + user.lastName)}</div>
-                    <div class="as-user-email-small">${esc(user.email)}</div>
-                  </div>
-                </div>
-                <div class="as-user-rows">
-                  <div class="as-user-row">
-                    <div class="as-user-row-label">Full Name</div>
-                    <div class="as-user-row-value">${esc(user.firstName + ' ' + user.lastName)}</div>
-                  </div>
-                  <div class="as-user-row">
-                    <div class="as-user-row-label">Email Address</div>
-                    <div class="as-user-row-value">${esc(user.email)}</div>
-                  </div>
-                  <div class="as-user-row">
-                    <div class="as-user-row-label">WhatsApp / Mobile</div>
-                    <div class="as-user-row-value">+91 ${esc(user.mobileNumber || user.mobileno || 'Not provided')}</div>
-                  </div>
-                </div>
-              </div>
-
-              <button class="as-confirm-btn" id="as-sub">Confirm Registration</button>
-              <div class="as-confirm-note">${confirmNote}</div>
-            </div>
-
-          </div>
-        </div>`;
-      document.body.appendChild(ov);
-      ov.addEventListener('click', e => { if (e.target === ov) removeOverlay(); });
-      document.getElementById('as-mclose').addEventListener('click', removeOverlay);
-      document.getElementById('as-sub').addEventListener('click', () => submitBooking(session, user));
-    }
-
-    // ── Submit — saves to Firebase ──
-    async function submitBooking(session, user) {
-      const err = document.getElementById('as-err');
-      const btn = document.getElementById('as-sub');
-      btn.textContent = 'Confirming...'; btn.disabled = true; err.style.display = 'none';
-
-      try {
-        const done = await alreadyRegistered(session.id, user.email);
-        if (done) {
-          saveBookedLocally(session.id, user.email);
-          removeOverlay();
-          setRegisteredBtn(document.getElementById('as-bookbtn'));
-          return;
+    if (user) {
+      const userId = user._id || user.id;
+      if (isBookedLocally(sid, userId)) {
+        setRegisteredBtn(btn);
+      } else {
+        // Verify with server
+        const chk = await fetch(`${API}/api/sessions/${sid}/booked/${userId}`);
+        const chkData = await chk.json();
+        if (chkData.booked) {
+          saveBookedLocally(sid, userId);
+          setRegisteredBtn(btn);
+        } else {
+          setBookBtn(btn);
         }
-
-        await set(push(ref(db, 'bookings')), {
-          name:      user.firstName + ' ' + user.lastName,
-          firstName: user.firstName,
-          lastName:  user.lastName,
-          email:     user.email,
-          phone:     user.mobileNumber || user.mobileno || '',
-          sid:       session.id,
-          stitle:    session.title,
-          sessionDate: session.date || '',
-          sessionTime: session.time || '',
-          duration:  session.duration || '',
-          fee:       session.fee || '0',
-          wpAdded:   false,
-          at:        new Date().toISOString()
-        });
-
-        saveBookedLocally(session.id, user.email);
-        setRegisteredBtn(document.getElementById('as-bookbtn'));
-
-        const fee = formatFee(session.fee);
-        const ov = document.getElementById('as-overlay');
-        ov.innerHTML = `
-          <div class="as-success">
-            <div class="as-success-icon"><i class="fa-solid fa-check"></i></div>
-            <div class="as-success-title">Registration Confirmed</div>
-            <div class="as-success-sub">
-              Thank you, <strong>${esc(user.firstName)}</strong>.<br/>
-              You have been successfully registered for <strong>${esc(session.title)}</strong>.<br/>
-              ${fee.paid ? 'Payment details will be shared on WhatsApp shortly.' : 'You will be added to the WhatsApp group soon.'}
-            </div>
-            <button class="as-success-close" onclick="document.getElementById('as-overlay').remove()">Done</button>
-          </div>`;
-      } catch (ex) {
-        console.error(ex);
-        err.style.display = 'block';
-        err.textContent = 'Something went wrong. Please try again.';
-        btn.textContent = 'Confirm Registration'; btn.disabled = false;
       }
+    } else {
+      setBookBtn(btn);
     }
 
-    function removeOverlay() {
-      const old = document.getElementById('as-overlay');
-      if (old) old.remove();
+    section.classList.add('as-visible');
+  } catch (err) {
+    console.error('Session load error:', err);
+    section.classList.remove('as-visible');
+  }
+}
+
+loadSessions();
+
+// ── Book Now click ──
+document.getElementById('as-bookbtn').addEventListener('click', async () => {
+  if (!currentSession) return;
+  const user = await getLoggedInUser();
+  if (!user) { openLoginPrompt(); return; }
+  const sid    = currentSession._id.toString();
+  const userId = user._id || user.id;
+  if (isBookedLocally(sid, userId)) return;
+  openModal(currentSession, user);
+});
+
+// ── Login prompt ──
+function openLoginPrompt() {
+  removeOverlay();
+  const ov = document.createElement('div');
+  ov.className = 'as-overlay'; ov.id = 'as-overlay';
+  ov.innerHTML = `
+    <div class="as-login-modal">
+      <div class="as-login-header">
+        <div class="as-login-icon"><i class="fa-solid fa-lock"></i></div>
+        <div class="as-login-title">Login Required</div>
+        <div class="as-login-sub">You need to be logged in to book a session. Your details will be filled in automatically.</div>
+      </div>
+      <div class="as-login-body">
+        <button class="as-login-btn" id="as-goto-login">Login / Sign Up</button>
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+  ov.addEventListener('click', e => { if (e.target === ov) removeOverlay(); });
+  document.getElementById('as-goto-login').addEventListener('click', () => {
+    removeOverlay();
+    const loginBtn = document.querySelector('.login') || document.querySelector('.login1');
+    if (loginBtn) loginBtn.click();
+  });
+}
+
+// ── Booking modal ──
+function openModal(session, user) {
+  removeOverlay();
+  const fee     = formatFee(session.fee);
+  const d       = new Date(session.date + 'T' + session.time);
+  const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
+  const ini     = ((user.firstName||'?')[0] + (user.lastName||'?')[0]).toUpperCase();
+
+  const feeValueHtml = fee.paid
+    ? `<span class="as-fee-value paid">Rs. ${fee.label}</span><span class="as-fee-tag paid">PAID</span>`
+    : `<span class="as-fee-value">Free</span><span class="as-fee-original">Rs. ${fee.originalPrice}</span><span class="as-fee-tag">LIMITED OFFER</span>`;
+
+  const confirmNote = fee.paid
+    ? 'Payment details will be shared on WhatsApp after registration.'
+    : 'This is a free session. You will be added to the WhatsApp group after registration.';
+
+  const ov = document.createElement('div');
+  ov.className = 'as-overlay'; ov.id = 'as-overlay';
+  ov.innerHTML = `
+    <div class="as-modal">
+      <div class="as-modal-topbar">
+        <div class="as-modal-topbar-title">Session Registration</div>
+        <button class="as-mclose" id="as-mclose">&#10005;</button>
+      </div>
+      <div class="as-modal-body">
+        <div class="as-modal-left">
+          <div class="as-modal-section-label">Session Details</div>
+          <div class="as-session-name">${esc(session.title)}</div>
+          <div class="as-detail-row">
+            <div class="as-detail-icon"><i class="fa-regular fa-calendar"></i></div>
+            <div><div class="as-detail-label">Date</div><div class="as-detail-value">${esc(dateStr)}</div></div>
+          </div>
+          <div class="as-detail-row">
+            <div class="as-detail-icon"><i class="fa-regular fa-clock"></i></div>
+            <div><div class="as-detail-label">Time</div><div class="as-detail-value">${esc(timeStr)}</div></div>
+          </div>
+          <div class="as-detail-row">
+            <div class="as-detail-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+            <div><div class="as-detail-label">Duration</div><div class="as-detail-value">${esc(session.duration || '1 hour')}</div></div>
+          </div>
+          ${session.seats ? `<div class="as-detail-row">
+            <div class="as-detail-icon"><i class="fa-solid fa-users"></i></div>
+            <div><div class="as-detail-label">Seats Available</div><div class="as-detail-value">${esc(session.seats)}</div></div>
+          </div>` : ''}
+          ${session.topic ? `<div class="as-detail-row">
+            <div class="as-detail-icon"><i class="fa-solid fa-tag"></i></div>
+            <div><div class="as-detail-label">Topic</div><div class="as-detail-value">${esc(session.topic)}</div></div>
+          </div>` : ''}
+          <div class="as-fee-block">
+            <div class="as-fee-label">Registration Fee</div>
+            <div>${feeValueHtml}</div>
+          </div>
+        </div>
+        <div class="as-modal-right">
+          <div class="as-modal-section-label">Your Details</div>
+          <div class="as-err" id="as-err"></div>
+          <div class="as-user-block">
+            <div class="as-user-avatar-row">
+              <div class="as-user-av">${esc(ini)}</div>
+              <div>
+                <div class="as-user-fullname">${esc(user.firstName + ' ' + user.lastName)}</div>
+                <div class="as-user-email-small">${esc(user.email)}</div>
+              </div>
+            </div>
+            <div class="as-user-rows">
+              <div class="as-user-row">
+                <div class="as-user-row-label">Full Name</div>
+                <div class="as-user-row-value">${esc(user.firstName + ' ' + user.lastName)}</div>
+              </div>
+              <div class="as-user-row">
+                <div class="as-user-row-label">Email Address</div>
+                <div class="as-user-row-value">${esc(user.email)}</div>
+              </div>
+              <div class="as-user-row">
+                <div class="as-user-row-label">WhatsApp / Mobile</div>
+                <div class="as-user-row-value">+91 ${esc(user.mobileNumber || user.mobileno || 'Not provided')}</div>
+              </div>
+            </div>
+          </div>
+          <button class="as-confirm-btn" id="as-sub">Confirm Registration</button>
+          <div class="as-confirm-note">${confirmNote}</div>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+  ov.addEventListener('click', e => { if (e.target === ov) removeOverlay(); });
+  document.getElementById('as-mclose').addEventListener('click', removeOverlay);
+  document.getElementById('as-sub').addEventListener('click', () => submitBooking(session, user));
+}
+
+// ── Submit booking to Express backend ──
+async function submitBooking(session, user) {
+  const err = document.getElementById('as-err');
+  const btn = document.getElementById('as-sub');
+  btn.textContent = 'Confirming...'; btn.disabled = true; err.style.display = 'none';
+
+  const sid    = session._id.toString();
+  const userId = user._id || user.id;
+
+  try {
+    const res = await fetch(`${API}/api/sessions/${sid}/book`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId,
+        name:      user.firstName + ' ' + user.lastName,
+        firstName: user.firstName,
+        lastName:  user.lastName,
+        email:     user.email,
+        phone:     user.mobileNumber || user.mobileno || '',
+      })
+    });
+
+    const data = await res.json();
+
+    if (!data.success && data.message !== 'Already registered for this session') {
+      throw new Error(data.message);
     }
-    function esc(s) {
-      return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    }
-    </script>
+
+    saveBookedLocally(sid, userId);
+    setRegisteredBtn(document.getElementById('as-bookbtn'));
+
+    const fee = formatFee(session.fee);
+    const ov  = document.getElementById('as-overlay');
+    ov.innerHTML = `
+      <div class="as-success">
+        <div class="as-success-icon"><i class="fa-solid fa-check"></i></div>
+        <div class="as-success-title">Registration Confirmed</div>
+        <div class="as-success-sub">
+          Thank you, <strong>${esc(user.firstName)}</strong>.<br/>
+          You have been successfully registered for <strong>${esc(session.title)}</strong>.<br/>
+          ${fee.paid ? 'Payment details will be shared on WhatsApp shortly.' : 'You will be added to the WhatsApp group soon.'}
+        </div>
+        <button class="as-success-close" onclick="document.getElementById('as-overlay').remove()">Done</button>
+      </div>`;
+  } catch (ex) {
+    console.error(ex);
+    err.style.display = 'block';
+    err.textContent = ex.message || 'Something went wrong. Please try again.';
+    btn.textContent = 'Confirm Registration'; btn.disabled = false;
+  }
+}
+
+function removeOverlay() {
+  const old = document.getElementById('as-overlay');
+  if (old) old.remove();
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
 
 <script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
