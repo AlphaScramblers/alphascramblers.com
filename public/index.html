@@ -1030,7 +1030,7 @@
     <script src="./navregbot.js"></script>
     <script src="./login-signup-profile.js"></script>
     
-    <!-- SESSION BANNER SCRIPT — replace the existing <script type="module"> block with this -->
+    <!-- SESSION BANNER SCRIPT -->
 <script>
 const API = 'https://alphascramblers-com.onrender.com';
 
@@ -1090,10 +1090,14 @@ async function loadSessions() {
       return;
     }
 
-    // Pick the next upcoming session
+    // Pick the next upcoming session — show all day on session date, hide only after midnight
     const now  = new Date();
     const upcoming = data.sessions
-      .filter(s => s.date && s.time && new Date(s.date + 'T' + s.time) > now)
+      .filter(s => {
+        if (!s.date) return false;
+        const endOfDay = new Date(s.date + 'T23:59:59');
+        return endOfDay >= now;
+      })
       .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
 
     if (!upcoming.length) { section.classList.remove('as-visible'); return; }
