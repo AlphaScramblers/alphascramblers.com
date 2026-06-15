@@ -73,6 +73,7 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .btn-ac{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:500}.btn-ac:hover{background:var(--ac2)}
 .btn-rd{background:var(--rd-bg);border-color:rgba(255,90,90,.25);color:var(--rd)}.btn-rd:hover{background:rgba(255,90,90,.2)}
 .btn-am{background:var(--am-bg);border-color:rgba(255,181,71,.25);color:var(--am)}.btn-am:hover{background:rgba(255,181,71,.2)}
+.btn-gr{background:var(--gr-bg);border-color:rgba(34,200,122,.25);color:var(--gr);font-weight:500}.btn-gr:hover{background:rgba(34,200,122,.2)}
 .sm{padding:5px 11px;font-size:12px;border-radius:6px}
 
 /* BADGES */
@@ -129,6 +130,21 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .wptick-label{font-size:11px;font-weight:500;color:var(--t2);white-space:nowrap}.wptick.done .wptick-label{color:var(--gr)}
 .sc-empty{text-align:center;padding:24px;font-size:12.5px;color:var(--t3)}
 .sc-del-row{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-top:1px solid var(--border)}
+
+/* REMOVE BOOKING BTN */
+.rem-bk{background:none;border:none;color:var(--t3);cursor:pointer;font-size:15px;padding:3px 6px;border-radius:5px;line-height:1;transition:all .15s;flex-shrink:0}
+.rem-bk:hover{color:var(--rd);background:var(--rd-bg)}
+
+/* ADD STUDENT INLINE FORM */
+.add-student-form{background:var(--bg4);border:1px dashed var(--ac-br);border-radius:10px;padding:14px 14px 12px;margin-top:10px;animation:fadeSlide .18s ease}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.add-student-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:10px}
+.add-student-grid .fg{margin-bottom:0}
+.add-student-label{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--ac2);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.add-student-label::before{content:'';width:3px;height:12px;background:var(--ac);border-radius:2px;display:inline-block}
+.add-fi{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 11px;color:var(--text);font-family:inherit;font-size:13px;outline:none;width:100%;transition:border-color .2s}
+.add-fi:focus{border-color:var(--ac)}.add-fi::placeholder{color:var(--t3)}
+.add-student-actions{display:flex;gap:8px;justify-content:flex-end}
 
 /* USERS */
 .fbar{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap}
@@ -227,7 +243,7 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
       <div class="section active" id="tab-sessions">
         <div class="card">
           <div class="ch">
-            <div><div class="ct">All Sessions</div><div class="cs">Click a session to see who registered</div></div>
+            <div><div class="ct">All Sessions</div><div class="cs">Click a session to see registrations — add or remove students directly</div></div>
             <button class="btn btn-ac sm" id="go-publish-btn">+ Publish New</button>
           </div>
           <div class="slist" id="sess-list"></div>
@@ -292,12 +308,14 @@ const API = 'https://alphascramblers-com.onrender.com';
 // ═══════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════
-let token       = sessionStorage.getItem('as_token')  || null;
+let token        = sessionStorage.getItem('as_token')  || null;
 let currentAdmin = JSON.parse(sessionStorage.getItem('as_admin') || 'null');
-let sessions    = [];
-let bookings    = [];
-let mongoUsers  = [];
-let usersLoaded = false;
+let sessions     = [];
+let bookings     = [];
+let mongoUsers   = [];
+let usersLoaded  = false;
+// Track which session has the add-student form open
+let addFormOpenSid = null;
 const avcs = ['avp','avg','avb','ava'];
 
 // ═══════════════════════════════════════════
@@ -441,7 +459,7 @@ function renderSessions() {
       ? regs.map((b, i) => {
           const bid = b._id || b.id;
           return `
-          <div class="reg-row">
+          <div class="reg-row" data-bid="${bid}">
             <div class="uav ${avcs[i % 4]}">${ini2(b.name)}</div>
             <div style="flex:1;min-width:0">
               <div class="reg-name">${esc(b.name)}</div>
@@ -453,9 +471,35 @@ function renderSessions() {
               <div class="wptick-box"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               <span class="wptick-label">${b.wpAdded ? 'WP Added' : 'Add to WP'}</span>
             </button>
+            <button class="rem-bk" data-bid="${bid}" data-sid="${sid}" title="Remove student from session">✕</button>
           </div>`;
         }).join('')
-      : '<div class="sc-empty">No registrations yet.</div>';
+      : '<div class="sc-empty">No registrations yet. Add a student below.</div>';
+
+    // Inline add-student form (shown if addFormOpenSid matches this session)
+    const showAddForm = addFormOpenSid === sid;
+    const addFormHtml = showAddForm ? `
+      <div class="add-student-form" data-sid="${sid}">
+        <div class="add-student-label">Add Student Manually</div>
+        <div class="add-student-grid">
+          <div class="fg">
+            <label class="fl">Full Name *</label>
+            <input class="add-fi" id="as-name-${sid}" placeholder="e.g. Rahul Sharma"/>
+          </div>
+          <div class="fg">
+            <label class="fl">Email *</label>
+            <input class="add-fi" id="as-email-${sid}" type="email" placeholder="rahul@email.com"/>
+          </div>
+          <div class="fg">
+            <label class="fl">Phone</label>
+            <input class="add-fi" id="as-phone-${sid}" type="tel" placeholder="+91 9876543210"/>
+          </div>
+        </div>
+        <div class="add-student-actions">
+          <button class="btn btn-sec sm cancel-add-student" data-sid="${sid}">Cancel</button>
+          <button class="btn btn-gr sm confirm-add-student" data-sid="${sid}">+ Add Student</button>
+        </div>
+      </div>` : '';
 
     return `
       <div class="scard ${live ? 'live-card' : ''}" data-sid="${sid}">
@@ -469,19 +513,23 @@ function renderSessions() {
           <div class="sc-right">
             <span class="b bb">${regs.length} registered</span>
             <span class="pill ${pc}">${pl}</span>
-            <span class="sc-chevron">▶</span>
+            <span class="sc-chevron ${showAddForm ? 'open' : ''}">▶</span>
           </div>
         </div>
-        <div class="sc-body">
+        <div class="sc-body ${showAddForm ? 'open' : ''}">
           <div class="sc-body-inner">
             <div class="sc-reg-header">
               <div class="sc-reg-title">Registered Students</div>
               <span class="reg-count">${regs.length}</span>
             </div>
             <div class="reg-list">${regRows}</div>
+            ${addFormHtml}
           </div>
           <div class="sc-del-row">
-            <button class="btn btn-am sm edit-sess">✏️ Edit</button>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-am sm edit-sess">✏️ Edit</button>
+              <button class="btn btn-gr sm open-add-student" data-sid="${sid}">+ Add Student</button>
+            </div>
             <button class="btn btn-rd sm del-sess">Remove Session</button>
           </div>
         </div>
@@ -501,6 +549,75 @@ function renderSessions() {
     });
   });
 
+  // Open "add student" inline form
+  el.querySelectorAll('.open-add-student').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const sid = btn.dataset.sid;
+      addFormOpenSid = addFormOpenSid === sid ? null : sid;
+      renderSessions();
+      // Keep the card open and focus name field
+      if (addFormOpenSid) {
+        setTimeout(() => {
+          const nameInput = document.getElementById(`as-name-${sid}`);
+          if (nameInput) nameInput.focus();
+        }, 50);
+      }
+    });
+  });
+
+  // Cancel add-student form
+  el.querySelectorAll('.cancel-add-student').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      addFormOpenSid = null;
+      renderSessions();
+    });
+  });
+
+  // Confirm add student
+  el.querySelectorAll('.confirm-add-student').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.stopPropagation();
+      const sid   = btn.dataset.sid;
+      const name  = (document.getElementById(`as-name-${sid}`)?.value || '').trim();
+      const email = (document.getElementById(`as-email-${sid}`)?.value || '').trim();
+      const phone = (document.getElementById(`as-phone-${sid}`)?.value || '').trim();
+
+      if (!name || !email) { toast('Name and email are required', 'rd'); return; }
+
+      const sess = sessions.find(s => (s._id || s.id) === sid);
+      if (!sess) return;
+
+      btn.textContent = 'Adding…'; btn.disabled = true;
+
+      try {
+        // POST to /api/bookings — same endpoint a student would hit, but admin-initiated
+        const data = await api('POST', '/api/bookings', {
+          sid,
+          name,
+          email,
+          phone,
+          stitle: sess.title,
+          adminAdded: true,          // flag so backend can distinguish if needed
+          at: new Date().toISOString(),
+        });
+
+        // Update local state
+        const newBooking = data.booking || { _id: data.id, sid, name, email, phone, stitle: sess.title, at: new Date().toISOString() };
+        bookings.push(newBooking);
+
+        addFormOpenSid = null;
+        renderSessions();
+        renderUsers();
+        toast(`✓ ${name} added to "${sess.title}"`, 'gr');
+      } catch (err) {
+        toast('Failed to add student: ' + err.message, 'rd');
+        btn.textContent = '+ Add Student'; btn.disabled = false;
+      }
+    });
+  });
+
   // WP tick
   el.querySelectorAll('.wptick').forEach(btn => {
     btn.addEventListener('click', async e => {
@@ -516,6 +633,31 @@ function renderSessions() {
         toast(newVal ? '✓ Marked added to WP' : 'Unmarked', newVal ? 'gr' : 'am');
       } catch (e) {
         toast('Update failed: ' + e.message, 'rd');
+      }
+    });
+  });
+
+  // Remove booking (✕ per student row)
+  el.querySelectorAll('.rem-bk').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.stopPropagation();
+      const bid = btn.dataset.bid;
+      const sid = btn.dataset.sid;
+      const bk  = bookings.find(b => (b._id || b.id) === bid);
+      if (!bk) return;
+      if (!confirm(`Remove "${bk.name}" from this session?`)) return;
+
+      btn.textContent = '…'; btn.disabled = true;
+
+      try {
+        await api('DELETE', `/api/bookings/${bid}`);
+        bookings = bookings.filter(b => (b._id || b.id) !== bid);
+        renderSessions();
+        renderUsers();
+        toast(`Removed ${bk.name}`, 'am');
+      } catch (err) {
+        toast('Remove failed: ' + err.message, 'rd');
+        btn.textContent = '✕'; btn.disabled = false;
       }
     });
   });
