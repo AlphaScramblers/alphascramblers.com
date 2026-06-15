@@ -74,6 +74,7 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .btn-rd{background:var(--rd-bg);border-color:rgba(255,90,90,.25);color:var(--rd)}.btn-rd:hover{background:rgba(255,90,90,.2)}
 .btn-am{background:var(--am-bg);border-color:rgba(255,181,71,.25);color:var(--am)}.btn-am:hover{background:rgba(255,181,71,.2)}
 .btn-gr{background:var(--gr-bg);border-color:rgba(34,200,122,.25);color:var(--gr);font-weight:500}.btn-gr:hover{background:rgba(34,200,122,.2)}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
 .sm{padding:5px 11px;font-size:12px;border-radius:6px}
 
 /* BADGES */
@@ -135,16 +136,34 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .rem-bk{background:none;border:none;color:var(--t3);cursor:pointer;font-size:15px;padding:3px 6px;border-radius:5px;line-height:1;transition:all .15s;flex-shrink:0}
 .rem-bk:hover{color:var(--rd);background:var(--rd-bg)}
 
-/* ADD STUDENT INLINE FORM */
+/* ADD STUDENT INLINE FORM (picker from registered users) */
 .add-student-form{background:var(--bg4);border:1px dashed var(--ac-br);border-radius:10px;padding:14px 14px 12px;margin-top:10px;animation:fadeSlide .18s ease}
 @keyframes fadeSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-.add-student-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:10px}
-.add-student-grid .fg{margin-bottom:0}
 .add-student-label{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--ac2);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .add-student-label::before{content:'';width:3px;height:12px;background:var(--ac);border-radius:2px;display:inline-block}
 .add-fi{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 11px;color:var(--text);font-family:inherit;font-size:13px;outline:none;width:100%;transition:border-color .2s}
 .add-fi:focus{border-color:var(--ac)}.add-fi::placeholder{color:var(--t3)}
-.add-student-actions{display:flex;gap:8px;justify-content:flex-end}
+.add-student-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.add-student-hint{font-size:11.5px;color:var(--t3);margin-top:8px;line-height:1.6}
+
+/* USER PICKER DROPDOWN */
+.user-pick-wrap{position:relative}
+.user-pick-results{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--bg2);border:1px solid var(--border2);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.45);max-height:240px;overflow-y:auto;z-index:20;display:none}
+.user-pick-results.open{display:block}
+.user-pick-row{display:flex;align-items:center;gap:10px;padding:8px 11px;cursor:pointer;transition:background .1s}
+.user-pick-row:hover,.user-pick-row.hl{background:var(--bg4)}
+.user-pick-row .uav{width:24px;height:24px;font-size:9px}
+.user-pick-name{font-size:12.5px;font-weight:500}
+.user-pick-email{font-size:11px;color:var(--t3)}
+.user-pick-empty{padding:12px;text-align:center;font-size:12px;color:var(--t3)}
+.user-pick-selected{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 11px}
+.user-pick-selected .uav{width:26px;height:26px;font-size:10px}
+.user-pick-clear{margin-left:auto;background:none;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:2px 5px;line-height:1}
+.user-pick-clear:hover{color:var(--rd)}
+
+/* ADD STUDENT INLINE FORM */
+.add-student-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:0}
+.add-student-grid .fg{margin-bottom:0}
 
 /* USERS */
 .fbar{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap}
@@ -316,6 +335,8 @@ let mongoUsers   = [];
 let usersLoaded  = false;
 // Track which session has the add-student form open
 let addFormOpenSid = null;
+// Track the currently-selected registered user in the open add-student form: { sid: user }
+let addFormSelectedUser = {};
 const avcs = ['avp','avg','avb','ava'];
 
 // ═══════════════════════════════════════════
@@ -454,6 +475,7 @@ function renderSessions() {
     const mon  = dt.toLocaleString('en', { month: 'short' }).toUpperCase();
     const day  = dt.getDate();
     const regs = bookings.filter(b => b.sid === sid || b.sid === s.id);
+    const registeredEmails = new Set(regs.map(b => (b.email || '').toLowerCase()));
 
     const regRows = regs.length
       ? regs.map((b, i) => {
@@ -478,27 +500,30 @@ function renderSessions() {
 
     // Inline add-student form (shown if addFormOpenSid matches this session)
     const showAddForm = addFormOpenSid === sid;
+    const selUser = addFormSelectedUser[sid];
     const addFormHtml = showAddForm ? `
       <div class="add-student-form" data-sid="${sid}">
-        <div class="add-student-label">Add Student Manually</div>
-        <div class="add-student-grid">
-          <div class="fg">
-            <label class="fl">Full Name *</label>
-            <input class="add-fi" id="as-name-${sid}" placeholder="e.g. Rahul Sharma"/>
+        <div class="add-student-label">Add Registered Student to this Session</div>
+        ${selUser ? `
+          <div class="user-pick-selected">
+            <div class="uav ${avcs[0]}">${ini2(((selUser.firstName||'')+' '+(selUser.lastName||'')).trim())}</div>
+            <div style="min-width:0">
+              <div class="user-pick-name">${esc(((selUser.firstName||'')+' '+(selUser.lastName||'')).trim() || '—')}</div>
+              <div class="user-pick-email">${esc(selUser.email || '—')}${selUser.mobileno ? ' · ' + esc(selUser.mobileno) : ''}</div>
+            </div>
+            <button class="user-pick-clear" data-sid="${sid}" title="Choose a different student">✕</button>
           </div>
-          <div class="fg">
-            <label class="fl">Email *</label>
-            <input class="add-fi" id="as-email-${sid}" type="email" placeholder="rahul@email.com"/>
+        ` : `
+          <div class="user-pick-wrap">
+            <input class="add-fi user-pick-input" id="as-search-${sid}" placeholder="Search registered students by name, email or phone…" autocomplete="off"/>
+            <div class="user-pick-results" id="as-results-${sid}"></div>
           </div>
-          <div class="fg">
-            <label class="fl">Phone</label>
-            <input class="add-fi" id="as-phone-${sid}" type="tel" placeholder="+91 9876543210"/>
-          </div>
-        </div>
+        `}
         <div class="add-student-actions">
           <button class="btn btn-sec sm cancel-add-student" data-sid="${sid}">Cancel</button>
-          <button class="btn btn-gr sm confirm-add-student" data-sid="${sid}">+ Add Student</button>
+          <button class="btn btn-gr sm confirm-add-student" data-sid="${sid}" ${selUser ? '' : 'disabled'}>+ Add Student</button>
         </div>
+        <div class="add-student-hint">Only students who already registered on the website can be added — pick one above to keep session and booking records in sync.</div>
       </div>` : '';
 
     return `
@@ -554,13 +579,18 @@ function renderSessions() {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const sid = btn.dataset.sid;
-      addFormOpenSid = addFormOpenSid === sid ? null : sid;
+      if (addFormOpenSid === sid) {
+        addFormOpenSid = null;
+      } else {
+        addFormOpenSid = sid;
+        addFormSelectedUser[sid] = null;
+      }
       renderSessions();
-      // Keep the card open and focus name field
+      // Keep the card open and focus the search field
       if (addFormOpenSid) {
         setTimeout(() => {
-          const nameInput = document.getElementById(`as-name-${sid}`);
-          if (nameInput) nameInput.focus();
+          const searchInput = document.getElementById(`as-search-${sid}`);
+          if (searchInput) searchInput.focus();
         }, 50);
       }
     });
@@ -570,36 +600,118 @@ function renderSessions() {
   el.querySelectorAll('.cancel-add-student').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
+      const sid = btn.dataset.sid;
       addFormOpenSid = null;
+      delete addFormSelectedUser[sid];
       renderSessions();
     });
   });
 
-  // Confirm add student
+  // Clear selected user — go back to search
+  el.querySelectorAll('.user-pick-clear').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const sid = btn.dataset.sid;
+      addFormSelectedUser[sid] = null;
+      renderSessions();
+      setTimeout(() => {
+        const searchInput = document.getElementById(`as-search-${sid}`);
+        if (searchInput) searchInput.focus();
+      }, 50);
+    });
+  });
+
+  // Live search over registered users
+  el.querySelectorAll('.user-pick-input').forEach(input => {
+    const sid = input.id.replace('as-search-', '');
+    const resultsBox = document.getElementById(`as-results-${sid}`);
+
+    const renderResults = () => {
+      const q = input.value.trim().toLowerCase();
+      if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
+
+      const regs = bookings.filter(b => b.sid === sid);
+      const registeredEmails = new Set(regs.map(b => (b.email || '').toLowerCase()));
+
+      const matches = mongoUsers.filter(u => {
+        const fullName = ((u.firstName || '') + ' ' + (u.lastName || '')).toLowerCase();
+        const email = (u.email || '').toLowerCase();
+        const phone = (u.mobileno || '').toLowerCase();
+        return fullName.includes(q) || email.includes(q) || phone.includes(q);
+      }).slice(0, 8);
+
+      if (!matches.length) {
+        resultsBox.innerHTML = '<div class="user-pick-empty">No registered students match that search</div>';
+        resultsBox.classList.add('open');
+        return;
+      }
+
+      resultsBox.innerHTML = matches.map((u, i) => {
+        const fullName = ((u.firstName || '') + ' ' + (u.lastName || '')).trim() || '—';
+        const already = registeredEmails.has((u.email || '').toLowerCase());
+        return `
+          <div class="user-pick-row" data-idx="${i}" data-email="${esc(u.email || '')}" ${already ? 'style="opacity:.5"' : ''}>
+            <div class="uav ${avcs[i % 4]}">${ini2(fullName)}</div>
+            <div style="min-width:0;flex:1">
+              <div class="user-pick-name">${esc(fullName)}</div>
+              <div class="user-pick-email">${esc(u.email || '—')}${u.mobileno ? ' · ' + esc(u.mobileno) : ''}${already ? ' · already registered' : ''}</div>
+            </div>
+          </div>`;
+      }).join('');
+
+      resultsBox.classList.add('open');
+      resultsBox.querySelectorAll('.user-pick-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const email = row.dataset.email;
+          const user = mongoUsers.find(u => (u.email || '') === email);
+          if (!user) return;
+          if (registeredEmails.has((user.email || '').toLowerCase())) {
+            toast('This student is already registered for this session', 'am');
+            return;
+          }
+          addFormSelectedUser[sid] = user;
+          renderSessions();
+        });
+      });
+    };
+
+    input.addEventListener('input', renderResults);
+    input.addEventListener('focus', renderResults);
+    document.addEventListener('click', e => {
+      if (!resultsBox.contains(e.target) && e.target !== input) resultsBox.classList.remove('open');
+    });
+  });
+
+  // Confirm add student (uses the selected registered user's exact details)
   el.querySelectorAll('.confirm-add-student').forEach(btn => {
     btn.addEventListener('click', async e => {
       e.stopPropagation();
-      const sid   = btn.dataset.sid;
-      const name  = (document.getElementById(`as-name-${sid}`)?.value || '').trim();
-      const email = (document.getElementById(`as-email-${sid}`)?.value || '').trim();
-      const phone = (document.getElementById(`as-phone-${sid}`)?.value || '').trim();
-
-      if (!name || !email) { toast('Name and email are required', 'rd'); return; }
+      const sid  = btn.dataset.sid;
+      const user = addFormSelectedUser[sid];
+      if (!user) { toast('Pick a registered student first', 'rd'); return; }
 
       const sess = sessions.find(s => (s._id || s.id) === sid);
       if (!sess) return;
 
+      const name  = ((user.firstName || '') + ' ' + (user.lastName || '')).trim();
+      const email = user.email || '';
+      const phone = user.mobileno || '';
+
+      if (!name || !email) { toast('This user record is missing name or email', 'rd'); return; }
+
       btn.textContent = 'Adding…'; btn.disabled = true;
 
       try {
-        // POST to /api/bookings — same endpoint a student would hit, but admin-initiated
+        // POST to /api/bookings — same endpoint a student would hit, but admin-initiated.
+        // Name/email/phone come straight from the registered user record so
+        // sessions, bookings and the users list always stay consistent.
         const data = await api('POST', '/api/bookings', {
           sid,
           name,
           email,
           phone,
           stitle: sess.title,
-          adminAdded: true,          // flag so backend can distinguish if needed
+          adminAdded: true,
           at: new Date().toISOString(),
         });
 
@@ -608,6 +720,7 @@ function renderSessions() {
         bookings.push(newBooking);
 
         addFormOpenSid = null;
+        delete addFormSelectedUser[sid];
         renderSessions();
         renderUsers();
         toast(`✓ ${name} added to "${sess.title}"`, 'gr');
