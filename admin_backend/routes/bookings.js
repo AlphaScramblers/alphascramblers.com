@@ -37,20 +37,16 @@ router.post("/", adminAuth, async (req, res) => {
     if (existing)
       return res.status(400).json({ success: false, message: "This email is already registered for this session" });
 
-    // Use email as a stable userId for admin-added students
-    const userId = `admin_${email}`;
-
-    // Add userId to session's bookings array
+    // Increment the session's booking count
     await sessions.updateOne(
       { _id: new ObjectId(sid) },
-      { $addToSet: { bookings: userId } }
+      { $inc: { bookingCount: 1 } }
     );
 
     // Create the booking document
     const booking = {
       sid,
       stitle:      session.title,
-      userId,
       name,
       email,
       phone:       phone || "",
@@ -83,10 +79,10 @@ router.delete("/:id", adminAuth, async (req, res) => {
     if (!booking)
       return res.status(404).json({ success: false, message: "Booking not found" });
 
-    // Remove userId from the session's bookings array
+    // Decrement the session's booking count
     await sessions.updateOne(
       { _id: new ObjectId(booking.sid) },
-      { $pull: { bookings: booking.userId } }
+      { $inc: { bookingCount: -1 } }
     );
 
     // Delete the booking document

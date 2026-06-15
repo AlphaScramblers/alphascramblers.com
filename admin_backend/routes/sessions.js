@@ -29,7 +29,7 @@ router.post("/", adminAuth, async (req, res) => {
       title, topic: topic || "", date, time,
       duration: duration || "1 hour",
       seats: seats || "", fee: fee || "0", desc: desc || "",
-      bookings: [],   // array of userIds
+      bookingCount: 0,   // number of registrations for this session
       by: req.admin.name,
       at: new Date().toISOString(),
     };
@@ -61,10 +61,10 @@ router.post("/:id/book", async (req, res) => {
     if (existing)
       return res.status(400).json({ success: false, message: "Already registered for this session" });
 
-    // Add userId to session's bookings array
+    // Increment the session's booking count
     await sessions.updateOne(
       { _id: new ObjectId(req.params.id) },
-      { $addToSet: { bookings: userId } }
+      { $inc: { bookingCount: 1 } }
     );
 
     // Save full booking details in bookings collection
