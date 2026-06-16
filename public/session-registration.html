@@ -320,6 +320,8 @@
 
   const CHECK_API =
   'https://alphascramblers-com.onrender.com/api/offline-registrations/check-payment';
+  const CHECK_EMAIL_API =
+  'https://alphascramblers-com.onrender.com/api/offline-registrations/check-payment-by-email';
   const RAZORPAY_URL    = 'https://pages.razorpay.com/pl_T1yVjw0NI9YeXe/view';
   const STORAGE_KEY     = 'asc_pending_reg_v1';
 
@@ -416,6 +418,7 @@
         return;
       }
       saveFormToStorage();
+      sessionStorage.setItem('returning_from_payment', 'yes');
       // same-tab navigation; Razorpay redirects back with ?razorpay_payment_id=...
     });
   }
@@ -511,24 +514,53 @@
   }
 
   async function handleReturnFromRazorpay() {
-    const params    = new URLSearchParams(location.search);
-    const paymentId = params.get('razorpay_payment_id');
-    if (!paymentId) { updateSubmitState(); return; }
+  restoreFormFromStorage();
 
-    // Restore form fields from storage before doing anything
-    restoreFormFromStorage();
+  const cameFromPayment =
+    sessionStorage.getItem('returning_from_payment') === 'yes';
 
-    const redirectParams = {
-      razorpay_payment_id:                   paymentId,
-      razorpay_payment_link_id:              params.get('razorpay_payment_link_id') || '',
-      razorpay_payment_link_reference_id:    params.get('razorpay_payment_link_reference_id') || '',
-      razorpay_payment_link_status:          params.get('razorpay_payment_link_status') || '',
-      razorpay_signature:                    params.get('razorpay_signature') || '',
-    };
-
-    // Start webhook-first verification
-    await pollWebhookThenVerify(paymentId, redirectParams);
+  if (!cameFromPayment) {
+    updateSubmitState();
+    return;
   }
+
+  const email = val('f-email');
+
+  if (!email) {
+    updateSubmitState();
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `${CHECK_EMAIL_API}?email=${encodeURIComponent(email)}`
+    );
+
+    const data = await res.json();
+
+    if (data.success && data.paid) {
+      sessionStorage.removeItem('returning_from_payment');
+
+      document.getElementById('pm-online').checked = true;
+      document.getElementById('pay-now-wrap').classList.add('show');
+
+      payState = {
+        verified: true,
+        razorpay_payment_id: data.paymentId
+      };
+
+      setPayNowState('paid', data.paymentId);
+      updateSubmitState();
+
+      await autoSubmit();
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
+  updateSubmitState();
+}
 
   // Auto-submit after payment is verified — no user action needed
   async function autoSubmit() {
