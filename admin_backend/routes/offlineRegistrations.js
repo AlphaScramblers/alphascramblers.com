@@ -105,6 +105,122 @@ router.post("/verify-payment", async (req, res) => {
   }
 });
 
+// POST /api/offline-registrations/webhook
+// Razorpay calls this server-to-server the moment a payment succeeds.
+// We verify the webhook signature, then upsert a "pendingPayment" doc so
+// the frontend can look it up after the user is redirected back.
+// IMPORTANT: this route must receive the RAW body for HMAC to work.
+// In index.js, mount this route BEFORE express.json() or use express.raw() here.
+router.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+  try {
+    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      console.error("RAZORPAY_WEBHOOK_SECRET is not set");
+      return res.status(500).json({ success: false });
+    }
+
+    // Verify Razorpay webhook signature
+    const signature = req.headers["x-razorpay-signature"];
+    if (!signature) return res.status(400).json({ success: false, message: "Missing signature" });
+
+    const rawBody = req.body; // Buffer because of express.raw()
+    const expected = crypto.createHmac("sha256", webhookSecret).update(rawBody).digest("hex");
+    const sigBuf = Buffer.from(signature);
+    const expBuf = Buffer.from(expected);
+    if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
+      console.warn("Webhook signature mismatch");
+      return res.status(400).json({ success: false, message: "Invalid signature" });
+    }
+
+    const event = JSON.parse(rawBody.toString());
+
+    // We only care about successful payment captures
+    if (event.event !== "payment.captured" && event.event !== "payment_link.paid") {
+      return res.json({ success: true, ignored: true });
+    }
+
+    // Extract payment details from the event payload
+    let paymentId, amount, method, email, contact, paymentLinkId;
+    if (event.event === "payment_link.paid") {
+      const pl = event.payload?.payment_link?.entity;
+      const pay = event.payload?.payment?.entity;
+      paymentLinkId = pl?.id || "";
+      paymentId = pay?.id || "";
+      amount = pay?.amount;
+      method = pay?.method;
+      email = pay?.email || pl?.customer?.email || "";
+      contact = pay?.contact || pl?.customer?.contact || "";
+    } else {
+      // payment.captured
+      const pay = event.payload?.payment?.entity;
+      paymentId = pay?.id || "";
+      amount = pay?.amount;
+      method = pay?.method;
+      email = pay?.email || "";
+      contact = pay?.contact || "";
+      paymentLinkId = pay?.payment_link_id || "";
+    }
+
+    if (!paymentId) return res.status(400).json({ success: false, message: "No payment ID in event" });
+
+    const { db } = await connectDB();
+
+    // Upsert into a pendingPayments collection so the frontend can poll for it
+    await db.collection("pendingPayments").updateOne(
+      { paymentId },
+      {
+        $set: {
+          paymentId,
+          paymentLinkId,
+          amount,
+          method,
+          email: email.toLowerCase(),
+          contact,
+          verified: true,
+          event: event.event,
+          capturedAt: new Date(),
+        },
+      },
+      { upsert: true }
+    );
+
+    console.log(`Webhook: payment ${paymentId} captured for ${email}`);
+    return res.json({ success: true });
+  } catch (err) {
+    console.error("WEBHOOK ERROR:", err);
+    return res.status(500).json({ success: false });
+  }
+});
+
+// GET /api/offline-registrations/check-payment?paymentId=pay_xxx
+// Frontend polls this right after being redirected back from Razorpay.
+// Returns the stored webhook data if the payment was already captured.
+router.get("/check-payment", async (req, res) => {
+  try {
+    const { paymentId } = req.query;
+    if (!paymentId) return res.status(400).json({ success: false, message: "paymentId is required" });
+
+    const { db } = await connectDB();
+    const doc = await db.collection("pendingPayments").findOne({ paymentId });
+    if (!doc || !doc.verified) {
+      return res.json({ success: true, found: false });
+    }
+    return res.json({
+      success: true,
+      found: true,
+      payment: {
+        razorpayId: doc.paymentId,
+        amount: doc.amount,
+        method: doc.method,
+        email: doc.email,
+      },
+    });
+  } catch (err) {
+    console.error("CHECK PAYMENT ERROR:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 // GET /api/offline-registrations — list all registrations (admin)
 router.get("/", async (req, res) => {
   try {

@@ -27,36 +27,18 @@
     --rl:12px;
   }
   html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
-
-  /* ── Layout — left panel wider at 480px ── */
   .layout{display:grid;grid-template-columns:600px 1fr;height:100vh;overflow:hidden}
-
-  /* ── LEFT PANEL ── */
   .left{background:var(--navy);display:flex;flex-direction:column;height:100vh;overflow:hidden;position:relative}
   .left-body{flex:1;padding:44px 44px 32px;display:flex;flex-direction:column;overflow:hidden;position:relative;z-index:1}
-
-  /* Logo area — ADD YOUR LOGO HERE */
   .logo-wrap{margin-bottom:0px}
-  /* Replace src="" with your logo file path e.g. src="logo.png" */
-  .logo-wrap img{
-    width:300px;
-    height:auto;
-    display:block;
-  }
-
-  /* Divider after logo */
+  .logo-wrap img{width:300px;height:auto;display:block;}
   .logo-divider{height:1px;background:rgba(255,255,255,.08);margin-bottom:32px}
-
-  /* Badge */
   .event-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(122,184,232,.1);border:1px solid rgba(122,184,232,.25);border-radius:20px;padding:5px 14px;font-size:10.5px;font-weight:600;color:var(--sky);letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px;width:fit-content}
   .bdot{width:5px;height:5px;border-radius:50%;background:var(--sky);animation:blink 2s ease infinite}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-
   .event-title{font-family:'Playfair Display',serif;font-size:36px;line-height:1.1;margin-bottom:10px;color:#fff}
   .event-title em{font-style:normal;color:var(--sky)}
   .event-desc{font-size:13px;color:rgba(255,255,255,.48);line-height:1.75;margin-bottom:28px}
-
-  /* Detail rows */
   .detail-list{border-top:1px solid rgba(255,255,255,.08)}
   .detail-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)}
   .d-icon{width:36px;height:36px;border-radius:9px;background:rgba(122,184,232,.1);border:1px solid rgba(122,184,232,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -64,13 +46,9 @@
   .d-meta{display:flex;flex-direction:column;gap:2px}
   .d-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.7px;color:rgba(255,255,255,.32);font-weight:700}
   .d-val{font-size:13.5px;font-weight:600;color:rgba(255,255,255,.9)}
-
-  /* Perks row */
   .perks-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
   .perk-chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:5px 12px;font-size:11.5px;color:rgba(255,255,255,.55)}
   .perk-chip::before{content:'';display:inline-block;width:13px;height:13px;flex-shrink:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5L13 4.5' stroke='%237ab8e8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E") center/contain no-repeat}
-
-  /* Fee card */
   .fee-card{margin-top:24px;background:rgba(122,184,232,.07);border:1px solid rgba(122,184,232,.18);border-radius:var(--rl);padding:18px 22px;display:flex;align-items:center;justify-content:space-between}
   .fee-left .fee-eyebrow{font-size:9.5px;text-transform:uppercase;letter-spacing:.7px;color:rgba(255,255,255,.38);font-weight:700;margin-bottom:4px}
   .fee-amount{font-family:'Playfair Display',serif;font-size:44px;color:var(--sky);line-height:1}
@@ -79,24 +57,17 @@
   .fee-tags{display:flex;flex-direction:column;gap:4px;align-items:flex-end}
   .fee-tag{font-size:11.5px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:6px}
   .fee-tag::after{content:'';display:inline-block;width:13px;height:13px;flex-shrink:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5L13 4.5' stroke='%237ab8e8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E") center/contain no-repeat}
-
-  /* Footer */
   .left-footer{padding:16px 44px;border-top:1px solid rgba(255,255,255,.08);font-size:15px;color:rgba(255,255,255,.3);position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between}
   .left-footer strong{color:rgba(255,255,255,.5)}
-
-  /* ── RIGHT PANEL ── */
   .right{height:100vh;overflow-y:auto;background:var(--white)}
   .right::-webkit-scrollbar{width:4px}
   .right::-webkit-scrollbar-track{background:transparent}
   .right::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
-
   .form-wrap{max-width:520px;margin:0 auto;padding:44px 40px}
   .form-heading{font-family:'Playfair Display',serif;font-size:26px;color:var(--ink);margin-bottom:4px}
   .form-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
-
   .fblock{border:1px solid var(--border);border-radius:var(--rl);padding:24px;margin-bottom:14px;background:var(--white)}
   .fblock-title{font-size:10px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;color:var(--muted);margin-bottom:18px}
-
   .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .fw{grid-column:1/-1}
   .fg{display:flex;flex-direction:column;gap:5px}
@@ -107,14 +78,12 @@
   .fi::placeholder{color:#c4cad8}
   .fi.has-err{border-color:var(--red);background:var(--red-lt)}
   .ferr{font-size:11px;color:var(--red);display:none;margin-top:2px}
-
   .class-row{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:2px}
   .co{position:relative}
   .co input{position:absolute;opacity:0;width:0;height:0}
   .co label{display:flex;align-items:center;justify-content:center;height:42px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .13s;background:var(--bg);user-select:none}
   .co input:checked + label{border-color:var(--navy);background:var(--sky-lt);color:var(--navy)}
   .co label:hover{border-color:var(--sky);color:var(--navy)}
-
   .pay-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
   .po{position:relative}
   .po input{position:absolute;opacity:0;width:0;height:0}
@@ -125,14 +94,11 @@
   .po-name{font-size:13px;font-weight:700;color:var(--ink);line-height:1.3}
   .po input:checked + label .po-name{color:var(--navy)}
   .po-desc{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4}
-
   .pay-now-wrap{display:none;background:var(--sky-lt);border:1.5px solid var(--sky-mid);border-radius:var(--r);padding:14px 16px;text-align:center}
   .pay-now-wrap.show{display:block}
   .pay-now-btn{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;text-decoration:none;border-radius:var(--r);padding:10px 22px;font-size:13.5px;font-weight:600;transition:all .15s}
   .pay-now-btn:hover{background:var(--navy2);box-shadow:0 4px 14px rgba(15,28,63,.25)}
   .pay-now-note{font-size:11px;color:var(--muted);margin-top:7px}
-
-  /* Pay-now states: verifying / paid / failed */
   .pay-now-wrap.verifying{background:var(--sky-lt);border-color:var(--sky-mid)}
   .pay-now-wrap.paid{background:var(--green-lt);border-color:#bfe3d4}
   .pay-now-wrap.failed{background:var(--red-lt);border-color:#f3c9c4}
@@ -144,20 +110,16 @@
   .pnw-check svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
   .pnw-sub{font-size:11px;color:var(--muted);margin-top:6px}
   .pnw-retry{display:inline-block;margin-top:9px;font-size:11.5px;font-weight:600;color:var(--navy);text-decoration:underline;cursor:pointer;background:none;border:none}
-
   .submit-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:var(--rl);padding:15px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:.2px}
   .submit-btn:hover{background:var(--navy2);box-shadow:0 6px 20px rgba(15,28,63,.25);transform:translateY(-1px)}
   .submit-btn:active{transform:translateY(0)}
   .submit-btn:disabled{background:#b0b8cc;cursor:not-allowed;transform:none;box-shadow:none}
   .submit-note{text-align:center;font-size:11px;color:var(--muted);margin-top:9px;line-height:1.55}
-
   .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;flex-shrink:0}
   @keyframes sp{to{transform:rotate(360deg)}}
-
   .toast{position:fixed;bottom:20px;right:20px;background:var(--navy);color:#fff;border-radius:var(--r);padding:11px 17px;font-size:13px;z-index:9999;transform:translateY(60px);opacity:0;transition:all .22s;max-width:300px;box-shadow:0 4px 16px rgba(0,0,0,.2)}
   .toast.show{transform:translateY(0);opacity:1}
   .toast.err{background:var(--red)}
-
   #success-view{display:none;text-align:center;padding:64px 32px}
   .suc-icon{width:60px;height:60px;border-radius:50%;background:var(--green-lt);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;animation:pop .35s ease}
   .suc-icon svg{width:26px;height:26px;stroke:var(--green);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
@@ -170,7 +132,6 @@
   .suc-row .sk{color:var(--muted)}.suc-row .sv{font-weight:600;color:var(--navy)}
   .suc-contact{font-size:12.5px;color:var(--muted)}
   .suc-contact strong{color:var(--navy)}
-
   @media(max-width:900px){
     html,body{overflow:auto}
     .layout{grid-template-columns:1fr;height:auto;overflow:visible}
@@ -187,73 +148,33 @@
   </head>
   <body>
   <div class="layout">
-
-    <!-- ═══════════════════════════════
-        LEFT PANEL
-    ═══════════════════════════════ -->
     <aside class="left">
       <div class="left-body">
-
-        <!-- ╔══════════════════════════════════╗
-            ║  ADD YOUR LOGO HERE              ║
-            ║  Replace src="" with logo path   ║
-            ╚══════════════════════════════════╝ -->
         <div class="logo-wrap">
           <img src="images/logo ss.png" alt="AlphaScramblers" />
         </div>
-
         <div class="logo-divider"></div>
-
         <div class="event-badge"><span class="bdot"></span>21 June 2026 &nbsp;&middot;&nbsp; Limited Seats</div>
-
         <h1 class="event-title">Communication<br/><em>Skills</em> Workshop</h1>
         <p class="event-desc">A hands-on offline workshop to speak confidently, connect better, and express with real impact — for students of Classes 6th to 10th.</p>
-
         <div class="detail-list">
-
           <div class="detail-item">
-            <div class="d-icon">
-              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </div>
-            <div class="d-meta">
-              <div class="d-label">Date</div>
-              <div class="d-val">Saturday, 21 June 2026</div>
-            </div>
+            <div class="d-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div class="d-meta"><div class="d-label">Date</div><div class="d-val">Saturday, 21 June 2026</div></div>
           </div>
-
           <div class="detail-item">
-            <div class="d-icon">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 15.5"/></svg>
-            </div>
-            <div class="d-meta">
-              <div class="d-label">Time</div>
-              <div class="d-val">4:00 PM – 6:00 PM</div>
-            </div>
+            <div class="d-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 15.5"/></svg></div>
+            <div class="d-meta"><div class="d-label">Time</div><div class="d-val">4:00 PM – 6:00 PM</div></div>
           </div>
-
           <div class="detail-item">
-            <div class="d-icon">
-              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-            </div>
-            <div class="d-meta">
-              <div class="d-label">Venue</div>
-              <div class="d-val">Gaur Homes Club House, Govindpuram</div>
-            </div>
+            <div class="d-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+            <div class="d-meta"><div class="d-label">Venue</div><div class="d-val">Gaur Homes Club House, Govindpuram</div></div>
           </div>
-
           <div class="detail-item">
-            <div class="d-icon">
-              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-            </div>
-            <div class="d-meta">
-              <div class="d-label">For Students</div>
-              <div class="d-val">Classes 6th – 10th</div>
-            </div>
+            <div class="d-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div class="d-meta"><div class="d-label">For Students</div><div class="d-val">Classes 6th – 10th</div></div>
           </div>
-
         </div>
-
-        <!-- Perks -->
         <div class="perks-row">
           <div class="perk-chip">Refreshments</div>
           <div class="perk-chip">Goodies</div>
@@ -261,8 +182,6 @@
           <div class="perk-chip">Winner Trophy</div>
           <div class="perk-chip">Public Speaking</div>
         </div>
-
-        <!-- Fee -->
         <div class="fee-card">
           <div class="fee-left">
             <div class="fee-eyebrow">Workshop Fee</div>
@@ -277,24 +196,18 @@
             </div>
           </div>
         </div>
-
       </div>
-
       <div class="left-footer">
         <strong>alphascramblers@gmail.com</strong>
         <span>9625963967 &nbsp;&middot;&nbsp; 8595752706</span>
       </div>
     </aside>
 
-    <!-- ═══════════════════════════════
-        RIGHT PANEL — FORM
-    ═══════════════════════════════ -->
     <main class="right">
       <div class="form-wrap" id="form-area">
         <div class="form-heading">Reserve your spot</div>
         <p class="form-sub">Fill in the details below. We'll confirm via WhatsApp.</p>
 
-        <!-- Student Details -->
         <div class="fblock">
           <div class="fblock-title">Student Details</div>
           <div class="fgrid">
@@ -337,16 +250,13 @@
           </div>
         </div>
 
-        <!-- Payment -->
         <div class="fblock">
           <div class="fblock-title">Payment — &#8377;149</div>
           <div class="pay-row">
             <div class="po">
               <input type="radio" name="pay" id="pm-cash" value="cash" checked/>
               <label for="pm-cash">
-                <div class="po-icon">
-                  <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-                </div>
+                <div class="po-icon"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
                 <div>
                   <div class="po-name">Pay at Venue</div>
                   <div class="po-desc">Cash or UPI on the day of the workshop.</div>
@@ -356,9 +266,7 @@
             <div class="po">
               <input type="radio" name="pay" id="pm-online" value="online"/>
               <label for="pm-online">
-                <div class="po-icon">
-                  <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                </div>
+                <div class="po-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
                 <div>
                   <div class="po-name">Pay Online</div>
                   <div class="po-desc">Secure your spot instantly.</div>
@@ -377,7 +285,6 @@
           </div>
         </div>
 
-        <!-- Submit -->
         <button class="submit-btn" id="submit-btn" onclick="doSubmit()">
           <span id="submit-lbl">Confirm Registration</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
@@ -386,11 +293,8 @@
         <p class="submit-note">By registering you agree to attend on 21 June 2026 at Gaur Homes Club House, Govindpuram.</p>
       </div>
 
-      <!-- SUCCESS -->
       <div id="success-view">
-        <div class="suc-icon">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
+        <div class="suc-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
         <div class="suc-h">You're Registered!</div>
         <p class="suc-p">Your spot is reserved. We'll confirm via WhatsApp shortly. See you on 21 June!</p>
         <div class="suc-box">
@@ -408,11 +312,18 @@
   <div class="toast" id="toast"></div>
 
   <script>
-  const API           = '/api/offline-registrations';
-  const VERIFY_API     = '/api/offline-registrations/verify-payment';
-  const RAZORPAY_URL   = 'https://pages.razorpay.com/pl_T1yVjw0NI9YeXe/view';
-  const STORAGE_KEY    = 'asc_pending_reg_v1';
+  const API =
+  'https://alphascramblers-com.onrender.com/api/offline-registrations';
 
+  const VERIFY_API =
+  'https://alphascramblers-com.onrender.com/api/offline-registrations/verify-payment';
+
+  const CHECK_API =
+  'https://alphascramblers-com.onrender.com/api/offline-registrations/check-payment';
+  const RAZORPAY_URL    = 'https://pages.razorpay.com/pl_T1yVjw0NI9YeXe/view';
+  const STORAGE_KEY     = 'asc_pending_reg_v1';
+
+  // Holds verified payment info — set either by webhook poll or by redirect params
   let payState = { verified: false };
 
   document.querySelectorAll('input[name="pay"]').forEach(r => {
@@ -439,7 +350,6 @@
     if (e) e.style.display = show ? 'block' : 'none';
   }
 
-  // Validates the student-details fields. Returns the collected values plus an ok flag.
   function validateFields() {
     let ok = true;
     const name   = val('f-name');
@@ -463,7 +373,6 @@
     return { ok, name, parent, phone, email, school, cls };
   }
 
-  // Enables / disables the Confirm Registration button based on pay mode + verification.
   function updateSubmitState() {
     const pay = document.querySelector('input[name="pay"]:checked').value;
     const btn = document.getElementById('submit-btn');
@@ -486,10 +395,10 @@
     if (!raw) return;
     try {
       const d = JSON.parse(raw);
-      if (!val('f-name') && d.name)   document.getElementById('f-name').value = d.name;
+      if (!val('f-name') && d.name)     document.getElementById('f-name').value = d.name;
       if (!val('f-parent') && d.parent) document.getElementById('f-parent').value = d.parent;
-      if (!val('f-phone') && d.phone)  document.getElementById('f-phone').value = d.phone;
-      if (!val('f-email') && d.email)  document.getElementById('f-email').value = d.email;
+      if (!val('f-phone') && d.phone)   document.getElementById('f-phone').value = d.phone;
+      if (!val('f-email') && d.email)   document.getElementById('f-email').value = d.email;
       if (!val('f-school') && d.school) document.getElementById('f-school').value = d.school;
       if (d.cls) { const r = document.getElementById('c' + d.cls); if (r) r.checked = true; }
     } catch (e) { /* ignore corrupt storage */ }
@@ -507,7 +416,7 @@
         return;
       }
       saveFormToStorage();
-      // same-tab navigation so Razorpay can redirect back to this page after payment
+      // same-tab navigation; Razorpay redirects back with ?razorpay_payment_id=...
     });
   }
 
@@ -537,39 +446,98 @@
     updateSubmitState();
   }
 
-  async function handleReturnFromRazorpay() {
-    const params = new URLSearchParams(location.search);
-    const paymentId = params.get('razorpay_payment_id');
-    if (!paymentId) { updateSubmitState(); return; }
+  // ── WEBHOOK-FIRST PAYMENT VERIFICATION ─────────────────────────────────
+  // Strategy:
+  //  1. Try polling /check-payment?paymentId=... (webhook already delivered → instant)
+  //  2. If not found after polling, fall back to /verify-payment (redirect params)
+  //  3. Once verified via either path, auto-submit the form immediately.
 
+  const POLL_INTERVAL_MS = 1500;
+  const POLL_MAX_TRIES   = 10; // 15 seconds total
+
+  async function pollWebhookThenVerify(paymentId, redirectParams) {
+    // Show verifying UI and unlock online radio
     document.getElementById('pm-online').checked = true;
     document.getElementById('pay-now-wrap').classList.add('show');
     setPayNowState('verifying');
 
-    const body = {
-      razorpay_payment_id: paymentId,
-      razorpay_payment_link_id: params.get('razorpay_payment_link_id') || '',
-      razorpay_payment_link_reference_id: params.get('razorpay_payment_link_reference_id') || '',
-      razorpay_payment_link_status: params.get('razorpay_payment_link_status') || '',
-      razorpay_signature: params.get('razorpay_signature') || '',
-    };
+    let tries = 0;
+    while (tries < POLL_MAX_TRIES) {
+      tries++;
+      try {
+        const res  = await fetch(`${CHECK_API}?paymentId=${encodeURIComponent(paymentId)}`);
+        const data = await res.json();
+        if (data.success && data.found) {
+          // Webhook confirmed — set payState and proceed
+          payState = {
+            verified: true,
+            razorpay_payment_id: paymentId,
+            razorpayId: data.payment.razorpayId,
+            ...redirectParams,
+          };
+          setPayNowState('paid', paymentId);
+          toast('Payment verified ✓');
+          updateSubmitState();
+          history.replaceState({}, '', location.pathname);
+          // Auto-submit right away — no extra button click needed
+          await autoSubmit();
+          return;
+        }
+      } catch (_) { /* network blip — keep polling */ }
 
+      await new Promise(r => setTimeout(r, POLL_INTERVAL_MS));
+    }
+
+    // Webhook didn't arrive in time — fall back to redirect-param verification
     try {
-      const res  = await fetch(VERIFY_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const res  = await fetch(VERIFY_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(redirectParams) });
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.message || 'Payment verification failed.');
 
-      payState = { verified: true, ...body, razorpayId: data.payment.razorpayId, txnId: data.payment.txnId };
+      payState = { verified: true, ...redirectParams, razorpayId: data.payment.razorpayId, txnId: data.payment.txnId };
       setPayNowState('paid', data.payment.razorpayId);
       toast('Payment verified ✓');
+      history.replaceState({}, '', location.pathname);
+      await autoSubmit();
     } catch (err) {
       payState = { verified: false };
       setPayNowState('failed', err.message);
       toast(err.message || 'Could not verify payment.', true);
-    } finally {
       updateSubmitState();
       history.replaceState({}, '', location.pathname);
     }
+  }
+
+  async function handleReturnFromRazorpay() {
+    const params    = new URLSearchParams(location.search);
+    const paymentId = params.get('razorpay_payment_id');
+    if (!paymentId) { updateSubmitState(); return; }
+
+    // Restore form fields from storage before doing anything
+    restoreFormFromStorage();
+
+    const redirectParams = {
+      razorpay_payment_id:                   paymentId,
+      razorpay_payment_link_id:              params.get('razorpay_payment_link_id') || '',
+      razorpay_payment_link_reference_id:    params.get('razorpay_payment_link_reference_id') || '',
+      razorpay_payment_link_status:          params.get('razorpay_payment_link_status') || '',
+      razorpay_signature:                    params.get('razorpay_signature') || '',
+    };
+
+    // Start webhook-first verification
+    await pollWebhookThenVerify(paymentId, redirectParams);
+  }
+
+  // Auto-submit after payment is verified — no user action needed
+  async function autoSubmit() {
+    const f = validateFields();
+    if (!f.ok) {
+      // Fields couldn't be restored — ask user to re-fill
+      toast('Please complete your details and click Confirm Registration.', false);
+      updateSubmitState();
+      return;
+    }
+    await doSubmit();
   }
 
   async function doSubmit() {
@@ -590,36 +558,37 @@
     const payload = {
       name: f.name, parentName: f.parent, phone: f.phone, email: f.email,
       class: f.cls.value, school: f.school, payMode: pay,
-      sessionId: 'comm-skills-21jun-2026',
+      sessionId:    'comm-skills-21jun-2026',
       sessionTitle: 'Communication Skills Workshop',
-      sessionDate: '2026-06-21',
+      sessionDate:  '2026-06-21',
       at: new Date().toISOString(),
     };
 
     if (pay === 'online') {
-      payload.razorpay_payment_id = payState.razorpay_payment_id;
-      payload.razorpay_payment_link_id = payState.razorpay_payment_link_id;
+      payload.razorpay_payment_id                = payState.razorpay_payment_id;
+      payload.razorpay_payment_link_id           = payState.razorpay_payment_link_id;
       payload.razorpay_payment_link_reference_id = payState.razorpay_payment_link_reference_id;
-      payload.razorpay_payment_link_status = payState.razorpay_payment_link_status;
-      payload.razorpay_signature = payState.razorpay_signature;
+      payload.razorpay_payment_link_status       = payState.razorpay_payment_link_status;
+      payload.razorpay_signature                 = payState.razorpay_signature;
     }
 
     try {
-      const res  = await fetch(API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const res  = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Registration failed');
 
       localStorage.removeItem(STORAGE_KEY);
-      document.getElementById('form-area').style.display = 'none';
+      document.getElementById('form-area').style.display  = 'none';
       document.getElementById('success-view').style.display = 'block';
       document.getElementById('s-name').textContent  = f.name;
       document.getElementById('s-class').textContent = 'Class ' + f.cls.value;
       document.getElementById('s-pay').textContent   = pay === 'online' ? 'Paid Online · Verified' : 'Pay at Venue';
-      document.querySelector('.right').scrollTo({ top:0, behavior:'smooth' });
+      document.querySelector('.right').scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       toast(err.message || 'Something went wrong. Try again.', true);
       btn.disabled = false;
       lbl.textContent = 'Confirm Registration';
+      updateSubmitState();
     }
   }
 
