@@ -170,6 +170,8 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
       { paymentId },
       {
         $set: {
+          used: false,
+          usedAt: new Date(),
           paymentId,
           paymentLinkId,
           amount,
@@ -250,19 +252,46 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid payment mode" });
     }
 
-    let verified = false, razorpayId = "", txnId = "";
+    const { db } = await connectDB();
+
+    let verified = false;
+    let razorpayId = "";
+    let txnId = "";
 
     if (payMode === "online") {
-      const result = await verifyRazorpayPayment(req.body);
-      if (!result.ok) {
-        return res.status(400).json({ success: false, message: result.message });
-      }
-      verified = true;
-      razorpayId = result.razorpayId;
-      txnId = result.txnId;
+
+    const paymentId = req.body.razorpay_payment_id;
+
+    if (!paymentId) {
+        return res.status(400).json({
+        success: false,
+        message: "Missing payment ID"
+        });
     }
 
-    const { db } = await connectDB();
+    const payment = await db
+        .collection("pendingPayments")
+        .findOne({
+            paymentId,
+            verified: true,
+            used: false
+        });
+
+    if (!payment) {
+        return res.status(400).json({
+        success: false,
+        message: "Payment not verified by webhook"
+        });
+    }
+
+    verified = true;
+    razorpayId = payment.paymentId;
+
+    txnId =
+        payment.txnId ||
+        payment.bankTransactionId ||
+        "";
+    }
     const registrations = db.collection("offlineRegistrations");
 
     // Avoid double-booking the same email for the same session
@@ -286,11 +315,34 @@ router.post("/", async (req, res) => {
     };
 
     const result = await registrations.insertOne(doc);
-    return res.json({ success: true, registration: { ...doc, _id: result.insertedId } });
-  } catch (err) {
+
+    if (payMode === "online" && razorpayId) {
+    await db.collection("pendingPayments").updateOne(
+    { paymentId: razorpayId },
+    {
+        $set: {
+        used: true,
+        usedAt: new Date()
+        }
+    }
+    );
+    }
+
+    return res.json({
+    success: true,
+    registration: {
+        ...doc,
+        _id: result.insertedId
+    }
+    });
+
+    } catch (err) {
     console.error("CREATE OFFLINE REGISTRATION ERROR:", err);
-    return res.status(500).json({ success: false, message: "Server error" });
-  }
-});
+    return res.status(500).json({
+        success: false,
+        message: "Server error"
+    });
+    }
+    });
 
 export default router;
