@@ -227,6 +227,52 @@ router.get("/check-payment", async (req, res) => {
   }
 });
 
+router.get("/check-payment-by-email", async (req, res) => {
+  try {
+    const { email } = req.query;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "email is required"
+      });
+    }
+
+    const { db } = await connectDB();
+
+    const payment = await db.collection("pendingPayments").findOne(
+      {
+        email: email.toLowerCase(),
+        verified: true,
+        used: false
+      },
+      {
+        sort: { capturedAt: -1 }
+      }
+    );
+
+    if (!payment) {
+      return res.json({
+        success: true,
+        paid: false
+      });
+    }
+
+    return res.json({
+      success: true,
+      paid: true,
+      paymentId: payment.paymentId
+    });
+
+  } catch (err) {
+    console.error("CHECK PAYMENT BY EMAIL ERROR:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+  }
+});
+
 // GET /api/offline-registrations — list all registrations (admin)
 router.get("/", async (req, res) => {
   try {
