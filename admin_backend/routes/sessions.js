@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 // POST /api/sessions — create session (admin only)
 router.post("/", adminAuth, async (req, res) => {
   try {
-    const { title, topic, date, time, duration, seats, fee, desc } = req.body;
+    const { title, topic, date, time, duration, seats, fee, desc, offlineSessionId } = req.body;
     if (!title || !date || !time)
       return res.status(400).json({ success: false, message: "Title, date and time are required" });
 
@@ -29,7 +29,8 @@ router.post("/", adminAuth, async (req, res) => {
       title, topic: topic || "", date, time,
       duration: duration || "1 hour",
       seats: seats || "", fee: fee || "0", desc: desc || "",
-      bookingCount: 0,   // number of registrations for this session
+      offlineSessionId: offlineSessionId || "",
+      bookingCount: 0,
       by: req.admin.name,
       at: new Date().toISOString(),
     };
@@ -56,18 +57,15 @@ router.post("/:id/book", async (req, res) => {
     if (!session)
       return res.status(404).json({ success: false, message: "Session not found" });
 
-    // Check if already booked
     const existing = await bookings.findOne({ sid: req.params.id, userId });
     if (existing)
       return res.status(400).json({ success: false, message: "Already registered for this session" });
 
-    // Increment the session's booking count
     await sessions.updateOne(
       { _id: new ObjectId(req.params.id) },
       { $inc: { bookingCount: 1 } }
     );
 
-    // Save full booking details in bookings collection
     await bookings.insertOne({
       sid:         req.params.id,
       stitle:      session.title,
@@ -109,7 +107,7 @@ router.get("/:id/booked/:userId", async (req, res) => {
 // PUT /api/sessions/:id — update session (admin only)
 router.put("/:id", adminAuth, async (req, res) => {
   try {
-    const { title, topic, date, time, duration, seats, fee, desc } = req.body;
+    const { title, topic, date, time, duration, seats, fee, desc, offlineSessionId } = req.body;
     if (!title || !date || !time)
       return res.status(400).json({ success: false, message: "Title, date and time are required" });
 
@@ -118,6 +116,7 @@ router.put("/:id", adminAuth, async (req, res) => {
       title, topic: topic || "", date, time,
       duration: duration || "1 hour",
       seats: seats || "", fee: fee || "0", desc: desc || "",
+      offlineSessionId: offlineSessionId || "",
       editedBy: req.admin.name,
       editedAt: new Date().toISOString(),
     };
