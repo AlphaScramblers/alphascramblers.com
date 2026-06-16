@@ -6,7 +6,7 @@ const router = express.Router();
 
 const KEY_ID     = process.env.RAZORPAY_KEY_ID;
 const KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
-const FEE_PAISE  = 14900; // ₹149 in paise — update if the workshop fee changes
+const FEE_PAISE  = 100; // ₹149 in paise — update if the workshop fee changes
 
 // ── Signature check ──────────────────────────────────────
 // Razorpay Payment Page redirects sign their query params with:
