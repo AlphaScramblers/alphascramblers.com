@@ -457,7 +457,9 @@
 
   async function pollWebhookThenVerify(paymentId, redirectParams) {
     // Show verifying UI and unlock online radio
-    document.getElementById('pm-online').checked = true;
+    const onlineRadio = document.getElementById('pm-online');
+    onlineRadio.checked = true;
+    onlineRadio.dispatchEvent(new Event('change')); // ← triggers updateSubmitState()
     document.getElementById('pay-now-wrap').classList.add('show');
     setPayNowState('verifying');
 
@@ -530,6 +532,7 @@
 
   // Auto-submit after payment is verified — no user action needed
   async function autoSubmit() {
+    await new Promise(r => setTimeout(r, 50));
     const f = validateFields();
     if (!f.ok) {
       // Fields couldn't be restored — ask user to re-fill
@@ -595,6 +598,7 @@
   restoreFormFromStorage();
   attachPayLinkHandler();
   handleReturnFromRazorpay();
+  updateSubmitState(); // ← sync button state on first load
   </script>
   </body>
   </html>
