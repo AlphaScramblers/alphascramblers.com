@@ -8,30 +8,14 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#0d0e14;
-  --ink2:#1e2030;
-  --paper:#f5f3ee;
-  --paper2:#eceae4;
-  --blue:#1b4fff;
-  --blue-lt:#e8edff;
-  --gold:#f5c842;
-  --gold-dk:#c49a0a;
-  --green:#18a96b;
-  --green-lt:#e6f7f1;
-  --red:#e53935;
-  --red-lt:#fdecea;
-  --t2:#6b6f85;
-  --t3:#9fa3b8;
-  --r:10px;--rl:16px;
+  --ink:#0d0e14;--ink2:#1e2030;--paper:#f5f3ee;--paper2:#eceae4;
+  --blue:#1b4fff;--blue-lt:#e8edff;--gold:#f5c842;--gold-dk:#c49a0a;
+  --green:#18a96b;--green-lt:#e6f7f1;--red:#e53935;--red-lt:#fdecea;
+  --t2:#6b6f85;--t3:#9fa3b8;--r:10px;--rl:16px;
 }
 body{font-family:'Space Grotesk',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden}
-
-/* HERO */
-.hero{background:var(--ink);color:#fff;padding:0;position:relative;overflow:hidden;min-height:420px;display:flex;align-items:stretch}
-.hero-bg{position:absolute;inset:0;background:
-  radial-gradient(ellipse 60% 80% at 80% 50%, rgba(27,79,255,.25) 0%, transparent 60%),
-  radial-gradient(ellipse 40% 50% at 20% 80%, rgba(245,200,66,.12) 0%, transparent 55%);
-  pointer-events:none}
+.hero{background:var(--ink);color:#fff;position:relative;overflow:hidden;min-height:420px;display:flex;align-items:stretch}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(27,79,255,.25) 0%,transparent 60%),radial-gradient(ellipse 40% 50% at 20% 80%,rgba(245,200,66,.12) 0%,transparent 55%);pointer-events:none}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
 .hero-inner{position:relative;z-index:1;width:100%;max-width:1100px;margin:0 auto;padding:52px 24px 48px;display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:center}
 .hero-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(245,200,66,.12);border:1px solid rgba(245,200,66,.3);border-radius:20px;padding:4px 13px;font-size:11.5px;font-weight:600;color:var(--gold);letter-spacing:.5px;text-transform:uppercase;margin-bottom:18px}
@@ -44,36 +28,26 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--paper);color:var(--
 .hero-chips{display:flex;flex-wrap:wrap;gap:9px}
 .chip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:7px 13px;font-size:12.5px;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:6px}
 .chip .ic{font-size:14px}
-
-/* SESSION CARD HERO */
 .sess-card{background:rgba(255,255,255,.06);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-radius:var(--rl);padding:24px;flex-shrink:0}
 .sess-card-title{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.4);margin-bottom:14px;font-weight:600}
 .sess-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07)}
 .sess-row:last-child{border-bottom:none}
 .sess-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.ic-blue{background:rgba(27,79,255,.2)}
-.ic-gold{background:rgba(245,200,66,.15)}
-.ic-green{background:rgba(24,169,107,.15)}
-.ic-purple{background:rgba(124,111,255,.2)}
+.ic-blue{background:rgba(27,79,255,.2)}.ic-gold{background:rgba(245,200,66,.15)}.ic-green{background:rgba(24,169,107,.15)}.ic-purple{background:rgba(124,111,255,.2)}
 .sess-label{font-size:10.5px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
 .sess-val{font-size:13.5px;color:#fff;font-weight:600;margin-top:1px}
 .fee-block{margin-top:16px;background:linear-gradient(135deg,var(--gold) 0%,#ffa726 100%);border-radius:var(--r);padding:14px 16px;text-align:center}
 .fee-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:rgba(0,0,0,.55);font-weight:700;margin-bottom:2px}
 .fee-amount{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--ink);letter-spacing:1px;line-height:1}
 .fee-note{font-size:11px;color:rgba(0,0,0,.5);margin-top:2px}
-
-/* PERKS */
 .perks-strip{background:var(--ink2);padding:14px 0}
 .perks-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .perk{display:flex;align-items:center;gap:7px;font-size:12.5px;color:rgba(255,255,255,.6);padding:4px 14px}
 .perk .pi{font-size:16px}
 .perk-divider{width:1px;height:20px;background:rgba(255,255,255,.1)}
-
-/* FORM AREA */
 .form-area{max-width:700px;margin:0 auto;padding:48px 24px}
 .section-label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);font-weight:700;margin-bottom:6px}
 .section-title{font-size:22px;font-weight:700;margin-bottom:28px;color:var(--ink)}
-
 .fcard{background:#fff;border:1px solid var(--paper2);border-radius:var(--rl);padding:26px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .fw{grid-column:1/-1}
@@ -84,16 +58,12 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--paper);color:var(--
 .fi:focus{border-color:var(--blue);background:#fff}
 .fi::placeholder{color:var(--t3)}
 select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6f85' stroke-width='1.5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px}
-
-/* CLASS SELECTOR */
 .class-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .class-opt{position:relative}
 .class-opt input{position:absolute;opacity:0;width:0;height:0}
 .class-opt label{display:flex;align-items:center;justify-content:center;height:44px;border:1.5px solid var(--paper2);border-radius:8px;font-size:13px;font-weight:600;color:var(--t2);cursor:pointer;transition:all .15s;background:var(--paper)}
 .class-opt input:checked + label{border-color:var(--blue);background:var(--blue-lt);color:var(--blue)}
 .class-opt label:hover{border-color:var(--blue);color:var(--blue)}
-
-/* PAYMENT SECTION */
 .pay-title{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:14px}
 .pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .pay-opt{position:relative}
@@ -104,7 +74,6 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
 .pay-opt input:checked + label{border-color:var(--blue);background:var(--blue-lt)}
 .pay-opt input:checked + label .pm-name{color:var(--blue)}
 .pm-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;background:#fff;border:1px solid var(--paper2)}
-
 .pay-info{background:var(--paper);border:1.5px solid var(--paper2);border-radius:var(--r);padding:14px;display:none}
 .pay-info.show{display:block}
 .pi-upi{display:flex;align-items:center;gap:10px}
@@ -115,16 +84,12 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
 .razorpay-btn-wrap{text-align:center}
 .razorpay-link{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#2b73ff,#1a5ce0);color:#fff;text-decoration:none;border-radius:var(--r);padding:12px 22px;font-size:14px;font-weight:600;transition:transform .15s,box-shadow .15s}
 .razorpay-link:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(43,115,255,.3)}
-
-/* SUBMIT */
 .submit-area{margin-top:6px}
 .submit-btn{width:100%;background:linear-gradient(135deg,var(--blue) 0%,#2b73ff 100%);color:#fff;border:none;border-radius:var(--rl);padding:16px;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:9px;letter-spacing:.3px}
 .submit-btn:hover{background:linear-gradient(135deg,#1240d6 0%,var(--blue) 100%);transform:translateY(-1px);box-shadow:0 8px 24px rgba(27,79,255,.3)}
 .submit-btn:active{transform:translateY(0)}
 .submit-btn:disabled{background:#b0b5cc;cursor:not-allowed;transform:none;box-shadow:none}
 .submit-note{text-align:center;font-size:11.5px;color:var(--t3);margin-top:10px}
-
-/* SUCCESS */
 #success-view{display:none;text-align:center;padding:60px 24px}
 .success-icon{width:72px;height:72px;border-radius:50%;background:var(--green-lt);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 18px;animation:pop .4s ease}
 @keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
@@ -134,25 +99,14 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
 .success-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--paper2);font-size:13px}
 .success-row:last-child{border-bottom:none}
 .success-row .sk{color:var(--t2)}.success-row .sv{font-weight:600;color:var(--ink)}
-.pending-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.35);border-radius:6px;padding:3px 10px;font-size:11.5px;color:var(--gold-dk);font-weight:600}
-
-/* TOAST */
 .toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;border-radius:var(--r);padding:11px 17px;font-size:13px;z-index:9999;transform:translateY(70px);opacity:0;transition:all .25s;max-width:320px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.3)}
-.toast.show{transform:translateY(0);opacity:1}
-.toast.err{background:var(--red)}
-
-/* FOOTER */
+.toast.show{transform:translateY(0);opacity:1}.toast.err{background:var(--red)}
 .site-footer{background:var(--ink);color:rgba(255,255,255,.4);text-align:center;padding:20px;font-size:12px}
 .site-footer a{color:rgba(255,255,255,.6);text-decoration:none}
-
-/* SPIN */
 .spin{width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .65s linear infinite;flex-shrink:0}
 @keyframes sp{to{transform:rotate(360deg)}}
-
-/* ERROR FIELD */
 .fi.err{border-color:var(--red);background:var(--red-lt)}
 .field-err{font-size:11px;color:var(--red);margin-top:3px;display:none}
-
 @media(max-width:700px){
   .hero-inner{grid-template-columns:1fr;gap:24px}
   .sess-card{display:none}
@@ -165,13 +119,12 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
 </head>
 <body>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-inner">
     <div class="hero-left">
-      <div class="hero-tag"><span></span>Limited Seats · 21 June 2025</div>
+      <div class="hero-tag"><span></span>Limited Seats · 21 June 2026</div>
       <div class="hero-kicker">
         <span class="big">Communication</span>
         <span class="accent">Skills</span>
@@ -180,27 +133,15 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
       <div class="hero-chips">
         <div class="chip"><span class="ic">📍</span>Gaur Homes Club House, Govindpuram</div>
         <div class="chip"><span class="ic">🕓</span>4:00 PM – 6:00 PM</div>
-        <div class="chip"><span class="ic">📅</span>21 June 2025</div>
+        <div class="chip"><span class="ic">📅</span>21 June 2026</div>
       </div>
     </div>
     <div class="sess-card">
       <div class="sess-card-title">Session Details</div>
-      <div class="sess-row">
-        <div class="sess-icon ic-blue">📅</div>
-        <div><div class="sess-label">Date</div><div class="sess-val">Saturday, 21 June 2025</div></div>
-      </div>
-      <div class="sess-row">
-        <div class="sess-icon ic-gold">🕓</div>
-        <div><div class="sess-label">Timings</div><div class="sess-val">4:00 PM to 6:00 PM</div></div>
-      </div>
-      <div class="sess-row">
-        <div class="sess-icon ic-green">📍</div>
-        <div><div class="sess-label">Venue</div><div class="sess-val">Gaur Homes Club House, Govindpuram</div></div>
-      </div>
-      <div class="sess-row">
-        <div class="sess-icon ic-purple">🏫</div>
-        <div><div class="sess-label">For Students</div><div class="sess-val">Classes 6th – 10th</div></div>
-      </div>
+      <div class="sess-row"><div class="sess-icon ic-blue">📅</div><div><div class="sess-label">Date</div><div class="sess-val">Sunday, 21 June 2026</div></div></div>
+      <div class="sess-row"><div class="sess-icon ic-gold">🕓</div><div><div class="sess-label">Timings</div><div class="sess-val">4:00 PM to 6:00 PM</div></div></div>
+      <div class="sess-row"><div class="sess-icon ic-green">📍</div><div><div class="sess-label">Venue</div><div class="sess-val">Gaur Homes Club House, Govindpuram</div></div></div>
+      <div class="sess-row"><div class="sess-icon ic-purple">🏫</div><div><div class="sess-label">For Students</div><div class="sess-val">Classes 6th – 10th</div></div></div>
       <div class="fee-block">
         <div class="fee-label">Workshop Fee</div>
         <div class="fee-amount">₹149</div>
@@ -210,7 +151,6 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
   </div>
 </section>
 
-<!-- PERKS STRIP -->
 <div class="perks-strip">
   <div class="perks-inner">
     <div class="perk"><span class="pi">☕</span>Refreshments Included</div>
@@ -225,33 +165,16 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
   </div>
 </div>
 
-<!-- REGISTRATION FORM -->
 <div class="form-area" id="form-area">
   <div class="section-label">Step 1 of 2</div>
   <div class="section-title">Register Your Spot</div>
 
-  <!-- Student Info -->
   <div class="fcard">
     <div class="fgrid">
-      <div class="fg">
-        <label class="fl">Student Name <span>*</span></label>
-        <input class="fi" id="f-name" type="text" placeholder="Full name"/>
-        <span class="field-err" id="e-name">Please enter the student's name.</span>
-      </div>
-      <div class="fg">
-        <label class="fl">Parent / Guardian Name <span>*</span></label>
-        <input class="fi" id="f-parent" type="text" placeholder="Parent's name"/>
-        <span class="field-err" id="e-parent">Please enter parent's name.</span>
-      </div>
-      <div class="fg">
-        <label class="fl">WhatsApp Number <span>*</span></label>
-        <input class="fi" id="f-phone" type="tel" placeholder="10-digit mobile number" maxlength="10"/>
-        <span class="field-err" id="e-phone">Enter a valid 10-digit number.</span>
-      </div>
-      <div class="fg">
-        <label class="fl">Email Address</label>
-        <input class="fi" id="f-email" type="email" placeholder="email@example.com (optional)"/>
-      </div>
+      <div class="fg"><label class="fl">Student Name <span>*</span></label><input class="fi" id="f-name" type="text" placeholder="Full name"/><span class="field-err" id="e-name">Please enter the student's name.</span></div>
+      <div class="fg"><label class="fl">Parent / Guardian Name <span>*</span></label><input class="fi" id="f-parent" type="text" placeholder="Parent's name"/><span class="field-err" id="e-parent">Please enter parent's name.</span></div>
+      <div class="fg"><label class="fl">WhatsApp Number <span>*</span></label><input class="fi" id="f-phone" type="tel" placeholder="10-digit mobile number" maxlength="10"/><span class="field-err" id="e-phone">Enter a valid 10-digit number.</span></div>
+      <div class="fg"><label class="fl">Email Address</label><input class="fi" id="f-email" type="email" placeholder="email@example.com (optional)"/></div>
       <div class="fg fw">
         <label class="fl">Student's Class <span>*</span></label>
         <div class="class-grid">
@@ -263,15 +186,10 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
         </div>
         <span class="field-err" id="e-class">Please select the student's class.</span>
       </div>
-      <div class="fg fw">
-        <label class="fl">School Name <span>*</span></label>
-        <input class="fi" id="f-school" type="text" placeholder="Name of the school"/>
-        <span class="field-err" id="e-school">Please enter school name.</span>
-      </div>
+      <div class="fg fw"><label class="fl">School Name <span>*</span></label><input class="fi" id="f-school" type="text" placeholder="Name of the school"/><span class="field-err" id="e-school">Please enter school name.</span></div>
     </div>
   </div>
 
-  <!-- Payment -->
   <div class="fcard">
     <div class="pay-title">💳 Pay Workshop Fee — ₹149</div>
     <div class="pay-methods">
@@ -279,7 +197,7 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
         <input type="radio" name="paymode" id="pm-offline" value="offline" checked/>
         <label for="pm-offline">
           <div class="pm-name"><div class="pm-icon">💵</div>Offline / UPI</div>
-          <div class="pm-desc">Pay via UPI QR at venue or transfer now. Admin verifies manually.</div>
+          <div class="pm-desc">Pay via UPI QR at venue or transfer now.</div>
         </label>
       </div>
       <div class="pay-opt">
@@ -291,30 +209,30 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
       </div>
     </div>
 
-    <!-- Offline UPI info -->
     <div class="pay-info show" id="pi-offline">
       <div class="pi-upi">
         <div>
           <div style="font-size:11px;color:var(--t3);margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.4px">UPI ID</div>
+          <!-- ✏️ REPLACE with your actual UPI ID -->
           <div class="pi-upi-id" id="upi-id-text">alphascramblers@upi</div>
         </div>
         <button class="pi-upi-copy" onclick="copyUPI()">Copy</button>
       </div>
-      <div class="pi-note">Transfer ₹149 to the UPI ID above and note the transaction ID. Our team will verify and confirm your seat via WhatsApp within a few hours. You can also pay at the venue.</div>
+      <div class="pi-note">Transfer ₹149 to the UPI ID above and note the transaction ID. We'll confirm your seat via WhatsApp within a few hours. You can also pay at the venue.</div>
       <div class="fg" style="margin-top:12px">
         <label class="fl">Transaction ID / UTR <span style="color:var(--t2);font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(if paid online)</span></label>
         <input class="fi" id="f-txn" type="text" placeholder="e.g. 4273819203 (optional if paying at venue)"/>
       </div>
     </div>
 
-    <!-- Razorpay -->
     <div class="pay-info" id="pi-razorpay">
       <div class="razorpay-btn-wrap">
+        <!-- ✏️ REPLACE href with your actual Razorpay payment link -->
         <a href="YOUR_RAZORPAY_LINK_HERE" target="_blank" class="razorpay-link" id="rzp-link">
           ⚡ Pay ₹149 via Razorpay
         </a>
       </div>
-      <div class="pi-note" style="margin-top:12px;text-align:center">Complete payment first, then submit your registration. Your seat will be auto-verified on successful payment.</div>
+      <div class="pi-note" style="margin-top:12px;text-align:center">Complete payment first, then submit your registration.</div>
       <div class="fg" style="margin-top:12px">
         <label class="fl">Razorpay Payment ID <span>*</span></label>
         <input class="fi" id="f-rzp-id" type="text" placeholder="e.g. pay_ABC123XYZ"/>
@@ -323,7 +241,6 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
     </div>
   </div>
 
-  <!-- Submit -->
   <div class="submit-area">
     <button class="submit-btn" id="submit-btn" onclick="submitForm()">
       <span id="submit-label">Confirm Registration</span>
@@ -333,18 +250,16 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
   </div>
 </div>
 
-<!-- SUCCESS VIEW -->
 <div id="success-view">
   <div class="success-icon">🎉</div>
   <div class="success-h">You're Registered!</div>
-  <p class="success-p">Your spot has been reserved for the Communication Skills Workshop. We'll confirm via WhatsApp once your payment is verified.</p>
+  <p class="success-p">Your spot has been reserved for the Communication Skills Workshop. We'll confirm via WhatsApp shortly.</p>
   <div class="success-box">
     <div class="success-row"><span class="sk">Student</span><span class="sv" id="s-name">—</span></div>
     <div class="success-row"><span class="sk">Class</span><span class="sv" id="s-class">—</span></div>
-    <div class="success-row"><span class="sk">Date</span><span class="sv">21 June 2025</span></div>
+    <div class="success-row"><span class="sk">Date</span><span class="sv">21 June 2026</span></div>
     <div class="success-row"><span class="sk">Venue</span><span class="sv">Gaur Homes Club House</span></div>
     <div class="success-row"><span class="sk">Payment</span><span class="sv" id="s-pay">—</span></div>
-    <div class="success-row"><span class="sk">Status</span><span class="sv" id="s-status"></span></div>
   </div>
   <p style="font-size:13px;color:var(--t2)">Questions? Call us at <strong>9625963967</strong> or <strong>8595752706</strong></p>
 </div>
@@ -356,13 +271,12 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
   </span>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-const API = 'https://alphascramblers-com.onrender.com';
+// ✏️ REPLACE this with your actual Vercel deployment URL
+const API = 'https://alphascramblers.com/api/offline-registrations';
 
-// Payment mode toggle
 document.querySelectorAll('input[name="paymode"]').forEach(radio => {
   radio.addEventListener('change', () => {
     const mode = document.querySelector('input[name="paymode"]:checked').value;
@@ -372,8 +286,8 @@ document.querySelectorAll('input[name="paymode"]').forEach(radio => {
 });
 
 function copyUPI() {
-  const id = document.getElementById('upi-id-text').textContent;
-  navigator.clipboard.writeText(id).then(() => showToast('UPI ID copied!'));
+  navigator.clipboard.writeText(document.getElementById('upi-id-text').textContent)
+    .then(() => showToast('UPI ID copied!'));
 }
 
 function showToast(msg, err) {
@@ -393,7 +307,6 @@ function setErr(id, show) {
 }
 
 async function submitForm() {
-  // Validate
   let ok = true;
   const name   = getVal('f-name');
   const parent = getVal('f-parent');
@@ -408,68 +321,44 @@ async function submitForm() {
   setErr('f-phone',  !/^[6-9]\d{9}$/.test(phone)); if (!/^[6-9]\d{9}$/.test(phone)) ok = false;
   setErr('f-school', !school); if (!school) ok = false;
 
-  if (!cls) {
-    document.getElementById('e-class').style.display = 'block';
-    ok = false;
-  } else {
-    document.getElementById('e-class').style.display = 'none';
-  }
+  if (!cls) { document.getElementById('e-class').style.display = 'block'; ok = false; }
+  else { document.getElementById('e-class').style.display = 'none'; }
 
-  if (mode === 'razorpay' && !rzpId) {
-    setErr('f-rzp-id', true); ok = false;
-  } else {
-    setErr('f-rzp-id', false);
-  }
+  if (mode === 'razorpay' && !rzpId) { setErr('f-rzp-id', true); ok = false; }
+  else { setErr('f-rzp-id', false); }
 
   if (!ok) { showToast('Please fill all required fields.', true); return; }
 
-  // Submit
   const btn = document.getElementById('submit-btn');
   const lbl = document.getElementById('submit-label');
   btn.disabled = true;
   lbl.innerHTML = '<span class="spin"></span>Submitting…';
 
   const payload = {
-    name,
-    parentName: parent,
-    phone,
+    name, parentName: parent, phone,
     email:    getVal('f-email'),
     class:    cls.value,
-    school,
-    payMode:  mode,
-    txnId:    mode === 'offline'   ? getVal('f-txn')    : '',
-    razorpayId: mode === 'razorpay' ? rzpId             : '',
-    // Auto-verify if razorpay ID provided (payment confirmed on their end)
-    verified: mode === 'razorpay' ? true : false,
-    sessionId: 'comm-skills-21jun-2025',
+    school,   payMode: mode,
+    txnId:    mode === 'offline'   ? getVal('f-txn')  : '',
+    razorpayId: mode === 'razorpay' ? rzpId           : '',
+    sessionId: 'comm-skills-21jun-2026',
     sessionTitle: 'Communication Skills Workshop',
-    sessionDate: '2025-06-21',
+    sessionDate: '2026-06-21',
     at: new Date().toISOString(),
   };
 
   try {
-    const res = await fetch(API + '/api/offline-registrations', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    const res  = await fetch(API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'Registration failed');
 
-    // Show success
     document.getElementById('form-area').style.display = 'none';
     const sv = document.getElementById('success-view');
     sv.style.display = 'block';
     document.getElementById('s-name').textContent  = name;
     document.getElementById('s-class').textContent = 'Class ' + cls.value;
     document.getElementById('s-pay').textContent   = mode === 'razorpay' ? 'Online (Razorpay)' : 'Offline / UPI';
-    const stEl = document.getElementById('s-status');
-    if (mode === 'razorpay') {
-      stEl.innerHTML = '<span style="color:var(--green);font-weight:700">✓ Verified</span>';
-    } else {
-      stEl.innerHTML = '<span class="pending-tag">⏳ Pending Verification</span>';
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top:0, behavior:'smooth' });
   } catch (err) {
     showToast(err.message || 'Something went wrong. Try again.', true);
     btn.disabled = false;
