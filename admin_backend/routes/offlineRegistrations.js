@@ -43,25 +43,30 @@ async function verifyRazorpayPayment(body) {
     razorpay_signature,
   } = body;
 
-  if (!razorpay_payment_id || !razorpay_payment_link_id || !razorpay_payment_link_status || !razorpay_signature) {
-    return { ok: false, message: "Missing payment details — please complete the payment again." };
+  if (!razorpay_payment_id) {
+    return { ok: false, message: "Missing payment ID — please complete the payment again." };
   }
 
-  const sigOk = isSignatureValid({
-    payment_link_id: razorpay_payment_link_id,
-    payment_link_reference_id: razorpay_payment_link_reference_id,
-    payment_link_status: razorpay_payment_link_status,
-    razorpay_payment_id,
-    razorpay_signature,
-  });
-  if (!sigOk) {
-    return { ok: false, message: "Payment signature did not match — this payment could not be verified." };
+  // Only validate Payment Link signature when those params are actually present.
+  // Razorpay Payment Pages redirect with only razorpay_payment_id — no link params.
+  const hasLinkParams = razorpay_payment_link_id && razorpay_payment_link_status && razorpay_signature;
+  if (hasLinkParams) {
+    const sigOk = isSignatureValid({
+      payment_link_id: razorpay_payment_link_id,
+      payment_link_reference_id: razorpay_payment_link_reference_id,
+      payment_link_status: razorpay_payment_link_status,
+      razorpay_payment_id,
+      razorpay_signature,
+    });
+    if (!sigOk) {
+      return { ok: false, message: "Payment signature did not match — this payment could not be verified." };
+    }
+    if (razorpay_payment_link_status !== "paid") {
+      return { ok: false, message: `Payment is not complete yet (status: ${razorpay_payment_link_status}).` };
+    }
   }
 
-  if (razorpay_payment_link_status !== "paid") {
-    return { ok: false, message: `Payment is not complete yet (status: ${razorpay_payment_link_status}).` };
-  }
-
+  // Always confirm directly with Razorpay API — this is the source of truth.
   let payment;
   try {
     payment = await fetchRazorpayPayment(razorpay_payment_id);
