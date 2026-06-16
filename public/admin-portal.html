@@ -22,8 +22,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
-
-/* LOGIN */
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden}
 #login-screen::before{content:'';position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(124,111,255,.1) 0%,transparent 65%);top:-150px;left:50%;transform:translateX(-50%);pointer-events:none}
 .lcard{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);padding:46px 42px;width:410px;position:relative;z-index:1;box-shadow:0 8px 40px rgba(0,0,0,.4)}
@@ -37,9 +35,8 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .lerr{background:var(--rd-bg);border:1px solid rgba(255,90,90,.25);border-radius:var(--r);padding:9px 13px;font-size:13px;color:var(--rd);margin-bottom:14px;display:none}
 .lbtn{width:100%;background:var(--ac);color:#fff;border:none;border-radius:var(--r);padding:12px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:.2s;margin-top:4px}
 .lbtn:hover{background:var(--ac2)}.lbtn:active{transform:scale(.98)}
+.lbtn:disabled{opacity:.6;cursor:not-allowed}
 .lhint{margin-top:18px;font-size:12px;color:var(--t3);text-align:center;line-height:1.7}
-
-/* SHELL */
 #dashboard{display:none;min-height:100vh}
 .sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;overflow-y:auto}
 .slogo{font-family:'DM Serif Display',serif;font-size:17px;padding:22px 20px;border-bottom:1px solid var(--border);color:var(--text);flex-shrink:0}.slogo span{color:var(--ac2)}
@@ -61,33 +58,22 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .syncing{font-size:11px;color:var(--t3);margin-left:8px}
 .content{padding:26px}
 .section{display:none}.section.active{display:block}
-
-/* CARD */
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:20px 22px;margin-bottom:16px}
 .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;flex-wrap:wrap;gap:10px}
 .ct{font-size:14px;font-weight:500}.cs{font-size:12px;color:var(--t3);margin-top:2px}
-
-/* BUTTONS */
 .btn{border-radius:var(--r);padding:9px 16px;font-family:inherit;font-size:13px;cursor:pointer;transition:all .15s;border:1px solid transparent}
 .btn-sec{background:var(--bg3);border-color:var(--border2);color:var(--text)}.btn-sec:hover{border-color:var(--ac);color:var(--ac2)}
 .btn-ac{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:500}.btn-ac:hover{background:var(--ac2)}
 .btn-rd{background:var(--rd-bg);border-color:rgba(255,90,90,.25);color:var(--rd)}.btn-rd:hover{background:rgba(255,90,90,.2)}
 .btn-am{background:var(--am-bg);border-color:rgba(255,181,71,.25);color:var(--am)}.btn-am:hover{background:rgba(255,181,71,.2)}
-.btn-gr{background:var(--gr-bg);border-color:rgba(34,200,122,.25);color:var(--gr);font-weight:500}.btn-gr:hover{background:rgba(34,200,122,.2)}
-.btn[disabled]{opacity:.55;cursor:not-allowed}
+.btn:disabled{opacity:.6;cursor:not-allowed}
 .sm{padding:5px 11px;font-size:12px;border-radius:6px}
-
-/* BADGES */
 .b{display:inline-block;font-size:11px;padding:2px 7px;border-radius:4px;font-weight:500}
 .bg{background:var(--gr-bg);color:var(--gr)}.ba{background:var(--am-bg);color:var(--am)}
 .bb{background:var(--bl-bg);color:var(--bl)}.bp{background:var(--ac-bg);color:var(--ac2)}
-
-/* SESSION FORM */
 .sform{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 .sform .fg{margin-bottom:0}.fw{grid-column:1/-1}
 .frow{display:flex;gap:9px;justify-content:flex-end}
-
-/* SESSION CARDS */
 .slist{display:flex;flex-direction:column;gap:12px}
 .scard{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .scard.live-card{border-color:rgba(34,200,122,.3)}
@@ -131,41 +117,28 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .wptick-label{font-size:11px;font-weight:500;color:var(--t2);white-space:nowrap}.wptick.done .wptick-label{color:var(--gr)}
 .sc-empty{text-align:center;padding:24px;font-size:12.5px;color:var(--t3)}
 .sc-del-row{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-top:1px solid var(--border)}
-
-/* REMOVE BOOKING BTN */
-.rem-bk{background:none;border:none;color:var(--t3);cursor:pointer;font-size:15px;padding:3px 6px;border-radius:5px;line-height:1;transition:all .15s;flex-shrink:0}
-.rem-bk:hover{color:var(--rd);background:var(--rd-bg)}
-
-/* ADD STUDENT INLINE FORM (picker from registered users) */
-.add-student-form{background:var(--bg4);border:1px dashed var(--ac-br);border-radius:10px;padding:14px 14px 12px;margin-top:10px;animation:fadeSlide .18s ease}
-@keyframes fadeSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-.add-student-label{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--ac2);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.add-student-label::before{content:'';width:3px;height:12px;background:var(--ac);border-radius:2px;display:inline-block}
-.add-fi{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 11px;color:var(--text);font-family:inherit;font-size:13px;outline:none;width:100%;transition:border-color .2s}
-.add-fi:focus{border-color:var(--ac)}.add-fi::placeholder{color:var(--t3)}
-.add-student-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
-.add-student-hint{font-size:11.5px;color:var(--t3);margin-top:8px;line-height:1.6}
-
-/* USER PICKER DROPDOWN */
-.user-pick-wrap{position:relative}
-.user-pick-results{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--bg2);border:1px solid var(--border2);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.45);max-height:240px;overflow-y:auto;z-index:20;display:none}
-.user-pick-results.open{display:block}
-.user-pick-row{display:flex;align-items:center;gap:10px;padding:8px 11px;cursor:pointer;transition:background .1s}
-.user-pick-row:hover,.user-pick-row.hl{background:var(--bg4)}
-.user-pick-row .uav{width:24px;height:24px;font-size:9px}
-.user-pick-name{font-size:12.5px;font-weight:500}
-.user-pick-email{font-size:11px;color:var(--t3)}
-.user-pick-empty{padding:12px;text-align:center;font-size:12px;color:var(--t3)}
-.user-pick-selected{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 11px}
-.user-pick-selected .uav{width:26px;height:26px;font-size:10px}
-.user-pick-clear{margin-left:auto;background:none;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:2px 5px;line-height:1}
-.user-pick-clear:hover{color:var(--rd)}
-
-/* ADD STUDENT INLINE FORM */
-.add-student-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:0}
-.add-student-grid .fg{margin-bottom:0}
-
-/* USERS */
+.sc-offline-block{border-top:1px solid var(--border);padding:14px 16px}
+.sc-offline-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sc-offline-title{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);font-weight:700;display:flex;align-items:center;gap:7px}
+.offline-count{font-size:11px;background:var(--am-bg);color:var(--am);border:1px solid rgba(255,181,71,.25);border-radius:4px;padding:1px 7px;font-weight:600}
+.oreg-row{display:flex;align-items:center;gap:11px;padding:10px;border-radius:8px;transition:background .1s;flex-wrap:wrap}
+.oreg-row:hover{background:var(--bg4)}
+.oreg-main{flex:1;min-width:180px}
+.oreg-name{font-size:13px;font-weight:500}
+.oreg-meta{font-size:11.5px;color:var(--t3);margin-top:2px}
+.oreg-pay{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap}
+.oreg-pay.razorpay{background:var(--bl-bg);color:var(--bl)}
+.oreg-pay.offline{background:var(--am-bg);color:var(--am)}
+.oreg-txn{font-size:11px;color:var(--t3);white-space:nowrap}
+.verify-tick{display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none;padding:5px 10px;border-radius:7px;border:1.5px solid var(--border2);background:transparent;transition:all .15s;flex-shrink:0}
+.verify-tick:hover{background:var(--bg4)}
+.verify-tick.done{border-color:rgba(34,200,122,.4);background:var(--gr-bg)}
+.verify-tick.locked{cursor:default;opacity:.85}
+.verify-tick.locked:hover{background:var(--gr-bg)}
+.verify-box{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);background:transparent;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.verify-tick.done .verify-box{background:var(--gr);border-color:var(--gr)}
+.verify-box svg{display:none;width:10px;height:10px}.verify-tick.done .verify-box svg{display:block}
+.verify-label{font-size:11px;font-weight:500;color:var(--t2);white-space:nowrap}.verify-tick.done .verify-label{color:var(--gr)}
 .fbar{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap}
 .fsearch{flex:1;min-width:180px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:8px 13px;color:var(--text);font-family:inherit;font-size:13px;outline:none;transition:border-color .2s}
 .fsearch:focus{border-color:var(--ac)}.fsearch::placeholder{color:var(--t3)}
@@ -179,15 +152,11 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
 .uname{font-weight:500}.uemail{font-size:11.5px;color:var(--t3)}
 .user-sessions-cell{display:flex;flex-wrap:wrap;gap:4px}
 .session-tag{font-size:10.5px;background:var(--bg4);border:1px solid var(--border2);border-radius:4px;padding:2px 7px;color:var(--t2);white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}
-
-/* PUBLISH */
 .pcard{background:var(--bg3);border:1px solid var(--ac-br);border-radius:var(--rl);padding:18px;margin-bottom:16px}
 .plabel{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin-bottom:9px;font-weight:700}
 .pbanner{background:var(--bg4);border:1px solid var(--border2);border-radius:var(--r);padding:13px 15px;display:flex;align-items:flex-start;gap:11px}
 .picon{width:34px;height:34px;border-radius:7px;background:var(--ac-bg);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 .ptit2{font-weight:500;font-size:13px;margin-bottom:3px}.pbody2{font-size:11.5px;color:var(--t2);line-height:1.5}
-
-/* EDIT MODAL */
 .edit-overlay{position:fixed;inset:0;background:rgba(10,15,30,.8);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;backdrop-filter:blur(4px)}
 .edit-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);width:100%;max-width:540px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:em-in .18s ease}
 @keyframes em-in{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
@@ -197,17 +166,11 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
 .edit-modal-body{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px;max-height:65vh;overflow-y:auto}
 .edit-modal-body .fg{margin-bottom:0}.edit-modal-body .fw{grid-column:1/-1}
 .edit-modal-foot{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
-
-/* API STATUS */
 .fb-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);margin-bottom:10px}
 .fb-dot{width:6px;height:6px;border-radius:50%;background:var(--t3);flex-shrink:0;transition:background .3s}
 .fb-dot.on{background:var(--gr)}.fb-dot.err{background:var(--rd)}
-
-/* TOAST */
 .toast{position:fixed;bottom:22px;right:22px;background:var(--bg2);border:1px solid rgba(34,200,122,.3);border-radius:var(--r);padding:11px 17px;font-size:13px;color:var(--gr);z-index:99999;display:flex;align-items:center;gap:9px;box-shadow:0 4px 20px rgba(0,0,0,.5);transform:translateY(70px);opacity:0;transition:all .28s ease;pointer-events:none;max-width:340px}
 .toast.show{transform:translateY(0);opacity:1}
-
-/* EMPTY / SPIN */
 .empty{text-align:center;padding:44px 20px}.empty-ic{font-size:34px;margin-bottom:9px}.empty-tx{font-size:13px;color:var(--t2)}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--ac2);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -216,7 +179,6 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="lcard">
     <div class="llogo">Alpha<span>Scramblers</span></div>
@@ -229,7 +191,6 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard">
   <nav class="sidebar">
     <div class="slogo">Alpha<span>Scramblers</span><span class="sbadge">ADMIN</span></div>
@@ -258,18 +219,16 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
     </div>
     <div class="content">
 
-      <!-- SESSIONS TAB -->
       <div class="section active" id="tab-sessions">
         <div class="card">
           <div class="ch">
-            <div><div class="ct">All Sessions</div><div class="cs">Click a session to see registrations — add or remove students directly</div></div>
+            <div><div class="ct">All Sessions</div><div class="cs">Click a session to see who registered (online + offline)</div></div>
             <button class="btn btn-ac sm" id="go-publish-btn">+ Publish New</button>
           </div>
           <div class="slist" id="sess-list"></div>
         </div>
       </div>
 
-      <!-- USERS TAB -->
       <div class="section" id="tab-users">
         <div class="card">
           <div class="ch">
@@ -280,7 +239,6 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
         </div>
       </div>
 
-      <!-- PUBLISH TAB -->
       <div class="section" id="tab-publish">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
           <div class="card">
@@ -294,6 +252,7 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
               <div class="fg"><label class="fl">Max Seats</label><input class="fi" id="sseat" type="number" placeholder="e.g. 25" min="1"/></div>
               <div class="fg fw"><label class="fl">Fee (₹) — leave 0 for free</label><input class="fi" id="sfee" type="number" placeholder="0" min="0" value="0"/></div>
               <div class="fg fw"><label class="fl">Description</label><textarea class="fi" id="sdesc" rows="3" placeholder="What will this session cover?"></textarea></div>
+              <div class="fg fw"><label class="fl">Offline Registration Session ID <span style="color:var(--t2);font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(matches sessionId on registration page, leave blank if none)</span></label><input class="fi" id="ssid" type="text" placeholder="e.g. comm-skills-21jun-2026"/></div>
               <div class="fg fw frow"><button class="btn btn-sec" id="clearbtn">Clear</button><button class="btn btn-ac" id="pubbtn">🚀 Publish Session</button></div>
             </div>
           </div>
@@ -307,7 +266,7 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
             </div>
             <div class="card" style="margin-top:0">
               <div class="ct" style="margin-bottom:8px">How it works</div>
-              <p style="font-size:12.5px;color:var(--t2);line-height:1.7">Sessions are saved to MongoDB and instantly available on your website.</p>
+              <p style="font-size:12.5px;color:var(--t2);line-height:1.7">Sessions are saved to MongoDB and instantly available on your website. If you set an "Offline Registration Session ID" matching the one used on your registration page, students who register for the offline workshop will show up under this session with a verification checkbox.</p>
             </div>
           </div>
         </div>
@@ -317,40 +276,79 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"><span id="toast-ic">✓</span><span id="toast-msg">Done</span></div>
 
 <script>
 
+// ✏️ Your existing Render backend (sessions / bookings / users / admin login)
 const API = 'https://alphascramblers-com.onrender.com';
+// ✏️ REPLACE with your actual Vercel deployment URL — single endpoint for offline registrations
+const OFFLINE_API = 'https://YOUR-VERCEL-DOMAIN.vercel.app/api/offline-registrations';
 
-// ═══════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════
 let token        = sessionStorage.getItem('as_token')  || null;
 let currentAdmin = JSON.parse(sessionStorage.getItem('as_admin') || 'null');
 let sessions     = [];
 let bookings     = [];
 let mongoUsers   = [];
+let offlineRegs  = [];
 let usersLoaded  = false;
-// Track which session has the add-student form open
-let addFormOpenSid = null;
-// Track the currently-selected registered user in the open add-student form: { sid: user }
-let addFormSelectedUser = {};
 const avcs = ['avp','avg','avb','ava'];
 
-// ═══════════════════════════════════════════
-// API HELPER
-// ═══════════════════════════════════════════
+// Generic fetch wrapper with timeout + clearer error messages.
+// "Failed to fetch" almost always means: (1) the Render backend is asleep/cold-starting
+// (free tier sleeps after 15 min idle and can take 30-50s to wake), (2) the URL is wrong,
+// or (3) CORS is blocking the request. This wrapper retries once after a short delay,
+// which covers the cold-start case automatically.
+async function rawFetch(url, opts, timeoutMs = 20000) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { ...opts, signal: ctrl.signal });
+    return res;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function api(method, path, body) {
   const opts = {
     method,
-    headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) }
+    headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) },
   };
   if (body) opts.body = JSON.stringify(body);
-  const res = await fetch(API + path, opts);
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Request failed');
+
+  let res;
+  try {
+    res = await rawFetch(API + path, opts);
+  } catch (err) {
+    // First attempt failed outright (likely cold Render instance or network blip) — retry once.
+    await new Promise(r => setTimeout(r, 4000));
+    try {
+      res = await rawFetch(API + path, opts, 30000);
+    } catch (err2) {
+      throw new Error('Cannot reach server. It may be waking up (free hosting can take ~30s) — please try again in a moment.');
+    }
+  }
+
+  let data;
+  try { data = await res.json(); } catch { data = {}; }
+  if (!res.ok) throw new Error(data.message || ('Request failed (' + res.status + ')'));
+  return data;
+}
+
+async function offlineApi(method, query, body) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const url = OFFLINE_API + (query || '');
+  let res;
+  try {
+    res = await rawFetch(url, opts);
+  } catch (err) {
+    throw new Error('Cannot reach offline registrations API. Check the OFFLINE_API URL in admin.html.');
+  }
+  let data;
+  try { data = await res.json(); } catch { data = {}; }
+  if (!res.ok) throw new Error(data.message || ('Request failed (' + res.status + ')'));
   return data;
 }
 
@@ -359,18 +357,12 @@ function setStatus(ok, msg) {
   Q('#fbstatus').textContent = msg;
 }
 
-// ═══════════════════════════════════════════
-// BOOT — check saved session
-// ═══════════════════════════════════════════
 if (token && currentAdmin) {
   showDashboard();
 } else {
   Q('#login-screen').style.display = 'flex';
 }
 
-// ═══════════════════════════════════════════
-// AUTH
-// ═══════════════════════════════════════════
 Q('#lbtn').addEventListener('click', doLogin);
 Q('#ap').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
@@ -378,8 +370,9 @@ async function doLogin() {
   const email    = Q('#ae').value.trim();
   const password = Q('#ap').value;
   Q('#lerr').style.display = 'none';
-  Q('#lbtn').textContent = 'Signing in…';
-  Q('#lbtn').disabled = true;
+  const btn = Q('#lbtn');
+  btn.textContent = 'Signing in… (may take up to 30s on first load)';
+  btn.disabled = true;
   try {
     const data = await api('POST', '/api/admin/login', { email, password });
     token = data.token;
@@ -391,8 +384,8 @@ async function doLogin() {
     Q('#lerr').textContent = e.message || 'Incorrect email or password.';
     Q('#lerr').style.display = 'block';
   } finally {
-    Q('#lbtn').textContent = 'Sign In →';
-    Q('#lbtn').disabled = false;
+    btn.textContent = 'Sign In →';
+    btn.disabled = false;
   }
 }
 
@@ -407,15 +400,12 @@ Q('#logbtn').addEventListener('click', () => {
 function showDashboard() {
   Q('#login-screen').style.display = 'none';
   Q('#dashboard').style.display = 'block';
-  Q('#aav').textContent   = ini2(currentAdmin.name);
+  Q('#aav').textContent    = ini2(currentAdmin.name);
   Q('#aname').textContent  = currentAdmin.name;
   Q('#aemail').textContent = currentAdmin.email;
   loadAllData();
 }
 
-// ═══════════════════════════════════════════
-// LOAD DATA
-// ═══════════════════════════════════════════
 async function loadAllData() {
   setStatus(null, 'Loading…');
   try {
@@ -424,10 +414,19 @@ async function loadAllData() {
       api('GET', '/api/bookings'),
       api('GET', '/api/users'),
     ]);
-    sessions   = sd.sessions || [];
-    bookings   = bd.bookings || [];
-    mongoUsers = ud.users    || [];
+    sessions    = sd.sessions || [];
+    bookings    = bd.bookings || [];
+    mongoUsers  = ud.users    || [];
     usersLoaded = true;
+
+    try {
+      const od = await offlineApi('GET', '');
+      offlineRegs = od.registrations || [];
+    } catch (e) {
+      offlineRegs = [];
+      console.warn('Offline registrations not loaded:', e.message);
+    }
+
     setStatus(true, 'Connected');
     renderSessions();
     renderUsers();
@@ -437,9 +436,6 @@ async function loadAllData() {
   }
 }
 
-// ═══════════════════════════════════════════
-// NAVIGATION
-// ═══════════════════════════════════════════
 const TITLES = { sessions: 'Sessions', users: 'All Users', publish: 'Publish Session' };
 Q('.sidebar').addEventListener('click', e => {
   const ni = e.target.closest('.ni');
@@ -453,9 +449,6 @@ function switchTab(tab) {
 }
 Q('#go-publish-btn').addEventListener('click', () => switchTab('publish'));
 
-// ═══════════════════════════════════════════
-// SESSIONS — render
-// ═══════════════════════════════════════════
 function renderSessions() {
   const el = Q('#sess-list');
   if (!sessions.length) {
@@ -475,13 +468,15 @@ function renderSessions() {
     const mon  = dt.toLocaleString('en', { month: 'short' }).toUpperCase();
     const day  = dt.getDate();
     const regs = bookings.filter(b => b.sid === sid || b.sid === s.id);
-    const registeredEmails = new Set(regs.map(b => (b.email || '').toLowerCase()));
+
+    const offSid = s.offlineSessionId || '';
+    const oregs  = offSid ? offlineRegs.filter(r => r.sessionId === offSid) : [];
 
     const regRows = regs.length
       ? regs.map((b, i) => {
           const bid = b._id || b.id;
           return `
-          <div class="reg-row" data-bid="${bid}">
+          <div class="reg-row">
             <div class="uav ${avcs[i % 4]}">${ini2(b.name)}</div>
             <div style="flex:1;min-width:0">
               <div class="reg-name">${esc(b.name)}</div>
@@ -493,38 +488,46 @@ function renderSessions() {
               <div class="wptick-box"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               <span class="wptick-label">${b.wpAdded ? 'WP Added' : 'Add to WP'}</span>
             </button>
-            <button class="rem-bk" data-bid="${bid}" data-sid="${sid}" title="Remove student from session">✕</button>
           </div>`;
         }).join('')
-      : '<div class="sc-empty">No registrations yet. Add a student below.</div>';
+      : '<div class="sc-empty">No registrations yet.</div>';
 
-    // Inline add-student form (shown if addFormOpenSid matches this session)
-    const showAddForm = addFormOpenSid === sid;
-    const selUser = addFormSelectedUser[sid];
-    const addFormHtml = showAddForm ? `
-      <div class="add-student-form" data-sid="${sid}">
-        <div class="add-student-label">Add Registered Student to this Session</div>
-        ${selUser ? `
-          <div class="user-pick-selected">
-            <div class="uav ${avcs[0]}">${ini2(((selUser.firstName||'')+' '+(selUser.lastName||'')).trim())}</div>
-            <div style="min-width:0">
-              <div class="user-pick-name">${esc(((selUser.firstName||'')+' '+(selUser.lastName||'')).trim() || '—')}</div>
-              <div class="user-pick-email">${esc(selUser.email || '—')}${selUser.mobileno ? ' · ' + esc(selUser.mobileno) : ''}</div>
-            </div>
-            <button class="user-pick-clear" data-sid="${sid}" title="Choose a different student">✕</button>
-          </div>
-        ` : `
-          <div class="user-pick-wrap">
-            <input class="add-fi user-pick-input" id="as-search-${sid}" placeholder="Search registered students by name, email or phone…" autocomplete="off"/>
-            <div class="user-pick-results" id="as-results-${sid}"></div>
-          </div>
-        `}
-        <div class="add-student-actions">
-          <button class="btn btn-sec sm cancel-add-student" data-sid="${sid}">Cancel</button>
-          <button class="btn btn-gr sm confirm-add-student" data-sid="${sid}" ${selUser ? '' : 'disabled'}>+ Add Student</button>
+    const offlineBlock = offSid ? `
+      <div class="sc-offline-block">
+        <div class="sc-offline-header">
+          <div class="sc-offline-title">🎟️ Offline Workshop Registrations <span style="color:var(--t3);font-weight:400;text-transform:none;letter-spacing:0">(₹${esc(s.fee || '149')})</span></div>
+          <span class="offline-count">${oregs.length}</span>
         </div>
-        <div class="add-student-hint">Only students who already registered on the website can be added — pick one above to keep session and booking records in sync.</div>
-      </div>` : '';
+        <div class="reg-list">
+          ${oregs.length ? oregs.map((r, i) => {
+            const rid = r._id || r.id;
+            const isRzp = r.payMode === 'razorpay';
+            const verified = !!r.verified;
+            const lockedClass = isRzp ? 'locked' : '';
+            const payBadge = isRzp
+              ? `<span class="oreg-pay razorpay">⚡ Razorpay</span>`
+              : `<span class="oreg-pay offline">💵 Offline / UPI</span>`;
+            const txnText = isRzp
+              ? (r.razorpayId ? 'Pay ID: ' + esc(r.razorpayId) : '')
+              : (r.txnId ? 'UTR: ' + esc(r.txnId) : 'Pay at venue');
+            return `
+            <div class="oreg-row">
+              <div class="uav ${avcs[i % 4]}">${ini2(r.name)}</div>
+              <div class="oreg-main">
+                <div class="oreg-name">${esc(r.name)} <span style="color:var(--t3);font-weight:400">· Class ${esc(r.class)} · ${esc(r.school)}</span></div>
+                <div class="oreg-meta">${esc(r.parentName)} · ${esc(r.phone)}${r.email ? ' · ' + esc(r.email) : ''}</div>
+              </div>
+              ${payBadge}
+              <div class="oreg-txn">${txnText}</div>
+              <button class="verify-tick ${verified ? 'done' : ''} ${lockedClass}" data-rid="${rid}" data-rzp="${isRzp ? '1' : '0'}" title="${isRzp ? 'Auto-verified by Razorpay payment' : 'Click to toggle verification'}">
+                <div class="verify-box"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="verify-label">${verified ? 'Verified' : 'Verify'}</span>
+              </button>
+            </div>`;
+          }).join('') : '<div class="sc-empty">No offline registrations yet.</div>'}
+        </div>
+      </div>
+    ` : '';
 
     return `
       <div class="scard ${live ? 'live-card' : ''}" data-sid="${sid}">
@@ -536,32 +539,28 @@ function renderSessions() {
             <div class="sc-meta">${fmtTime(s.time)} · ${esc(s.duration || '1 hr')}${s.seats ? ' · ' + s.seats + ' seats' : ''}${s.fee && s.fee !== '0' ? ' · ₹' + s.fee : ' · Free'}${s.topic ? ' · ' + esc(s.topic) : ''}</div>
           </div>
           <div class="sc-right">
-            <span class="b bb">${regs.length} registered</span>
+            <span class="b bb">${regs.length} online${offSid ? ' · ' + oregs.length + ' offline' : ''}</span>
             <span class="pill ${pc}">${pl}</span>
-            <span class="sc-chevron ${showAddForm ? 'open' : ''}">▶</span>
+            <span class="sc-chevron">▶</span>
           </div>
         </div>
-        <div class="sc-body ${showAddForm ? 'open' : ''}">
+        <div class="sc-body">
           <div class="sc-body-inner">
             <div class="sc-reg-header">
-              <div class="sc-reg-title">Registered Students</div>
+              <div class="sc-reg-title">Registered Students (Online)</div>
               <span class="reg-count">${regs.length}</span>
             </div>
             <div class="reg-list">${regRows}</div>
-            ${addFormHtml}
           </div>
+          ${offlineBlock}
           <div class="sc-del-row">
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-am sm edit-sess">✏️ Edit</button>
-              <button class="btn btn-gr sm open-add-student" data-sid="${sid}">+ Add Student</button>
-            </div>
+            <button class="btn btn-am sm edit-sess">✏️ Edit</button>
             <button class="btn btn-rd sm del-sess">Remove Session</button>
           </div>
         </div>
       </div>`;
   }).join('');
 
-  // Toggle dropdown
   el.querySelectorAll('.sc-head').forEach(head => {
     head.addEventListener('click', () => {
       const card    = head.closest('.scard');
@@ -574,164 +573,6 @@ function renderSessions() {
     });
   });
 
-  // Open "add student" inline form
-  el.querySelectorAll('.open-add-student').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const sid = btn.dataset.sid;
-      if (addFormOpenSid === sid) {
-        addFormOpenSid = null;
-      } else {
-        addFormOpenSid = sid;
-        addFormSelectedUser[sid] = null;
-      }
-      renderSessions();
-      // Keep the card open and focus the search field
-      if (addFormOpenSid) {
-        setTimeout(() => {
-          const searchInput = document.getElementById(`as-search-${sid}`);
-          if (searchInput) searchInput.focus();
-        }, 50);
-      }
-    });
-  });
-
-  // Cancel add-student form
-  el.querySelectorAll('.cancel-add-student').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const sid = btn.dataset.sid;
-      addFormOpenSid = null;
-      delete addFormSelectedUser[sid];
-      renderSessions();
-    });
-  });
-
-  // Clear selected user — go back to search
-  el.querySelectorAll('.user-pick-clear').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const sid = btn.dataset.sid;
-      addFormSelectedUser[sid] = null;
-      renderSessions();
-      setTimeout(() => {
-        const searchInput = document.getElementById(`as-search-${sid}`);
-        if (searchInput) searchInput.focus();
-      }, 50);
-    });
-  });
-
-  // Live search over registered users
-  el.querySelectorAll('.user-pick-input').forEach(input => {
-    const sid = input.id.replace('as-search-', '');
-    const resultsBox = document.getElementById(`as-results-${sid}`);
-
-    const renderResults = () => {
-      const q = input.value.trim().toLowerCase();
-      if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
-
-      const regs = bookings.filter(b => b.sid === sid);
-      const registeredEmails = new Set(regs.map(b => (b.email || '').toLowerCase()));
-
-      const matches = mongoUsers.filter(u => {
-        const fullName = ((u.firstName || '') + ' ' + (u.lastName || '')).toLowerCase();
-        const email = (u.email || '').toLowerCase();
-        const phone = (u.mobileno || '').toLowerCase();
-        return fullName.includes(q) || email.includes(q) || phone.includes(q);
-      }).slice(0, 8);
-
-      if (!matches.length) {
-        resultsBox.innerHTML = '<div class="user-pick-empty">No registered students match that search</div>';
-        resultsBox.classList.add('open');
-        return;
-      }
-
-      resultsBox.innerHTML = matches.map((u, i) => {
-        const fullName = ((u.firstName || '') + ' ' + (u.lastName || '')).trim() || '—';
-        const already = registeredEmails.has((u.email || '').toLowerCase());
-        return `
-          <div class="user-pick-row" data-idx="${i}" data-email="${esc(u.email || '')}" ${already ? 'style="opacity:.5"' : ''}>
-            <div class="uav ${avcs[i % 4]}">${ini2(fullName)}</div>
-            <div style="min-width:0;flex:1">
-              <div class="user-pick-name">${esc(fullName)}</div>
-              <div class="user-pick-email">${esc(u.email || '—')}${u.mobileno ? ' · ' + esc(u.mobileno) : ''}${already ? ' · already registered' : ''}</div>
-            </div>
-          </div>`;
-      }).join('');
-
-      resultsBox.classList.add('open');
-      resultsBox.querySelectorAll('.user-pick-row').forEach(row => {
-        row.addEventListener('click', () => {
-          const email = row.dataset.email;
-          const user = mongoUsers.find(u => (u.email || '') === email);
-          if (!user) return;
-          if (registeredEmails.has((user.email || '').toLowerCase())) {
-            toast('This student is already registered for this session', 'am');
-            return;
-          }
-          addFormSelectedUser[sid] = user;
-          renderSessions();
-        });
-      });
-    };
-
-    input.addEventListener('input', renderResults);
-    input.addEventListener('focus', renderResults);
-    document.addEventListener('click', e => {
-      if (!resultsBox.contains(e.target) && e.target !== input) resultsBox.classList.remove('open');
-    });
-  });
-
-  // Confirm add student (uses the selected registered user's exact details)
-  el.querySelectorAll('.confirm-add-student').forEach(btn => {
-    btn.addEventListener('click', async e => {
-      e.stopPropagation();
-      const sid  = btn.dataset.sid;
-      const user = addFormSelectedUser[sid];
-      if (!user) { toast('Pick a registered student first', 'rd'); return; }
-
-      const sess = sessions.find(s => (s._id || s.id) === sid);
-      if (!sess) return;
-
-      const name  = ((user.firstName || '') + ' ' + (user.lastName || '')).trim();
-      const email = user.email || '';
-      const phone = user.mobileno || '';
-
-      if (!name || !email) { toast('This user record is missing name or email', 'rd'); return; }
-
-      btn.textContent = 'Adding…'; btn.disabled = true;
-
-      try {
-        // POST to /api/bookings — same endpoint a student would hit, but admin-initiated.
-        // Name/email/phone come straight from the registered user record so
-        // sessions, bookings and the users list always stay consistent.
-        const data = await api('POST', '/api/bookings', {
-          sid,
-          name,
-          email,
-          phone,
-          stitle: sess.title,
-          adminAdded: true,
-          at: new Date().toISOString(),
-        });
-
-        // Update local state
-        const newBooking = data.booking || { _id: data.id, sid, name, email, phone, stitle: sess.title, at: new Date().toISOString() };
-        bookings.push(newBooking);
-
-        addFormOpenSid = null;
-        delete addFormSelectedUser[sid];
-        renderSessions();
-        renderUsers();
-        toast(`✓ ${name} added to "${sess.title}"`, 'gr');
-      } catch (err) {
-        toast('Failed to add student: ' + err.message, 'rd');
-        btn.textContent = '+ Add Student'; btn.disabled = false;
-      }
-    });
-  });
-
-  // WP tick
   el.querySelectorAll('.wptick').forEach(btn => {
     btn.addEventListener('click', async e => {
       e.stopPropagation();
@@ -750,32 +591,29 @@ function renderSessions() {
     });
   });
 
-  // Remove booking (✕ per student row)
-  el.querySelectorAll('.rem-bk').forEach(btn => {
+  el.querySelectorAll('.verify-tick').forEach(btn => {
     btn.addEventListener('click', async e => {
       e.stopPropagation();
-      const bid = btn.dataset.bid;
-      const sid = btn.dataset.sid;
-      const bk  = bookings.find(b => (b._id || b.id) === bid);
-      if (!bk) return;
-      if (!confirm(`Remove "${bk.name}" from this session?`)) return;
-
-      btn.textContent = '…'; btn.disabled = true;
-
+      const isRzp = btn.dataset.rzp === '1';
+      if (isRzp) {
+        toast('Razorpay registrations are auto-verified', 'am');
+        return;
+      }
+      const rid = btn.dataset.rid;
+      const reg = offlineRegs.find(r => (r._id || r.id) === rid);
+      if (!reg) return;
+      const newVal = !reg.verified;
       try {
-        await api('DELETE', `/api/bookings/${bid}`);
-        bookings = bookings.filter(b => (b._id || b.id) !== bid);
+        await offlineApi('PATCH', '?id=' + rid, { verified: newVal });
+        reg.verified = newVal;
         renderSessions();
-        renderUsers();
-        toast(`Removed ${bk.name}`, 'am');
-      } catch (err) {
-        toast('Remove failed: ' + err.message, 'rd');
-        btn.textContent = '✕'; btn.disabled = false;
+        toast(newVal ? '✓ Marked as verified' : 'Unmarked as verified', newVal ? 'gr' : 'am');
+      } catch (e) {
+        toast('Update failed: ' + e.message, 'rd');
       }
     });
   });
 
-  // Delete session
   el.querySelectorAll('.del-sess').forEach(btn => {
     btn.addEventListener('click', async e => {
       e.stopPropagation();
@@ -794,7 +632,6 @@ function renderSessions() {
     });
   });
 
-  // Edit session
   el.querySelectorAll('.edit-sess').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
@@ -805,9 +642,6 @@ function renderSessions() {
   });
 }
 
-// ═══════════════════════════════════════════
-// EDIT SESSION MODAL
-// ═══════════════════════════════════════════
 function openEditModal(s) {
   const old = document.getElementById('edit-overlay');
   if (old) old.remove();
@@ -831,6 +665,7 @@ function openEditModal(s) {
         <div class="fg"><label class="fl">Max Seats</label><input class="fi" type="number" id="e-seats" min="1"/></div>
         <div class="fg fw"><label class="fl">Fee (₹) — 0 for free</label><input class="fi" type="number" id="e-fee" min="0"/></div>
         <div class="fg fw"><label class="fl">Description</label><textarea class="fi" id="e-desc" rows="3"></textarea></div>
+        <div class="fg fw"><label class="fl">Offline Registration Session ID</label><input class="fi" id="e-offsid"/></div>
       </div>
       <div class="edit-modal-foot">
         <button class="btn btn-sec" id="edit-cancel">Cancel</button>
@@ -839,13 +674,14 @@ function openEditModal(s) {
     </div>`;
   document.body.appendChild(ov);
 
-  document.getElementById('e-title').value = s.title  || '';
-  document.getElementById('e-topic').value = s.topic  || '';
-  document.getElementById('e-date').value  = s.date   || '';
-  document.getElementById('e-time').value  = s.time   || '';
-  document.getElementById('e-seats').value = s.seats  || '';
-  document.getElementById('e-fee').value   = s.fee    || '0';
-  document.getElementById('e-desc').value  = s.desc   || '';
+  document.getElementById('e-title').value  = s.title  || '';
+  document.getElementById('e-topic').value  = s.topic  || '';
+  document.getElementById('e-date').value   = s.date   || '';
+  document.getElementById('e-time').value   = s.time   || '';
+  document.getElementById('e-seats').value  = s.seats  || '';
+  document.getElementById('e-fee').value    = s.fee    || '0';
+  document.getElementById('e-desc').value   = s.desc   || '';
+  document.getElementById('e-offsid').value = s.offlineSessionId || '';
 
   const sid = s._id || s.id;
   const closeModal = () => ov.remove();
@@ -869,12 +705,13 @@ function openEditModal(s) {
       seats:    document.getElementById('e-seats').value,
       fee:      document.getElementById('e-fee').value || '0',
       desc:     document.getElementById('e-desc').value.trim(),
+      offlineSessionId: document.getElementById('e-offsid').value.trim(),
     };
 
     try {
       const data = await api('PUT', `/api/sessions/${sid}`, body);
       const idx = sessions.findIndex(x => (x._id || x.id) === sid);
-      if (idx > -1) sessions[idx] = { ...sessions[idx], ...data.session };
+      if (idx > -1) sessions[idx] = { ...sessions[idx], ...data.session, ...body };
       closeModal();
       renderSessions();
       toast('✓ Session updated', 'gr');
@@ -885,9 +722,6 @@ function openEditModal(s) {
   });
 }
 
-// ═══════════════════════════════════════════
-// USERS
-// ═══════════════════════════════════════════
 Q('#refresh-users-btn').addEventListener('click', loadAllData);
 Q('#usearch').addEventListener('input', renderUsers);
 
@@ -931,9 +765,6 @@ function renderUsers() {
     <div style="padding:12px 4px 0;font-size:11.5px;color:var(--t3)">${users.length} user${users.length !== 1 ? 's' : ''}</div>`;
 }
 
-// ═══════════════════════════════════════════
-// PUBLISH SESSION
-// ═══════════════════════════════════════════
 ['st', 'sd', 'stm', 'sto'].forEach(id => Q('#' + id).addEventListener('input', updatePreview));
 function updatePreview() {
   const t  = Q('#st').value || 'Session title';
@@ -954,6 +785,7 @@ Q('#pubbtn').addEventListener('click', async () => {
       title, topic: Q('#sto').value.trim(), date, time,
       duration: Q('#sdu').value, seats: Q('#sseat').value,
       fee: Q('#sfee').value || '0', desc: Q('#sdesc').value.trim(),
+      offlineSessionId: Q('#ssid').value.trim(),
     });
     sessions.unshift(data.session);
     clearForm();
@@ -968,14 +800,11 @@ Q('#pubbtn').addEventListener('click', async () => {
 
 Q('#clearbtn').addEventListener('click', clearForm);
 function clearForm() {
-  ['st', 'sto', 'sd', 'stm', 'sseat', 'sdesc'].forEach(id => Q('#' + id).value = '');
+  ['st', 'sto', 'sd', 'stm', 'sseat', 'sdesc', 'ssid'].forEach(id => Q('#' + id).value = '');
   Q('#sdu').value = '1 hour'; Q('#sfee').value = '0';
   updatePreview();
 }
 
-// ═══════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════
 function Q(sel)   { return document.querySelector(sel); }
 function esc(s)   { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function ini2(n)  { return String(n || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?'; }
