@@ -170,17 +170,16 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
       { paymentId },
       {
         $set: {
-          used: false,
-          usedAt: new Date(),
-          paymentId,
-          paymentLinkId,
-          amount,
-          method,
-          email: email.toLowerCase(),
-          contact,
-          verified: true,
-          event: event.event,
-          capturedAt: new Date(),
+            paymentId,
+            paymentLinkId,
+            amount,
+            method,
+            email: email.toLowerCase(),
+            contact,
+            verified: true,
+            used: false,          // ← keep this
+            event: event.event,
+            capturedAt: new Date(),
         },
       },
       { upsert: true }
