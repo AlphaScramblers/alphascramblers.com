@@ -20,6 +20,9 @@ const CORS = {
 
 let cachedClient = null;
 async function getDb() {
+  if (!MONGO_URI) {
+    throw new Error('MONGO_URI environment variable is not set on Vercel');
+  }
   if (!cachedClient) {
     cachedClient = new MongoClient(MONGO_URI, { maxPoolSize: 5 });
     await cachedClient.connect();
@@ -28,13 +31,13 @@ async function getDb() {
 }
 
 export default async function handler(req, res) {
+  // Set CORS on all responses (including preflight)
+  Object.entries(CORS).forEach(([k, v]) => res.setHeader(k, v));
+
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
-    return res.status(200).setHeaders(CORS).end();
+    return res.status(200).end();
   }
-
-  // Set CORS on all responses
-  Object.entries(CORS).forEach(([k, v]) => res.setHeader(k, v));
 
   try {
     const db   = await getDb();
