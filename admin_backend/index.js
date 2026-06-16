@@ -17,6 +17,13 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
+
+// Must be registered BEFORE express.json() — the webhook's HMAC check needs
+// the untouched raw body, and express.json() would otherwise consume the
+// request stream first and leave req.body empty by the time the route's
+// own express.raw() middleware runs.
+app.use("/api/offline-registrations/webhook", express.raw({ type: "application/json" }));
+
 app.use(express.json());
 
 // ── Routes ──────────────────────────────────────────────
