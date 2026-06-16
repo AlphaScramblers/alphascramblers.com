@@ -4,274 +4,389 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Register — Communication Skills Workshop · AlphaScramblers</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#0d0e14;--ink2:#1e2030;--paper:#f5f3ee;--paper2:#eceae4;
-  --blue:#1b4fff;--blue-lt:#e8edff;--gold:#f5c842;--gold-dk:#c49a0a;
-  --green:#18a96b;--green-lt:#e6f7f1;--red:#e53935;--red-lt:#fdecea;
-  --t2:#6b6f85;--t3:#9fa3b8;--r:10px;--rl:16px;
+  --navy:#0f1c3f;
+  --navy2:#172550;
+  --sky:#7ab8e8;
+  --sky-lt:#deeef9;
+  --sky-mid:#a8d0ef;
+  --white:#ffffff;
+  --ink:#111827;
+  --ink2:#374151;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --bg:#f9fafb;
+  --red:#c0392b;
+  --red-lt:#fdf0ef;
+  --green:#1a7a5e;
+  --green-lt:#eaf5f1;
+  --r:8px;
+  --rl:12px;
 }
-body{font-family:'Space Grotesk',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden}
-.hero{background:var(--ink);color:#fff;position:relative;overflow:hidden;min-height:420px;display:flex;align-items:stretch}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(27,79,255,.25) 0%,transparent 60%),radial-gradient(ellipse 40% 50% at 20% 80%,rgba(245,200,66,.12) 0%,transparent 55%);pointer-events:none}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
-.hero-inner{position:relative;z-index:1;width:100%;max-width:1100px;margin:0 auto;padding:52px 24px 48px;display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:center}
-.hero-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(245,200,66,.12);border:1px solid rgba(245,200,66,.3);border-radius:20px;padding:4px 13px;font-size:11.5px;font-weight:600;color:var(--gold);letter-spacing:.5px;text-transform:uppercase;margin-bottom:18px}
-.hero-tag span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1.6s ease infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
-.hero-kicker{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,7vw,88px);line-height:.95;letter-spacing:1px;margin-bottom:14px}
-.hero-kicker .big{display:block;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.7) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-kicker .accent{display:block;background:linear-gradient(135deg,var(--gold) 0%,#ffa726 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:15px;color:rgba(255,255,255,.65);line-height:1.6;margin-bottom:28px;max-width:440px}
-.hero-chips{display:flex;flex-wrap:wrap;gap:9px}
-.chip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:7px 13px;font-size:12.5px;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:6px}
-.chip .ic{font-size:14px}
-.sess-card{background:rgba(255,255,255,.06);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-radius:var(--rl);padding:24px;flex-shrink:0}
-.sess-card-title{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.4);margin-bottom:14px;font-weight:600}
-.sess-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07)}
-.sess-row:last-child{border-bottom:none}
-.sess-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.ic-blue{background:rgba(27,79,255,.2)}.ic-gold{background:rgba(245,200,66,.15)}.ic-green{background:rgba(24,169,107,.15)}.ic-purple{background:rgba(124,111,255,.2)}
-.sess-label{font-size:10.5px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
-.sess-val{font-size:13.5px;color:#fff;font-weight:600;margin-top:1px}
-.fee-block{margin-top:16px;background:linear-gradient(135deg,var(--gold) 0%,#ffa726 100%);border-radius:var(--r);padding:14px 16px;text-align:center}
-.fee-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:rgba(0,0,0,.55);font-weight:700;margin-bottom:2px}
-.fee-amount{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--ink);letter-spacing:1px;line-height:1}
-.fee-note{font-size:11px;color:rgba(0,0,0,.5);margin-top:2px}
-.perks-strip{background:var(--ink2);padding:14px 0}
-.perks-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.perk{display:flex;align-items:center;gap:7px;font-size:12.5px;color:rgba(255,255,255,.6);padding:4px 14px}
-.perk .pi{font-size:16px}
-.perk-divider{width:1px;height:20px;background:rgba(255,255,255,.1)}
-.form-area{max-width:700px;margin:0 auto;padding:48px 24px}
-.section-label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);font-weight:700;margin-bottom:6px}
-.section-title{font-size:22px;font-weight:700;margin-bottom:28px;color:var(--ink)}
-.fcard{background:#fff;border:1px solid var(--paper2);border-radius:var(--rl);padding:26px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+
+/* ── Layout — left panel wider at 480px ── */
+.layout{display:grid;grid-template-columns:600px 1fr;height:100vh;overflow:hidden}
+
+/* ── LEFT PANEL ── */
+.left{background:var(--navy);display:flex;flex-direction:column;height:100vh;overflow:hidden;position:relative}
+.left-body{flex:1;padding:44px 44px 32px;display:flex;flex-direction:column;overflow:hidden;position:relative;z-index:1}
+
+/* Logo area — ADD YOUR LOGO HERE */
+.logo-wrap{margin-bottom:0px}
+/* Replace src="" with your logo file path e.g. src="logo.png" */
+.logo-wrap img{
+  width:300px;
+  height:auto;
+  display:block;
+}
+
+/* Divider after logo */
+.logo-divider{height:1px;background:rgba(255,255,255,.08);margin-bottom:32px}
+
+/* Badge */
+.event-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(122,184,232,.1);border:1px solid rgba(122,184,232,.25);border-radius:20px;padding:5px 14px;font-size:10.5px;font-weight:600;color:var(--sky);letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px;width:fit-content}
+.bdot{width:5px;height:5px;border-radius:50%;background:var(--sky);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+.event-title{font-family:'Playfair Display',serif;font-size:36px;line-height:1.1;margin-bottom:10px;color:#fff}
+.event-title em{font-style:normal;color:var(--sky)}
+.event-desc{font-size:13px;color:rgba(255,255,255,.48);line-height:1.75;margin-bottom:28px}
+
+/* Detail rows */
+.detail-list{border-top:1px solid rgba(255,255,255,.08)}
+.detail-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.d-icon{width:36px;height:36px;border-radius:9px;background:rgba(122,184,232,.1);border:1px solid rgba(122,184,232,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.d-icon svg{width:16px;height:16px;stroke:var(--sky);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.d-meta{display:flex;flex-direction:column;gap:2px}
+.d-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.7px;color:rgba(255,255,255,.32);font-weight:700}
+.d-val{font-size:13.5px;font-weight:600;color:rgba(255,255,255,.9)}
+
+/* Perks row */
+.perks-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.perk-chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:5px 12px;font-size:11.5px;color:rgba(255,255,255,.55)}
+.perk-chip::before{content:'';display:inline-block;width:13px;height:13px;flex-shrink:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5L13 4.5' stroke='%237ab8e8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E") center/contain no-repeat}
+
+/* Fee card */
+.fee-card{margin-top:24px;background:rgba(122,184,232,.07);border:1px solid rgba(122,184,232,.18);border-radius:var(--rl);padding:18px 22px;display:flex;align-items:center;justify-content:space-between}
+.fee-left .fee-eyebrow{font-size:9.5px;text-transform:uppercase;letter-spacing:.7px;color:rgba(255,255,255,.38);font-weight:700;margin-bottom:4px}
+.fee-amount{font-family:'Playfair Display',serif;font-size:44px;color:var(--sky);line-height:1}
+.fee-right{text-align:right}
+.fee-includes{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.3);font-weight:700;margin-bottom:6px}
+.fee-tags{display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.fee-tag{font-size:11.5px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:6px}
+.fee-tag::after{content:'';display:inline-block;width:13px;height:13px;flex-shrink:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5L13 4.5' stroke='%237ab8e8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E") center/contain no-repeat}
+
+/* Footer */
+.left-footer{padding:16px 44px;border-top:1px solid rgba(255,255,255,.08);font-size:15px;color:rgba(255,255,255,.3);position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between}
+.left-footer strong{color:rgba(255,255,255,.5)}
+
+/* ── RIGHT PANEL ── */
+.right{height:100vh;overflow-y:auto;background:var(--white)}
+.right::-webkit-scrollbar{width:4px}
+.right::-webkit-scrollbar-track{background:transparent}
+.right::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+
+.form-wrap{max-width:520px;margin:0 auto;padding:44px 40px}
+.form-heading{font-family:'Playfair Display',serif;font-size:26px;color:var(--ink);margin-bottom:4px}
+.form-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+
+.fblock{border:1px solid var(--border);border-radius:var(--rl);padding:24px;margin-bottom:14px;background:var(--white)}
+.fblock-title{font-size:10px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;color:var(--muted);margin-bottom:18px}
+
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .fw{grid-column:1/-1}
 .fg{display:flex;flex-direction:column;gap:5px}
-.fl{font-size:11.5px;font-weight:600;color:var(--ink);text-transform:uppercase;letter-spacing:.4px}
-.fl span{color:var(--red);margin-left:2px}
-.fi{background:var(--paper);border:1.5px solid var(--paper2);border-radius:var(--r);padding:11px 13px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color .18s,background .18s;width:100%}
-.fi:focus{border-color:var(--blue);background:#fff}
-.fi::placeholder{color:var(--t3)}
-select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6f85' stroke-width='1.5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px}
-.class-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.class-opt{position:relative}
-.class-opt input{position:absolute;opacity:0;width:0;height:0}
-.class-opt label{display:flex;align-items:center;justify-content:center;height:44px;border:1.5px solid var(--paper2);border-radius:8px;font-size:13px;font-weight:600;color:var(--t2);cursor:pointer;transition:all .15s;background:var(--paper)}
-.class-opt input:checked + label{border-color:var(--blue);background:var(--blue-lt);color:var(--blue)}
-.class-opt label:hover{border-color:var(--blue);color:var(--blue)}
-.pay-title{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:14px}
-.pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-.pay-opt{position:relative}
-.pay-opt input{position:absolute;opacity:0}
-.pay-opt label{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border:2px solid var(--paper2);border-radius:var(--rl);cursor:pointer;transition:all .18s;background:var(--paper)}
-.pay-opt label .pm-name{font-size:13.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
-.pay-opt label .pm-desc{font-size:11.5px;color:var(--t2);line-height:1.4}
-.pay-opt input:checked + label{border-color:var(--blue);background:var(--blue-lt)}
-.pay-opt input:checked + label .pm-name{color:var(--blue)}
-.pm-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;background:#fff;border:1px solid var(--paper2)}
-.pay-info{background:var(--paper);border:1.5px solid var(--paper2);border-radius:var(--r);padding:14px;display:none}
-.pay-info.show{display:block}
-.pi-note{font-size:12px;color:var(--t2);line-height:1.6}
-.pi-note strong{color:var(--ink)}
-.razorpay-btn-wrap{text-align:center}
-.razorpay-link{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#2b73ff,#1a5ce0);color:#fff;text-decoration:none;border-radius:var(--r);padding:12px 22px;font-size:14px;font-weight:600;transition:transform .15s,box-shadow .15s}
-.razorpay-link:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(43,115,255,.3)}
-.submit-area{margin-top:6px}
-.submit-btn{width:100%;background:linear-gradient(135deg,var(--blue) 0%,#2b73ff 100%);color:#fff;border:none;border-radius:var(--rl);padding:16px;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:9px;letter-spacing:.3px}
-.submit-btn:hover{background:linear-gradient(135deg,#1240d6 0%,var(--blue) 100%);transform:translateY(-1px);box-shadow:0 8px 24px rgba(27,79,255,.3)}
+.fl{font-size:11.5px;font-weight:600;color:var(--ink2)}
+.fl sup{color:var(--red)}
+.fi{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color .15s,background .15s,box-shadow .15s;width:100%}
+.fi:focus{border-color:var(--sky);background:#fff;box-shadow:0 0 0 3px rgba(122,184,232,.15)}
+.fi::placeholder{color:#c4cad8}
+.fi.has-err{border-color:var(--red);background:var(--red-lt)}
+.ferr{font-size:11px;color:var(--red);display:none;margin-top:2px}
+
+.class-row{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:2px}
+.co{position:relative}
+.co input{position:absolute;opacity:0;width:0;height:0}
+.co label{display:flex;align-items:center;justify-content:center;height:42px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .13s;background:var(--bg);user-select:none}
+.co input:checked + label{border-color:var(--navy);background:var(--sky-lt);color:var(--navy)}
+.co label:hover{border-color:var(--sky);color:var(--navy)}
+
+.pay-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.po{position:relative}
+.po input{position:absolute;opacity:0;width:0;height:0}
+.po label{display:flex;align-items:flex-start;gap:11px;padding:14px;border:2px solid var(--border);border-radius:var(--rl);cursor:pointer;transition:all .15s;background:var(--bg)}
+.po input:checked + label{border-color:var(--navy);background:var(--sky-lt)}
+.po-icon{width:34px;height:34px;border-radius:8px;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.po-icon svg{width:16px;height:16px;stroke:var(--navy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.po-name{font-size:13px;font-weight:700;color:var(--ink);line-height:1.3}
+.po input:checked + label .po-name{color:var(--navy)}
+.po-desc{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+
+.pay-now-wrap{display:none;background:var(--sky-lt);border:1.5px solid var(--sky-mid);border-radius:var(--r);padding:14px 16px;text-align:center}
+.pay-now-wrap.show{display:block}
+.pay-now-btn{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;text-decoration:none;border-radius:var(--r);padding:10px 22px;font-size:13.5px;font-weight:600;transition:all .15s}
+.pay-now-btn:hover{background:var(--navy2);box-shadow:0 4px 14px rgba(15,28,63,.25)}
+.pay-now-note{font-size:11px;color:var(--muted);margin-top:7px}
+
+.submit-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:var(--rl);padding:15px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:.2px}
+.submit-btn:hover{background:var(--navy2);box-shadow:0 6px 20px rgba(15,28,63,.25);transform:translateY(-1px)}
 .submit-btn:active{transform:translateY(0)}
-.submit-btn:disabled{background:#b0b5cc;cursor:not-allowed;transform:none;box-shadow:none}
-.submit-note{text-align:center;font-size:11.5px;color:var(--t3);margin-top:10px}
-#success-view{display:none;text-align:center;padding:60px 24px}
-.success-icon{width:72px;height:72px;border-radius:50%;background:var(--green-lt);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 18px;animation:pop .4s ease}
-@keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
-.success-h{font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--ink);letter-spacing:.5px;margin-bottom:8px}
-.success-p{font-size:14px;color:var(--t2);line-height:1.7;max-width:420px;margin:0 auto 24px}
-.success-box{background:#fff;border:1px solid var(--paper2);border-radius:var(--rl);padding:20px;max-width:340px;margin:0 auto 24px;text-align:left}
-.success-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--paper2);font-size:13px}
-.success-row:last-child{border-bottom:none}
-.success-row .sk{color:var(--t2)}.success-row .sv{font-weight:600;color:var(--ink)}
-.toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;border-radius:var(--r);padding:11px 17px;font-size:13px;z-index:9999;transform:translateY(70px);opacity:0;transition:all .25s;max-width:320px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.3)}
-.toast.show{transform:translateY(0);opacity:1}.toast.err{background:var(--red)}
-.site-footer{background:var(--ink);color:rgba(255,255,255,.4);text-align:center;padding:20px;font-size:12px}
-.site-footer a{color:rgba(255,255,255,.6);text-decoration:none}
-.spin{width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .65s linear infinite;flex-shrink:0}
+.submit-btn:disabled{background:#b0b8cc;cursor:not-allowed;transform:none;box-shadow:none}
+.submit-note{text-align:center;font-size:11px;color:var(--muted);margin-top:9px;line-height:1.55}
+
+.spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;flex-shrink:0}
 @keyframes sp{to{transform:rotate(360deg)}}
-.fi.err{border-color:var(--red);background:var(--red-lt)}
-.field-err{font-size:11px;color:var(--red);margin-top:3px;display:none}
-@media(max-width:700px){
-  .hero-inner{grid-template-columns:1fr;gap:24px}
-  .sess-card{display:none}
+
+.toast{position:fixed;bottom:20px;right:20px;background:var(--navy);color:#fff;border-radius:var(--r);padding:11px 17px;font-size:13px;z-index:9999;transform:translateY(60px);opacity:0;transition:all .22s;max-width:300px;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.err{background:var(--red)}
+
+#success-view{display:none;text-align:center;padding:64px 32px}
+.suc-icon{width:60px;height:60px;border-radius:50%;background:var(--green-lt);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;animation:pop .35s ease}
+.suc-icon svg{width:26px;height:26px;stroke:var(--green);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.suc-h{font-family:'Playfair Display',serif;font-size:30px;color:var(--navy);margin-bottom:8px}
+.suc-p{font-size:13.5px;color:var(--muted);line-height:1.7;max-width:360px;margin:0 auto 24px}
+.suc-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--rl);padding:18px;max-width:320px;margin:0 auto 20px;text-align:left}
+.suc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.suc-row:last-child{border-bottom:none}
+.suc-row .sk{color:var(--muted)}.suc-row .sv{font-weight:600;color:var(--navy)}
+.suc-contact{font-size:12.5px;color:var(--muted)}
+.suc-contact strong{color:var(--navy)}
+
+@media(max-width:900px){
+  html,body{overflow:auto}
+  .layout{grid-template-columns:1fr;height:auto;overflow:visible}
+  .left{height:auto;overflow:visible}
+  .left-body{padding:28px 24px 24px}
+  .left-footer{padding:14px 24px}
+  .right{height:auto;overflow:visible}
+  .form-wrap{padding:28px 20px}
   .fgrid{grid-template-columns:1fr}
   .fw{grid-column:1}
-  .class-grid{grid-template-columns:repeat(5,1fr)}
-  .pay-methods{grid-template-columns:1fr}
+  .pay-row{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
+<div class="layout">
 
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-inner">
-    <div class="hero-left">
-      <div class="hero-tag"><span></span>Limited Seats · 21 June 2026</div>
-      <div class="hero-kicker">
-        <span class="big">Communication</span>
-        <span class="accent">Skills</span>
-      </div>
-      <p class="hero-sub">A powerful offline workshop to speak confidently, connect better, and express with impact. For students of Classes 6th to 10th.</p>
-      <div class="hero-chips">
-        <div class="chip"><span class="ic">📍</span>Gaur Homes Club House, Govindpuram</div>
-        <div class="chip"><span class="ic">🕓</span>4:00 PM – 6:00 PM</div>
-        <div class="chip"><span class="ic">📅</span>21 June 2026</div>
-      </div>
-    </div>
-    <div class="sess-card">
-      <div class="sess-card-title">Session Details</div>
-      <div class="sess-row"><div class="sess-icon ic-blue">📅</div><div><div class="sess-label">Date</div><div class="sess-val">Saturday, 21 June 2026</div></div></div>
-      <div class="sess-row"><div class="sess-icon ic-gold">🕓</div><div><div class="sess-label">Timings</div><div class="sess-val">4:00 PM to 6:00 PM</div></div></div>
-      <div class="sess-row"><div class="sess-icon ic-green">📍</div><div><div class="sess-label">Venue</div><div class="sess-val">Gaur Homes Club House, Govindpuram</div></div></div>
-      <div class="sess-row"><div class="sess-icon ic-purple">🏫</div><div><div class="sess-label">For Students</div><div class="sess-val">Classes 6th – 10th</div></div></div>
-      <div class="fee-block">
-        <div class="fee-label">Workshop Fee</div>
-        <div class="fee-amount">₹149</div>
-        <div class="fee-note">Inclusive of all · Refreshments + Goodies + Certificate</div>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- ═══════════════════════════════
+       LEFT PANEL
+  ═══════════════════════════════ -->
+  <aside class="left">
+    <div class="left-body">
 
-<div class="perks-strip">
-  <div class="perks-inner">
-    <div class="perk"><span class="pi">☕</span>Refreshments Included</div>
-    <div class="perk-divider"></div>
-    <div class="perk"><span class="pi">🎁</span>Goodies for All</div>
-    <div class="perk-divider"></div>
-    <div class="perk"><span class="pi">📜</span>Participation Certificate</div>
-    <div class="perk-divider"></div>
-    <div class="perk"><span class="pi">🏆</span>Winner gets Winning Certificate</div>
-    <div class="perk-divider"></div>
-    <div class="perk"><span class="pi">🎤</span>Public Speaking Activities</div>
-  </div>
-</div>
+      <!-- ╔══════════════════════════════════╗
+           ║  ADD YOUR LOGO HERE              ║
+           ║  Replace src="" with logo path   ║
+           ╚══════════════════════════════════╝ -->
+      <div class="logo-wrap">
+        <img src="images/logo ss.png" alt="AlphaScramblers" />
+      </div>
 
-<div class="form-area" id="form-area">
-  <div class="section-label">Step 1 of 2</div>
-  <div class="section-title">Register Your Spot</div>
+      <div class="logo-divider"></div>
 
-  <!-- Student Info -->
-  <div class="fcard">
-    <div class="fgrid">
-      <div class="fg">
-        <label class="fl">Student Name <span>*</span></label>
-        <input class="fi" id="f-name" type="text" placeholder="Full name"/>
-        <span class="field-err" id="e-name">Please enter the student's name.</span>
-      </div>
-      <div class="fg">
-        <label class="fl">Parent / Guardian Name <span>*</span></label>
-        <input class="fi" id="f-parent" type="text" placeholder="Parent's name"/>
-        <span class="field-err" id="e-parent">Please enter parent's name.</span>
-      </div>
-      <div class="fg">
-        <label class="fl">WhatsApp Number <span>*</span></label>
-        <input class="fi" id="f-phone" type="tel" placeholder="10-digit mobile number" maxlength="10"/>
-        <span class="field-err" id="e-phone">Enter a valid 10-digit number.</span>
-      </div>
-      <div class="fg">
-        <label class="fl">Email Address <span>*</span></label>
-        <input class="fi" id="f-email" type="email" placeholder="email@example.com"/>
-        <span class="field-err" id="e-email">Please enter a valid email address.</span>
-      </div>
-      <div class="fg fw">
-        <label class="fl">Student's Class <span>*</span></label>
-        <div class="class-grid">
-          <div class="class-opt"><input type="radio" name="class" id="c6" value="6"/><label for="c6">6th</label></div>
-          <div class="class-opt"><input type="radio" name="class" id="c7" value="7"/><label for="c7">7th</label></div>
-          <div class="class-opt"><input type="radio" name="class" id="c8" value="8"/><label for="c8">8th</label></div>
-          <div class="class-opt"><input type="radio" name="class" id="c9" value="9"/><label for="c9">9th</label></div>
-          <div class="class-opt"><input type="radio" name="class" id="c10" value="10"/><label for="c10">10th</label></div>
+      <div class="event-badge"><span class="bdot"></span>21 June 2026 &nbsp;&middot;&nbsp; Limited Seats</div>
+
+      <h1 class="event-title">Communication<br/><em>Skills</em> Workshop</h1>
+      <p class="event-desc">A hands-on offline workshop to speak confidently, connect better, and express with real impact — for students of Classes 6th to 10th.</p>
+
+      <div class="detail-list">
+
+        <div class="detail-item">
+          <div class="d-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="d-meta">
+            <div class="d-label">Date</div>
+            <div class="d-val">Saturday, 21 June 2026</div>
+          </div>
         </div>
-        <span class="field-err" id="e-class">Please select the student's class.</span>
+
+        <div class="detail-item">
+          <div class="d-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 15.5"/></svg>
+          </div>
+          <div class="d-meta">
+            <div class="d-label">Time</div>
+            <div class="d-val">4:00 PM – 6:00 PM</div>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <div class="d-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </div>
+          <div class="d-meta">
+            <div class="d-label">Venue</div>
+            <div class="d-val">Gaur Homes Club House, Govindpuram</div>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <div class="d-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="d-meta">
+            <div class="d-label">For Students</div>
+            <div class="d-val">Classes 6th – 10th</div>
+          </div>
+        </div>
+
       </div>
-      <div class="fg fw">
-        <label class="fl">School Name <span>*</span></label>
-        <input class="fi" id="f-school" type="text" placeholder="Name of the school"/>
-        <span class="field-err" id="e-school">Please enter school name.</span>
+
+      <!-- Perks -->
+      <div class="perks-row">
+        <div class="perk-chip">Refreshments</div>
+        <div class="perk-chip">Goodies</div>
+        <div class="perk-chip">Certificate</div>
+        <div class="perk-chip">Winner Trophy</div>
+        <div class="perk-chip">Public Speaking</div>
       </div>
+
+      <!-- Fee -->
+      <div class="fee-card">
+        <div class="fee-left">
+          <div class="fee-eyebrow">Workshop Fee</div>
+          <div class="fee-amount">&#8377;149</div>
+        </div>
+        <div class="fee-right">
+          <div class="fee-includes">Includes</div>
+          <div class="fee-tags">
+            <div class="fee-tag">All Materials</div>
+            <div class="fee-tag">Refreshments</div>
+            <div class="fee-tag">Certificate</div>
+          </div>
+        </div>
+      </div>
+
     </div>
-  </div>
 
-  <!-- Payment -->
-  <div class="fcard">
-    <div class="pay-title">💳 Pay Workshop Fee — ₹149</div>
-    <div class="pay-methods">
-      <div class="pay-opt">
-        <input type="radio" name="paymode" id="pm-offline" value="offline" checked/>
-        <label for="pm-offline">
-          <div class="pm-name"><div class="pm-icon">💵</div>Pay at Venue</div>
-          <div class="pm-desc">Pay ₹149 cash or UPI at the venue on the day of the workshop.</div>
-        </label>
+    <div class="left-footer">
+      <strong>alphascramblers@gmail.com</strong>
+      <span>9625963967 &nbsp;&middot;&nbsp; 8595752706</span>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════
+       RIGHT PANEL — FORM
+  ═══════════════════════════════ -->
+  <main class="right">
+    <div class="form-wrap" id="form-area">
+      <div class="form-heading">Reserve your spot</div>
+      <p class="form-sub">Fill in the details below. We'll confirm via WhatsApp.</p>
+
+      <!-- Student Details -->
+      <div class="fblock">
+        <div class="fblock-title">Student Details</div>
+        <div class="fgrid">
+          <div class="fg">
+            <label class="fl">Student Name <sup>*</sup></label>
+            <input class="fi" id="f-name" type="text" placeholder="Full name"/>
+            <span class="ferr" id="e-name">Enter the student's name.</span>
+          </div>
+          <div class="fg">
+            <label class="fl">Parent / Guardian <sup>*</sup></label>
+            <input class="fi" id="f-parent" type="text" placeholder="Parent's name"/>
+            <span class="ferr" id="e-parent">Enter parent's name.</span>
+          </div>
+          <div class="fg">
+            <label class="fl">WhatsApp Number <sup>*</sup></label>
+            <input class="fi" id="f-phone" type="tel" placeholder="10-digit number" maxlength="10"/>
+            <span class="ferr" id="e-phone">Enter a valid 10-digit number.</span>
+          </div>
+          <div class="fg">
+            <label class="fl">Email Address <sup>*</sup></label>
+            <input class="fi" id="f-email" type="email" placeholder="email@example.com"/>
+            <span class="ferr" id="e-email">Enter a valid email.</span>
+          </div>
+          <div class="fg fw">
+            <label class="fl">Student's Class <sup>*</sup></label>
+            <div class="class-row">
+              <div class="co"><input type="radio" name="cls" id="c6" value="6"/><label for="c6">6th</label></div>
+              <div class="co"><input type="radio" name="cls" id="c7" value="7"/><label for="c7">7th</label></div>
+              <div class="co"><input type="radio" name="cls" id="c8" value="8"/><label for="c8">8th</label></div>
+              <div class="co"><input type="radio" name="cls" id="c9" value="9"/><label for="c9">9th</label></div>
+              <div class="co"><input type="radio" name="cls" id="c10" value="10"/><label for="c10">10th</label></div>
+            </div>
+            <span class="ferr" id="e-cls">Select the student's class.</span>
+          </div>
+          <div class="fg fw">
+            <label class="fl">School Name <sup>*</sup></label>
+            <input class="fi" id="f-school" type="text" placeholder="Name of school"/>
+            <span class="ferr" id="e-school">Enter school name.</span>
+          </div>
+        </div>
       </div>
-      <div class="pay-opt">
-        <input type="radio" name="paymode" id="pm-razorpay" value="razorpay"/>
-        <label for="pm-razorpay">
-          <div class="pm-name"><div class="pm-icon">⚡</div>Pay Online Now</div>
-          <div class="pm-desc">Pay now via Razorpay and secure your spot instantly.</div>
-        </label>
+
+      <!-- Payment -->
+      <div class="fblock">
+        <div class="fblock-title">Payment — &#8377;149</div>
+        <div class="pay-row">
+          <div class="po">
+            <input type="radio" name="pay" id="pm-cash" value="cash" checked/>
+            <label for="pm-cash">
+              <div class="po-icon">
+                <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              </div>
+              <div>
+                <div class="po-name">Pay at Venue</div>
+                <div class="po-desc">Cash or UPI on the day of the workshop.</div>
+              </div>
+            </label>
+          </div>
+          <div class="po">
+            <input type="radio" name="pay" id="pm-online" value="online"/>
+            <label for="pm-online">
+              <div class="po-icon">
+                <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div>
+                <div class="po-name">Pay Online</div>
+                <div class="po-desc">Secure your spot instantly.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div class="pay-now-wrap" id="pay-now-wrap">
+          <a href="https://pages.razorpay.com/pl_T1yVjw0NI9YeXe/view" target="_blank" class="pay-now-btn">
+            Pay &#8377;149 Now
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+          </a>
+          <p class="pay-now-note">Pay first, then submit your registration below.</p>
+        </div>
       </div>
+
+      <!-- Submit -->
+      <button class="submit-btn" id="submit-btn" onclick="doSubmit()">
+        <span id="submit-lbl">Confirm Registration</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+      </button>
+      <p class="submit-note">By registering you agree to attend on 21 June 2026 at Gaur Homes Club House, Govindpuram.</p>
     </div>
 
-    <!-- Pay at Venue info -->
-    <div class="pay-info show" id="pi-offline"></div>
-
-    <!-- Razorpay -->
-    <div class="pay-info" id="pi-razorpay">
-      <div class="razorpay-btn-wrap">
-        <a href="https://pages.razorpay.com/pl_T1yVjw0NI9YeXe/view" target="_blank" class="razorpay-link">
-          ⚡ Pay ₹149 via Razorpay
-        </a>
+    <!-- SUCCESS -->
+    <div id="success-view">
+      <div class="suc-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <p class="pi-note" style="margin-top:12px;text-align:center">Click the button above to pay, then come back and submit your registration below.</p>
+      <div class="suc-h">You're Registered!</div>
+      <p class="suc-p">Your spot is reserved. We'll confirm via WhatsApp shortly. See you on 21 June!</p>
+      <div class="suc-box">
+        <div class="suc-row"><span class="sk">Student</span><span class="sv" id="s-name">—</span></div>
+        <div class="suc-row"><span class="sk">Class</span><span class="sv" id="s-class">—</span></div>
+        <div class="suc-row"><span class="sk">Date</span><span class="sv">21 June 2026</span></div>
+        <div class="suc-row"><span class="sk">Venue</span><span class="sv">Gaur Homes Club House</span></div>
+        <div class="suc-row"><span class="sk">Payment</span><span class="sv" id="s-pay">—</span></div>
+      </div>
+      <p class="suc-contact">Questions? Call <strong>9625963967</strong> or <strong>8595752706</strong></p>
     </div>
-  </div>
-
-  <!-- Submit -->
-  <div class="submit-area">
-    <button class="submit-btn" id="submit-btn" onclick="submitForm()">
-      <span id="submit-label">Confirm Registration</span>
-      <span style="font-size:18px">→</span>
-    </button>
-    <p class="submit-note">By registering you agree to attend the session at the venue on the mentioned date and time.</p>
-  </div>
-</div>
-
-<!-- SUCCESS VIEW -->
-<div id="success-view">
-  <div class="success-icon">🎉</div>
-  <div class="success-h">You're Registered!</div>
-  <p class="success-p">Your spot has been reserved for the Communication Skills Workshop. We'll reach out via WhatsApp to confirm.</p>
-  <div class="success-box">
-    <div class="success-row"><span class="sk">Student</span><span class="sv" id="s-name">—</span></div>
-    <div class="success-row"><span class="sk">Class</span><span class="sv" id="s-class">—</span></div>
-    <div class="success-row"><span class="sk">Date</span><span class="sv">21 June 2026</span></div>
-    <div class="success-row"><span class="sk">Venue</span><span class="sv">Gaur Homes Club House</span></div>
-    <div class="success-row"><span class="sk">Payment</span><span class="sv" id="s-pay">—</span></div>
-  </div>
-  <p style="font-size:13px;color:var(--t2)">Questions? Call us at <strong>9625963967</strong> or <strong>8595752706</strong></p>
-</div>
-
-<div class="site-footer">
-  <strong style="color:rgba(255,255,255,.7)">AlphaScramblers</strong> · Best for the Best<br/>
-  <span style="margin-top:4px;display:block">
-    <a href="mailto:alphascramblers@gmail.com">alphascramblers@gmail.com</a> · 9625963967 · 8595752706
-  </span>
+  </main>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -279,61 +394,60 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
 <script>
 const API = '/api/offline-registrations';
 
-document.querySelectorAll('input[name="paymode"]').forEach(radio => {
-  radio.addEventListener('change', () => {
-    const mode = document.querySelector('input[name="paymode"]:checked').value;
-    document.getElementById('pi-offline').classList.toggle('show', mode === 'offline');
-    document.getElementById('pi-razorpay').classList.toggle('show', mode === 'razorpay');
+document.querySelectorAll('input[name="pay"]').forEach(r => {
+  r.addEventListener('change', () => {
+    const v = document.querySelector('input[name="pay"]:checked').value;
+    document.getElementById('pay-now-wrap').classList.toggle('show', v === 'online');
   });
 });
 
-function showToast(msg, err) {
+function toast(msg, err) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'toast show' + (err ? ' err' : '');
   clearTimeout(window._tt);
-  window._tt = setTimeout(() => t.className = 'toast', 3000);
+  window._tt = setTimeout(() => t.className = 'toast', 3200);
 }
 
-function getVal(id) { return document.getElementById(id).value.trim(); }
-function setErr(id, show) {
-  const fi = document.getElementById(id);
-  const fe = document.getElementById('e-' + id.replace('f-',''));
-  if (fi) fi.classList.toggle('err', show);
-  if (fe) fe.style.display = show ? 'block' : 'none';
+function val(id) { return document.getElementById(id).value.trim(); }
+
+function setErr(fieldId, errId, show) {
+  document.getElementById(fieldId)?.classList.toggle('has-err', show);
+  const e = document.getElementById(errId);
+  if (e) e.style.display = show ? 'block' : 'none';
 }
 
-async function submitForm() {
+async function doSubmit() {
   let ok = true;
-  const name   = getVal('f-name');
-  const parent = getVal('f-parent');
-  const phone  = getVal('f-phone');
-  const email  = getVal('f-email');
-  const school = getVal('f-school');
-  const cls    = document.querySelector('input[name="class"]:checked');
-  const mode   = document.querySelector('input[name="paymode"]:checked').value;
+  const name   = val('f-name');
+  const parent = val('f-parent');
+  const phone  = val('f-phone');
+  const email  = val('f-email');
+  const school = val('f-school');
+  const cls    = document.querySelector('input[name="cls"]:checked');
+  const pay    = document.querySelector('input[name="pay"]:checked').value;
 
-  setErr('f-name',   !name);   if (!name)   ok = false;
-  setErr('f-parent', !parent); if (!parent) ok = false;
-  setErr('f-phone',  !/^[6-9]\d{9}$/.test(phone)); if (!/^[6-9]\d{9}$/.test(phone)) ok = false;
+  setErr('f-name',   'e-name',   !name);   if (!name)   ok = false;
+  setErr('f-parent', 'e-parent', !parent); if (!parent) ok = false;
+  const phoneOk = /^[6-9]\d{9}$/.test(phone);
+  setErr('f-phone', 'e-phone', !phoneOk); if (!phoneOk) ok = false;
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  setErr('f-email', !emailOk); if (!emailOk) ok = false;
-  setErr('f-school', !school); if (!school) ok = false;
+  setErr('f-email', 'e-email', !emailOk); if (!emailOk) ok = false;
+  setErr('f-school', 'e-school', !school); if (!school) ok = false;
 
-  if (!cls) { document.getElementById('e-class').style.display = 'block'; ok = false; }
-  else { document.getElementById('e-class').style.display = 'none'; }
+  const ec = document.getElementById('e-cls');
+  if (!cls) { ec.style.display='block'; ok=false; } else { ec.style.display='none'; }
 
-  if (!ok) { showToast('Please fill all required fields.', true); return; }
+  if (!ok) { toast('Please fill all required fields correctly.', true); return; }
 
   const btn = document.getElementById('submit-btn');
-  const lbl = document.getElementById('submit-label');
+  const lbl = document.getElementById('submit-lbl');
   btn.disabled = true;
-  lbl.innerHTML = '<span class="spin"></span>Submitting…';
+  lbl.innerHTML = '<span class="spin"></span> Submitting…';
 
   const payload = {
     name, parentName: parent, phone, email,
-    class: cls.value, school,
-    payMode: mode,
+    class: cls.value, school, payMode: pay,
     sessionId: 'comm-skills-21jun-2026',
     sessionTitle: 'Communication Skills Workshop',
     sessionDate: '2026-06-21',
@@ -341,7 +455,7 @@ async function submitForm() {
   };
 
   try {
-    const res  = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    const res  = await fetch(API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'Registration failed');
 
@@ -349,10 +463,10 @@ async function submitForm() {
     document.getElementById('success-view').style.display = 'block';
     document.getElementById('s-name').textContent  = name;
     document.getElementById('s-class').textContent = 'Class ' + cls.value;
-    document.getElementById('s-pay').textContent   = mode === 'razorpay' ? 'Online (Razorpay)' : 'Pay at Venue';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('s-pay').textContent   = pay === 'online' ? 'Paid Online' : 'Pay at Venue';
+    document.querySelector('.right').scrollTo({ top:0, behavior:'smooth' });
   } catch (err) {
-    showToast(err.message || 'Something went wrong. Try again.', true);
+    toast(err.message || 'Something went wrong. Try again.', true);
     btn.disabled = false;
     lbl.textContent = 'Confirm Registration';
   }
