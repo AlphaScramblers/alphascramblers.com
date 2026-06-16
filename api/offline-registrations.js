@@ -5,11 +5,10 @@
 // POST   /api/offline-registrations          → create new registration
 // PATCH  /api/offline-registrations?id=xxx  → update (verified, etc.)
 
-import { MongoClient, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
+import { connectDB } from '../lib/mongo.js';
 
-const MONGO_URI = process.env.MONGO_URI;          // set in Vercel env vars
-const DB_NAME   = process.env.DB_NAME || 'alphascramblers';
-const COLL      = 'offline_registrations';
+const COLL = 'offline_registrations';
 
 // CORS headers — allow your domain + localhost
 const CORS = {
@@ -17,18 +16,6 @@ const CORS = {
   'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
-
-let cachedClient = null;
-async function getDb() {
-  if (!MONGO_URI) {
-    throw new Error('MONGO_URI environment variable is not set on Vercel');
-  }
-  if (!cachedClient) {
-    cachedClient = new MongoClient(MONGO_URI, { maxPoolSize: 5 });
-    await cachedClient.connect();
-  }
-  return cachedClient.db(DB_NAME);
-}
 
 export default async function handler(req, res) {
   // Set CORS on all responses (including preflight)
@@ -40,7 +27,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const db   = await getDb();
+    const { db } = await connectDB();
     const coll = db.collection(COLL);
     const { id } = req.query;
 
