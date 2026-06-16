@@ -16,6 +16,7 @@
   --rd:#ff5a5a;--rd-bg:rgba(255,90,90,.1);
   --am:#ffb547;--am-bg:rgba(255,181,71,.1);
   --bl:#4fa3ff;--bl-bg:rgba(79,163,255,.1);
+  --or:#ff8c42;--or-bg:rgba(255,140,66,.1);--or-br:rgba(255,140,66,.3);
   --r:10px;--rl:14px;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
@@ -48,6 +49,7 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .ni{display:flex;align-items:center;gap:9px;padding:8px 20px;cursor:pointer;color:var(--t2);font-size:13px;border-left:3px solid transparent;transition:all .13s;user-select:none}
 .ni:hover{color:var(--text);background:var(--bg3)}
 .ni.active{color:var(--ac2);background:var(--ac-bg);border-left-color:var(--ac);font-weight:500}
+.ni.active.offline-nav{color:var(--or);background:var(--or-bg);border-left-color:var(--or)}
 .nic{font-size:15px;width:18px;text-align:center}
 .sfooter{margin-top:auto;padding:14px 18px;border-top:1px solid var(--border);flex-shrink:0}
 .achip{display:flex;align-items:center;gap:9px}
@@ -73,12 +75,14 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .btn-ac{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:500}.btn-ac:hover{background:var(--ac2)}
 .btn-rd{background:var(--rd-bg);border-color:rgba(255,90,90,.25);color:var(--rd)}.btn-rd:hover{background:rgba(255,90,90,.2)}
 .btn-am{background:var(--am-bg);border-color:rgba(255,181,71,.25);color:var(--am)}.btn-am:hover{background:rgba(255,181,71,.2)}
+.btn-or{background:var(--or-bg);border-color:var(--or-br);color:var(--or);font-weight:500}.btn-or:hover{background:rgba(255,140,66,.2)}
 .sm{padding:5px 11px;font-size:12px;border-radius:6px}
 
 /* BADGES */
 .b{display:inline-block;font-size:11px;padding:2px 7px;border-radius:4px;font-weight:500}
 .bg{background:var(--gr-bg);color:var(--gr)}.ba{background:var(--am-bg);color:var(--am)}
 .bb{background:var(--bl-bg);color:var(--bl)}.bp{background:var(--ac-bg);color:var(--ac2)}
+.bo{background:var(--or-bg);color:var(--or)}
 
 /* SESSION FORM */
 .sform{display:grid;grid-template-columns:1fr 1fr;gap:13px}
@@ -89,6 +93,7 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .slist{display:flex;flex-direction:column;gap:12px}
 .scard{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .scard.live-card{border-color:rgba(34,200,122,.3)}
+.scard.offline-card{border-color:var(--or-br)}
 .sc-head{display:flex;align-items:center;gap:14px;padding:14px 16px;cursor:pointer;user-select:none;transition:background .12s}
 .sc-head:hover{background:rgba(255,255,255,.03)}
 .sc-date-block{text-align:center;min-width:42px;flex-shrink:0}
@@ -103,23 +108,30 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .pill-live{background:var(--gr-bg);color:var(--gr);border:1px solid rgba(34,200,122,.25)}
 .pill-up{background:var(--bl-bg);color:var(--bl);border:1px solid rgba(79,163,255,.25)}
 .pill-past{background:var(--bg4);color:var(--t3);border:1px solid var(--border)}
+.pill-offline{background:var(--or-bg);color:var(--or);border:1px solid var(--or-br)}
 .sc-chevron{font-size:11px;color:var(--t3);transition:transform .2s;margin-left:2px}
 .sc-chevron.open{transform:rotate(90deg)}
 .sc-body{display:none;border-top:1px solid var(--border)}
 .sc-body.open{display:block}
 .sc-body-inner{padding:14px 16px}
-.sc-reg-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sc-reg-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
 .sc-reg-title{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);font-weight:700}
 .reg-count{font-size:11px;background:var(--ac-bg);color:var(--ac2);border:1px solid var(--ac-br);border-radius:4px;padding:1px 7px;font-weight:600}
 .reg-list{display:flex;flex-direction:column;gap:1px}
-.reg-row{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:8px;transition:background .1s}
+.reg-row{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:8px;transition:background .1s;flex-wrap:wrap}
 .reg-row:hover{background:var(--bg4)}
 .uav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
 .avp{background:var(--ac-bg);color:var(--ac2)}.avg{background:var(--gr-bg);color:var(--gr)}
 .avb{background:var(--bl-bg);color:var(--bl)}.ava{background:var(--am-bg);color:var(--am)}
+.avo{background:var(--or-bg);color:var(--or)}
 .reg-name{font-size:13px;font-weight:500;min-width:0;flex:1}
 .reg-email{font-size:11.5px;color:var(--t3)}
 .reg-phone{font-size:12px;color:var(--t2);min-width:110px}
+.reg-class{font-size:11.5px;color:var(--t2);min-width:60px}
+.reg-school{font-size:11.5px;color:var(--t3);min-width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.reg-pay{font-size:11px;padding:2px 7px;border-radius:4px;font-weight:500;flex-shrink:0}
+.pay-online{background:var(--gr-bg);color:var(--gr)}
+.pay-venue{background:var(--am-bg);color:var(--am)}
 .reg-date{font-size:11px;color:var(--t3);min-width:80px;text-align:right}
 .wptick{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:4px 9px;border-radius:7px;border:1.5px solid var(--border2);background:transparent;transition:all .15s;flex-shrink:0}
 .wptick:hover{background:var(--bg4)}.wptick.done{border-color:rgba(34,200,122,.4);background:var(--gr-bg)}
@@ -129,6 +141,18 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .wptick-label{font-size:11px;font-weight:500;color:var(--t2);white-space:nowrap}.wptick.done .wptick-label{color:var(--gr)}
 .sc-empty{text-align:center;padding:24px;font-size:12.5px;color:var(--t3)}
 .sc-del-row{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-top:1px solid var(--border)}
+
+/* OFFLINE STATS ROW */
+.offline-stats{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.stat-chip{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 16px;min-width:110px}
+.stat-num{font-size:22px;font-weight:700;line-height:1}
+.stat-label{font-size:11px;color:var(--t3);margin-top:3px}
+.stat-chip.online-chip .stat-num{color:var(--gr)}
+.stat-chip.venue-chip .stat-num{color:var(--am)}
+.stat-chip.total-chip .stat-num{color:var(--or)}
+
+/* EXPORT */
+.export-bar{display:flex;align-items:center;gap:9px}
 
 /* USERS */
 .fbar{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap}
@@ -177,6 +201,10 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
 .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--ac2);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .users-loading{display:flex;align-items:center;justify-content:center;padding:40px;font-size:13px;color:var(--t2)}
+
+/* OFFLINE TABLE */
+.offline-table-wrap{overflow-x:auto}
+.offline-table-wrap table th:first-child{min-width:150px}
 </style>
 </head>
 <body>
@@ -198,9 +226,11 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
 <div id="dashboard">
   <nav class="sidebar">
     <div class="slogo">Alpha<span>Scramblers</span><span class="sbadge">ADMIN</span></div>
-    <div class="nsec">Manage</div>
+    <div class="nsec">Online</div>
     <div class="ni active" data-tab="sessions"><span class="nic">📅</span>Sessions</div>
     <div class="ni" data-tab="users"><span class="nic">👥</span>All Users</div>
+    <div class="nsec">Offline</div>
+    <div class="ni offline-nav" data-tab="offline"><span class="nic">🏫</span>Offline Sessions</div>
     <div class="nsec">Actions</div>
     <div class="ni" data-tab="publish"><span class="nic">📢</span>Publish Session</div>
     <div class="sfooter">
@@ -223,11 +253,11 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
     </div>
     <div class="content">
 
-      <!-- SESSIONS TAB -->
+      <!-- SESSIONS TAB (online) -->
       <div class="section active" id="tab-sessions">
         <div class="card">
           <div class="ch">
-            <div><div class="ct">All Sessions</div><div class="cs">Click a session to see who registered</div></div>
+            <div><div class="ct">Online Sessions</div><div class="cs">Click a session to see who registered</div></div>
             <button class="btn btn-ac sm" id="go-publish-btn">+ Publish New</button>
           </div>
           <div class="slist" id="sess-list"></div>
@@ -242,6 +272,23 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
           </div>
           <div class="fbar"><input class="fsearch" type="search" id="usearch" placeholder="Search by name, email or phone…"/></div>
           <div id="users-container"><div class="users-loading"><span class="spin"></span>Loading users…</div></div>
+        </div>
+      </div>
+
+      <!-- OFFLINE SESSIONS TAB -->
+      <div class="section" id="tab-offline">
+        <div class="card">
+          <div class="ch">
+            <div>
+              <div class="ct">Offline Sessions</div>
+              <div class="cs">Registrations from offline/in-person events</div>
+            </div>
+            <div class="export-bar">
+              <button class="btn btn-sec sm" id="refresh-offline-btn">↻ Refresh</button>
+              <button class="btn btn-or sm" id="export-offline-btn">⬇ Export CSV</button>
+            </div>
+          </div>
+          <div id="offline-container"><div class="users-loading"><span class="spin"></span>Loading offline sessions…</div></div>
         </div>
       </div>
 
@@ -292,12 +339,18 @@ const API = 'https://alphascramblers-com.onrender.com';
 // ═══════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════
-let token       = sessionStorage.getItem('as_token')  || null;
+let token        = sessionStorage.getItem('as_token')  || null;
 let currentAdmin = JSON.parse(sessionStorage.getItem('as_admin') || 'null');
-let sessions    = [];
-let bookings    = [];
-let mongoUsers  = [];
-let usersLoaded = false;
+let sessions     = [];
+let bookings     = [];
+let mongoUsers   = [];
+let usersLoaded  = false;
+
+// Offline state
+let offlineSessions      = [];  // from /api/offline-sessions (or derived from registrations)
+let offlineRegistrations = [];  // from /api/offline-registrations
+let offlineLoaded        = false;
+
 const avcs = ['avp','avg','avb','ava'];
 
 // ═══════════════════════════════════════════
@@ -321,7 +374,7 @@ function setStatus(ok, msg) {
 }
 
 // ═══════════════════════════════════════════
-// BOOT — check saved session
+// BOOT
 // ═══════════════════════════════════════════
 if (token && currentAdmin) {
   showDashboard();
@@ -398,24 +451,78 @@ async function loadAllData() {
   }
 }
 
+// ── Load offline data separately ────────────────────────────────────────────
+async function loadOfflineData() {
+  Q('#offline-container').innerHTML = '<div class="users-loading"><span class="spin"></span>Loading offline registrations…</div>';
+  try {
+    // Fetch all offline registrations
+    const rd = await api('GET', '/api/offline-registrations');
+    offlineRegistrations = rd.registrations || rd.data || rd || [];
+
+    // Also try to fetch offline sessions list (may or may not exist as a separate endpoint)
+    try {
+      const osd = await api('GET', '/api/offline-sessions');
+      offlineSessions = osd.sessions || osd.data || [];
+    } catch (_) {
+      // No dedicated offline-sessions endpoint — derive sessions from registrations
+      offlineSessions = deriveOfflineSessions(offlineRegistrations);
+    }
+
+    offlineLoaded = true;
+    renderOffline();
+  } catch (e) {
+    Q('#offline-container').innerHTML = `<div class="empty"><div class="empty-ic">⚠️</div><div class="empty-tx">Failed to load offline data: ${esc(e.message)}</div></div>`;
+    toast('Failed to load offline data: ' + e.message, 'rd');
+  }
+}
+
+// Derive unique session groups from registrations when no offline-sessions endpoint exists
+function deriveOfflineSessions(regs) {
+  const map = {};
+  regs.forEach(r => {
+    const sid = r.sessionId || r.offlineSessionId || 'unknown';
+    if (!map[sid]) {
+      map[sid] = {
+        _id: sid,
+        offlineSessionId: sid,
+        title: r.sessionTitle || r.sessionName || sid,
+        date:  r.sessionDate  || r.date || '',
+        time:  r.sessionTime  || r.time || '',
+        duration: r.duration  || '',
+        fee:   r.fee || '149',
+        seats: r.seats || '',
+      };
+    }
+  });
+  return Object.values(map);
+}
+
 // ═══════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════
-const TITLES = { sessions: 'Sessions', users: 'All Users', publish: 'Publish Session' };
+const TITLES = { sessions: 'Online Sessions', users: 'All Users', offline: 'Offline Sessions', publish: 'Publish Session' };
 Q('.sidebar').addEventListener('click', e => {
   const ni = e.target.closest('.ni');
   if (!ni || !ni.dataset.tab) return;
   switchTab(ni.dataset.tab);
 });
 function switchTab(tab) {
-  document.querySelectorAll('.ni').forEach(n => n.classList.toggle('active', n.dataset.tab === tab));
+  document.querySelectorAll('.ni').forEach(n => {
+    n.classList.toggle('active', n.dataset.tab === tab);
+  });
   document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === 'tab-' + tab));
   Q('#ptitle').textContent = TITLES[tab] || '';
+  if (tab === 'offline' && !offlineLoaded) loadOfflineData();
 }
 Q('#go-publish-btn').addEventListener('click', () => switchTab('publish'));
+Q('#refresh-offline-btn').addEventListener('click', () => {
+  offlineLoaded = false;
+  loadOfflineData();
+});
+Q('#export-offline-btn').addEventListener('click', exportOfflineCSV);
 
 // ═══════════════════════════════════════════
-// SESSIONS — render
+// ONLINE SESSIONS — render (unchanged)
 // ═══════════════════════════════════════════
 function renderSessions() {
   const el = Q('#sess-list');
@@ -551,7 +658,211 @@ function renderSessions() {
 }
 
 // ═══════════════════════════════════════════
-// EDIT SESSION MODAL
+// OFFLINE SESSIONS — render
+// ═══════════════════════════════════════════
+function renderOffline() {
+  const container = Q('#offline-container');
+  if (!offlineSessions.length && !offlineRegistrations.length) {
+    container.innerHTML = '<div class="empty"><div class="empty-ic">🏫</div><div class="empty-tx">No offline sessions found.</div></div>';
+    return;
+  }
+
+  const now = new Date();
+
+  // Build session cards HTML
+  const sessionCards = offlineSessions.map(s => {
+    const sid  = s.offlineSessionId || s._id || s.id;
+    const regs = offlineRegistrations.filter(r =>
+      (r.sessionId || r.offlineSessionId) === sid
+    );
+    const onlineCount = regs.filter(r => r.payMode === 'online').length;
+    const venueCount  = regs.filter(r => r.payMode === 'cash' || r.payMode === 'venue' || r.payMode !== 'online').length;
+    const total       = regs.length;
+
+    let dt, mon, day;
+    if (s.date) {
+      dt  = new Date(s.date + 'T' + (s.time || '00:00'));
+      mon = dt.toLocaleString('en', { month: 'short' }).toUpperCase();
+      day = dt.getDate();
+    } else {
+      dt  = null;
+      mon = '—';
+      day = '?';
+    }
+
+    const past = dt && dt < now;
+    const live = dt && !past && (dt - now) < 3600000;
+
+    const regRows = regs.length
+      ? regs.map((r, i) => {
+          const rid   = r._id || r.id || i;
+          const isOnline = r.payMode === 'online';
+          return `
+          <div class="reg-row" data-rid="${rid}">
+            <div class="uav avo">${ini2(r.name)}</div>
+            <div style="flex:1;min-width:0">
+              <div class="reg-name">${esc(r.name)}</div>
+              <div class="reg-email">${esc(r.email || '—')}</div>
+            </div>
+            <div class="reg-phone">${esc(r.phone || '—')}</div>
+            <div class="reg-class">Class ${esc(r.class || r.studentClass || '—')}</div>
+            <div class="reg-school" title="${esc(r.school || r.schoolName || '—')}">${esc(r.school || r.schoolName || '—')}</div>
+            <span class="reg-pay ${isOnline ? 'pay-online' : 'pay-venue'}">${isOnline ? '✓ Paid Online' : '⏳ Pay at Venue'}</span>
+            <div class="reg-date">${fmtDate(r.at || r.createdAt)}</div>
+            <button class="wptick ${r.wpAdded ? 'done' : ''}" data-rid="${rid}" data-offline="1">
+              <div class="wptick-box"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="wptick-label">${r.wpAdded ? 'WP Added' : 'Add to WP'}</span>
+            </button>
+          </div>`;
+        }).join('')
+      : '<div class="sc-empty">No registrations yet.</div>';
+
+    return `
+      <div class="scard offline-card" data-osid="${esc(sid)}">
+        <div class="sc-head">
+          <div class="sc-date-block"><div class="sc-mon">${mon}</div><div class="sc-day">${day}</div></div>
+          <div class="sc-divider"></div>
+          <div class="sc-info">
+            <div class="sc-title">${esc(s.title || sid)}</div>
+            <div class="sc-meta">${s.time ? fmtTime(s.time) : ''}${s.duration ? ' · ' + esc(s.duration) : ''}${s.seats ? ' · ' + s.seats + ' seats' : ''}${s.fee && s.fee !== '0' ? ' · ₹' + s.fee : ''}</div>
+          </div>
+          <div class="sc-right">
+            <span class="b bo">${total} registered</span>
+            <span class="pill pill-offline">Offline</span>
+            <span class="sc-chevron">▶</span>
+          </div>
+        </div>
+        <div class="sc-body">
+          <div class="sc-body-inner">
+            <!-- Mini stats -->
+            <div class="offline-stats">
+              <div class="stat-chip total-chip"><div class="stat-num">${total}</div><div class="stat-label">Total</div></div>
+              <div class="stat-chip online-chip"><div class="stat-num">${onlineCount}</div><div class="stat-label">Paid Online</div></div>
+              <div class="stat-chip venue-chip"><div class="stat-num">${venueCount}</div><div class="stat-label">Pay at Venue</div></div>
+              <div class="stat-chip" style="border-color:rgba(124,111,255,.2)"><div class="stat-num" style="color:var(--ac2)">₹${onlineCount * parseInt(s.fee || 149)}</div><div class="stat-label">Collected Online</div></div>
+            </div>
+            <div class="sc-reg-header">
+              <div class="sc-reg-title">Registered Students</div>
+              <span class="reg-count">${total}</span>
+            </div>
+            <div class="reg-list">${regRows}</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = sessionCards || '<div class="empty"><div class="empty-ic">🏫</div><div class="empty-tx">No offline sessions found.</div></div>';
+
+  // Toggle expand/collapse
+  container.querySelectorAll('.sc-head').forEach(head => {
+    head.addEventListener('click', () => {
+      const card    = head.closest('.scard');
+      const body    = card.querySelector('.sc-body');
+      const chev    = head.querySelector('.sc-chevron');
+      const wasOpen = body.classList.contains('open');
+      container.querySelectorAll('.sc-body').forEach(b => b.classList.remove('open'));
+      container.querySelectorAll('.sc-chevron').forEach(c => c.classList.remove('open'));
+      if (!wasOpen) { body.classList.add('open'); chev.classList.add('open'); }
+    });
+  });
+
+  // WP tick for offline registrations
+  container.querySelectorAll('.wptick[data-offline]').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.stopPropagation();
+      const rid = btn.dataset.rid;
+      const reg = offlineRegistrations.find(r => (r._id || r.id) === rid);
+      if (!reg) return;
+      const newVal = !reg.wpAdded;
+      try {
+        await api('PATCH', `/api/offline-registrations/${rid}/wp`, { wpAdded: newVal });
+        reg.wpAdded = newVal;
+        renderOffline();
+        toast(newVal ? '✓ Marked added to WP' : 'Unmarked', newVal ? 'gr' : 'am');
+      } catch (err) {
+        // If endpoint doesn't exist yet, just update locally and warn
+        reg.wpAdded = newVal;
+        renderOffline();
+        toast('Saved locally (no API endpoint for offline WP yet)', 'am');
+      }
+    });
+  });
+}
+
+// ── Export offline registrations as CSV ─────────────────────────────────────
+function exportOfflineCSV() {
+  if (!offlineRegistrations.length) { toast('No registrations to export', 'am'); return; }
+  const headers = ['Name','Parent','Email','Phone','Class','School','Payment Mode','Session','Date','Registered At'];
+  const rows = offlineRegistrations.map(r => [
+    r.name        || '',
+    r.parentName  || r.parent || '',
+    r.email       || '',
+    r.phone       || '',
+    r.class       || r.studentClass || '',
+    r.school      || r.schoolName || '',
+    r.payMode     || '',
+    r.sessionTitle || r.sessionName || r.sessionId || '',
+    r.sessionDate || r.date || '',
+    r.at          || r.createdAt || '',
+  ].map(v => '"' + String(v).replace(/"/g, '""') + '"'));
+
+  const csv  = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'offline-registrations.csv'; a.click();
+  URL.revokeObjectURL(url);
+  toast('CSV exported ✓', 'gr');
+}
+
+// ═══════════════════════════════════════════
+// USERS
+// ═══════════════════════════════════════════
+Q('#refresh-users-btn').addEventListener('click', loadAllData);
+Q('#usearch').addEventListener('input', renderUsers);
+
+function renderUsers() {
+  const container = Q('#users-container');
+  if (!usersLoaded) return;
+  const q = Q('#usearch').value.toLowerCase();
+
+  let users = mongoUsers.map(u => {
+    const fbBks = bookings.filter(b => b.email === u.email);
+    return { ...u, sessionTitles: fbBks.map(b => b.stitle || 'Session') };
+  });
+
+  if (q) users = users.filter(u =>
+    ((u.firstName || '') + ' ' + (u.lastName || '')).toLowerCase().includes(q) ||
+    (u.email || '').toLowerCase().includes(q) ||
+    (u.mobileno || '').includes(q)
+  );
+
+  if (!users.length) {
+    container.innerHTML = '<div class="empty"><div class="empty-ic">👥</div><div class="empty-tx">No users found</div></div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="tw"><table>
+      <thead><tr><th>Student</th><th>Email</th><th>Mobile</th><th>Sessions Booked</th></tr></thead>
+      <tbody>${users.map((u, i) => {
+        const name = ((u.firstName || '') + ' ' + (u.lastName || '')).trim() || '—';
+        const sessHtml = u.sessionTitles.length
+          ? u.sessionTitles.map(t => `<span class="session-tag" title="${esc(t)}">${esc(t)}</span>`).join('')
+          : '<span style="color:var(--t3);font-size:12px">—</span>';
+        return `<tr>
+          <td><div class="uchip"><div class="uav ${avcs[i % 4]}">${ini2(name)}</div><div><div class="uname">${esc(name)}</div><div class="uemail">${esc(u.email || '—')}</div></div></div></td>
+          <td style="color:var(--t2)">${esc(u.email || '—')}</td>
+          <td style="color:var(--t2)">${esc(u.mobileno || '—')}</td>
+          <td><div class="user-sessions-cell">${sessHtml}</div></td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>
+    <div style="padding:12px 4px 0;font-size:11.5px;color:var(--t3)">${users.length} user${users.length !== 1 ? 's' : ''}</div>`;
+}
+
+// ═══════════════════════════════════════════
+// EDIT SESSION MODAL (online)
 // ═══════════════════════════════════════════
 function openEditModal(s) {
   const old = document.getElementById('edit-overlay');
@@ -628,52 +939,6 @@ function openEditModal(s) {
       saveBtn.textContent = 'Save Changes'; saveBtn.disabled = false;
     }
   });
-}
-
-// ═══════════════════════════════════════════
-// USERS
-// ═══════════════════════════════════════════
-Q('#refresh-users-btn').addEventListener('click', loadAllData);
-Q('#usearch').addEventListener('input', renderUsers);
-
-function renderUsers() {
-  const container = Q('#users-container');
-  if (!usersLoaded) return;
-  const q = Q('#usearch').value.toLowerCase();
-
-  let users = mongoUsers.map(u => {
-    const fbBks = bookings.filter(b => b.email === u.email);
-    return { ...u, sessionTitles: fbBks.map(b => b.stitle || 'Session') };
-  });
-
-  if (q) users = users.filter(u =>
-    ((u.firstName || '') + ' ' + (u.lastName || '')).toLowerCase().includes(q) ||
-    (u.email || '').toLowerCase().includes(q) ||
-    (u.mobileno || '').includes(q)
-  );
-
-  if (!users.length) {
-    container.innerHTML = '<div class="empty"><div class="empty-ic">👥</div><div class="empty-tx">No users found</div></div>';
-    return;
-  }
-
-  container.innerHTML = `
-    <div class="tw"><table>
-      <thead><tr><th>Student</th><th>Email</th><th>Mobile</th><th>Sessions Booked</th></tr></thead>
-      <tbody>${users.map((u, i) => {
-        const name = ((u.firstName || '') + ' ' + (u.lastName || '')).trim() || '—';
-        const sessHtml = u.sessionTitles.length
-          ? u.sessionTitles.map(t => `<span class="session-tag" title="${esc(t)}">${esc(t)}</span>`).join('')
-          : '<span style="color:var(--t3);font-size:12px">—</span>';
-        return `<tr>
-          <td><div class="uchip"><div class="uav ${avcs[i % 4]}">${ini2(name)}</div><div><div class="uname">${esc(name)}</div><div class="uemail">${esc(u.email || '—')}</div></div></div></td>
-          <td style="color:var(--t2)">${esc(u.email || '—')}</td>
-          <td style="color:var(--t2)">${esc(u.mobileno || '—')}</td>
-          <td><div class="user-sessions-cell">${sessHtml}</div></td>
-        </tr>`;
-      }).join('')}</tbody>
-    </table></div>
-    <div style="padding:12px 4px 0;font-size:11.5px;color:var(--t3)">${users.length} user${users.length !== 1 ? 's' : ''}</div>`;
 }
 
 // ═══════════════════════════════════════════
