@@ -76,11 +76,8 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
 .pm-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;background:#fff;border:1px solid var(--paper2)}
 .pay-info{background:var(--paper);border:1.5px solid var(--paper2);border-radius:var(--r);padding:14px;display:none}
 .pay-info.show{display:block}
-.pi-upi{display:flex;align-items:center;gap:10px}
-.pi-upi-id{font-size:15px;font-weight:700;color:var(--ink);letter-spacing:.5px}
-.pi-upi-copy{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:5px 11px;font-size:12px;font-family:inherit;cursor:pointer;transition:background .15s}
-.pi-upi-copy:hover{background:#1240d6}
-.pi-note{font-size:11.5px;color:var(--t2);margin-top:8px;line-height:1.5}
+.pi-note{font-size:12px;color:var(--t2);line-height:1.6}
+.pi-note strong{color:var(--ink)}
 .razorpay-btn-wrap{text-align:center}
 .razorpay-link{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#2b73ff,#1a5ce0);color:#fff;text-decoration:none;border-radius:var(--r);padding:12px 22px;font-size:14px;font-weight:600;transition:transform .15s,box-shadow .15s}
 .razorpay-link:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(43,115,255,.3)}
@@ -138,7 +135,7 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
     </div>
     <div class="sess-card">
       <div class="sess-card-title">Session Details</div>
-      <div class="sess-row"><div class="sess-icon ic-blue">📅</div><div><div class="sess-label">Date</div><div class="sess-val">Sunday, 21 June 2026</div></div></div>
+      <div class="sess-row"><div class="sess-icon ic-blue">📅</div><div><div class="sess-label">Date</div><div class="sess-val">Saturday, 21 June 2026</div></div></div>
       <div class="sess-row"><div class="sess-icon ic-gold">🕓</div><div><div class="sess-label">Timings</div><div class="sess-val">4:00 PM to 6:00 PM</div></div></div>
       <div class="sess-row"><div class="sess-icon ic-green">📍</div><div><div class="sess-label">Venue</div><div class="sess-val">Gaur Homes Club House, Govindpuram</div></div></div>
       <div class="sess-row"><div class="sess-icon ic-purple">🏫</div><div><div class="sess-label">For Students</div><div class="sess-val">Classes 6th – 10th</div></div></div>
@@ -169,12 +166,29 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
   <div class="section-label">Step 1 of 2</div>
   <div class="section-title">Register Your Spot</div>
 
+  <!-- Student Info -->
   <div class="fcard">
     <div class="fgrid">
-      <div class="fg"><label class="fl">Student Name <span>*</span></label><input class="fi" id="f-name" type="text" placeholder="Full name"/><span class="field-err" id="e-name">Please enter the student's name.</span></div>
-      <div class="fg"><label class="fl">Parent / Guardian Name <span>*</span></label><input class="fi" id="f-parent" type="text" placeholder="Parent's name"/><span class="field-err" id="e-parent">Please enter parent's name.</span></div>
-      <div class="fg"><label class="fl">WhatsApp Number <span>*</span></label><input class="fi" id="f-phone" type="tel" placeholder="10-digit mobile number" maxlength="10"/><span class="field-err" id="e-phone">Enter a valid 10-digit number.</span></div>
-      <div class="fg"><label class="fl">Email Address</label><input class="fi" id="f-email" type="email" placeholder="email@example.com (optional)"/></div>
+      <div class="fg">
+        <label class="fl">Student Name <span>*</span></label>
+        <input class="fi" id="f-name" type="text" placeholder="Full name"/>
+        <span class="field-err" id="e-name">Please enter the student's name.</span>
+      </div>
+      <div class="fg">
+        <label class="fl">Parent / Guardian Name <span>*</span></label>
+        <input class="fi" id="f-parent" type="text" placeholder="Parent's name"/>
+        <span class="field-err" id="e-parent">Please enter parent's name.</span>
+      </div>
+      <div class="fg">
+        <label class="fl">WhatsApp Number <span>*</span></label>
+        <input class="fi" id="f-phone" type="tel" placeholder="10-digit mobile number" maxlength="10"/>
+        <span class="field-err" id="e-phone">Enter a valid 10-digit number.</span>
+      </div>
+      <div class="fg">
+        <label class="fl">Email Address <span>*</span></label>
+        <input class="fi" id="f-email" type="email" placeholder="email@example.com"/>
+        <span class="field-err" id="e-email">Please enter a valid email address.</span>
+      </div>
       <div class="fg fw">
         <label class="fl">Student's Class <span>*</span></label>
         <div class="class-grid">
@@ -186,61 +200,49 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
         </div>
         <span class="field-err" id="e-class">Please select the student's class.</span>
       </div>
-      <div class="fg fw"><label class="fl">School Name <span>*</span></label><input class="fi" id="f-school" type="text" placeholder="Name of the school"/><span class="field-err" id="e-school">Please enter school name.</span></div>
+      <div class="fg fw">
+        <label class="fl">School Name <span>*</span></label>
+        <input class="fi" id="f-school" type="text" placeholder="Name of the school"/>
+        <span class="field-err" id="e-school">Please enter school name.</span>
+      </div>
     </div>
   </div>
 
+  <!-- Payment -->
   <div class="fcard">
     <div class="pay-title">💳 Pay Workshop Fee — ₹149</div>
     <div class="pay-methods">
       <div class="pay-opt">
         <input type="radio" name="paymode" id="pm-offline" value="offline" checked/>
         <label for="pm-offline">
-          <div class="pm-name"><div class="pm-icon">💵</div>Offline / UPI</div>
-          <div class="pm-desc">Pay via UPI QR at venue or transfer now.</div>
+          <div class="pm-name"><div class="pm-icon">💵</div>Pay at Venue</div>
+          <div class="pm-desc">Pay ₹149 cash or UPI at the venue on the day of the workshop.</div>
         </label>
       </div>
       <div class="pay-opt">
         <input type="radio" name="paymode" id="pm-razorpay" value="razorpay"/>
         <label for="pm-razorpay">
-          <div class="pm-name"><div class="pm-icon">⚡</div>Razorpay Link</div>
-          <div class="pm-desc">Pay online via Razorpay. Verification is automatic on payment.</div>
+          <div class="pm-name"><div class="pm-icon">⚡</div>Pay Online Now</div>
+          <div class="pm-desc">Pay now via Razorpay and secure your spot instantly.</div>
         </label>
       </div>
     </div>
 
-    <div class="pay-info show" id="pi-offline">
-      <div class="pi-upi">
-        <div>
-          <div style="font-size:11px;color:var(--t3);margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.4px">UPI ID</div>
-          <!-- ✏️ REPLACE with your actual UPI ID -->
-          <div class="pi-upi-id" id="upi-id-text">alphascramblers@upi</div>
-        </div>
-        <button class="pi-upi-copy" onclick="copyUPI()">Copy</button>
-      </div>
-      <div class="pi-note">Transfer ₹149 to the UPI ID above and note the transaction ID. We'll confirm your seat via WhatsApp within a few hours. You can also pay at the venue.</div>
-      <div class="fg" style="margin-top:12px">
-        <label class="fl">Transaction ID / UTR <span style="color:var(--t2);font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(if paid online)</span></label>
-        <input class="fi" id="f-txn" type="text" placeholder="e.g. 4273819203 (optional if paying at venue)"/>
-      </div>
-    </div>
+    <!-- Pay at Venue info -->
+    <div class="pay-info show" id="pi-offline"></div>
 
+    <!-- Razorpay -->
     <div class="pay-info" id="pi-razorpay">
       <div class="razorpay-btn-wrap">
-        <!-- ✏️ REPLACE href with your actual Razorpay payment link -->
-        <a href="https://pages.razorpay.com/pl_T1yVjw0NI9YeXe/view" target="_blank" class="razorpay-link" id="rzp-link">
+        <a href="https://pages.razorpay.com/pl_T1yVjw0NI9YeXe/view" target="_blank" class="razorpay-link">
           ⚡ Pay ₹149 via Razorpay
         </a>
       </div>
-      <div class="pi-note" style="margin-top:12px;text-align:center">Complete payment first, then submit your registration.</div>
-      <div class="fg" style="margin-top:12px">
-        <label class="fl">Razorpay Payment ID <span>*</span></label>
-        <input class="fi" id="f-rzp-id" type="text" placeholder="e.g. pay_ABC123XYZ"/>
-        <span class="field-err" id="e-rzp-id">Please enter the Razorpay payment ID after completing payment.</span>
-      </div>
+      <p class="pi-note" style="margin-top:12px;text-align:center">Click the button above to pay, then come back and submit your registration below.</p>
     </div>
   </div>
 
+  <!-- Submit -->
   <div class="submit-area">
     <button class="submit-btn" id="submit-btn" onclick="submitForm()">
       <span id="submit-label">Confirm Registration</span>
@@ -250,10 +252,11 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
   </div>
 </div>
 
+<!-- SUCCESS VIEW -->
 <div id="success-view">
   <div class="success-icon">🎉</div>
   <div class="success-h">You're Registered!</div>
-  <p class="success-p">Your spot has been reserved for the Communication Skills Workshop. We'll confirm via WhatsApp shortly.</p>
+  <p class="success-p">Your spot has been reserved for the Communication Skills Workshop. We'll reach out via WhatsApp to confirm.</p>
   <div class="success-box">
     <div class="success-row"><span class="sk">Student</span><span class="sv" id="s-name">—</span></div>
     <div class="success-row"><span class="sk">Class</span><span class="sv" id="s-class">—</span></div>
@@ -274,8 +277,7 @@ select.fi{cursor:pointer;-webkit-appearance:none;background-image:url("data:imag
 <div class="toast" id="toast"></div>
 
 <script>
-// ✏️ REPLACE this with your actual Vercel deployment URL
-const API = 'https://www.alphascramblers.com/api/offline-registrations';
+const API = '/api/offline-registrations';
 
 document.querySelectorAll('input[name="paymode"]').forEach(radio => {
   radio.addEventListener('change', () => {
@@ -284,11 +286,6 @@ document.querySelectorAll('input[name="paymode"]').forEach(radio => {
     document.getElementById('pi-razorpay').classList.toggle('show', mode === 'razorpay');
   });
 });
-
-function copyUPI() {
-  navigator.clipboard.writeText(document.getElementById('upi-id-text').textContent)
-    .then(() => showToast('UPI ID copied!'));
-}
 
 function showToast(msg, err) {
   const t = document.getElementById('toast');
@@ -311,21 +308,20 @@ async function submitForm() {
   const name   = getVal('f-name');
   const parent = getVal('f-parent');
   const phone  = getVal('f-phone');
+  const email  = getVal('f-email');
   const school = getVal('f-school');
   const cls    = document.querySelector('input[name="class"]:checked');
   const mode   = document.querySelector('input[name="paymode"]:checked').value;
-  const rzpId  = getVal('f-rzp-id');
 
   setErr('f-name',   !name);   if (!name)   ok = false;
   setErr('f-parent', !parent); if (!parent) ok = false;
   setErr('f-phone',  !/^[6-9]\d{9}$/.test(phone)); if (!/^[6-9]\d{9}$/.test(phone)) ok = false;
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  setErr('f-email', !emailOk); if (!emailOk) ok = false;
   setErr('f-school', !school); if (!school) ok = false;
 
   if (!cls) { document.getElementById('e-class').style.display = 'block'; ok = false; }
   else { document.getElementById('e-class').style.display = 'none'; }
-
-  if (mode === 'razorpay' && !rzpId) { setErr('f-rzp-id', true); ok = false; }
-  else { setErr('f-rzp-id', false); }
 
   if (!ok) { showToast('Please fill all required fields.', true); return; }
 
@@ -335,12 +331,9 @@ async function submitForm() {
   lbl.innerHTML = '<span class="spin"></span>Submitting…';
 
   const payload = {
-    name, parentName: parent, phone,
-    email:    getVal('f-email'),
-    class:    cls.value,
-    school,   payMode: mode,
-    txnId:    mode === 'offline'   ? getVal('f-txn')  : '',
-    razorpayId: mode === 'razorpay' ? rzpId           : '',
+    name, parentName: parent, phone, email,
+    class: cls.value, school,
+    payMode: mode,
     sessionId: 'comm-skills-21jun-2026',
     sessionTitle: 'Communication Skills Workshop',
     sessionDate: '2026-06-21',
@@ -348,17 +341,16 @@ async function submitForm() {
   };
 
   try {
-    const res  = await fetch(API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    const res  = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'Registration failed');
 
     document.getElementById('form-area').style.display = 'none';
-    const sv = document.getElementById('success-view');
-    sv.style.display = 'block';
+    document.getElementById('success-view').style.display = 'block';
     document.getElementById('s-name').textContent  = name;
     document.getElementById('s-class').textContent = 'Class ' + cls.value;
-    document.getElementById('s-pay').textContent   = mode === 'razorpay' ? 'Online (Razorpay)' : 'Offline / UPI';
-    window.scrollTo({ top:0, behavior:'smooth' });
+    document.getElementById('s-pay').textContent   = mode === 'razorpay' ? 'Online (Razorpay)' : 'Pay at Venue';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (err) {
     showToast(err.message || 'Something went wrong. Try again.', true);
     btn.disabled = false;
