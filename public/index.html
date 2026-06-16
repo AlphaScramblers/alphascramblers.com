@@ -1095,10 +1095,12 @@ async function loadSessions() {
     const upcoming = data.sessions
       .filter(s => {
         if (!s.date) return false;
+        if (s.offlineSessionId) return false;
         const endOfDay = new Date(s.date + 'T23:59:59');
         return endOfDay >= now;
       })
       .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+      
 
     if (!upcoming.length) { section.classList.remove('as-visible'); return; }
 
