@@ -26,9 +26,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
 
 /* LOGIN */
-#login-screen{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;background:var(--bg);position:relative;overflow:hidden;padding-top:12vh}
-#login-screen::before{content:'';position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(124,111,255,.1) 0%,transparent 65%);top:-150px;left:50%;transform:translateX(-50%);pointer-events:none}
-.lcard{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);padding:46px 42px;width:410px;position:relative;z-index:1;box-shadow:0 8px 40px rgba(0,0,0,.4)}
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden;padding:24px}
+#login-screen::before{content:'';position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(124,111,255,.1) 0%,transparent 65%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.lcard{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);padding:46px 42px;width:410px;max-width:100%;position:relative;z-index:1;box-shadow:0 8px 40px rgba(0,0,0,.4)}
 .llogo{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:4px}.llogo span{color:var(--ac2)}
 .lsub{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--t3);margin-bottom:34px;font-weight:600}
 .fg{margin-bottom:16px}
@@ -74,11 +74,11 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .topbar-right{display:flex;align-items:center;gap:10px}
 .blive{background:var(--gr-bg);border:1px solid rgba(34,200,122,.22);color:var(--gr);border-radius:20px;padding:3px 10px;font-size:11.5px;font-weight:500}
 .syncing{font-size:11px;color:var(--t3);margin-left:8px}
-.content{padding:26px}
-.section{display:none}.section.active{display:block}
+.content{padding:26px;width:100%;box-sizing:border-box}
+.section{display:none}.section.active{display:block;width:100%}
 
 /* CARD */
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:20px 22px;margin-bottom:16px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:20px 22px;margin-bottom:16px;width:100%;box-sizing:border-box}
 .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;flex-wrap:wrap;gap:10px}
 .ct{font-size:14px;font-weight:500}.cs{font-size:12px;color:var(--t3);margin-top:2px}
 
@@ -188,11 +188,18 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
 .session-tag{font-size:10.5px;background:var(--bg4);border:1px solid var(--border2);border-radius:4px;padding:2px 7px;color:var(--t2);white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}
 
 /* PUBLISH */
-.pcard{background:var(--bg3);border:1px solid var(--ac-br);border-radius:var(--rl);padding:18px;margin-bottom:16px}
+.pcard{background:var(--bg3);border:1px solid var(--ac-br);border-radius:var(--rl);padding:18px;margin-bottom:16px;width:100%;box-sizing:border-box}
 .plabel{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin-bottom:9px;font-weight:700}
 .pbanner{background:var(--bg4);border:1px solid var(--border2);border-radius:var(--r);padding:13px 15px;display:flex;align-items:flex-start;gap:11px}
 .picon{width:34px;height:34px;border-radius:7px;background:var(--ac-bg);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 .ptit2{font-weight:500;font-size:13px;margin-bottom:3px}.pbody2{font-size:11.5px;color:var(--t2);line-height:1.5}
+
+/* PUBLISH TAB LAYOUT — force full width, prevent grid items from
+   shrinking to their content size (the classic min-width:auto trap) */
+#tab-publish{width:100%;box-sizing:border-box}
+#tab-publish > div{width:100%;box-sizing:border-box}
+#tab-publish > div > .card,
+#tab-publish > div > div{min-width:0;width:100%;box-sizing:border-box}
 
 /* EDIT MODAL */
 .edit-overlay{position:fixed;inset:0;background:rgba(10,15,30,.8);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;backdrop-filter:blur(4px)}
@@ -242,10 +249,15 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
   .topbar{padding:0 14px}
   .content{padding:18px}
 
-  /* Publish: stack 2-col grid */
+  /* Publish: stack 2-col grid, but keep it spanning the full width */
   #tab-publish > div{
     display:flex !important;
     flex-direction:column;
+    width:100%;
+  }
+  #tab-publish > div > .card,
+  #tab-publish > div > div{
+    width:100%;
   }
 
   .sform{grid-template-columns:1fr}
@@ -256,8 +268,13 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
    RESPONSIVE — mobile (≤ 600px)
    ═════════════════════════════════════════ */
 @media (max-width:600px){
-  /* Login */
-  #login-screen{padding:16px;align-items:flex-start;padding-top:24px}
+  /* Prevent iOS/Android auto-zoom on focus: any input/select/textarea
+     under 16px triggers the browser to zoom in when tapped (e.g. the
+     password field). Bumping to 16px stops that completely. */
+  .fi{font-size:16px}
+
+  /* Login — vertically + horizontally centered */
+  #login-screen{padding:16px;align-items:center}
   .lcard{width:100%;padding:28px 18px}
 
   /* Topbar */
@@ -294,7 +311,8 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
   .sc-del-row{flex-direction:column;gap:7px;align-items:stretch}
   .sc-del-row .btn{text-align:center}
 
-  /* Publish form: single column */
+  /* Publish form: single column, full width */
+  #tab-publish > div{width:100%}
   .sform{grid-template-columns:1fr}
   .fw{grid-column:1/-1}
   .frow{flex-direction:column-reverse}
@@ -425,7 +443,7 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
 
       <!-- PUBLISH TAB -->
       <div class="section" id="tab-publish">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start;width:100%">
           <div class="card">
             <div class="ch"><div><div class="ct">Schedule a New Session</div><div class="cs">Goes live on your website immediately</div></div></div>
             <div class="sform">
