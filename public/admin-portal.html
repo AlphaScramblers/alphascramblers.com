@@ -18,6 +18,7 @@
   --bl:#4fa3ff;--bl-bg:rgba(79,163,255,.1);
   --or:#ff8c42;--or-bg:rgba(255,140,66,.1);--or-br:rgba(255,140,66,.3);
   --r:10px;--rl:14px;
+  --sidebar-w:220px;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
 ::-webkit-scrollbar{width:5px;height:5px}
@@ -42,7 +43,9 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 
 /* SHELL */
 #dashboard{display:none;min-height:100vh}
-.sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;overflow-y:auto}
+
+/* Sidebar */
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;overflow-y:auto;transition:transform .25s ease}
 .slogo{font-family:'DM Serif Display',serif;font-size:17px;padding:22px 20px;border-bottom:1px solid var(--border);color:var(--text);flex-shrink:0}.slogo span{color:var(--ac2)}
 .sbadge{font-size:9px;background:var(--ac-bg);color:var(--ac2);border:1px solid var(--ac-br);border-radius:4px;padding:1px 6px;font-family:inherit;font-weight:600;letter-spacing:.5px;margin-left:5px;vertical-align:middle}
 .nsec{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);padding:14px 20px 5px;font-weight:700}
@@ -56,9 +59,19 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .aav{width:30px;height:30px;border-radius:50%;background:var(--ac-bg);border:1px solid var(--ac-br);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--ac2);flex-shrink:0}
 .ainfo{flex:1;min-width:0}.aname{font-size:12.5px;font-weight:500}.aemail{font-size:11px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .logbtn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:17px;padding:3px;transition:color .15s;line-height:1}.logbtn:hover{color:var(--rd)}
-.main{margin-left:220px;min-height:100vh}
+
+/* Sidebar backdrop (mobile) */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99;backdrop-filter:blur(2px)}
+.sidebar-overlay.open{display:block}
+
+/* Hamburger — hidden on desktop */
+.hamburger{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:2px 6px;line-height:1;flex-shrink:0}
+
+.main{margin-left:var(--sidebar-w);min-height:100vh;transition:margin-left .25s ease}
 .topbar{height:58px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 26px;background:var(--bg);position:sticky;top:0;z-index:50}
+.topbar-left{display:flex;align-items:center;gap:6px}
 .ptitle{font-size:15px;font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:10px}
 .blive{background:var(--gr-bg);border:1px solid rgba(34,200,122,.22);color:var(--gr);border-radius:20px;padding:3px 10px;font-size:11.5px;font-weight:500}
 .syncing{font-size:11px;color:var(--t3);margin-left:8px}
 .content{padding:26px}
@@ -157,13 +170,13 @@ select.fi{cursor:pointer}textarea.fi{resize:vertical}
 .offline-section-notice strong{color:var(--or)}
 
 /* EXPORT */
-.export-bar{display:flex;align-items:center;gap:9px}
+.export-bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 
 /* USERS */
 .fbar{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap}
 .fsearch{flex:1;min-width:180px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:8px 13px;color:var(--text);font-family:inherit;font-size:13px;outline:none;transition:border-color .2s}
 .fsearch:focus{border-color:var(--ac)}.fsearch::placeholder{color:var(--t3)}
-.tw{overflow-x:auto}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse}
 thead tr{border-bottom:1px solid var(--border)}
 th{text-align:left;padding:9px 13px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);white-space:nowrap}
@@ -217,6 +230,87 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
 .oreg-table-wrap table td,.oreg-table-wrap table th{padding:10px 12px}
 .oreg-pay-online{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;background:var(--gr-bg);color:var(--gr)}
 .oreg-pay-venue{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;background:var(--am-bg);color:var(--am)}
+
+/* ═════════════════════════════════════════
+   RESPONSIVE — tablet (≤ 900px)
+   ═════════════════════════════════════════ */
+@media (max-width:900px){
+  .hamburger{display:block}
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .topbar{padding:0 14px}
+  .content{padding:18px}
+
+  /* Publish: stack 2-col grid */
+  #tab-publish > div{
+    display:flex !important;
+    flex-direction:column;
+  }
+}
+
+/* ═════════════════════════════════════════
+   RESPONSIVE — mobile (≤ 600px)
+   ═════════════════════════════════════════ */
+@media (max-width:600px){
+  /* Login */
+  #login-screen{padding:16px;align-items:flex-start;padding-top:50px}
+  .lcard{width:100%;padding:28px 18px}
+
+  /* Topbar */
+  .topbar{padding:0 10px}
+  .ptitle{font-size:13.5px}
+  .syncing{display:none}
+
+  /* Content */
+  .content{padding:10px}
+  .card{padding:14px 12px}
+
+  /* Session card header */
+  .sc-head{gap:9px;padding:11px 12px}
+  .sc-date-block{min-width:32px}
+  .sc-day{font-size:17px}
+  .sc-divider{display:none}
+  .sc-title{font-size:12.5px}
+  .sc-meta{font-size:10.5px}
+  /* Hide reg count badge, keep status pill */
+  .sc-right .bb{display:none}
+
+  /* Reg rows: show only name + WP tick */
+  .reg-phone,.reg-class,.reg-school,.reg-date{display:none}
+  .reg-row{gap:7px;padding:7px 8px}
+
+  /* Stat chips: tighter */
+  .stat-chip{min-width:70px;padding:8px 10px;flex:1}
+  .stat-num{font-size:17px}
+
+  /* Offline notice */
+  .offline-section-notice{font-size:11px;padding:9px 12px}
+
+  /* Action row in session card: stack */
+  .sc-del-row{flex-direction:column;gap:7px;align-items:stretch}
+  .sc-del-row .btn{text-align:center}
+
+  /* Publish form: single column */
+  .sform{grid-template-columns:1fr}
+  .fw{grid-column:1/-1}
+  .frow{flex-direction:column-reverse}
+  .frow .btn{width:100%;text-align:center}
+
+  /* WP tick: hide label on tiny screens */
+  .wptick-label{display:none}
+
+  /* Edit modal: bottom sheet */
+  .edit-overlay{padding:0;align-items:flex-end}
+  .edit-modal{border-radius:var(--rl) var(--rl) 0 0;max-height:88vh}
+  .edit-modal-body{grid-template-columns:1fr;max-height:55vh}
+  .edit-modal-body .fw{grid-column:1/-1}
+  .edit-modal-foot{flex-direction:column-reverse;gap:7px}
+  .edit-modal-foot .btn{width:100%;text-align:center}
+
+  /* Toast: full width */
+  .toast{left:10px;right:10px;bottom:12px;max-width:none}
+}
 </style>
 </head>
 <body>
@@ -234,9 +328,12 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
   </div>
 </div>
 
+<!-- Sidebar backdrop (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
 <!-- DASHBOARD -->
 <div id="dashboard">
-  <nav class="sidebar">
+  <nav class="sidebar" id="sidebar">
     <div class="slogo">Alpha<span>Scramblers</span><span class="sbadge">ADMIN</span></div>
 
     <div class="nsec">Online</div>
@@ -261,17 +358,18 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
 
   <div class="main">
     <div class="topbar">
-      <div class="ptitle" id="ptitle">Sessions</div>
-      <div style="display:flex;align-items:center;gap:10px">
+      <div class="topbar-left">
+        <button class="hamburger" id="hamburger" aria-label="Open menu">☰</button>
+        <div class="ptitle" id="ptitle">Sessions</div>
+      </div>
+      <div class="topbar-right">
         <span class="blive">Live</span>
         <span class="syncing" id="syncmsg"></span>
       </div>
     </div>
     <div class="content">
 
-      <!-- ══════════════════════════════════════════ -->
-      <!-- ONLINE SESSIONS TAB                        -->
-      <!-- ══════════════════════════════════════════ -->
+      <!-- ONLINE SESSIONS TAB -->
       <div class="section active" id="tab-sessions">
         <div class="card">
           <div class="ch">
@@ -282,9 +380,7 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
         </div>
       </div>
 
-      <!-- ══════════════════════════════════════════ -->
-      <!-- USERS TAB                                   -->
-      <!-- ══════════════════════════════════════════ -->
+      <!-- USERS TAB -->
       <div class="section" id="tab-users">
         <div class="card">
           <div class="ch">
@@ -296,18 +392,12 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
         </div>
       </div>
 
-      <!-- ══════════════════════════════════════════ -->
-      <!-- OFFLINE REGISTRATIONS TAB (fully separate) -->
-      <!-- ══════════════════════════════════════════ -->
+      <!-- OFFLINE REGISTRATIONS TAB -->
       <div class="section" id="tab-offline">
-
-        <!-- Notice banner clarifying this is independent -->
         <div class="offline-section-notice">
           <span style="font-size:16px">🏫</span>
           <span>This section is <strong>completely separate</strong> from online sessions. Registrations here come from in-person/offline events only and are stored in their own collection — they are not linked to any online session or booking.</span>
         </div>
-
-        <!-- Summary stats card — rendered from offline data alone -->
         <div class="card" id="offline-summary-card" style="display:none">
           <div class="ch" style="margin-bottom:0">
             <div><div class="ct">Offline Registrations Summary</div><div class="cs" id="offline-summary-sub"></div></div>
@@ -318,25 +408,18 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
           </div>
           <div class="offline-stats" id="offline-global-stats" style="margin-top:16px;margin-bottom:0"></div>
         </div>
-
-        <!-- Per-event accordion cards -->
         <div id="offline-events-container">
           <div class="users-loading"><span class="spin"></span>Loading offline registrations…</div>
         </div>
-
-        <!-- Controls when no summary card shown yet -->
         <div id="offline-controls-bare" style="display:none;margin-bottom:12px">
           <div class="export-bar" style="justify-content:flex-end">
             <button class="btn btn-sec sm" id="refresh-offline-bare-btn">↻ Refresh</button>
             <button class="btn btn-or sm" id="export-offline-bare-btn">⬇ Export CSV</button>
           </div>
         </div>
-
       </div>
 
-      <!-- ══════════════════════════════════════════ -->
-      <!-- PUBLISH TAB                                -->
-      <!-- ══════════════════════════════════════════ -->
+      <!-- PUBLISH TAB -->
       <div class="section" id="tab-publish">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
           <div class="card">
@@ -379,22 +462,14 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
 <script>
 
 const API = 'https://api.alphascramblers.com';
-// ═══════════════════════════════════════════
-// STATE — online and offline are fully isolated
-// ═══════════════════════════════════════════
 let token        = sessionStorage.getItem('as_token')  || null;
 let currentAdmin = JSON.parse(sessionStorage.getItem('as_admin') || 'null');
-
-// Online-only state
 let sessions    = [];
 let bookings    = [];
 let mongoUsers  = [];
 let usersLoaded = false;
-
-// Offline-only state — completely separate, never mixed with online data
 let offlineRegistrations = [];
 let offlineLoaded        = false;
-
 const avcs = ['avp','avg','avb','ava'];
 
 // ═══════════════════════════════════════════
@@ -424,6 +499,19 @@ if (token && currentAdmin) {
   showDashboard();
 } else {
   Q('#login-screen').style.display = 'flex';
+}
+
+// ═══════════════════════════════════════════
+// HAMBURGER / SIDEBAR
+// ═══════════════════════════════════════════
+Q('#hamburger').addEventListener('click', () => {
+  Q('#sidebar').classList.toggle('open');
+  Q('#sidebar-overlay').classList.toggle('open');
+});
+Q('#sidebar-overlay').addEventListener('click', closeSidebar);
+function closeSidebar() {
+  Q('#sidebar').classList.remove('open');
+  Q('#sidebar-overlay').classList.remove('open');
 }
 
 // ═══════════════════════════════════════════
@@ -472,8 +560,7 @@ function showDashboard() {
 }
 
 // ═══════════════════════════════════════════
-// LOAD ONLINE DATA (sessions + bookings + users)
-// No offline data is fetched or touched here
+// LOAD ONLINE DATA
 // ═══════════════════════════════════════════
 async function loadOnlineData() {
   setStatus(null, 'Loading…');
@@ -497,19 +584,15 @@ async function loadOnlineData() {
 }
 
 // ═══════════════════════════════════════════
-// LOAD OFFLINE DATA (completely separate fetch)
-// Only reads /api/offline-registrations
-// No sessions, bookings, or user data involved
+// LOAD OFFLINE DATA
 // ═══════════════════════════════════════════
 async function loadOfflineData() {
   const eventsEl = Q('#offline-events-container');
   const summaryCard = Q('#offline-summary-card');
   const bareControls = Q('#offline-controls-bare');
-
   eventsEl.innerHTML = '<div class="users-loading"><span class="spin"></span>Loading offline registrations…</div>';
   summaryCard.style.display = 'none';
   bareControls.style.display = 'none';
-
   try {
     const rd = await api('GET', '/api/offline-registrations');
     offlineRegistrations = rd.registrations || rd.data || (Array.isArray(rd) ? rd : []);
@@ -536,6 +619,7 @@ Q('.sidebar').addEventListener('click', e => {
   const ni = e.target.closest('.ni');
   if (!ni || !ni.dataset.tab) return;
   switchTab(ni.dataset.tab);
+  closeSidebar();
 });
 
 function switchTab(tab) {
@@ -546,14 +630,12 @@ function switchTab(tab) {
     s.classList.toggle('active', s.id === 'tab-' + tab);
   });
   Q('#ptitle').textContent = TITLES[tab] || '';
-  // Only load offline data when that tab is opened, and only once per session
   if (tab === 'offline' && !offlineLoaded) loadOfflineData();
 }
 
 Q('#go-publish-btn').addEventListener('click', () => switchTab('publish'));
 Q('#refresh-users-btn').addEventListener('click', loadOnlineData);
 
-// Offline refresh buttons
 document.addEventListener('click', e => {
   if (e.target.id === 'refresh-offline-btn' || e.target.id === 'refresh-offline-bare-btn') {
     offlineLoaded = false;
@@ -585,7 +667,6 @@ function renderSessions() {
     const pl   = past ? 'Past' : live ? '● Live' : 'Upcoming';
     const mon  = dt.toLocaleString('en', { month: 'short' }).toUpperCase();
     const day  = dt.getDate();
-    // Bookings matched against this specific online session only
     const regs = bookings.filter(b => b.sid === sid || b.sid === s.id);
 
     const regRows = regs.length
@@ -639,7 +720,6 @@ function renderSessions() {
       </div>`;
   }).join('');
 
-  // Toggle dropdown
   el.querySelectorAll('.sc-head').forEach(head => {
     head.addEventListener('click', () => {
       const card    = head.closest('.scard');
@@ -652,7 +732,6 @@ function renderSessions() {
     });
   });
 
-  // WP tick
   el.querySelectorAll('.wptick').forEach(btn => {
     btn.addEventListener('click', async e => {
       e.stopPropagation();
@@ -671,7 +750,6 @@ function renderSessions() {
     });
   });
 
-  // Delete session
   el.querySelectorAll('.del-sess').forEach(btn => {
     btn.addEventListener('click', async e => {
       e.stopPropagation();
@@ -690,7 +768,6 @@ function renderSessions() {
     });
   });
 
-  // Edit session
   el.querySelectorAll('.edit-sess').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
@@ -703,8 +780,6 @@ function renderSessions() {
 
 // ═══════════════════════════════════════════
 // OFFLINE REGISTRATIONS RENDER
-// Uses ONLY offlineRegistrations — zero dependency on sessions/bookings/users
-// Groups by sessionId so multiple events show as separate cards
 // ═══════════════════════════════════════════
 function renderOffline() {
   const eventsEl   = Q('#offline-events-container');
@@ -718,7 +793,6 @@ function renderOffline() {
     return;
   }
 
-  // Group registrations by sessionId
   const groups = {};
   offlineRegistrations.forEach(r => {
     const key = r.sessionId || r.offlineSessionId || 'unknown';
@@ -736,14 +810,11 @@ function renderOffline() {
   });
 
   const groupList = Object.values(groups);
+  const totalAll  = offlineRegistrations.length;
+  const onlineAll = offlineRegistrations.filter(r => r.payMode === 'online').length;
+  const venueAll  = totalAll - onlineAll;
+  const collectedAll = onlineAll * 149;
 
-  // Global summary stats
-  const totalAll   = offlineRegistrations.length;
-  const onlineAll  = offlineRegistrations.filter(r => r.payMode === 'online').length;
-  const venueAll   = totalAll - onlineAll;
-  const collectedAll = onlineAll * 149; // rough, per-group fee would be more accurate
-
-  // Update summary card
   summaryCard.style.display = 'block';
   bareControls.style.display = 'none';
   Q('#offline-summary-sub').textContent = `${groupList.length} event${groupList.length !== 1 ? 's' : ''} · ${totalAll} total registration${totalAll !== 1 ? 's' : ''}`;
@@ -754,7 +825,6 @@ function renderOffline() {
     <div class="stat-chip" style="border-color:rgba(124,111,255,.2)"><div class="stat-num" style="color:var(--ac2)">₹${collectedAll.toLocaleString('en-IN')}</div><div class="stat-label">Collected Online</div></div>
   `;
 
-  // Per-event accordion cards
   eventsEl.innerHTML = groupList.map(g => {
     const { sessionId, sessionTitle, sessionDate, sessionTime, fee, regs } = g;
     const onlineCount = regs.filter(r => r.payMode === 'online').length;
@@ -807,7 +877,6 @@ function renderOffline() {
         </div>
         <div class="sc-body">
           <div class="sc-body-inner">
-            <!-- Per-event stats -->
             <div class="offline-stats">
               <div class="stat-chip total-chip"><div class="stat-num">${regs.length}</div><div class="stat-label">Total</div></div>
               <div class="stat-chip online-chip"><div class="stat-num">${onlineCount}</div><div class="stat-label">Paid Online</div></div>
@@ -824,7 +893,6 @@ function renderOffline() {
       </div>`;
   }).join('');
 
-  // Toggle expand/collapse
   eventsEl.querySelectorAll('.sc-head').forEach(head => {
     head.addEventListener('click', () => {
       const card    = head.closest('.scard');
@@ -837,7 +905,6 @@ function renderOffline() {
     });
   });
 
-  // WP tick for offline — calls separate offline API endpoint
   eventsEl.querySelectorAll('.wptick[data-offline]').forEach(btn => {
     btn.addEventListener('click', async e => {
       e.stopPropagation();
@@ -851,7 +918,7 @@ function renderOffline() {
         renderOffline();
         toast(newVal ? '✓ Marked added to WP' : 'Unmarked', newVal ? 'gr' : 'am');
       } catch (err) {
-        reg.wpAdded = newVal; // optimistic local update
+        reg.wpAdded = newVal;
         renderOffline();
         toast('Saved locally — no WP API endpoint yet', 'am');
       }
@@ -859,7 +926,7 @@ function renderOffline() {
   });
 }
 
-// ── Export offline registrations as CSV ─────────────────────────────────────
+// ── Export offline CSV ──────────────────────────────────
 function exportOfflineCSV() {
   if (!offlineRegistrations.length) { toast('No registrations to export', 'am'); return; }
   const headers = ['Name','Parent / Guardian','Email','Phone','Class','School','Payment Mode','Session','Event Date','Registered At'];
@@ -886,7 +953,7 @@ function exportOfflineCSV() {
 }
 
 // ═══════════════════════════════════════════
-// USERS (online-only)
+// USERS
 // ═══════════════════════════════════════════
 Q('#usearch').addEventListener('input', renderUsers);
 
@@ -931,7 +998,7 @@ function renderUsers() {
 }
 
 // ═══════════════════════════════════════════
-// EDIT SESSION MODAL (online sessions only)
+// EDIT SESSION MODAL
 // ═══════════════════════════════════════════
 function openEditModal(s) {
   const old = document.getElementById('edit-overlay');
@@ -1011,7 +1078,7 @@ function openEditModal(s) {
 }
 
 // ═══════════════════════════════════════════
-// PUBLISH SESSION (online only)
+// PUBLISH SESSION
 // ═══════════════════════════════════════════
 ['st', 'sd', 'stm', 'sto'].forEach(id => Q('#' + id).addEventListener('input', updatePreview));
 function updatePreview() {
