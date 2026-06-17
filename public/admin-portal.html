@@ -26,7 +26,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
 
 /* LOGIN */
-#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden}
+#login-screen{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;background:var(--bg);position:relative;overflow:hidden;padding-top:12vh}
 #login-screen::before{content:'';position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(124,111,255,.1) 0%,transparent 65%);top:-150px;left:50%;transform:translateX(-50%);pointer-events:none}
 .lcard{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);padding:46px 42px;width:410px;position:relative;z-index:1;box-shadow:0 8px 40px rgba(0,0,0,.4)}
 .llogo{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:4px}.llogo span{color:var(--ac2)}
@@ -247,6 +247,9 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
     display:flex !important;
     flex-direction:column;
   }
+
+  .sform{grid-template-columns:1fr}
+  .sform .fw{grid-column:1/-1}
 }
 
 /* ═════════════════════════════════════════
@@ -254,7 +257,7 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
    ═════════════════════════════════════════ */
 @media (max-width:600px){
   /* Login */
-  #login-screen{padding:16px;align-items:flex-start;padding-top:50px}
+  #login-screen{padding:16px;align-items:flex-start;padding-top:24px}
   .lcard{width:100%;padding:28px 18px}
 
   /* Topbar */
