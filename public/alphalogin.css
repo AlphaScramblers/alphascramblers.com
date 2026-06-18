@@ -1,0 +1,407 @@
+/* ============================================================
+   ALPHASCRAMBLERS — LOGIN / SIGNUP MODAL
+   Horizontal layout, ~75% viewport width, matches site theme
+   (navy/black gradient card + brand-blue accents + green links)
+   Drop this in AFTER your existing stylesheet so it overrides
+   the old .alphalogin / .signup / .loginform / .logologin rules.
+   ============================================================ */
+
+:root {
+    --as-deep:        #0a0a0a;
+    --as-navy:        #001a4d;
+    --as-blue-deep:   #052f97;
+    --as-blue:        #3B82F6;
+    --as-blue-dark:   #2563EB;
+    --as-teal:        #6BCFD4;
+    --as-green:       #4aa72d;
+    --as-text:        #ffffff;
+    --as-text-dim:    rgba(255, 255, 255, 0.62);
+    --as-input-bg:    rgba(255, 255, 255, 0.07);
+    --as-input-bd:    rgba(255, 255, 255, 0.18);
+    --as-radius:      28px;
+}
+
+/* ---------- Backdrop ---------- */
+.overlay.overlay1 {
+    backdrop-filter: blur(2px);
+}
+
+/* ---------- Hidden state (toggled by JS) ---------- */
+.alphalogin.alphadis {
+    display: none !important;
+}
+
+/* ---------- Modal shell ---------- */
+.alphalogin {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    margin: 0;
+    width: 75vw;
+    max-width: 1180px;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    border-radius: var(--as-radius);
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+    z-index: 100001;
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.alphalogin.closing {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.94);
+}
+
+/* ---------- Close button ---------- */
+.cross {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    left: auto;
+    height: 34px;
+    width: 34px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: var(--as-text);
+    background: rgba(255, 255, 255, 0.08);
+    transition: background 0.2s ease, transform 0.2s ease;
+    z-index: 5;
+}
+
+.cross:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: rotate(90deg);
+}
+
+/* ---------- Form panels (signup + login share the same look) ---------- */
+.signup,
+.loginform {
+    flex: 1 1 56%;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    padding: 3vw 3.5vw;
+    background: linear-gradient(135deg, var(--as-deep) 0%, var(--as-navy) 55%, var(--as-blue-deep) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.loginform {
+    display: none; /* default hidden; existing toggle logic shows this */
+}
+
+.signdis,
+.logdis {
+    display: none !important;
+}
+
+/* ---------- Headings / copy ---------- */
+.start {
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    color: var(--as-teal);
+    margin: 0 0 0.6rem 0;
+    font-weight: 600;
+}
+
+.acc {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    color: var(--as-text);
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    line-height: 1.15;
+}
+
+.amem {
+    margin-bottom: 1.5rem;
+}
+
+.member,
+.member1 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--as-text-dim);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.member1 {
+    justify-content: center;
+    margin-top: 1.4rem;
+    text-align: center;
+}
+
+.log,
+.caa {
+    color: var(--as-green);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.log:hover,
+.caa:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Form rows ---------- */
+.signup form,
+.loginform form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.name {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.name,
+.logmob,
+.logmail,
+.pass {
+    width: 100%;
+}
+
+/* ---------- Inputs ---------- */
+#logfname,
+#loglname,
+#logmob,
+#logmail,
+#logpass1,
+#logpass2,
+#logname {
+    width: 100%;
+    height: 52px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0 16px;
+    border-radius: 12px;
+    border: 1px solid var(--as-input-bd);
+    background: var(--as-input-bg);
+    color: var(--as-text);
+    font-size: 0.95rem;
+    font-family: "Inter", "Mada", sans-serif;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+#logfname::placeholder,
+#loglname::placeholder,
+#logmob::placeholder,
+#logmail::placeholder,
+#logpass1::placeholder,
+#logpass2::placeholder,
+#logname::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+#logfname:focus,
+#loglname:focus,
+#logmob:focus,
+#logmail:focus,
+#logpass1:focus,
+#logpass2:focus,
+#logname:focus {
+    outline: none;
+    border-color: var(--as-teal);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(107, 207, 212, 0.18);
+}
+
+/* ---------- Forgot password row (login form) ---------- */
+.fp {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.fpnew {
+    align-self: flex-end;
+    margin: 0;
+    color: var(--as-green);
+    font-size: 0.85rem;
+}
+
+.fpnew a.forgot-link {
+    color: inherit;
+    text-decoration: underline;
+}
+
+/* ---------- Errors ---------- */
+.error,
+.error1 {
+    width: 100%;
+    margin: 0;
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* ---------- Buttons ---------- */
+.sub,
+.signin {
+    width: 100%;
+    margin-top: 0.4rem;
+}
+
+.logsub,
+.logsignin {
+    width: 100%;
+    height: 54px;
+    margin: 0;
+    border: 0;
+    border-radius: 14px;
+    background: linear-gradient(to right, var(--as-blue) 0%, var(--as-blue-dark) 100%);
+    color: var(--as-text);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.logsignin {
+    margin-top: 0.5rem;
+}
+
+.logsub:hover,
+.logsignin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+}
+
+.logsub:disabled,
+.logsignin:disabled {
+    cursor: default;
+    transform: none;
+    background: linear-gradient(to right, var(--as-green) 0%, #3d8f24 100%);
+    box-shadow: none;
+}
+
+/* ---------- Brand / image side panel ---------- */
+.logologin {
+    flex: 1 1 44%;
+    position: relative;
+    min-width: 0;
+    background: linear-gradient(160deg, var(--as-blue) 0%, var(--as-blue-dark) 100%);
+    overflow: hidden;
+}
+
+.logologin::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0) 55%);
+}
+
+.vb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media screen and (min-width: 700px) and (max-width: 1000px) {
+    .alphalogin {
+        width: 90vw;
+        max-height: 92vh;
+    }
+
+    .logologin {
+        display: none;
+    }
+
+    .signup,
+    .loginform {
+        flex: 1 1 100%;
+        padding: 6vw;
+    }
+
+    .name {
+        flex-direction: column;
+    }
+}
+
+/* Mobile */
+@media screen and (max-width: 700px) {
+    .alphalogin {
+        width: 94vw;
+        max-height: 94vh;
+        border-radius: 20px;
+        flex-direction: column;
+    }
+
+    .logologin {
+        display: none;
+    }
+
+    .signup,
+    .loginform {
+        flex: 1 1 100%;
+        padding: 9vw 6vw;
+        max-height: 94vh;
+    }
+
+    .acc {
+        font-size: 1.6rem;
+    }
+
+    .name {
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+
+    #logfname,
+    #loglname,
+    #logmob,
+    #logmail,
+    #logpass1,
+    #logpass2,
+    #logname {
+        height: 48px;
+    }
+
+    .logsub,
+    .logsignin {
+        height: 50px;
+        font-size: 0.95rem;
+    }
+
+    .cross {
+        top: 12px;
+        right: 14px;
+        height: 30px;
+        width: 30px;
+    }
+}
+
+/* Very small phones */
+@media screen and (max-width: 380px) {
+    .signup,
+    .loginform {
+        padding: 8vw 5vw;
+    }
+
+    .acc {
+        font-size: 1.4rem;
+    }
+}

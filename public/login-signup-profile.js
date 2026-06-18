@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const logsub = document.querySelector(".logsub");
     const logsignin = document.querySelector(".logsignin");
     const logoutBtn = document.querySelector(".lgtBtn");
+    const crossBtn = document.querySelector(".cross");
 
     // ERROR BOXES
     const error1 = document.querySelector(".error");
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const login = document.querySelector(".login");
     const login1 = document.querySelector(".login1");
     const profilesection = document.querySelector(".profile-section");
+    const alphalogin = document.querySelector(".alphalogin");
 
     // AVATAR + TEXT
     const avatar = document.querySelector(".avatar");
@@ -35,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // LOADER + OVERLAY
     const cloader = document.querySelector(".contactloader");
-    const alphalogin = document.querySelector(".alphalogin");
     const overlay = document.querySelector(".overlay");
 
     // RESPONSIVE
@@ -74,6 +75,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (tab.matches || lap.matches) profile.style.display = "block";
         if (mobile.matches) profile1.style.display = "block";
+    }
+
+    // -------------------------------------
+    // AUTO-CLOSE: closes the login/signup modal
+    // and resets it so it's fresh next time it opens
+    // -------------------------------------
+    function closeAuthModal() {
+        if (!alphalogin) return;
+
+        alphalogin.classList.add("closing");
+
+        setTimeout(() => {
+            alphalogin.classList.add("alphadis");
+            alphalogin.classList.remove("closing");
+            overlay.classList.remove("overlay1");
+
+            // reset signup form
+            if (logsub) {
+                logsub.textContent = "Create Account";
+                logsub.disabled = false;
+            }
+            if (error1) error1.style.display = "none";
+
+            // reset login form
+            if (logsignin) {
+                logsignin.textContent = "Sign In";
+                logsignin.disabled = false;
+            }
+            if (logname) logname.readOnly = false;
+            if (logpass2) logpass2.readOnly = false;
+            if (error2) error2.style.display = "none";
+        }, 320); // matches the CSS transition on .alphalogin
+    }
+
+    if (crossBtn) {
+        crossBtn.addEventListener("click", closeAuthModal);
     }
 
     // -------------------------------------
@@ -145,6 +182,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 logsub.textContent = "Account Created";
                 logsub.disabled = true;
 
+                // auto-close once the user has had a moment to see the confirmation
+                setTimeout(closeAuthModal, 1200);
+
             } catch (err) {
                 error1.textContent = "Something went wrong.";
                 error1.style.display = "block";
@@ -189,6 +229,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 logsignin.disabled = true;
                 logname.readOnly = true;
                 logpass2.readOnly = true;
+
+                // auto-close once the user has had a moment to see the confirmation
+                setTimeout(closeAuthModal, 1200);
 
             } catch (err) {
                 error2.textContent = "Login failed.";
