@@ -104,6 +104,8 @@
       main.style.opacity="0.3";
       bottom.style.opacity="0.3";
       overlay.classList.add("overlay1");
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
   })
   contactus1.addEventListener("click",(e)=>{
       if(hasmoved){
@@ -117,6 +119,8 @@
       main.style.opacity="0.3";
       bottom.style.opacity="0.3";
       overlay.classList.add("overlay1");
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
   })
   contactus2.addEventListener("click",(e)=>{
       if(hasmoved){
@@ -130,6 +134,8 @@
       main.style.opacity="0.3";
       bottom.style.opacity="0.3";
       overlay.classList.add("overlay1");
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
   })
   if(window.matchMedia("(pointer: coarse)").matches){
       console.log("Touch device");

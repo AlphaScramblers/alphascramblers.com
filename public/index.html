@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="./homepage/alpha.css">
     <link rel="stylesheet" href="./navregbot.css">
     <link rel="stylesheet" href="alphalogin.css">
+    <link rel="stylesheet" href="contact.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
@@ -994,50 +995,69 @@
     <div class="contactloader">
         <div class="cloader"></div>
     </div>
-    <div class="contactuslogo"><i class="fa-solid fa-phone" style="color: #00BFFF;"></i></div>
-    <div class="contactus dis">
+    <div class="contactuslogo"><i class="fa-solid fa-phone" style="color:#fff;"></i></div>
+
+<div class="contactus dis">
+    <div class="contactus-card">
         <div class="crossct"><i class="fa-solid fa-xmark"></i></div>
+
+        <!-- LEFT — Form -->
         <div class="contactdata">
-            <div class="contacthead">CONTACT US</div>
+            <div class="contacthead">Get in touch</div>
+            <div class="contact-title">Talk to an expert.</div>
+            <div class="contact-subtitle">Fill in your details and we'll get back to you within 24 hours.</div>
             <div class="form">
-               <form action="/api/contact" method="POST" id="contactForm">
-                        <div class="n">
-                            <label for="name">NAME:</label><br>
-                            <input type="text" name="name" id="namect" placeholder="Enter Your Name"><br>
-                        </div>
-                        <div class="e">
-                            <label for="mail">EMAIL ID:</label><br>
-                            <input type="text" name="mail" id="mailct" placeholder="Enter Your Email Id"><br>
-                        </div>
-                        <div class="c">
-                            <label for="contact">CONTACT NO.:</label><br>
-                            <input type="text" name="contact" id="contactct" placeholder="Enter Your Contact No."><br>
-                        </div>
-                        <div class="ctbut">
-                            <button class="ct" class="submit" name="ctbut" type="submit">Talk To An Expert</button>
-                        </div>
+                <form action="/api/contact" method="POST" id="contactForm">
+                    <div class="n">
+                        <label for="namect">Name</label>
+                        <input type="text" name="name" id="namect" placeholder="Your full name">
+                    </div>
+                    <div class="e">
+                        <label for="mailct">Email</label>
+                        <input type="text" name="mail" id="mailct" placeholder="your@email.com">
+                    </div>
+                    <div class="c">
+                        <label for="contactct">Phone</label>
+                        <input type="text" name="contact" id="contactct" placeholder="+91 XXXXX XXXXX">
+                    </div>
+                    <div class="ctbut">
+                        <button class="ct" name="ctbut" type="submit">Talk To An Expert</button>
+                    </div>
                 </form>
             </div>
         </div>
-        <hr>
+
+        <!-- RIGHT — Reach -->
         <div class="reach">
-                <div class="reachhead">
-                    REACH US AT:
-                </div>
-                <div class="reachtext">
-                    <div class="call">
-                        <div class="callicon"><i class="fa-solid fa-phone" style="color: #00BFFF;"></div></i>
-                        <b>Call Us Now:</b>
-                        +91 9625963967
-                    </div>
-                    <div class="mail">
-                        <div class="mailicon"><i class="fa-solid fa-envelope" style="color: #00BFFF;"></i></div>
-                        <b>Mail Us At:</b>
-                        alphascramblers@gmail.com
+            <div class="reachhead">Reach us at</div>
+            <div class="reachtext">
+                <div class="call">
+                    <div class="callicon"><i class="fa-solid fa-phone"></i></div>
+                    <div class="reach-detail">
+                        <div class="reach-label">Call us</div>
+                        <div class="reach-value">+91 9625963967</div>
                     </div>
                 </div>
+                <div class="mail">
+                    <div class="mailicon"><i class="fa-solid fa-envelope"></i></div>
+                    <div class="reach-detail">
+                        <div class="reach-label">Email us</div>
+                        <div class="reach-value">alphascramblers@gmail.com</div>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-divider"></div>
+            <div class="contact-social-label">Follow us</div>
+            <div class="contact-social-icons">
+                <a href="https://www.instagram.com/alpha_scramblers/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/alpha-scramblers-33035338b" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=61581582834501" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://x.com/AScramblers" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://www.youtube.com/@AlphaScramblers" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+            </div>
         </div>
     </div>
+</div>
         <profile>
             <div class="profile-section">
                 <div class="ahead">

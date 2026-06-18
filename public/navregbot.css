@@ -31,7 +31,7 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 100000000  ;
+    z-index: 100000000;
 }
 .loader{
     border: 6px solid #ddd;
@@ -112,16 +112,6 @@ footer{
 .profile,.profile1{
     display: none;
 }
-.cross{
-    height: 5%;
-    width: 5%;
-    position: absolute;
-    left: 78.5vw;
-    padding-top: 0.1%;
-    font-size: 1.2rem;
-    cursor: pointer;
-    color: white;
-}
 .ct{
     background-color: #6BCFD4;
     height: 5vh;
@@ -139,7 +129,7 @@ footer{
     background-color: rgba(0,0,0,0.7);
     position: fixed;
     top: 0;
-    z-index: 100000;    
+    z-index: 100000;
     display: none;
     height: 100%;
 }
@@ -213,42 +203,6 @@ footer{
     user-select: none;
     display: none;
 }
-.contactdata{
-    width: 25vw;
-    padding: 5%;
-}
-.callicon,.mailicon{
-    height: 10vh;
-    width: 5vw;
-    font-size: 2rem;
-    background-color: #0D1B2A;
-    border-radius: 1000px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.reach{
-    padding: 5%;
-}
-.call,.mail{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 5%;
-    font-size: 1.2rem;
-}
-.contactus{
-    font-family: "Mada", sans-serif;
-    background-color: #ffffff;
-    width: 45vw;
-    position: fixed;
-    top: 15vh;
-    left: 27.5vw;
-    z-index: 1000000;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    display: flex;
-}
 .dis{
     display: none;
 }
@@ -261,7 +215,6 @@ footer{
     font-size: 1.2rem;
     cursor: pointer;
     color: white;
-
     text-shadow: 0 0 0 white;
     font-family: Arial, sans-serif;
 }
@@ -304,27 +257,13 @@ footer{
 .ql{
     gap: 7%;
 }
-.ql div:hover{
-    text-decoration: underline;
-}
-.ql a:hover{
-    text-decoration: underline;
-}
-.features a:hover{
-    text-decoration: underline;
-}
-.hov:hover{
-    text-decoration: underline;
-}
-.know a:hover{
-    text-decoration: underline;
-}
-.hns a:hover{
-    text-decoration: underline;
-}
-.cntus1:hover{
-    text-decoration: underline;
-}
+.ql div:hover{ text-decoration: underline; }
+.ql a:hover{ text-decoration: underline; }
+.features a:hover{ text-decoration: underline; }
+.hov:hover{ text-decoration: underline; }
+.know a:hover{ text-decoration: underline; }
+.hns a:hover{ text-decoration: underline; }
+.cntus1:hover{ text-decoration: underline; }
 .ql1{
     margin-bottom: 0vh;
     font-weight: 900;
@@ -449,204 +388,24 @@ footer{
     100% {transform: rotate(360deg);}
 }
 .waitloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.center-loader {
-  width: 60px;
-  height: 60px;
-  border: 6px solid white;
-  border-top: 6px solid #3498db;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.signup{
-    width: 60vw;
-    padding: 1vw;
-    background-image: linear-gradient(
-    to right,
-    #0a0a0a 0%,
-    #001a4d 50%,
-    #052f97 90%
-  );
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.vb{
-    width: 40vw;
-    height: 80vh;
-}
-.start{
-    font-size: 1.1rem;
-    color: #999;
-    margin: 2%;
-}
-.acc{
-    font-size: 3rem;
-    color: white;
-    font-weight: 700;
-    margin: 2%;
-}
-.member{
-    display: flex;
-    padding: 2%;
-    color: #ddd;
-    padding-left: 0;
-    gap: 1vw;
-    font-size: 0.9rem;
-    margin: 2%;
-}
-.member1{
-    display: flex;
-    padding: 2%;
-    color: #ddd;
-    padding-left: 0;
-    gap: 1vw;
-    font-size: 1rem;
-    margin: 11%;
-    margin-top: 2%;
-}
-.log{
-    color: #4aa72d;
-    cursor: pointer;
-}
-.caa{
-    color: #4aa72d;
-    cursor: pointer;
-}
-#logfname,#loglname,#logmail,#logpass1,#logpass2,#logname,#logmob{
-    height: 6vh;
-    width: 14vw;
-    border-radius: 10px;
-    padding-left: 1vw;
-    margin: 2%;
-}
-#logmail,#logpass1,#logpass2,#logname,#logmob{
-    width: 30vw;
-}
-#logfname{
-    margin-right: 0;
-}
-#loglname{
-    margin-left: 1%;
-}
-.accdetails{
-    padding: 2%;
-    color: #ddd;
-    padding-left: 0;
-    font-size: 1rem;
-    margin: 2%;
-    margin-top: 0%;
-}
-.fp{
-    color: #4aa72d;
-    font-size: 0.9rem;
-    text-decoration: underline;
-    cursor: pointer;
-}
-.fpnew{
-    margin-left: 3%;
-    color: #4aa72d;
-    font-size: 0.9rem;
-    text-decoration: underline;
-    cursor: pointer;
-    margin-top: 1%;
-}
-.logsub{
-    width: 20vw;
-    margin: 2%;
-    height: 6vh;
-    border-radius: 20px;
-    background-color:#052f97;
-    border: 0;
-    color: white;
-    font-weight: 800;
-    margin-left: 6vw;
-    cursor: pointer;
-}
-.logsignin{
-    width: 20vw;
-    margin: 2%;
-    height: 6vh;
-    border-radius: 20px;
-    background-color:#052f97;
-    border: 0;
-    color: white;
-    font-weight: 800;
-    margin-left: 6vw;
-    cursor: pointer;
-    margin-top: 4vh;
-}
-.alphalogin{
-    display: flex;
     position: fixed;
-    height: 80vh;
-    width: 80vw;
-    background-size: cover;
-    margin-left: 5vw;
-    border-radius: 50px;
-    font-family: Arial, Helvetica, sans-serif;
-    z-index: 100001;
-    top: 10vh;
-    left: 5vw;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
 }
-.alphadis{
-    display: none;
-}
-.loginform{
-    width: 60vw;
-    padding: 1vw;
-    background-image: linear-gradient(
-    to right,
-    #0a0a0a 0%,
-    #001a4d 50%,
-    #052f97 90%
-  );
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  display: none;
-}
-.signdis{
-    display: none;
-}
-.logdis{
-    display: none;
-}
-login{
-    display: block;
-}
-.error{
-    color: red;
-    font-size: 1.1rem;
-    margin: 2%;
-    width: 30vw;
-    text-align: center;
-    display: none;
-}
-.error1{
-    color: red;
-    font-size: 1.1rem;
-    margin: 2%;
-    width: 30vw;
-    text-align: center;
-    display: none;
+.center-loader {
+    width: 60px;
+    height: 60px;
+    border: 6px solid white;
+    border-top: 6px solid #3498db;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
 }
 .ahead{
     width: 100%;
@@ -663,41 +422,41 @@ login{
     font-family: "Inter", sans-serif;
 }
 .avatar{
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: linear-gradient(to right, #579CF1 100%, #56A3F2 0%);
-  color: #ffffff;
-  font-family: "Inter", sans-serif;
-  font-size: 3.5rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 5%;
-  margin-bottom: 8%;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #579CF1 100%, #56A3F2 0%);
+    color: #ffffff;
+    font-family: "Inter", sans-serif;
+    font-size: 3.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5%;
+    margin-bottom: 8%;
 }
 .outer{
-  width: 135px;
-  height: 135px;
-  border-radius: 50%;
-  background: linear-gradient(to right, #3B82F6 100%, #2563EB 0%);
-  margin-top: 5%;
-  display: flex;
-  justify-content: center;
+    width: 135px;
+    height: 135px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #3B82F6 100%, #2563EB 0%);
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
 }
 .avatar1{
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(to right, #579CF1 100%, #56A3F2 0%);
-  color: #ffffff;
-  font-family: "Inter", sans-serif;
-  font-size: 1.5rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #579CF1 100%, #56A3F2 0%);
+    color: #ffffff;
+    font-family: "Inter", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .profile-section {
     width: auto;
@@ -717,14 +476,8 @@ login{
     right: 0;
 }
 @keyframes slidein {
-    from {
-        right: -100%;
-        opacity: 0;
-    }
-    to {
-        right: 0;
-        opacity: 1;
-    }
+    from { right: -100%; opacity: 0; }
+    to   { right: 0; opacity: 1; }
 }
 .profiledetails{
     margin: 2vw;
@@ -749,66 +502,63 @@ login{
     text-align: center;
 }
 .lgtBtn {
-  background: linear-gradient(to right, #3B82F6 100%, #2563EB 0%);
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 600;
-  font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(58, 80, 107, 0.2);
+    background: linear-gradient(to right, #3B82F6 100%, #2563EB 0%);
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(58, 80, 107, 0.2);
 }
-
 .lgtBtn:hover {
-  background: #5bc0be;
-  box-shadow: 0 6px 14px rgba(91, 192, 190, 0.3);
-  transform: translateY(-2px);
+    background: #5bc0be;
+    box-shadow: 0 6px 14px rgba(91, 192, 190, 0.3);
+    transform: translateY(-2px);
 }
-
 .lgtBtn:active {
-  transform: translateY(0);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
 }
 .pname,
 .mobile,
 .email {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 7%;
-  font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #0E1420;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 7%;
+    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #0E1420;
 }
 .namehead,
 .mobilehead,
 .emailhead {
-  font-weight: 600;
-  color: #5C6670;
+    font-weight: 600;
+    color: #5C6670;
 }
 .emaildata{
-  color: #0E1420;
-  word-break: break-word;
-  cursor: pointer;
-  transition: color 0.3s ease;
+    color: #0E1420;
+    word-break: break-word;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
-
 .emaildata:hover {
-  color: #5bc0be;
+    color: #5bc0be;
 }
 .ccode {
-  color: #5bc0be;
-  font-weight: 600;
-  margin-right: 4px;
+    color: #5bc0be;
+    font-weight: 600;
+    margin-right: 4px;
 }
 .psychodetails {
-  font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
-  font-size: 1rem;
-  color: #5C6670;
-  margin: 20px auto;
+    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+    font-size: 1rem;
+    color: #5C6670;
+    margin: 20px auto;
 }
 .status{
     display: flex;
@@ -816,102 +566,58 @@ login{
     margin-left: 7%;
 }
 .phead {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #3a506b;
-  margin-bottom: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #3a506b;
+    margin-bottom: 12px;
 }
 .psub,
 .sug {
-  display: flex;
+    display: flex;
 }
 .psubstatus,
 .sugdata {
-  font-weight: 800;
-  color: #5C6670;
+    font-weight: 800;
+    color: #5C6670;
 }
 .socialicons{
     display: none;
 }
+login{
+    display: block;
+}
+
+/* ============================================================
+   TABLET
+   ============================================================ */
 @media screen and (min-width: 700px) and (max-width: 1000px){
-.rightnav{
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    width: 80%;
-    padding-left: 20%;
+    .rightnav{
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        width: 80%;
+        padding-left: 20%;
+    }
+    .image{
+        width: 20%;
+    }
+    .navbar{
+        height: 10vh;
+        width: 100%;
+        background-color: #f4f9fd;
+        display: flex;
+        align-items: center;
+        font-family: "Rowdies", sans-serif;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .bottom{
+        margin-top: 2vh;
+    }
 }
-.image{
-    width: 20%;
-}
-.navbar{
-    height: 10vh;
-    width: 100%;
-    background-color: #f4f9fd;
-    display: flex;
-    align-items: center;
-    font-family: "Rowdies", sans-serif;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-.contactuslogo{
-    width: 70px;
-    height: 70px;
-}
-.register{
-    height: 45vh;
-    top: 30vh;
-    width: 95vw;
-    left: 2.5vw;
-}
-.contactus{
-    width: 92vw;
-    left: 4vw;
-    top: 27vh;
-}
-.callicon,.mailicon{
-    height: 90px;
-    width: 90px;
-}
-.contactdata{
-    width: 50%;
-}
-.call,.mail{
-    height: 17vh;
-    gap: 2vh;
-}
-.bottom{
-    margin-top: 2vh;
-}
-.logologin,.vb{
-    display: none;
-}
-.alphalogin{
-    width: 100vw;
-}
-.signup{
-    width: 80vw;
-    height: 60vh;
-}
-#logfname,#loglname,#logmob,#logmail,#logpass1{
-    height: 4vh;
-}
-#logmob,#logmail,#logpass1{
-    width: 70vw;
-    margin-left: 4vw;
-}
-#logfname,#loglname{
-    width: 33.5vw;
-}
-#logfname{
-    margin-left: 4vw;
-}
-.logsub{
-    margin-left: 15vw;
-    width: 50vw;
-    font-size: 1.2rem;
-    height: 4vh;
-}
-}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
 @media screen and (min-width: 0px) and (max-width: 700px){
     .ql,.features,.bottoms3,.cnt{
         width: 18%;
@@ -924,6 +630,7 @@ login{
     .bottomtext{
         padding: 5%;
         padding-top: 0;
+        gap: 0;
     }
     .bt1,.bt2,.bt3,.bt4{
         margin-bottom: 5%;
@@ -967,9 +674,6 @@ login{
         flex-direction: column;
         font-size: 0.6rem;
     }
-    .logname{
-        font-size: 0.9rem;
-    }
     .home,.login,.help,.about{
         display: none !important;
     }
@@ -985,7 +689,6 @@ login{
         width: 100%;
         flex-direction: column;
         background-color: #f4f9fd;
-        position: fixed;
         animation-name: navconele;
         animation-duration: 1s;
         z-index: 10000;
@@ -1012,39 +715,6 @@ login{
         font-size: 1rem;
         right: 2%;
     }
-    .reglogo{
-        display: none;
-    }
-    .regtext{
-        width: 100%;
-    }
-    .register{
-        height: 60vh;
-        width: 90vw;
-        left: 5vw;
-    }
-    .cross{
-        left: 77%;
-    }
-    .contactus{
-        flex-direction: column;
-        width: 90vw;
-        left: 5vw;
-        top: 5vh;
-        height: 80vh;
-    }
-    .contactdata{
-        width: 90vw;
-        padding: 2.5%;
-    }
-    .callicon,.mailicon{
-        display: none;
-    }
-    .call,.mail{
-        height: 10vh;
-        margin: 0;
-        padding: 0;
-    }
     .crossct{
         right: -5%;
         top: -2.5%;
@@ -1060,115 +730,19 @@ login{
         margin-right: 6.5vw;
         margin-bottom: 1.5vh;
     }
-    .logologin{
-        display: none;
-    }
-    .alphalogin{
-        margin-left: 3.7vw;
-        margin-top: 10vw;
-        width: 100vw;
-        height: auto;
-    }
-    .signup{
-        width: 80vw;
-        height: 55vh;
-    }
-    .start{
-        font-size: 0.9rem;
-        margin-left: 4vw;
-    }
-    .acc{
-        font-size: 2.5rem;
-        margin-left: 4vw;
-    }
-    .member{
-        margin-left: 4vw;
-    }
-    #logfname,#loglname,#logmob,#logmail,#logpass1{
-        height: 4vh;
-    }
-    #logmob,#logmail,#logpass1{
-        width: 70vw;
-        margin-left: 4vw;
-    }
-    #logfname{
-        width: 33.5vw;
-        margin-left: 4vw;
-    }
-    #loglname{
-        width: 33vw;
-    }
-    .log{
-        margin-left: 10px;
-    }
-    .sub{
-        margin-top: 2vw;
-    }
-    .logsub{
-        margin-left: 15vw;
-        width: 50vw;
-        font-size: 1.2rem;
-        height: 4vh;
-    }
-    .loginform{
-        width: 80vw;
-        height: 55vh;
-    }
-    .accdetails{
-        margin-left: 4vw;
-    }
-    #logname,#logpass2{
-        height: 4vh;
-        width: 70vw;
-        margin-left: 4vw;
-    }
-    .fpnew{
-        margin-left: 6%;
-        color: #4aa72d;
-        font-size: 0.9rem;
-        text-decoration: underline;
-        cursor: pointer;
-        margin-top: 2%;
-    }
-    .logsignin{
-        margin-left: 4vw;
-    }
-    .member1{
-        margin-left: 6vw;
-    }
-    .bottomtext{
-        gap: 0;
-    }
-    .logobottom1{
-        margin-top: 6%;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0;
-    }
-    .social1{
-        margin-top: 15%;
-    }
-    .bottomlogo1{
-        width: 35%;
-    }
     .progress{
-        display: none;  
+        display: none;
     }
     .progress-value{
         display: none;
     }
-    .error{
-        width: 80vw;
-        margin: 0;
-        margin-top: 2%;
-    }
 }
+
 @keyframes navconele{
     0%{padding-left:100%}
     100%{padding-left:0%}
 }
+
 @media screen and (min-width: 1360px){
     html{
         font-size: 17.5px;

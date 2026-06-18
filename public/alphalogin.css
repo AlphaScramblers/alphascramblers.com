@@ -16,8 +16,6 @@
     --as-input-bd:    rgba(255, 255, 255, 0.14);
     --as-input-focus: rgba(107, 207, 212, 0.2);
     --as-radius:      24px;
-
-    /* navbar is 12vh; center modal in the remaining 88vh */
     --as-nav-h:       12vh;
     --as-modal-h:     min(640px, 82vh);
 }
@@ -33,78 +31,92 @@
 
 /* ---------- Modal shell ---------- */
 .alphalogin {
-    position: fixed;
-    /* sit in the center of the space BELOW the navbar */
-    top:  calc(var(--as-nav-h) + (100vh - var(--as-nav-h)) / 2);
-    left: 50%;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    width: min(75vw, 1080px);
-    height: var(--as-modal-h);
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    border-radius: var(--as-radius);
-    overflow: hidden;
-    box-shadow: 0 32px 72px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
-    z-index: 100001;
+    position: fixed !important;
+    top: 50vh !important;
+    left: 50vw !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    width: min(75vw, 1080px) !important;
+    max-width: calc(100vw - 24px) !important;
+    height: var(--as-modal-h) !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    border-radius: var(--as-radius) !important;
+    overflow: hidden !important;
+    box-shadow: 0 32px 72px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06) !important;
+    z-index: 100001 !important;
     opacity: 1;
     transition: opacity 0.3s ease, transform 0.3s ease;
+    background: none !important;
+    font-family: "Inter", "Mada", sans-serif !important;
 }
 
 .alphalogin.closing {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.95);
+    transform: translate(-50%, -50%) scale(0.95) !important;
 }
 
 /* ---------- Close button ---------- */
-.cross {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    left: auto;
-    height: 30px;
-    width: 30px;
-    padding: 0;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.82rem;
-    color: var(--as-text-dim);
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.1);
-    transition: all 0.2s ease;
-    z-index: 10;
-    cursor: pointer;
+.alphalogin .cross {
+    position: absolute !important;
+    top: 15px !important;
+    right: 15px !important;
+    left: auto !important;
+    height: 30px !important;
+    width: 30px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.82rem !important;
+    color: var(--as-text-dim) !important;
+    background: rgba(255,255,255,0.07) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    transition: all 0.2s ease !important;
+    z-index: 10 !important;
+    cursor: pointer !important;
 }
 
-.cross:hover {
-    background: rgba(255,255,255,0.15);
-    color: var(--as-text);
-    transform: rotate(90deg);
+.alphalogin .cross:hover {
+    background: rgba(255,255,255,0.15) !important;
+    color: var(--as-text) !important;
+    transform: rotate(90deg) !important;
 }
 
 /* ============================================================
    LEFT — FORM PANEL
+   NOTE: No display property here — JS controls show/hide via
+   style.display and .signdis / .logdis classes
    ============================================================ */
-.signup,
-.loginform {
-    flex: 0 0 52%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 5.5% 0 7%;
-    background: linear-gradient(150deg, var(--as-navy-deep) 0%, var(--as-navy) 60%, var(--as-navy-mid) 100%);
-    box-sizing: border-box;
-    overflow: hidden;
-    position: relative;
+.alphalogin .signup,
+.alphalogin .loginform {
+    flex: 0 0 52% !important;
+    width: auto !important;
+    height: 100% !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding: 0 5.5% 0 7% !important;
+    background: linear-gradient(150deg, var(--as-navy-deep) 0%, var(--as-navy) 60%, var(--as-navy-mid) 100%) !important;
+    background-image: linear-gradient(150deg, var(--as-navy-deep) 0%, var(--as-navy) 60%, var(--as-navy-mid) 100%) !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    position: relative !important;
+    margin: 0 !important;
 }
 
+/* Default visibility — signup shows, loginform hidden */
+.alphalogin .signup   { display: flex; }
+.alphalogin .loginform { display: none; }
+
+/* JS toggles these classes to switch panels */
+.alphalogin .signup.signdis   { display: none !important; }
+.alphalogin .loginform.logdis { display: none !important; }
+
 /* teal accent top bar */
-.signup::before,
-.loginform::before {
+.alphalogin .signup::before,
+.alphalogin .loginform::before {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0;
@@ -113,179 +125,238 @@
     opacity: 0.7;
 }
 
-.loginform { display: none; }
-.signdis, .logdis { display: none !important; }
-
 /* ---------- Headings ---------- */
-.start {
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--as-teal);
-    font-weight: 700;
-    margin: 0 0 0.55rem;
+.alphalogin .start {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase !important;
+    color: var(--as-teal) !important;
+    font-weight: 700 !important;
+    margin: 0 0 0.55rem !important;
 }
 
-.acc {
-    font-size: clamp(1.55rem, 2.5vw, 2rem);
-    color: var(--as-text);
-    font-weight: 700;
-    margin: 0 0 0.4rem;
-    line-height: 1.15;
+.alphalogin .acc {
+    font-size: clamp(1.55rem, 2.5vw, 2rem) !important;
+    color: var(--as-text) !important;
+    font-weight: 700 !important;
+    margin: 0 0 0.4rem !important;
+    line-height: 1.15 !important;
 }
 
-.amem { margin-bottom: 1.5rem; }
+.alphalogin .amem { margin-bottom: 1.5rem !important; }
 
-.accdetails {
-    padding: 0;
-    color: var(--as-text-dim);
-    font-size: 0.86rem;
-    margin: 0;
+.alphalogin .accdetails {
+    padding: 0 !important;
+    color: var(--as-text-dim) !important;
+    font-size: 0.86rem !important;
+    margin: 0 !important;
 }
 
-.member,
-.member1 {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.38rem;
-    color: var(--as-text-dim);
-    font-size: 0.84rem;
-    margin: 0;
+.alphalogin .member,
+.alphalogin .member1 {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 0.38rem !important;
+    color: var(--as-text-dim) !important;
+    font-size: 0.84rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-.member1 {
-    justify-content: center;
-    margin-top: 1.1rem;
+.alphalogin .member1 {
+    justify-content: center !important;
+    margin-top: 1.1rem !important;
 }
 
-.log, .caa {
-    color: var(--as-teal);
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.15s;
+.alphalogin .log,
+.alphalogin .caa {
+    color: var(--as-teal) !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: opacity 0.15s !important;
+    margin: 0 !important;
 }
-.log:hover, .caa:hover { opacity: 0.7; }
+.alphalogin .log:hover,
+.alphalogin .caa:hover { opacity: 0.7; }
 
 /* ---------- Form ---------- */
-.signup form,
-.loginform form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.72rem;
+.alphalogin .signup form,
+.alphalogin .loginform form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.72rem !important;
 }
 
-.name { display: flex; gap: 0.7rem; }
-.name, .logmob, .logmail, .pass { width: 100%; }
+.alphalogin .name { display: flex !important; gap: 0.7rem !important; }
+.alphalogin .name,
+.alphalogin .logmob,
+.alphalogin .logmail,
+.alphalogin .pass { width: 100% !important; }
 
 /* ---------- Inputs ---------- */
-#logfname, #loglname, #logmob, #logmail,
-#logpass1, #logpass2, #logname {
-    width: 100%;
-    height: 48px;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0 16px;
-    border-radius: 10px;
-    border: 1px solid var(--as-input-bd);
-    background: var(--as-input-bg);
-    color: var(--as-text);
-    font-size: 0.9rem;
-    font-family: "Inter", "Mada", sans-serif;
-    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+.alphalogin #logfname,
+.alphalogin #loglname,
+.alphalogin #logmob,
+.alphalogin #logmail,
+.alphalogin #logpass1,
+.alphalogin #logpass2,
+.alphalogin #logname {
+    width: 100% !important;
+    height: 48px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 16px !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--as-input-bd) !important;
+    background: var(--as-input-bg) !important;
+    color: var(--as-text) !important;
+    font-size: 0.9rem !important;
+    font-family: "Inter", "Mada", sans-serif !important;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s !important;
+    text-decoration: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
 }
 
-#logfname::placeholder, #loglname::placeholder, #logmob::placeholder,
-#logmail::placeholder, #logpass1::placeholder, #logpass2::placeholder,
-#logname::placeholder {
-    color: rgba(255,255,255,0.32);
+.alphalogin #logfname::placeholder,
+.alphalogin #loglname::placeholder,
+.alphalogin #logmob::placeholder,
+.alphalogin #logmail::placeholder,
+.alphalogin #logpass1::placeholder,
+.alphalogin #logpass2::placeholder,
+.alphalogin #logname::placeholder {
+    color: rgba(255,255,255,0.32) !important;
 }
 
-#logfname:focus, #loglname:focus, #logmob:focus, #logmail:focus,
-#logpass1:focus, #logpass2:focus, #logname:focus {
-    outline: none;
-    border-color: var(--as-teal);
-    background: rgba(107,207,212,0.05);
-    box-shadow: 0 0 0 3px var(--as-input-focus);
+.alphalogin #logfname:focus,
+.alphalogin #loglname:focus,
+.alphalogin #logmob:focus,
+.alphalogin #logmail:focus,
+.alphalogin #logpass1:focus,
+.alphalogin #logpass2:focus,
+.alphalogin #logname:focus {
+    outline: none !important;
+    border-color: var(--as-teal) !important;
+    background: rgba(107,207,212,0.05) !important;
+    box-shadow: 0 0 0 3px var(--as-input-focus) !important;
+}
+
+/* ---------- Autofill override ---------- */
+.alphalogin #logfname:-webkit-autofill,
+.alphalogin #loglname:-webkit-autofill,
+.alphalogin #logmob:-webkit-autofill,
+.alphalogin #logmail:-webkit-autofill,
+.alphalogin #logpass1:-webkit-autofill,
+.alphalogin #logpass2:-webkit-autofill,
+.alphalogin #logname:-webkit-autofill,
+.alphalogin #logfname:-webkit-autofill:hover,
+.alphalogin #loglname:-webkit-autofill:hover,
+.alphalogin #logmob:-webkit-autofill:hover,
+.alphalogin #logmail:-webkit-autofill:hover,
+.alphalogin #logpass1:-webkit-autofill:hover,
+.alphalogin #logpass2:-webkit-autofill:hover,
+.alphalogin #logname:-webkit-autofill:hover,
+.alphalogin #logfname:-webkit-autofill:focus,
+.alphalogin #loglname:-webkit-autofill:focus,
+.alphalogin #logmob:-webkit-autofill:focus,
+.alphalogin #logmail:-webkit-autofill:focus,
+.alphalogin #logpass1:-webkit-autofill:focus,
+.alphalogin #logpass2:-webkit-autofill:focus,
+.alphalogin #logname:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #041533 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff;
+    border-color: rgba(255,255,255,0.14) !important;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 /* ---------- Forgot password ---------- */
-.fp { display: flex; flex-direction: column; gap: 0.55rem; }
+.alphalogin .fp { display: flex !important; flex-direction: column !important; gap: 0.55rem !important; }
 
-.fpnew {
-    align-self: flex-end;
-    margin: 0.1rem 0 0;
-    font-size: 0.82rem;
+.alphalogin .fpnew {
+    align-self: flex-end !important;
+    margin: 0.1rem 0 0 !important;
+    font-size: 0.82rem !important;
+    text-decoration: none !important;
 }
 
-.fpnew a.forgot-link {
-    color: var(--as-teal);
-    text-decoration: underline;
-    text-underline-offset: 2px;
+.alphalogin .fpnew a.forgot-link {
+    color: var(--as-teal) !important;
+    text-decoration: underline !important;
+    text-underline-offset: 2px !important;
 }
 
 /* ---------- Errors ---------- */
-.error, .error1 {
-    width: 100%;
-    margin: 0.25rem 0 0;
-    color: #f87171;
-    font-size: 0.8rem;
-    text-align: center;
+.alphalogin .error,
+.alphalogin .error1 {
+    width: 100% !important;
+    margin: 0.25rem 0 0 !important;
+    color: #f87171 !important;
+    font-size: 0.8rem !important;
+    text-align: center !important;
 }
 
 /* ---------- Buttons ---------- */
-.sub, .signin { width: 100%; margin-top: 0.55rem; }
+.alphalogin .sub,
+.alphalogin .signin { width: 100% !important; margin-top: 0.55rem !important; }
 
-.logsub, .logsignin {
-    width: 100%;
-    height: 50px;
-    margin: 0;
-    border: 0;
-    border-radius: 12px;
-    background: linear-gradient(to right, var(--as-blue), var(--as-blue-dark));
-    color: #fff;
-    font-weight: 700;
-    font-size: 0.95rem;
-    letter-spacing: 0.03em;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+.alphalogin .logsub,
+.alphalogin .logsignin {
+    width: 100% !important;
+    height: 50px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    background: linear-gradient(to right, var(--as-blue), var(--as-blue-dark)) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    letter-spacing: 0.03em !important;
+    cursor: pointer !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
 }
 
-.logsignin { margin-top: 0.5rem; }
+.alphalogin .logsignin { margin-top: 0.5rem !important; }
 
-.logsub:hover, .logsignin:hover {
+.alphalogin .logsub:hover,
+.alphalogin .logsignin:hover {
     transform: translateY(-1px);
     box-shadow: 0 8px 20px rgba(59,130,246,0.4);
 }
 
-.logsub:active, .logsignin:active { transform: translateY(0); }
+.alphalogin .logsub:active,
+.alphalogin .logsignin:active { transform: translateY(0); }
 
-.logsub:disabled, .logsignin:disabled {
+.alphalogin .logsub:disabled,
+.alphalogin .logsignin:disabled {
     cursor: default;
     transform: none;
-    background: linear-gradient(to right, #1d8a4a, #15733d);
+    background: linear-gradient(to right, #1d8a4a, #15733d) !important;
     box-shadow: none;
 }
 
 /* ============================================================
    RIGHT — BRAND PANEL
    ============================================================ */
-.logologin {
-    flex: 0 0 48%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 5.5% 0 6%;
-    box-sizing: border-box;
-    background: linear-gradient(155deg, #041533 0%, #062050 40%, #0a3a8a 100%);
-    border-left: 1px solid rgba(255,255,255,0.06);
+.alphalogin .logologin {
+    flex: 0 0 48% !important;
+    width: auto !important;
+    height: 100% !important;
+    position: relative !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding: 0 5.5% 0 6% !important;
+    box-sizing: border-box !important;
+    background: linear-gradient(155deg, #041533 0%, #062050 40%, #0a3a8a 100%) !important;
+    background-image: linear-gradient(155deg, #041533 0%, #062050 40%, #0a3a8a 100%) !important;
+    border-left: 1px solid rgba(255,255,255,0.06) !important;
 }
 
-/* decorative rings */
-.logologin::before {
+.alphalogin .logologin::before {
     content: "";
     position: absolute;
     width: 480px; height: 480px;
@@ -295,7 +366,7 @@
     pointer-events: none;
 }
 
-.logologin::after {
+.alphalogin .logologin::after {
     content: "";
     position: absolute;
     width: 300px; height: 300px;
@@ -305,7 +376,6 @@
     pointer-events: none;
 }
 
-/* logo */
 .as-brand-logo {
     width: 150px;
     margin-bottom: 1.8rem;
@@ -313,7 +383,6 @@
     filter: brightness(0) invert(1);
     opacity: 0.88;
 }
-
 .as-brand-tag {
     font-size: 0.7rem;
     letter-spacing: 0.14em;
@@ -323,7 +392,6 @@
     margin-bottom: 0.5rem;
     position: relative; z-index: 1;
 }
-
 .as-brand-headline {
     font-size: clamp(1.35rem, 2.1vw, 1.8rem);
     font-weight: 700;
@@ -332,7 +400,6 @@
     margin-bottom: 0.5rem;
     position: relative; z-index: 1;
 }
-
 .as-brand-sub {
     font-size: 0.81rem;
     color: var(--as-text-dim);
@@ -340,20 +407,17 @@
     margin-bottom: 1.6rem;
     position: relative; z-index: 1;
 }
-
 .as-features {
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
     position: relative; z-index: 1;
 }
-
 .as-feature {
     display: flex;
     align-items: center;
     gap: 13px;
 }
-
 .as-feature-icon {
     width: 34px; height: 34px;
     flex-shrink: 0;
@@ -366,34 +430,29 @@
     color: var(--as-teal);
     font-size: 0.88rem;
 }
-
 .as-feature-title {
     font-size: 0.87rem;
     font-weight: 700;
     color: var(--as-text-mid);
     margin-bottom: 1px;
 }
-
 .as-feature-desc {
     font-size: 0.74rem;
     color: var(--as-text-dim);
     line-height: 1.5;
 }
-
 .as-brand-divider {
     height: 1px;
     background: rgba(255,255,255,0.07);
     margin: 1.4rem 0;
     position: relative; z-index: 1;
 }
-
 .as-trust {
     display: flex;
     align-items: center;
     gap: 9px;
     position: relative; z-index: 1;
 }
-
 .as-trust-dot {
     width: 6px; height: 6px;
     border-radius: 50%;
@@ -401,112 +460,127 @@
     flex-shrink: 0;
     animation: as-pulse 2.2s infinite;
 }
-
 @keyframes as-pulse {
     0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74,222,128,0.4); }
     50%       { opacity: 0.55; box-shadow: 0 0 0 4px rgba(74,222,128,0); }
 }
-
 .as-trust-text { font-size: 0.76rem; color: var(--as-text-dim); }
 .as-trust-text strong { color: var(--as-text-mid); font-weight: 600; }
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE — TABLET
    ============================================================ */
-
-/* Tablet: navbar drops to 10vh */
 @media screen and (min-width: 700px) and (max-width: 1000px) {
     .alphalogin {
-        top: calc(10vh + (100vh - 10vh) / 2);
-        width: 88vw;
-        height: auto;
-        min-height: 460px;
-        max-height: 86vh;
+        top: 50vh !important;
+        width: 88vw !important;
+        max-width: calc(100vw - 24px) !important;
+        height: auto !important;
+        min-height: 460px !important;
+        max-height: 86vh !important;
     }
-    .logologin { display: none; }
-    .signup, .loginform {
-        flex: 1 1 100%;
-        padding: 5vh 8%;
-        overflow-y: auto;
-        height: auto;
+    .alphalogin .logologin { display: none !important; }
+    .alphalogin .signup,
+    .alphalogin .loginform {
+        flex: 1 1 100% !important;
+        padding: 5vh 8% !important;
+        overflow-y: auto !important;
+        height: auto !important;
     }
-    .name { flex-direction: column; }
+    .alphalogin .name { flex-direction: column !important; }
 }
 
-/* Mobile: navbar is 8vh */
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
 @media screen and (max-width: 700px) {
     .alphalogin {
-        top: calc(8vh + (100vh - 8vh) / 2);
-        width: 92vw;          /* was 95vw — slight margin so edges don't clip */
-        height: auto;
-        max-height: 90vh;
-        border-radius: 18px;
-        flex-direction: column;
-    }
-    .logologin { display: none; }
-    .signup, .loginform {
-        flex: 1 1 auto;
-        padding: 22px 20px 20px;   /* tighter than 6vh 7% — more predictable */
-        overflow-y: auto;
-        height: auto;
-    }
-    .acc { font-size: 1.45rem; }
-
-    /* Stack name fields vertically */
-    .name {
-        flex-direction: column;
-        gap: 10px;
+        top: 50vh !important;
+        left: 50vw !important;
+        width: calc(100vw - 24px) !important;
+        max-width: calc(100vw - 24px) !important;
+        transform: translate(-50%, -50%) !important;
+        height: auto !important;
+        max-height: 90vh !important;
+        border-radius: 18px !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        margin: 0 !important;
     }
 
-    /* Tighter field sizing on mobile */
-    #logfname, #loglname, #logmob, #logmail,
-    #logpass1, #logpass2, #logname {
-        height: 44px;
-        font-size: 0.88rem;
-        border-radius: 8px;    /* less pill-like */
-        padding: 0 14px;
+    .alphalogin .logologin { display: none !important; }
+
+    .alphalogin .signup,
+    .alphalogin .loginform {
+        flex: 1 1 auto !important;
+        padding: 22px 20px 20px !important;
+        overflow-y: auto !important;
+        height: auto !important;
+        width: 100% !important;
     }
 
-    .logsub, .logsignin {
-        height: 46px;
-        font-size: 0.92rem;
-        border-radius: 10px;
+    .alphalogin .acc { font-size: 1.45rem !important; }
+
+    .alphalogin .name {
+        flex-direction: column !important;
+        gap: 10px !important;
     }
 
-    /* Tighter form gaps */
-    .signup form,
-    .loginform form {
-        gap: 10px;
+    .alphalogin #logfname,
+    .alphalogin #loglname,
+    .alphalogin #logmob,
+    .alphalogin #logmail,
+    .alphalogin #logpass1,
+    .alphalogin #logpass2,
+    .alphalogin #logname {
+        height: 44px !important;
+        font-size: 16px !important;
+        border-radius: 8px !important;
+        padding: 0 14px !important;
+        width: 100% !important;
+        margin: 0 !important;
     }
 
-    /* Cross fully inside modal */
-    .cross {
-        top: 11px;
-        right: 11px;
-        width: 26px;
-        height: 26px;
-        font-size: 0.75rem;
+    .alphalogin .logsub,
+    .alphalogin .logsignin {
+        height: 46px !important;
+        font-size: 0.92rem !important;
+        border-radius: 10px !important;
+        margin: 0 !important;
+        width: 100% !important;
     }
 
-    /* Headings tighter */
-    .start { margin-bottom: 4px; }
-    .acc   { margin-bottom: 3px; }
-    .amem  { margin-bottom: 12px; }
-
-    #logfname, #loglname, #logmob, #logmail,
-    #logpass1, #logpass2, #logname {
-        font-size: 16px;
+    .alphalogin .signup form,
+    .alphalogin .loginform form {
+        gap: 10px !important;
     }
+
+    .alphalogin .cross {
+        top: 11px !important;
+        right: 11px !important;
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 0.75rem !important;
+    }
+
+    .alphalogin .start { margin-bottom: 4px !important; }
+    .alphalogin .acc   { margin-bottom: 3px !important; }
+    .alphalogin .amem  { margin-bottom: 12px !important; }
+    .alphalogin .member1 { margin-top: 1rem !important; }
 }
 
 @media screen and (max-width: 380px) {
-    .signup, .loginform { padding: 18px 16px; }
-    .acc { font-size: 1.25rem; }
-    #logfname, #loglname, #logmob, #logmail,
-    #logpass1, #logpass2, #logname { height: 42px; font-size: 0.84rem; }
-}
-
-@media screen and (max-width: 380px) {
-    .signup, .loginform { padding: 5vh 6%; }
-    .acc { font-size: 1.3rem; }
+    .alphalogin .signup,
+    .alphalogin .loginform { padding: 18px 16px !important; }
+    .alphalogin .acc { font-size: 1.25rem !important; }
+    .alphalogin #logfname,
+    .alphalogin #loglname,
+    .alphalogin #logmob,
+    .alphalogin #logmail,
+    .alphalogin #logpass1,
+    .alphalogin #logpass2,
+    .alphalogin #logname {
+        height: 42px !important;
+        font-size: 16px !important;
+    }
 }

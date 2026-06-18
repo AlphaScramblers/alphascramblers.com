@@ -1,0 +1,443 @@
+/* ============================================================
+   ALPHASCRAMBLERS — CONTACT US MODAL
+   ============================================================ */
+
+/* ---------- Trigger button ---------- */
+.contactuslogo {
+    height: 52px !important;
+    width: 52px !important;
+    font-size: 1.3rem !important;
+    position: fixed !important;
+    bottom: 28px !important;
+    right: 20px !important;
+    z-index: 100000 !important;
+    cursor: pointer !important;
+    background: linear-gradient(135deg, #3B82F6, #2563EB) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    user-select: none !important;
+    box-shadow: 0 4px 20px rgba(59,130,246,0.45) !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+    border: none !important;
+}
+.contactuslogo:hover {
+    transform: scale(1.08) !important;
+    box-shadow: 0 6px 28px rgba(59,130,246,0.55) !important;
+}
+
+/* ---------- Modal overlay ---------- */
+.contactus {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1000000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(3px) !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    flex-direction: row !important;
+    overflow: hidden !important;
+}
+
+.contactus.dis {
+    display: none !important;
+}
+
+/* ---------- Inner card ---------- */
+.contactus-card {
+    position: relative;
+    width: 100%;
+    max-width: 860px;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: row;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 32px 72px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
+    font-family: "Inter", "Mada", sans-serif;
+}
+
+/* ---------- Close button ---------- */
+.crossct {
+    position: absolute !important;
+    top: 14px !important;
+    right: 14px !important;
+    left: auto !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    background: rgba(255,255,255,0.07) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: rgba(255,255,255,0.55) !important;
+    font-size: 0.82rem !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    z-index: 10 !important;
+    padding: 0 !important;
+}
+.crossct:hover {
+    background: rgba(255,255,255,0.15) !important;
+    color: #fff !important;
+    transform: rotate(90deg) !important;
+}
+
+/* ============================================================
+   LEFT — FORM PANEL
+   ============================================================ */
+.contactdata {
+    flex: 0 0 55% !important;
+    width: auto !important;
+    padding: 40px 36px 36px !important;
+    background: linear-gradient(150deg, #020d1f 0%, #041533 60%, #0a2a6e 100%) !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+    overflow-y: auto !important;
+    height: auto !important;
+    top: auto !important;
+    left: auto !important;
+}
+
+/* teal top bar */
+.contactdata::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, #6BCFD4, #3B82F6);
+    opacity: 0.7;
+}
+
+.contacthead {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase !important;
+    color: #6BCFD4 !important;
+    font-weight: 700 !important;
+    margin: 0 0 0.4rem !important;
+    text-decoration: none !important;
+    font-family: "Inter", "Mada", sans-serif !important;
+}
+
+.contact-title {
+    font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+    color: #ffffff;
+    font-weight: 700;
+    margin: 0 0 0.35rem;
+    line-height: 1.15;
+}
+
+.contact-subtitle {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    margin: 0 0 1.8rem;
+    line-height: 1.5;
+}
+
+.contactus .form { flex: 1; }
+
+.contactus .form form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+}
+
+.contactus .n,
+.contactus .e,
+.contactus .c {
+    margin: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+}
+
+.contactus label {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: rgba(255,255,255,0.45) !important;
+    font-weight: 600 !important;
+    font-family: "Inter", "Mada", sans-serif !important;
+}
+
+.contactus #namect,
+.contactus #mailct,
+.contactus #contactct {
+    width: 100% !important;
+    height: 46px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 14px !important;
+    border-radius: 9px !important;
+    border: 1px solid rgba(255,255,255,0.14) !important;
+    background: rgba(255,255,255,0.06) !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-family: "Inter", "Mada", sans-serif !important;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    text-decoration: none !important;
+}
+
+.contactus #namect::placeholder,
+.contactus #mailct::placeholder,
+.contactus #contactct::placeholder {
+    color: rgba(255,255,255,0.28) !important;
+}
+
+.contactus #namect:focus,
+.contactus #mailct:focus,
+.contactus #contactct:focus {
+    outline: none !important;
+    border-color: #6BCFD4 !important;
+    background: rgba(107,207,212,0.05) !important;
+    box-shadow: 0 0 0 3px rgba(107,207,212,0.18) !important;
+}
+
+.contactus #namect:-webkit-autofill,
+.contactus #mailct:-webkit-autofill,
+.contactus #contactct:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #041533 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.contactus .ctbut {
+    display: flex !important;
+    justify-content: flex-start !important;
+    margin-top: 6px !important;
+}
+
+.contactus .ct {
+    width: 100% !important;
+    height: 48px !important;
+    border: 0 !important;
+    border-radius: 11px !important;
+    background: linear-gradient(to right, #3B82F6, #2563EB) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    letter-spacing: 0.03em !important;
+    cursor: pointer !important;
+    font-family: "Inter", "Mada", sans-serif !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+}
+.contactus .ct:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 8px 20px rgba(59,130,246,0.4) !important;
+}
+.contactus .ct:active { transform: translateY(0) !important; }
+.contactus .ct:disabled {
+    background: linear-gradient(to right, #1d8a4a, #15733d) !important;
+    cursor: default !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.contactus hr { display: none !important; }
+
+/* ============================================================
+   RIGHT — REACH PANEL
+   ============================================================ */
+.reach {
+    flex: 0 0 45% !important;
+    width: auto !important;
+    padding: 40px 32px !important;
+    background: linear-gradient(155deg, #041533 0%, #062050 40%, #0a3a8a 100%) !important;
+    border-left: 1px solid rgba(255,255,255,0.06) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    height: auto !important;
+    top: auto !important;
+    left: auto !important;
+}
+
+.reach::before {
+    content: "";
+    position: absolute;
+    width: 340px; height: 340px;
+    border-radius: 50%;
+    border: 1px solid rgba(107,207,212,0.07);
+    top: -100px; right: -100px;
+    pointer-events: none;
+}
+
+.reachhead {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase !important;
+    color: #6BCFD4 !important;
+    font-weight: 700 !important;
+    margin: 0 0 1.6rem !important;
+    text-decoration: none !important;
+    font-family: "Inter", "Mada", sans-serif !important;
+    position: relative;
+    z-index: 1;
+}
+
+.reachtext {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Override ALL old call/mail rules from navregbot.css */
+.contactus .call,
+.contactus .mail {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    font-size: 0.9rem !important;
+    font-family: "Inter", "Mada", sans-serif !important;
+}
+
+.contactus .callicon,
+.contactus .mailicon {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    border-radius: 10px !important;
+    background: rgba(107,207,212,0.1) !important;
+    border: 1px solid rgba(107,207,212,0.18) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: 1rem !important;
+    color: #6BCFD4 !important;
+}
+
+.contactus .callicon i,
+.contactus .mailicon i {
+    color: #6BCFD4 !important;
+}
+
+.reach-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    z-index: 1;
+    position: relative;
+}
+
+.reach-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.4);
+    font-weight: 600;
+}
+
+.reach-value {
+    font-size: 0.92rem;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.contact-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+    margin: 1.6rem 0;
+    position: relative;
+    z-index: 1;
+}
+
+.contact-social-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.contact-social-icons {
+    display: flex;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+}
+
+.contact-social-icons a {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.contact-social-icons a:hover {
+    background: rgba(107,207,212,0.12);
+    border-color: rgba(107,207,212,0.3);
+    color: #6BCFD4;
+}
+
+/* ============================================================
+   RESPONSIVE — TABLET
+   ============================================================ */
+@media screen and (max-width: 800px) {
+    .contactus-card {
+        flex-direction: column !important;
+        max-height: 88vh;
+        overflow-y: auto;
+        border-radius: 18px;
+    }
+    .contactdata {
+        flex: none !important;
+        padding: 28px 22px 24px !important;
+    }
+    .reach {
+        flex: none !important;
+        padding: 24px 22px 28px !important;
+        border-left: none !important;
+        border-top: 1px solid rgba(255,255,255,0.06) !important;
+        justify-content: flex-start !important;
+    }
+    .reach::before { display: none; }
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+@media screen and (max-width: 480px) {
+    .contactus { padding: 12px !important; }
+    .contactus-card { border-radius: 16px; }
+    .contactdata { padding: 24px 18px 20px !important; }
+    .reach { padding: 20px 18px 24px !important; }
+    .contact-title { font-size: 1.35rem; }
+}
