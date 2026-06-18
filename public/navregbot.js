@@ -86,6 +86,8 @@
       main.style.opacity="1";
       bottom.style.opacity="1";
       overlay.classList.remove("overlay1");
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
   })
   let button = document.querySelector(".contactuslogo");
   let offsetX;
@@ -119,8 +121,8 @@
       main.style.opacity="0.3";
       bottom.style.opacity="0.3";
       overlay.classList.add("overlay1");
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
   })
   contactus2.addEventListener("click",(e)=>{
       if(hasmoved){
@@ -134,8 +136,8 @@
       main.style.opacity="0.3";
       bottom.style.opacity="0.3";
       overlay.classList.add("overlay1");
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
   })
   if(window.matchMedia("(pointer: coarse)").matches){
       console.log("Touch device");
