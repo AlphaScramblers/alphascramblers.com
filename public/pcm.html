@@ -19,6 +19,7 @@
     <title>PCM</title>
     <link rel="stylesheet" href="./allstreams/allstreams.css">
     <link rel="stylesheet" href="./navregbot.css">
+    <link rel="stylesheet" href="alphalogin.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
@@ -465,72 +466,115 @@
         </div>
     </footer>
 <login>
-        <div class="alphalogin alphadis">
-            <div class="cross">&#10006</div>
-            <div class="signup">
-                <div class="start">START FOR FREE</div>
-                <div class="acc">Create New Account.</div>
-                <div class="amem">
-                    <div class="member">Already A Member?
-                        <div class="log">
-                            Log In
-                        </div>
-                    </div>
+    <div class="alphalogin alphadis">
+        <div class="cross">&#10006;</div>
+
+        <!-- ── SIGNUP PANEL ── -->
+        <div class="signup">
+            <div class="start">Start for free</div>
+            <div class="acc">Create your account.</div>
+            <div class="amem">
+                <div class="member">Already a member?
+                    <span class="log">Log in</span>
                 </div>
-                <form>
+            </div>
+            <form>
+                <div class="name">
+                    <input type="text"     placeholder="First Name"    id="logfname">
+                    <input type="text"     placeholder="Last Name"     id="loglname">
+                </div>
+                <div class="logmob">
+                    <input type="tel"      placeholder="Mobile Number" id="logmob">
+                </div>
+                <div class="logmail">
+                    <input type="email"    placeholder="Email address" id="logmail">
+                </div>
+                <div class="pass">
+                    <input type="password" placeholder="Password"      id="logpass1">
+                </div>
+                <div class="sub">
+                    <button class="logsub">Create Account</button>
+                </div>
+                <div class="error"></div>
+            </form>
+        </div>
+
+        <!-- ── LOGIN PANEL ── -->
+        <div class="loginform">
+            <div class="acc">Welcome back.</div>
+            <div class="amem">
+                <div class="accdetails">Enter your account details to continue.</div>
+            </div>
+            <div class="fp">
+                <form id="loginForm">
                     <div class="name">
-                        <input type="text" placeholder="First Name" id="logfname">
-                        <input type="text" placeholder="Last Name" id="loglname">
-                    </div>
-                    <div class="logmob">
-                        <input type="text" placeholder="Mobile Number" id="logmob">
-                    </div>
-                    <div class="logmail">
-                        <input type="text" placeholder="Mail Id" id="logmail">
+                        <input type="email"    placeholder="Email address" id="logname">
                     </div>
                     <div class="pass">
-                        <input type="password" placeholder="Password" id="logpass1">
+                        <input type="password" placeholder="Password"      id="logpass2">
                     </div>
-                    <div class="sub">
-                        <button class="logsub">Create Account</button>
-                    </div>
-                    <div class="error"></div>
                 </form>
+                <p class="fpnew">
+                    <a href="/password/forgotpassword.html" class="forgot-link">Forgot password?</a>
+                </p>
             </div>
-            <div class="loginform ">
-                <div class="acc">Welcome Back</div>
-                <div class="amem">
-                    <div class="accdetails">Please Enter Your Account Details</div>
-                </div>
-                <div class="fp">
-                <form id="loginForm" >
-                    <div class="name">
-                        <input type="email" placeholder="Email Id or Mobile No." name="email" id="logname">
-                    </div>
-                    <div class="pass">
-                        <input type="password" placeholder="Password" name="password" id="logpass2">
-                    </div>
-                </form>
-                    <p class="fpnew">
-                    <a href="/password/forgotpassword.html" class="forgot-link">Forgot Password?</a>
-                    </p>
-                </div>
-                    <div class="error1"></div>
-                    <div class="signin">
-                        <button class="logsignin">Sign In</button>
-                    </div>
-                    <div class="member1">New To AlphaScramblers
-                        <div class="caa">
-                            Create an Account
-                        </div>
-                    </div>
-                </form>
+            <div class="error1"></div>
+            <div class="signin">
+                <button class="logsignin">Sign In</button>
             </div>
-            <div class="logologin">
-                <img src="./images/background image wit.png" class="vb">
+            <div class="member1">New to AlphaScramblers?
+                <span class="caa">Create an account</span>
             </div>
         </div>
-    </login>
+
+        <!-- ── BRAND PANEL ── -->
+        <div class="logologin">
+            <img src="./images/Broad Logo/2-nobg.svg" class="as-brand-logo" alt="AlphaScramblers">
+
+            <div class="as-brand-tag">Your career starts here</div>
+            <div class="as-brand-headline">From Confusion<br>to Clarity.</div>
+            <div class="as-brand-sub">Expert guidance for Class 10th, 12th &amp; graduates — free, personalised, and built around you.</div>
+
+            <div class="as-features">
+                <div class="as-feature">
+                    <div class="as-feature-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                    <div class="as-feature-text">
+                        <div class="as-feature-title">100% Free Consultancy</div>
+                        <div class="as-feature-desc">No hidden fees. Expert career advice at zero cost.</div>
+                    </div>
+                </div>
+                <div class="as-feature">
+                    <div class="as-feature-icon"><i class="fa-solid fa-brain"></i></div>
+                    <div class="as-feature-text">
+                        <div class="as-feature-title">Psychometric Test</div>
+                        <div class="as-feature-desc">Science-backed assessment to match you with the right career.</div>
+                    </div>
+                </div>
+                <div class="as-feature">
+                    <div class="as-feature-icon"><i class="fa-solid fa-user-tie"></i></div>
+                    <div class="as-feature-text">
+                        <div class="as-feature-title">1-on-1 Counselling</div>
+                        <div class="as-feature-desc">Tailored sessions with experienced counsellors.</div>
+                    </div>
+                </div>
+                <div class="as-feature">
+                    <div class="as-feature-icon"><i class="fa-solid fa-route"></i></div>
+                    <div class="as-feature-text">
+                        <div class="as-feature-title">Personalised Roadmaps</div>
+                        <div class="as-feature-desc">Clear direction for every stage — stream, college &amp; beyond.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="as-brand-divider"></div>
+
+            <div class="as-trust">
+                <div class="as-trust-dot"></div>
+                <div class="as-trust-text">Trusted by students across India &mdash; <strong>start for free today</strong></div>
+            </div>
+        </div>
+    </div>
+</login>
     <div class="contactloader">
         <div class="cloader"></div>
     </div>

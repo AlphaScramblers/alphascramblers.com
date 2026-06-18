@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const logsub = document.querySelector(".logsub");
     const logsignin = document.querySelector(".logsignin");
     const logoutBtn = document.querySelector(".lgtBtn");
-    const crossBtn = document.querySelector(".cross");
 
     // ERROR BOXES
     const error1 = document.querySelector(".error");
@@ -26,6 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const login1 = document.querySelector(".login1");
     const profilesection = document.querySelector(".profile-section");
     const alphalogin = document.querySelector(".alphalogin");
+
+    // PAGE SECTIONS (needed for opacity reset on auto-close)
+    const main = document.querySelector("main");
+    const bottom = document.querySelector(".bottom");
+    const header = document.querySelector("header");
 
     // AVATAR + TEXT
     const avatar = document.querySelector(".avatar");
@@ -49,37 +53,31 @@ document.addEventListener("DOMContentLoaded", () => {
     // -------------------------------------
     function showLoader() {
         cloader.style.display = "flex";
-        overlay.classList.add("overlay1");
-        if (alphalogin) alphalogin.style.opacity = "0.3";
+        // Do NOT touch alphalogin opacity — it looks terrible dimming the modal itself
     }
 
     function hideLoader() {
         cloader.style.display = "none";
-        overlay.classList.remove("overlay1");
-        if (alphalogin) alphalogin.style.opacity = "1";
     }
 
     function showLoginUI() {
         login.style.display = mobile.matches ? "none" : "block";
         login1.style.display = mobile.matches ? "block" : "none";
-
         profile.style.display = "none";
         profile1.style.display = "none";
-
         localStorage.removeItem("token");
     }
 
     function showProfileUI() {
         login.style.display = "none";
         login1.style.display = "none";
-
         if (tab.matches || lap.matches) profile.style.display = "block";
         if (mobile.matches) profile1.style.display = "block";
     }
 
     // -------------------------------------
-    // AUTO-CLOSE: closes the login/signup modal
-    // and resets it so it's fresh next time it opens
+    // AUTO-CLOSE — full cleanup so the overlay
+    // and page opacity don't get stuck
     // -------------------------------------
     function closeAuthModal() {
         if (!alphalogin) return;
@@ -87,31 +85,44 @@ document.addEventListener("DOMContentLoaded", () => {
         alphalogin.classList.add("closing");
 
         setTimeout(() => {
+            // Hide modal
             alphalogin.classList.add("alphadis");
             alphalogin.classList.remove("closing");
-            overlay.classList.remove("overlay1");
 
-            // reset signup form
+            // Restore overlay + page opacity (navregbot.js set these on open;
+            // auto-close bypasses navregbot's cross handler so we must do it here)
+            overlay.classList.remove("overlay1");
+            if (main)   main.style.opacity   = "1";
+            if (bottom) bottom.style.opacity = "1";
+            if (header) header.style.opacity = "1";
+
+            // Restore scroll
+            document.body.style.overflow = "auto";
+            document.documentElement.style.overflow = "auto";
+
+            // Reset signup form
             if (logsub) {
                 logsub.textContent = "Create Account";
                 logsub.disabled = false;
             }
             if (error1) error1.style.display = "none";
 
-            // reset login form
+            // Reset login form
             if (logsignin) {
                 logsignin.textContent = "Sign In";
                 logsignin.disabled = false;
             }
-            if (logname) logname.readOnly = false;
+            if (logname)  logname.readOnly  = false;
             if (logpass2) logpass2.readOnly = false;
-            if (error2) error2.style.display = "none";
-        }, 320); // matches the CSS transition on .alphalogin
+            if (error2)   error2.style.display = "none";
+
+        }, 300);
     }
 
-    if (crossBtn) {
-        crossBtn.addEventListener("click", closeAuthModal);
-    }
+    // NOTE: .cross already has a click listener in navregbot.js that handles
+    // the normal close (adding alphadis, resetting opacity/overflow immediately).
+    // We only need closeAuthModal for the auto-close-on-success path.
+    // Do NOT add a second listener on .cross here to avoid double-firing.
 
     // -------------------------------------
     // FETCH PROFILE
@@ -153,10 +164,10 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
 
             const firstName = logfname.value.trim();
-            const lastName = loglname.value.trim();
-            const email = logmail.value.trim();
-            const mobileno = logmob.value.trim();
-            const password = logpass1.value.trim();
+            const lastName  = loglname.value.trim();
+            const email     = logmail.value.trim();
+            const mobileno  = logmob.value.trim();
+            const password  = logpass1.value.trim();
 
             error1.style.display = "none";
             showLoader();
@@ -179,10 +190,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 localStorage.setItem("token", data.token);
                 await loadProfile();
 
-                logsub.textContent = "Account Created";
+                logsub.textContent = "Account Created ✓";
                 logsub.disabled = true;
 
-                // auto-close once the user has had a moment to see the confirmation
+                // Auto-close after brief confirmation moment
                 setTimeout(closeAuthModal, 1200);
 
             } catch (err) {
@@ -201,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logsignin.addEventListener("click", async (e) => {
             e.preventDefault();
 
-            const email = logname.value.trim();
+            const email    = logname.value.trim();
             const password = logpass2.value.trim();
 
             error2.style.display = "none";
@@ -225,12 +236,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 localStorage.setItem("token", data.token);
                 await loadProfile();
 
-                logsignin.textContent = "Signed In Successfully";
+                logsignin.textContent = "Signed In ✓";
                 logsignin.disabled = true;
-                logname.readOnly = true;
+                logname.readOnly  = true;
                 logpass2.readOnly = true;
 
-                // auto-close once the user has had a moment to see the confirmation
+                // Auto-close after brief confirmation moment
                 setTimeout(closeAuthModal, 1200);
 
             } catch (err) {

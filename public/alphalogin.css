@@ -1,32 +1,32 @@
 /* ============================================================
    ALPHASCRAMBLERS — LOGIN / SIGNUP MODAL
-   Horizontal layout, ~75% viewport width, matches site theme
-   (navy/black gradient card + brand-blue accents + green links)
-   Drop this in AFTER your existing stylesheet so it overrides
-   the old .alphalogin / .signup / .loginform / .logologin rules.
    ============================================================ */
 
 :root {
-    --as-deep:        #0a0a0a;
-    --as-navy:        #001a4d;
-    --as-blue-deep:   #052f97;
+    --as-navy-deep:   #020d1f;
+    --as-navy:        #041533;
+    --as-navy-mid:    #0a2a6e;
     --as-blue:        #3B82F6;
     --as-blue-dark:   #2563EB;
     --as-teal:        #6BCFD4;
-    --as-green:       #4aa72d;
     --as-text:        #ffffff;
-    --as-text-dim:    rgba(255, 255, 255, 0.62);
-    --as-input-bg:    rgba(255, 255, 255, 0.07);
-    --as-input-bd:    rgba(255, 255, 255, 0.18);
-    --as-radius:      28px;
+    --as-text-dim:    rgba(255, 255, 255, 0.55);
+    --as-text-mid:    rgba(255, 255, 255, 0.8);
+    --as-input-bg:    rgba(255, 255, 255, 0.06);
+    --as-input-bd:    rgba(255, 255, 255, 0.14);
+    --as-input-focus: rgba(107, 207, 212, 0.2);
+    --as-radius:      24px;
+
+    /* navbar is 12vh; center modal in the remaining 88vh */
+    --as-nav-h:       12vh;
+    --as-modal-h:     min(640px, 82vh);
 }
 
-/* ---------- Backdrop ---------- */
+/* ---------- Overlay ---------- */
 .overlay.overlay1 {
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(3px);
 }
 
-/* ---------- Hidden state (toggled by JS) ---------- */
 .alphalogin.alphadis {
     display: none !important;
 }
@@ -34,19 +34,19 @@
 /* ---------- Modal shell ---------- */
 .alphalogin {
     position: fixed;
-    top: 50%;
+    /* sit in the center of the space BELOW the navbar */
+    top:  calc(var(--as-nav-h) + (100vh - var(--as-nav-h)) / 2);
     left: 50%;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%);
     margin: 0;
-    width: 75vw;
-    max-width: 1180px;
-    max-height: 88vh;
+    width: min(75vw, 1080px);
+    height: var(--as-modal-h);
     display: flex;
     flex-direction: row;
     align-items: stretch;
     border-radius: var(--as-radius);
     overflow: hidden;
-    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 32px 72px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
     z-index: 100001;
     opacity: 1;
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -54,78 +54,93 @@
 
 .alphalogin.closing {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.94);
+    transform: translate(-50%, -50%) scale(0.95);
 }
 
 /* ---------- Close button ---------- */
 .cross {
     position: absolute;
-    top: 18px;
-    right: 22px;
+    top: 15px;
+    right: 15px;
     left: auto;
-    height: 34px;
-    width: 34px;
+    height: 30px;
+    width: 30px;
     padding: 0;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
-    color: var(--as-text);
-    background: rgba(255, 255, 255, 0.08);
-    transition: background 0.2s ease, transform 0.2s ease;
-    z-index: 5;
+    font-size: 0.82rem;
+    color: var(--as-text-dim);
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s ease;
+    z-index: 10;
+    cursor: pointer;
 }
 
 .cross:hover {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255,255,255,0.15);
+    color: var(--as-text);
     transform: rotate(90deg);
 }
 
-/* ---------- Form panels (signup + login share the same look) ---------- */
+/* ============================================================
+   LEFT — FORM PANEL
+   ============================================================ */
 .signup,
 .loginform {
-    flex: 1 1 56%;
-    width: auto;
-    height: auto;
-    min-width: 0;
-    padding: 3vw 3.5vw;
-    background: linear-gradient(135deg, var(--as-deep) 0%, var(--as-navy) 55%, var(--as-blue-deep) 100%);
+    flex: 0 0 52%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow-y: auto;
+    padding: 0 5.5% 0 7%;
+    background: linear-gradient(150deg, var(--as-navy-deep) 0%, var(--as-navy) 60%, var(--as-navy-mid) 100%);
     box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
 }
 
-.loginform {
-    display: none; /* default hidden; existing toggle logic shows this */
+/* teal accent top bar */
+.signup::before,
+.loginform::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--as-teal), var(--as-blue));
+    opacity: 0.7;
 }
 
-.signdis,
-.logdis {
-    display: none !important;
-}
+.loginform { display: none; }
+.signdis, .logdis { display: none !important; }
 
-/* ---------- Headings / copy ---------- */
+/* ---------- Headings ---------- */
 .start {
-    font-size: 0.95rem;
-    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--as-teal);
-    margin: 0 0 0.6rem 0;
-    font-weight: 600;
+    font-weight: 700;
+    margin: 0 0 0.55rem;
 }
 
 .acc {
-    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-size: clamp(1.55rem, 2.5vw, 2rem);
     color: var(--as-text);
     font-weight: 700;
-    margin: 0 0 1rem 0;
+    margin: 0 0 0.4rem;
     line-height: 1.15;
 }
 
-.amem {
-    margin-bottom: 1.5rem;
+.amem { margin-bottom: 1.5rem; }
+
+.accdetails {
+    padding: 0;
+    color: var(--as-text-dim);
+    font-size: 0.86rem;
+    margin: 0;
 }
 
 .member,
@@ -133,275 +148,317 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.38rem;
     color: var(--as-text-dim);
-    font-size: 0.9rem;
+    font-size: 0.84rem;
     margin: 0;
 }
 
 .member1 {
     justify-content: center;
-    margin-top: 1.4rem;
-    text-align: center;
+    margin-top: 1.1rem;
 }
 
-.log,
-.caa {
-    color: var(--as-green);
+.log, .caa {
+    color: var(--as-teal);
     font-weight: 600;
     cursor: pointer;
+    transition: opacity 0.15s;
 }
+.log:hover, .caa:hover { opacity: 0.7; }
 
-.log:hover,
-.caa:hover {
-    text-decoration: underline;
-}
-
-/* ---------- Form rows ---------- */
+/* ---------- Form ---------- */
 .signup form,
 .loginform form {
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
+    gap: 0.72rem;
 }
 
-.name {
-    display: flex;
-    gap: 0.8rem;
-}
-
-.name,
-.logmob,
-.logmail,
-.pass {
-    width: 100%;
-}
+.name { display: flex; gap: 0.7rem; }
+.name, .logmob, .logmail, .pass { width: 100%; }
 
 /* ---------- Inputs ---------- */
-#logfname,
-#loglname,
-#logmob,
-#logmail,
-#logpass1,
-#logpass2,
-#logname {
+#logfname, #loglname, #logmob, #logmail,
+#logpass1, #logpass2, #logname {
     width: 100%;
-    height: 52px;
+    height: 48px;
     box-sizing: border-box;
     margin: 0;
     padding: 0 16px;
-    border-radius: 12px;
+    border-radius: 10px;
     border: 1px solid var(--as-input-bd);
     background: var(--as-input-bg);
     color: var(--as-text);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-family: "Inter", "Mada", sans-serif;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
-#logfname::placeholder,
-#loglname::placeholder,
-#logmob::placeholder,
-#logmail::placeholder,
-#logpass1::placeholder,
-#logpass2::placeholder,
+#logfname::placeholder, #loglname::placeholder, #logmob::placeholder,
+#logmail::placeholder, #logpass1::placeholder, #logpass2::placeholder,
 #logname::placeholder {
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(255,255,255,0.32);
 }
 
-#logfname:focus,
-#loglname:focus,
-#logmob:focus,
-#logmail:focus,
-#logpass1:focus,
-#logpass2:focus,
-#logname:focus {
+#logfname:focus, #loglname:focus, #logmob:focus, #logmail:focus,
+#logpass1:focus, #logpass2:focus, #logname:focus {
     outline: none;
     border-color: var(--as-teal);
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 0 3px rgba(107, 207, 212, 0.18);
+    background: rgba(107,207,212,0.05);
+    box-shadow: 0 0 0 3px var(--as-input-focus);
 }
 
-/* ---------- Forgot password row (login form) ---------- */
-.fp {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-}
+/* ---------- Forgot password ---------- */
+.fp { display: flex; flex-direction: column; gap: 0.55rem; }
 
 .fpnew {
     align-self: flex-end;
-    margin: 0;
-    color: var(--as-green);
-    font-size: 0.85rem;
+    margin: 0.1rem 0 0;
+    font-size: 0.82rem;
 }
 
 .fpnew a.forgot-link {
-    color: inherit;
+    color: var(--as-teal);
     text-decoration: underline;
+    text-underline-offset: 2px;
 }
 
 /* ---------- Errors ---------- */
-.error,
-.error1 {
+.error, .error1 {
     width: 100%;
-    margin: 0;
-    color: #ff6b6b;
-    font-size: 0.85rem;
+    margin: 0.25rem 0 0;
+    color: #f87171;
+    font-size: 0.8rem;
     text-align: center;
 }
 
 /* ---------- Buttons ---------- */
-.sub,
-.signin {
-    width: 100%;
-    margin-top: 0.4rem;
-}
+.sub, .signin { width: 100%; margin-top: 0.55rem; }
 
-.logsub,
-.logsignin {
+.logsub, .logsignin {
     width: 100%;
-    height: 54px;
+    height: 50px;
     margin: 0;
     border: 0;
-    border-radius: 14px;
-    background: linear-gradient(to right, var(--as-blue) 0%, var(--as-blue-dark) 100%);
-    color: var(--as-text);
+    border-radius: 12px;
+    background: linear-gradient(to right, var(--as-blue), var(--as-blue-dark));
+    color: #fff;
     font-weight: 700;
-    font-size: 1rem;
-    letter-spacing: 0.02em;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.logsignin {
-    margin-top: 0.5rem;
+.logsignin { margin-top: 0.5rem; }
+
+.logsub:hover, .logsignin:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(59,130,246,0.4);
 }
 
-.logsub:hover,
-.logsignin:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
-}
+.logsub:active, .logsignin:active { transform: translateY(0); }
 
-.logsub:disabled,
-.logsignin:disabled {
+.logsub:disabled, .logsignin:disabled {
     cursor: default;
     transform: none;
-    background: linear-gradient(to right, var(--as-green) 0%, #3d8f24 100%);
+    background: linear-gradient(to right, #1d8a4a, #15733d);
     box-shadow: none;
 }
 
-/* ---------- Brand / image side panel ---------- */
+/* ============================================================
+   RIGHT — BRAND PANEL
+   ============================================================ */
 .logologin {
-    flex: 1 1 44%;
+    flex: 0 0 48%;
+    height: 100%;
     position: relative;
-    min-width: 0;
-    background: linear-gradient(160deg, var(--as-blue) 0%, var(--as-blue-dark) 100%);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 5.5% 0 6%;
+    box-sizing: border-box;
+    background: linear-gradient(155deg, #041533 0%, #062050 40%, #0a3a8a 100%);
+    border-left: 1px solid rgba(255,255,255,0.06);
+}
+
+/* decorative rings */
+.logologin::before {
+    content: "";
+    position: absolute;
+    width: 480px; height: 480px;
+    border-radius: 50%;
+    border: 1px solid rgba(107,207,212,0.07);
+    top: -150px; right: -130px;
+    pointer-events: none;
 }
 
 .logologin::after {
     content: "";
     position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0) 55%);
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 1px solid rgba(107,207,212,0.05);
+    bottom: -70px; left: -60px;
+    pointer-events: none;
 }
 
-.vb {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+/* logo */
+.as-brand-logo {
+    width: 150px;
+    margin-bottom: 1.8rem;
+    position: relative; z-index: 1;
+    filter: brightness(0) invert(1);
+    opacity: 0.88;
 }
+
+.as-brand-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--as-teal);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    position: relative; z-index: 1;
+}
+
+.as-brand-headline {
+    font-size: clamp(1.35rem, 2.1vw, 1.8rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+    position: relative; z-index: 1;
+}
+
+.as-brand-sub {
+    font-size: 0.81rem;
+    color: var(--as-text-dim);
+    line-height: 1.65;
+    margin-bottom: 1.6rem;
+    position: relative; z-index: 1;
+}
+
+.as-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    position: relative; z-index: 1;
+}
+
+.as-feature {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.as-feature-icon {
+    width: 34px; height: 34px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: rgba(107,207,212,0.1);
+    border: 1px solid rgba(107,207,212,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--as-teal);
+    font-size: 0.88rem;
+}
+
+.as-feature-title {
+    font-size: 0.87rem;
+    font-weight: 700;
+    color: var(--as-text-mid);
+    margin-bottom: 1px;
+}
+
+.as-feature-desc {
+    font-size: 0.74rem;
+    color: var(--as-text-dim);
+    line-height: 1.5;
+}
+
+.as-brand-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+    margin: 1.4rem 0;
+    position: relative; z-index: 1;
+}
+
+.as-trust {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    position: relative; z-index: 1;
+}
+
+.as-trust-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    flex-shrink: 0;
+    animation: as-pulse 2.2s infinite;
+}
+
+@keyframes as-pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74,222,128,0.4); }
+    50%       { opacity: 0.55; box-shadow: 0 0 0 4px rgba(74,222,128,0); }
+}
+
+.as-trust-text { font-size: 0.76rem; color: var(--as-text-dim); }
+.as-trust-text strong { color: var(--as-text-mid); font-weight: 600; }
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
 
-/* Tablet */
+/* Tablet: navbar drops to 10vh */
 @media screen and (min-width: 700px) and (max-width: 1000px) {
     .alphalogin {
-        width: 90vw;
-        max-height: 92vh;
+        top: calc(10vh + (100vh - 10vh) / 2);
+        width: 88vw;
+        height: auto;
+        min-height: 460px;
+        max-height: 86vh;
     }
-
-    .logologin {
-        display: none;
-    }
-
-    .signup,
-    .loginform {
+    .logologin { display: none; }
+    .signup, .loginform {
         flex: 1 1 100%;
-        padding: 6vw;
+        padding: 5vh 8%;
+        overflow-y: auto;
+        height: auto;
     }
-
-    .name {
-        flex-direction: column;
-    }
+    .name { flex-direction: column; }
 }
 
-/* Mobile */
+/* Mobile: navbar is 8vh */
 @media screen and (max-width: 700px) {
     .alphalogin {
-        width: 94vw;
-        max-height: 94vh;
-        border-radius: 20px;
+        top: calc(8vh + (100vh - 8vh) / 2);
+        width: 95vw;
+        height: auto;
+        max-height: 88vh;
+        border-radius: 18px;
         flex-direction: column;
     }
-
-    .logologin {
-        display: none;
+    .logologin { display: none; }
+    .signup, .loginform {
+        flex: 1 1 auto;
+        padding: 6vh 7%;
+        overflow-y: auto;
+        height: auto;
     }
-
-    .signup,
-    .loginform {
-        flex: 1 1 100%;
-        padding: 9vw 6vw;
-        max-height: 94vh;
-    }
-
-    .acc {
-        font-size: 1.6rem;
-    }
-
-    .name {
-        flex-direction: column;
-        gap: 0.7rem;
-    }
-
-    #logfname,
-    #loglname,
-    #logmob,
-    #logmail,
-    #logpass1,
-    #logpass2,
-    #logname {
-        height: 48px;
-    }
-
-    .logsub,
-    .logsignin {
-        height: 50px;
-        font-size: 0.95rem;
-    }
-
-    .cross {
-        top: 12px;
-        right: 14px;
-        height: 30px;
-        width: 30px;
-    }
+    .acc { font-size: 1.5rem; }
+    .name { flex-direction: column; gap: 0.6rem; }
+    #logfname, #loglname, #logmob, #logmail,
+    #logpass1, #logpass2, #logname { height: 46px; }
+    .logsub, .logsignin { height: 47px; }
+    .cross { top: 11px; right: 11px; }
 }
 
-/* Very small phones */
 @media screen and (max-width: 380px) {
-    .signup,
-    .loginform {
-        padding: 8vw 5vw;
-    }
-
-    .acc {
-        font-size: 1.4rem;
-    }
+    .signup, .loginform { padding: 5vh 6%; }
+    .acc { font-size: 1.3rem; }
 }
