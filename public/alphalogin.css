@@ -437,25 +437,73 @@
 @media screen and (max-width: 700px) {
     .alphalogin {
         top: calc(8vh + (100vh - 8vh) / 2);
-        width: 95vw;
+        width: 92vw;          /* was 95vw — slight margin so edges don't clip */
         height: auto;
-        max-height: 88vh;
+        max-height: 90vh;
         border-radius: 18px;
         flex-direction: column;
     }
     .logologin { display: none; }
     .signup, .loginform {
         flex: 1 1 auto;
-        padding: 6vh 7%;
+        padding: 22px 20px 20px;   /* tighter than 6vh 7% — more predictable */
         overflow-y: auto;
         height: auto;
     }
-    .acc { font-size: 1.5rem; }
-    .name { flex-direction: column; gap: 0.6rem; }
+    .acc { font-size: 1.45rem; }
+
+    /* Stack name fields vertically */
+    .name {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Tighter field sizing on mobile */
     #logfname, #loglname, #logmob, #logmail,
-    #logpass1, #logpass2, #logname { height: 46px; }
-    .logsub, .logsignin { height: 47px; }
-    .cross { top: 11px; right: 11px; }
+    #logpass1, #logpass2, #logname {
+        height: 44px;
+        font-size: 0.88rem;
+        border-radius: 8px;    /* less pill-like */
+        padding: 0 14px;
+    }
+
+    .logsub, .logsignin {
+        height: 46px;
+        font-size: 0.92rem;
+        border-radius: 10px;
+    }
+
+    /* Tighter form gaps */
+    .signup form,
+    .loginform form {
+        gap: 10px;
+    }
+
+    /* Cross fully inside modal */
+    .cross {
+        top: 11px;
+        right: 11px;
+        width: 26px;
+        height: 26px;
+        font-size: 0.75rem;
+    }
+
+    /* Headings tighter */
+    .start { margin-bottom: 4px; }
+    .acc   { margin-bottom: 3px; }
+    .amem  { margin-bottom: 12px; }
+
+    #logfname, #loglname, #logmob, #logmail,
+    #logpass1, #logpass2, #logname {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .signup, .loginform { padding: 18px 16px; }
+    .acc { font-size: 1.25rem; }
+    #logfname, #loglname, #logmob, #logmail,
+    #logpass1, #logpass2, #logname { height: 42px; font-size: 0.84rem; }
 }
 
 @media screen and (max-width: 380px) {
