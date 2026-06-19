@@ -128,6 +128,42 @@
             cursor: default;
             pointer-events: none;
         }
+                    .as-nav-btn {
+            background: #f0f4ff;
+            border: 1px solid #d1d9f0;
+            color: #1a56db;
+            width: 30px; height: 30px;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s;
+            flex-shrink: 0;
+            line-height: 1;
+            }
+            .as-nav-btn:hover { background: #dce6ff; }
+            .as-nav-btn:disabled { opacity: 0.35; cursor: default; }
+            .as-counter {
+            font-size: 11px;
+            color: #6b7280;
+            font-family: 'Lato', sans-serif;
+            white-space: nowrap;
+            min-width: 32px;
+            text-align: center;
+            }
+
+            /* slide animation */
+            .as-banner-text {
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            }
+            .as-banner-text.as-slide-out {
+            opacity: 0;
+            transform: translateX(-10px);
+            }
+            .as-banner-text.as-slide-in {
+            opacity: 0;
+            transform: translateX(10px);
+            }
 
         /* ── OVERLAY ── */
         .as-overlay {
@@ -669,17 +705,22 @@
 
             <!-- SESSION BANNER -->
             <div id="as-session-section">
-                <div id="as-banner">
-                    <div class="as-banner-left">
-                        <div class="as-indicator"></div>
-                        <div class="as-banner-text">
-                            <div class="as-eyebrow">Upcoming Session</div>
-                            <div class="as-title" id="as-title">Loading...</div>
-                            <div class="as-meta" id="as-meta"></div>
-                        </div>
-                    </div>
-                    <button class="as-bookbtn" id="as-bookbtn">Book Your Seat</button>
+            <div id="as-banner">
+                <div class="as-banner-left">
+                <div class="as-indicator"></div>
+                <div class="as-banner-text">
+                    <div class="as-eyebrow">Upcoming Session</div>
+                    <div class="as-title" id="as-title">Loading...</div>
+                    <div class="as-meta" id="as-meta"></div>
                 </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+                <button class="as-nav-btn" id="as-prev" aria-label="Previous">&#8592;</button>
+                <span class="as-counter" id="as-counter"></span>
+                <button class="as-nav-btn" id="as-next" aria-label="Next">&#8594;</button>
+                <button class="as-bookbtn" id="as-bookbtn">Book Your Seat</button>
+                </div>
+            </div>
             </div>
 
             <div class="psychotest">
@@ -1098,32 +1139,26 @@
     <!-- SESSION BANNER SCRIPT -->
 <script>
 const API = 'https://api.alphascramblers.com';
-let currentSession = null;
+let sessions = [];      // all upcoming sessions
+let sessionIdx = 0;     // which one is shown
 const section = document.getElementById('as-session-section');
 
-// ── auth helpers (DEFINED FIRST) ──────────────────────────────────────────────
+// ── auth helpers ──────────────────────────────────────────────────────────────
 function getToken() {
   return localStorage.getItem('token') || localStorage.getItem('authToken') || null;
 }
 function getCurrentUser() {
   try {
-    // Try the object key first
-    const u = localStorage.getItem('userProfile');
-    if (u) return JSON.parse(u);
-    
-    // Fall back to flat keys
+    const up = localStorage.getItem('userProfile');
+    if (up) return JSON.parse(up);
     const email = localStorage.getItem('email');
     const userId = localStorage.getItem('userId');
-    if (email || userId) {
-      return {
-        id: userId,
-        _id: userId,
-        email: email,
-        firstName: localStorage.getItem('firstName'),
-        lastName: localStorage.getItem('lastName'),
-        mobile: localStorage.getItem('no')
-      };
-    }
+    if (email || userId) return {
+      id: userId, _id: userId, email,
+      firstName: localStorage.getItem('firstName'),
+      lastName:  localStorage.getItem('lastName'),
+      mobile:    localStorage.getItem('no')
+    };
     return null;
   } catch { return null; }
 }
@@ -1131,15 +1166,13 @@ function getCurrentUser() {
 // ── registration helpers ──────────────────────────────────────────────────────
 function registeredKey(sid) {
   const user = getCurrentUser();
-  const uid = user?._id || user?.id || user?.email || null;
-  if (!uid) return null; // no user = no valid key
-  return 'as_registered_' + sid + '_' + uid;
+  const uid  = user?._id || user?.id || user?.email || null;
+  return uid ? 'as_registered_' + sid + '_' + uid : null;
 }
 function isRegisteredLocally(sid) {
   if (!getToken() || !getCurrentUser()) return false;
   const key = registeredKey(sid);
   if (key && localStorage.getItem(key) === 'yes') return true;
-  // fallback: old unscoped key (pre-fix registrations)
   if (localStorage.getItem('as_registered_' + sid) === 'yes') return true;
   return false;
 }
@@ -1152,7 +1185,6 @@ function formatFee(fee) {
   if (!fee || fee == 0 || fee === '0') return { label: 'Free', paid: false };
   return { label: fee, paid: true };
 }
-
 function setRegisteredBtn(btn) {
   btn.textContent = 'Registered ✓';
   btn.classList.add('as-registered');
@@ -1164,6 +1196,49 @@ function setBookBtn(btn) {
   btn.disabled = false;
 }
 
+// ── banner render ─────────────────────────────────────────────────────────────
+function renderSession(s, animate) {
+  const textEl = document.querySelector('.as-banner-text');
+  const btn    = document.getElementById('as-bookbtn');
+  const counter = document.getElementById('as-counter');
+  const prevBtn = document.getElementById('as-prev');
+  const nextBtn = document.getElementById('as-next');
+
+  const doRender = () => {
+    const d = new Date(s.date + 'T' + s.time);
+    const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
+    const fee = formatFee(s.fee);
+
+    document.getElementById('as-title').textContent = s.title;
+    let meta = dateStr + ' at ' + timeStr + ' &nbsp;|&nbsp; ' + (s.duration || '1 hour');
+    if (s.topic) meta += ' &nbsp;|&nbsp; ' + s.topic;
+    if (s.seats) meta += ' &nbsp;|&nbsp; ' + s.seats + ' seats';
+    meta += ' &nbsp;|&nbsp; ' + (fee.paid ? '₹' + fee.label : 'Free');
+    document.getElementById('as-meta').innerHTML = meta;
+
+    counter.textContent = (sessionIdx + 1) + ' / ' + sessions.length;
+    prevBtn.disabled = sessionIdx === 0;
+    nextBtn.disabled = sessionIdx === sessions.length - 1;
+
+    isRegisteredLocally(s._id.toString()) ? setRegisteredBtn(btn) : setBookBtn(btn);
+  };
+
+  if (animate && textEl) {
+    textEl.classList.add('as-slide-out');
+    setTimeout(() => {
+      doRender();
+      textEl.classList.remove('as-slide-out');
+      textEl.classList.add('as-slide-in');
+      // force reflow
+      void textEl.offsetWidth;
+      textEl.classList.remove('as-slide-in');
+    }, 180);
+  } else {
+    doRender();
+  }
+}
+
 // ── modal helpers ─────────────────────────────────────────────────────────────
 function showOverlay(html) {
   removeOverlay();
@@ -1172,7 +1247,6 @@ function showOverlay(html) {
   el.id = 'as-overlay';
   el.innerHTML = html;
   document.body.appendChild(el);
-  // close on backdrop click
   el.addEventListener('click', e => { if (e.target === el) removeOverlay(); });
 }
 function removeOverlay() {
@@ -1180,7 +1254,6 @@ function removeOverlay() {
   if (el) el.remove();
 }
 
-// ── LOGIN PROMPT modal ────────────────────────────────────────────────────────
 function showLoginPrompt() {
   showOverlay(`
     <div class="as-login-modal">
@@ -1199,23 +1272,18 @@ function showLoginPrompt() {
   `);
   document.getElementById('as-goto-login').addEventListener('click', () => {
     removeOverlay();
-    // trigger your existing login modal
     document.querySelector('.login')?.click() || document.querySelector('.login1')?.click();
   });
 }
 
-// ── BOOKING CONFIRMATION modal ────────────────────────────────────────────────
 function showBookingModal(s, user) {
   const fee = formatFee(s.fee);
   const d = new Date(s.date + 'T' + s.time);
-  const dateStr = d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  const timeStr = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-
+  const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
   const initials = ((user?.firstName || user?.name || '?')[0] + (user?.lastName ? user.lastName[0] : '')).toUpperCase();
   const fullName = [user?.firstName || user?.name, user?.lastName].filter(Boolean).join(' ') || 'You';
-  const email    = user?.email || '';
-
-  const feeHTML = fee.paid
+  const feeHTML  = fee.paid
     ? `<span class="as-fee-value paid">₹${fee.label}</span><span class="as-fee-tag paid">PAID</span>`
     : `<span class="as-fee-value">Free</span><span class="as-fee-tag">FREE</span>`;
 
@@ -1226,7 +1294,6 @@ function showBookingModal(s, user) {
         <button class="as-mclose" id="as-mclose">&#x2715;</button>
       </div>
       <div class="as-modal-body">
-        <!-- LEFT -->
         <div class="as-modal-left">
           <div class="as-modal-section-label">Session Details</div>
           <div class="as-session-name">${s.title}</div>
@@ -1238,37 +1305,11 @@ function showBookingModal(s, user) {
               <div class="as-detail-value" style="font-weight:400;color:#6b7280;">${timeStr}</div>
             </div>
           </div>
-          ${s.duration ? `
-          <div class="as-detail-row">
-            <div class="as-detail-icon"><i class="fa-regular fa-clock"></i></div>
-            <div>
-              <div class="as-detail-label">Duration</div>
-              <div class="as-detail-value">${s.duration}</div>
-            </div>
-          </div>` : ''}
-          ${s.topic ? `
-          <div class="as-detail-row">
-            <div class="as-detail-icon"><i class="fa-solid fa-tag"></i></div>
-            <div>
-              <div class="as-detail-label">Topic</div>
-              <div class="as-detail-value">${s.topic}</div>
-            </div>
-          </div>` : ''}
-          ${s.seats ? `
-          <div class="as-detail-row">
-            <div class="as-detail-icon"><i class="fa-solid fa-users"></i></div>
-            <div>
-              <div class="as-detail-label">Available Seats</div>
-              <div class="as-detail-value">${s.seats}</div>
-            </div>
-          </div>` : ''}
-          <div class="as-fee-block">
-            <div class="as-fee-label">Session Fee</div>
-            ${feeHTML}
-          </div>
+          ${s.duration ? `<div class="as-detail-row"><div class="as-detail-icon"><i class="fa-regular fa-clock"></i></div><div><div class="as-detail-label">Duration</div><div class="as-detail-value">${s.duration}</div></div></div>` : ''}
+          ${s.topic    ? `<div class="as-detail-row"><div class="as-detail-icon"><i class="fa-solid fa-tag"></i></div><div><div class="as-detail-label">Topic</div><div class="as-detail-value">${s.topic}</div></div></div>` : ''}
+          ${s.seats    ? `<div class="as-detail-row"><div class="as-detail-icon"><i class="fa-solid fa-users"></i></div><div><div class="as-detail-label">Available Seats</div><div class="as-detail-value">${s.seats}</div></div></div>` : ''}
+          <div class="as-fee-block"><div class="as-fee-label">Session Fee</div>${feeHTML}</div>
         </div>
-
-        <!-- RIGHT -->
         <div class="as-modal-right">
           <div class="as-modal-section-label">Your Details</div>
           <div class="as-user-block">
@@ -1280,95 +1321,63 @@ function showBookingModal(s, user) {
               <div class="as-user-av">${initials}</div>
               <div>
                 <div class="as-user-fullname">${fullName}</div>
-                <div class="as-user-email-small">${email}</div>
+                <div class="as-user-email-small">${user?.email || ''}</div>
               </div>
             </div>
             <div class="as-user-rows">
-              ${user?.mobile || user?.phone ? `
-              <div class="as-user-row">
-                <div class="as-user-row-label">Mobile</div>
-                <div class="as-user-row-value">${user.mobile || user.phone}</div>
-              </div>` : ''}
+              ${user?.mobile || user?.phone ? `<div class="as-user-row"><div class="as-user-row-label">Mobile</div><div class="as-user-row-value">${user.mobile || user.phone}</div></div>` : ''}
             </div>
           </div>
-
           <div class="as-err" id="as-err"></div>
-
           <button class="as-confirm-btn" id="as-confirm-btn">
             ${fee.paid ? `Pay ₹${fee.label} &amp; Register` : 'Confirm Registration'}
           </button>
           <div class="as-confirm-note">
-            ${fee.paid
-              ? 'You will be redirected to the payment page to complete your registration.'
-              : 'Free session — no payment required. Your seat will be confirmed immediately.'}
+            ${fee.paid ? 'You will be redirected to the payment page.' : 'Free session — confirmed immediately.'}
           </div>
         </div>
       </div>
     </div>
   `);
-
   document.getElementById('as-mclose').addEventListener('click', removeOverlay);
   document.getElementById('as-confirm-btn').addEventListener('click', () => handleConfirm(s, user));
 }
 
-// ── CONFIRM / REGISTER ────────────────────────────────────────────────────────
 async function handleConfirm(s, user) {
-  const btn = document.getElementById('as-confirm-btn');
+  const btn   = document.getElementById('as-confirm-btn');
   const errEl = document.getElementById('as-err');
-  const fee = formatFee(s.fee);
-  const sid = s._id.toString();
+  const fee   = formatFee(s.fee);
+  const sid   = s._id.toString();
 
-  // paid → go to registration page (Razorpay lives there)
-  if (fee.paid) {
-    window.location.href = `/online-session-register.html?id=${sid}`;
-    return;
-  }
+  if (fee.paid) { window.location.href = `/online-session-register.html?id=${sid}`; return; }
 
-  // free → book directly
   btn.disabled = true;
   btn.textContent = 'Confirming…';
   errEl.style.display = 'none';
 
   try {
     const token = getToken();
-    const res = await fetch(`${API}/api/bookings`, {
+    const res  = await fetch(`${API}/api/bookings`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-      },
+      headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': `Bearer ${token}` } : {}) },
       body: JSON.stringify({ sessionId: sid })
     });
-
     const data = await res.json();
-
     if (!res.ok || !data.success) {
-      const msg = data?.message || 'Booking failed. Please try again.';
-      // already registered — treat as success
-      if (msg.toLowerCase().includes('already')) {
-        markRegisteredLocally(sid);
-        showSuccess(s, user);
-        return;
-      }
-      errEl.textContent = msg;
-      errEl.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Confirm Registration';
+      const msg = data?.message || 'Booking failed.';
+      if (msg.toLowerCase().includes('already')) { markRegisteredLocally(sid); showSuccess(s, user); return; }
+      errEl.textContent = msg; errEl.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Confirm Registration';
       return;
     }
-
     markRegisteredLocally(sid);
     showSuccess(s, user);
-
-  } catch (err) {
-    errEl.textContent = 'Network error. Please check your connection.';
-    errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Confirm Registration';
+  } catch {
+    errEl.textContent = 'Network error.'; errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Confirm Registration';
   }
 }
 
-// ── SUCCESS modal ─────────────────────────────────────────────────────────────
 function showSuccess(s, user) {
   showOverlay(`
     <div class="as-success">
@@ -1383,11 +1392,11 @@ function showSuccess(s, user) {
   `);
   document.getElementById('as-success-close').addEventListener('click', () => {
     removeOverlay();
-    setRegisteredBtn(document.getElementById('as-bookbtn'));
+    renderSession(sessions[sessionIdx], false);
   });
 }
 
-// ── LOAD SESSIONS ─────────────────────────────────────────────────────────────
+// ── load & boot ───────────────────────────────────────────────────────────────
 async function loadSessions() {
   try {
     const res  = await fetch(`${API}/api/sessions`);
@@ -1395,34 +1404,18 @@ async function loadSessions() {
     if (!data.success || !data.sessions.length) { section.classList.remove('as-visible'); return; }
 
     const now = new Date();
-    const upcoming = data.sessions
+    sessions = data.sessions
       .filter(s => {
         if (!s.date) return false;
         if (s.offlineSessionId) return false;
-        const endOfDay = new Date(s.date + 'T23:59:59');
-        return endOfDay >= now;
+        return new Date(s.date + 'T23:59:59') >= now;
       })
       .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
 
-    if (!upcoming.length) { section.classList.remove('as-visible'); return; }
+    if (!sessions.length) { section.classList.remove('as-visible'); return; }
 
-    currentSession = upcoming[0];
-    const s = currentSession;
-    const d = new Date(s.date + 'T' + s.time);
-    const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-    const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
-    const fee = formatFee(s.fee);
-
-    document.getElementById('as-title').textContent = s.title;
-    let meta = dateStr + ' at ' + timeStr + ' &nbsp;|&nbsp; ' + (s.duration || '1 hour');
-    if (s.topic)  meta += ' &nbsp;|&nbsp; ' + s.topic;
-    if (s.seats)  meta += ' &nbsp;|&nbsp; ' + s.seats + ' seats';
-    meta += ' &nbsp;|&nbsp; ' + (fee.paid ? '₹' + fee.label : 'Free');
-    document.getElementById('as-meta').innerHTML = meta;
-
-    const btn = document.getElementById('as-bookbtn');
-    isRegisteredLocally(s._id.toString()) ? setRegisteredBtn(btn) : setBookBtn(btn);
-
+    sessionIdx = 0;
+    renderSession(sessions[0], false);
     section.classList.add('as-visible');
   } catch (err) {
     console.error('Session load error:', err);
@@ -1432,21 +1425,24 @@ async function loadSessions() {
 
 loadSessions();
 
-// ── BOOK BUTTON ───────────────────────────────────────────────────────────────
+// ── nav buttons ───────────────────────────────────────────────────────────────
+document.getElementById('as-prev').addEventListener('click', () => {
+  if (sessionIdx > 0) { sessionIdx--; renderSession(sessions[sessionIdx], true); }
+});
+document.getElementById('as-next').addEventListener('click', () => {
+  if (sessionIdx < sessions.length - 1) { sessionIdx++; renderSession(sessions[sessionIdx], true); }
+});
+
+// ── book button ───────────────────────────────────────────────────────────────
 document.getElementById('as-bookbtn').addEventListener('click', () => {
-  if (!currentSession) return;
-  const sid = currentSession._id.toString();
-  if (isRegisteredLocally(sid)) return;
+  const s = sessions[sessionIdx];
+  if (!s) return;
+  if (isRegisteredLocally(s._id.toString())) return;
 
   const token = getToken();
   const user  = getCurrentUser();
-
-  if (!token || !user) {
-    showLoginPrompt();
-    return;
-  }
-
-  showBookingModal(currentSession, user);
+  if (!token || !user) { showLoginPrompt(); return; }
+  showBookingModal(s, user);
 });
 </script>
     <script defer src="/_vercel/insights/script.js"></script>
