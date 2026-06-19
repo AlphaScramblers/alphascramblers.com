@@ -8,13 +8,6 @@ const router = express.Router();
 
 const KEY_ID     = process.env.RAZORPAY_KEY_ID;
 const KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
-// Separate webhook secret for the sessions Payment Page, configured as its
-// own webhook in the Razorpay dashboard (Settings → Webhooks → Add New
-// Webhook → URL: https://api.alphascramblers.com/api/sessions/webhook).
-// Keeping this distinct from RAZORPAY_WEBHOOK_SECRET (used by
-// offline-registrations) means the two Payment Pages/webhooks can be
-// rotated or disabled independently without affecting each other.
-const SESSIONS_WEBHOOK_SECRET = process.env.SESSIONS_RAZORPAY_WEBHOOK_SECRET;
 
 // ── Razorpay helpers (same as offlineRegistrations.js) ──────────────────────
 async function fetchRazorpayPayment(paymentId) {
@@ -65,106 +58,14 @@ router.post("/", adminAuth, async (req, res) => {
   }
 });
 
-// ── POST /api/sessions/webhook ───────────────────────────────────────────────
-// Razorpay calls this server-to-server the moment a payment on the sessions
-// Payment Page succeeds. Mirrors offlineRegistrations.js's webhook, but is
-// its own route with its own secret so the two Payment Pages stay independent.
-// IMPORTANT: must receive the RAW body for HMAC verification — mounted with
-// express.raw() in index.js BEFORE the global express.json() middleware.
-//
-// Because a Razorpay Payment Page gives us no reliable way to tag which
-// session a payment belongs to (no custom redirect params), we identify the
-// session from the payment's notes if present, falling back to matching by
-// email only. Configure the Payment Page's "Additional Fields" / order notes
-// to include the session id where possible for unambiguous matching;
-// otherwise the most recent unused payment for that email is used.
-router.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
-  try {
-    if (!SESSIONS_WEBHOOK_SECRET) {
-      console.error("SESSIONS_RAZORPAY_WEBHOOK_SECRET is not set");
-      return res.status(500).json({ success: false });
-    }
-
-    const signature = req.headers["x-razorpay-signature"];
-    if (!signature) return res.status(400).json({ success: false, message: "Missing signature" });
-
-    const rawBody = req.body; // Buffer because of express.raw()
-    const expected = crypto.createHmac("sha256", SESSIONS_WEBHOOK_SECRET).update(rawBody).digest("hex");
-    const sigBuf = Buffer.from(signature);
-    const expBuf = Buffer.from(expected);
-    if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
-      console.warn("Sessions webhook signature mismatch");
-      return res.status(400).json({ success: false, message: "Invalid signature" });
-    }
-
-    const event = JSON.parse(rawBody.toString());
-
-    if (event.event !== "payment.captured" && event.event !== "payment_link.paid") {
-      return res.json({ success: true, ignored: true });
-    }
-
-    let paymentId, amount, method, email, contact, sessionIdNote;
-    if (event.event === "payment_link.paid") {
-      const pl  = event.payload?.payment_link?.entity;
-      const pay = event.payload?.payment?.entity;
-      paymentId     = pay?.id || "";
-      amount        = pay?.amount;
-      method        = pay?.method;
-      email         = pay?.email || pl?.customer?.email || "";
-      contact       = pay?.contact || pl?.customer?.contact || "";
-      sessionIdNote = pay?.notes?.sessionId || pl?.notes?.sessionId || "";
-    } else {
-      const pay = event.payload?.payment?.entity;
-      paymentId     = pay?.id || "";
-      amount        = pay?.amount;
-      method        = pay?.method;
-      email         = pay?.email || "";
-      contact       = pay?.contact || "";
-      sessionIdNote = pay?.notes?.sessionId || "";
-    }
-
-    if (!paymentId) return res.status(400).json({ success: false, message: "No payment ID in event" });
-
-    const { db } = await connectDB();
-
-    await db.collection("pendingPayments").updateOne(
-      { paymentId },
-      {
-        $set: {
-          paymentId,
-          sessionId: sessionIdNote || "",   // best-effort; may be empty
-          amount,
-          method,
-          email: (email || "").toLowerCase(),
-          contact,
-          verified: true,
-          used: false,
-          source: "sessions",               // distinguishes from offline-registrations docs
-          event: event.event,
-          capturedAt: new Date(),
-        },
-      },
-      { upsert: true }
-    );
-
-    console.log(`Sessions webhook: payment ${paymentId} captured for ${email}`);
-    return res.json({ success: true });
-  } catch (err) {
-    console.error("SESSIONS WEBHOOK ERROR:", err);
-    return res.status(500).json({ success: false });
-  }
-});
-
 // ── POST /api/sessions/:id/book — student books a session ───────────────────
-// For paid sessions (fee > 0), requires that the webhook has already written
-// a verified, unused pendingPayments doc for this email (and ideally this
-// session id). Razorpay Payment Pages give the frontend no payment id to pass
-// us directly, so — same as offlineRegistrations.js — the webhook is the
-// sole source of truth here, looked up by email.
+// For paid sessions (fee > 0), requires a verified razorpay_payment_id in body.
+// The ID is looked up in pendingPayments (written by webhook) and marked used.
 router.post("/:id/book", async (req, res) => {
   try {
     const {
       userId, name, firstName, lastName, email, phone,
+      razorpay_payment_id,
     } = req.body;
 
     if (!userId || !email)
@@ -189,35 +90,48 @@ router.post("/:id/book", async (req, res) => {
     let paymentMethod = "";
 
     if (feeAmount > 0) {
-      const emailLc = (email || "").toLowerCase();
-      const pending = db.collection("pendingPayments");
+      if (!razorpay_payment_id)
+        return res.status(400).json({ success: false, message: "Payment is required for this session" });
 
-      let pendingDoc = await pending.findOne(
-        { email: emailLc, sessionId: req.params.id, verified: true, used: false },
-        { sort: { capturedAt: -1 } }
-      );
+      // Look up in pendingPayments (written by Razorpay webhook)
+      const pendingDoc = await db.collection("pendingPayments").findOne({
+        paymentId: razorpay_payment_id,
+        verified:  true,
+        used:      false,
+      });
+
       if (!pendingDoc) {
-        pendingDoc = await pending.findOne(
-          { email: emailLc, sessionId: "", verified: true, used: false, source: "sessions" },
-          { sort: { capturedAt: -1 } }
+        // Webhook hasn't arrived yet — fall back to direct Razorpay API check
+        let rzPay;
+        try {
+          rzPay = await fetchRazorpayPayment(razorpay_payment_id);
+        } catch (err) {
+          return res.status(400).json({ success: false, message: "Could not verify payment with Razorpay" });
+        }
+        if (rzPay.status !== "captured")
+          return res.status(400).json({ success: false, message: `Payment not captured (status: ${rzPay.status})` });
+        // Amount check: fee stored as rupees, Razorpay returns paise
+        if (rzPay.amount !== feeAmount * 100)
+          return res.status(400).json({ success: false, message: "Payment amount does not match session fee" });
+
+        verified = true;
+        razorpayId = razorpay_payment_id;
+        paymentMethod = rzPay.method || "";
+      } else {
+        // Webhook-confirmed path — quick amount sanity check
+        if (pendingDoc.amount !== feeAmount * 100)
+          return res.status(400).json({ success: false, message: "Payment amount does not match session fee" });
+
+        verified = true;
+        razorpayId = pendingDoc.paymentId;
+        paymentMethod = pendingDoc.method || "";
+
+        // Mark the pending payment as used so it can't be reused
+        await db.collection("pendingPayments").updateOne(
+          { paymentId: razorpayId },
+          { $set: { used: true, usedAt: new Date() } }
         );
       }
-
-      if (!pendingDoc)
-        return res.status(400).json({ success: false, message: "We couldn't find a verified payment for this email yet. Please complete payment first." });
-
-      if (pendingDoc.amount !== feeAmount * 100)
-        return res.status(400).json({ success: false, message: "Payment amount does not match session fee" });
-
-      verified = true;
-      razorpayId = pendingDoc.paymentId;
-      paymentMethod = pendingDoc.method || "";
-
-      // Mark the pending payment as used so it can't be reused for another booking
-      await pending.updateOne(
-        { paymentId: razorpayId },
-        { $set: { used: true, usedAt: new Date() } }
-      );
     }
 
     // ── Increment booking count ──
@@ -306,45 +220,46 @@ router.post("/:id/verify-payment", async (req, res) => {
   }
 });
 
+// ── GET /api/sessions/:id/check-payment ─────────────────────────────────────
+// Poll-based check: was this paymentId captured by webhook yet?
+router.get("/:id/check-payment", async (req, res) => {
+  try {
+    const { paymentId } = req.query;
+    if (!paymentId)
+      return res.status(400).json({ success: false, message: "paymentId is required" });
+
+    const { db } = await connectDB();
+    const doc = await db.collection("pendingPayments").findOne({ paymentId, verified: true, used: false });
+    if (!doc)
+      return res.json({ success: true, found: false });
+
+    return res.json({
+      success: true, found: true,
+      payment: { razorpayId: doc.paymentId, amount: doc.amount, method: doc.method, email: doc.email },
+    });
+  } catch (err) {
+    console.error("SESSION CHECK PAYMENT ERROR:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 // ── GET /api/sessions/:id/check-payment-by-email ────────────────────────────
-// Razorpay Payment Pages don't return any identifying query params on
-// redirect, so the frontend can't poll by paymentId. Instead it polls this
-// route by email right after returning from Razorpay. Prefers a payment
-// whose webhook notes matched this session id; falls back to the most
-// recent unused payment for this email if notes weren't set on the Payment
-// Page (e.g. session id wasn't passed through as a custom field).
+// Fallback: when redirected back from Razorpay without a payment ID in the URL,
+// look up by email whether a webhook payment arrived for this user.
 router.get("/:id/check-payment-by-email", async (req, res) => {
   try {
     const { email } = req.query;
-    if (!email) return res.status(400).json({ success: false, message: "email is required" });
+    if (!email)
+      return res.status(400).json({ success: false, message: "email is required" });
 
     const { db } = await connectDB();
-    const sid = req.params.id;
-    const emailLc = email.toLowerCase();
-
-    const pending = db.collection("pendingPayments");
-
-    // Prefer an exact session match (webhook notes carried the session id)
-    let payment = await pending.findOne(
-      { email: emailLc, sessionId: sid, verified: true, used: false },
+    const payment = await db.collection("pendingPayments").findOne(
+      { email: email.toLowerCase(), verified: true, used: false },
       { sort: { capturedAt: -1 } }
     );
 
-    // Fallback: most recent unused payment for this email with no session
-    // tag at all (Payment Page didn't pass notes through)
-    if (!payment) {
-      payment = await pending.findOne(
-        { email: emailLc, sessionId: "", verified: true, used: false, source: "sessions" },
-        { sort: { capturedAt: -1 } }
-      );
-    }
-
     if (!payment) return res.json({ success: true, paid: false });
-    return res.json({
-      success: true,
-      paid: true,
-      payment: { razorpayId: payment.paymentId, amount: payment.amount, method: payment.method },
-    });
+    return res.json({ success: true, paid: true, paymentId: payment.paymentId });
   } catch (err) {
     console.error("SESSION CHECK PAYMENT BY EMAIL ERROR:", err);
     return res.status(500).json({ success: false, message: "Server error" });
