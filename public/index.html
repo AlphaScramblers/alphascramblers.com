@@ -1467,12 +1467,15 @@ async function startRazorpayPayment(session, user) {
 
   const sid    = session._id.toString();
   const userId = user._id || user.id;
+  const email  = user.email;
+  const name   = user.firstName + ' ' + user.lastName;
+  const phone  = user.mobileNumber || user.mobileno || '';
 
   try {
-    const orderRes  = await fetch(`${API}/api/razorpay/order`, {
+    const orderRes  = await fetch(`${API}/api/sessions/${sid}/create-order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: sid })
+      body: JSON.stringify({ email, name, phone })
     });
     const orderData = await orderRes.json();
     if (!orderData.success) throw new Error(orderData.message || 'Could not start payment');
@@ -1481,18 +1484,14 @@ async function startRazorpayPayment(session, user) {
 
     const options = {
       key: orderData.key,
-      amount: orderData.order.amount,
-      currency: orderData.order.currency,
+      amount: orderData.amount,
+      currency: orderData.currency,
       name: 'AlphaScramblers',
       description: session.title,
-      order_id: orderData.order.id,   // ties this popup to exactly one order, set server-side
-      prefill: {
-        name:  user.firstName + ' ' + user.lastName,
-        email: user.email,
-        contact: user.mobileNumber || user.mobileno || '',
-      },
+      order_id: orderData.orderId,
+      prefill: { name, email, contact: phone },
       theme: { color: '#1a56db' },
-      // session & user are closed over from startRazorpayPayment's own arguments —
+      // session & user are closed over from this function's own arguments —
       // even if the slider moves to a different session while Checkout is open,
       // this handler still only ever resolves against THIS session/user pair
       handler: async function (response) {
@@ -1527,6 +1526,7 @@ async function startRazorpayPayment(session, user) {
 }
 
 // ── Verify payment signature on backend for THIS session, then show success ──
+// ── Verify payment signature for THIS session, then finalize the booking ──
 async function verifyAndConfirm(razorpayResponse, session, user) {
   const err = document.getElementById('as-err');
   const btn = document.getElementById('as-sub');
@@ -1536,14 +1536,28 @@ async function verifyAndConfirm(razorpayResponse, session, user) {
   const userId = user._id || user.id;
 
   try {
-    const res = await fetch(`${API}/api/razorpay/verify`, {
+    // Step 1 — verify the Checkout result against Razorpay (signature + order lookup)
+    const verifyRes = await fetch(`${API}/api/sessions/${sid}/verify-payment`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         razorpay_order_id:   razorpayResponse.razorpay_order_id,
         razorpay_payment_id: razorpayResponse.razorpay_payment_id,
         razorpay_signature:  razorpayResponse.razorpay_signature,
-        sessionId: sid,            // explicit, not inferred — backend trusts only this + the verified order
+      })
+    });
+    const verifyData = await verifyRes.json();
+    if (!verifyData.success) throw new Error(verifyData.message || 'Payment verification failed');
+
+    if (btn) btn.textContent = 'Finalizing registration...';
+
+    // Step 2 — now that pendingPayments has a verified record for this email+session,
+    // call the same /book endpoint the free-session flow uses. It will look up
+    // that verified payment, mark it used, and create the booking.
+    const bookRes = await fetch(`${API}/api/sessions/${sid}/book`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         userId,
         name:      user.firstName + ' ' + user.lastName,
         firstName: user.firstName,
@@ -1552,8 +1566,10 @@ async function verifyAndConfirm(razorpayResponse, session, user) {
         phone:     user.mobileNumber || user.mobileno || '',
       })
     });
-    const data = await res.json();
-    if (!data.success) throw new Error(data.message || 'Payment verification failed');
+    const bookData = await bookRes.json();
+    if (!bookData.success && bookData.message !== 'Already registered for this session') {
+      throw new Error(bookData.message || 'Payment succeeded but booking could not be finalized — please contact support.');
+    }
 
     saveBookedLocally(sid, userId);
     markSlideRegistered(sid);
