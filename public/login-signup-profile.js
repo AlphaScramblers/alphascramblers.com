@@ -65,9 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         login1.style.display = mobile.matches ? "block" : "none";
         profile.style.display = "none";
         profile1.style.display = "none";
-        const hadToken = !!localStorage.getItem("token");
         localStorage.removeItem("token");
-        if (hadToken) window.dispatchEvent(new Event("as:logout"));
     }
 
     function showProfileUI() {
@@ -191,7 +189,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 localStorage.setItem("token", data.token);
                 await loadProfile();
-                window.dispatchEvent(new Event("as:login"));
 
                 logsub.textContent = "Account Created ✓";
                 logsub.disabled = true;
@@ -238,7 +235,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 localStorage.setItem("token", data.token);
                 await loadProfile();
-                window.dispatchEvent(new Event("as:login"));
 
                 logsignin.textContent = "Signed In ✓";
                 logsignin.disabled = true;
@@ -263,7 +259,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
             localStorage.removeItem("token");
-            window.dispatchEvent(new Event("as:logout"));
             showLoginUI();
             window.location.reload();
         });
