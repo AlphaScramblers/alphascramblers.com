@@ -1,6 +1,5 @@
 import express from "express";
 import crypto  from "crypto";
-import Razorpay from "razorpay";
 import { ObjectId } from "mongodb";
 import { connectDB } from "../lib/mongo.js";
 import { adminAuth } from "../middleware/auth.js";
@@ -9,13 +8,16 @@ const router = express.Router();
 
 const SESSIONS_WEBHOOK_SECRET = process.env.SESSIONS_RAZORPAY_WEBHOOK_SECRET;
 
-// ── Razorpay client ───────────────────────────────────────────────────────────
-// NOTE: these weren't defined in the file you pasted — if you already declare
-// KEY_ID / KEY_SECRET / razorpay elsewhere in your real file, delete this block
-// and just drop the new routes below into your existing file.
-const KEY_ID     = process.env.RAZORPAY_KEY_ID;
-const KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
-const razorpay   = new Razorpay({ key_id: KEY_ID, key_secret: KEY_SECRET });
+// ── Razorpay helpers ──────────────────────
+async function fetchRazorpayPayment(paymentId) {
+  if (!KEY_ID || !KEY_SECRET) throw new Error("Razorpay API keys are not configured on the server");
+  const auth = Buffer.from(`${KEY_ID}:${KEY_SECRET}`).toString("base64");
+  const resp = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}`, {
+    headers: { Authorization: `Basic ${auth}` },
+  });
+  if (!resp.ok) throw new Error("Could not reach Razorpay to confirm this payment");
+  return resp.json();
+}
 
 // ── GET /api/sessions — all sessions (public) ───────────────────────────────
 router.get("/", async (req, res) => {
@@ -42,10 +44,7 @@ router.post("/", adminAuth, async (req, res) => {
       duration: duration || "1 hour",
       seats: seats || "", fee: fee || "0", desc: desc || "",
       offlineSessionId: offlineSessionId || "",
-      // razorpayLink is no longer used by the registration page (it now uses
-      // the Checkout popup via /create-order), kept only for backward compat
-      // in case your admin UI still has the field.
-      razorpayLink: razorpayLink || "",
+      razorpayLink: razorpayLink || "",   // ← NEW: Razorpay Payment Page / Link URL
       bookingCount: 0,
       by: req.admin.name,
       at: new Date().toISOString(),
@@ -58,122 +57,71 @@ router.post("/", adminAuth, async (req, res) => {
   }
 });
 
-// ── POST /api/sessions/:id/create-order ──────────────────────────────────────
-// Creates a Razorpay Order sized to this session's fee. Works for ANY session
-// with a fee > 0 — no per-session setup needed in the Razorpay dashboard.
-router.post("/:id/create-order", async (req, res) => {
+router.post("/:id/create-payment-link", async (req, res) => {
   try {
-    const { name, email, phone } = req.body;
+    const { email, phone, name } = req.body;
+
     if (!email)
-      return res.status(400).json({ success: false, message: "Email is required" });
-    if (!ObjectId.isValid(req.params.id))
-      return res.status(400).json({ success: false, message: "Invalid session id" });
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
 
     const { db } = await connectDB();
-    const session = await db.collection("sessions").findOne({ _id: new ObjectId(req.params.id) });
+
+    const session = await db.collection("sessions").findOne({
+      _id: new ObjectId(req.params.id),
+    });
+
     if (!session)
-      return res.status(404).json({ success: false, message: "Session not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Session not found",
+      });
 
     const feeAmount = parseInt(session.fee || "0");
-    if (feeAmount <= 0)
-      return res.status(400).json({ success: false, message: "This session is free — no payment needed" });
 
-    const order = await razorpay.orders.create({
-      amount:   feeAmount * 100,
+    if (feeAmount <= 0)
+      return res.status(400).json({
+        success: false,
+        message: "This session is free",
+      });
+
+    const paymentLink = await razorpay.paymentLink.create({
+      amount: feeAmount * 100,
       currency: "INR",
-      receipt:  `sess_${req.params.id}_${Date.now()}`,
+
+      customer: {
+        name: name || "",
+        email,
+        contact: phone || "",
+      },
+
+      notify: {
+        sms: true,
+        email: true,
+      },
+
       notes: {
-        sessionId:    req.params.id,
+        sessionId: session._id.toString(),
         sessionTitle: session.title,
-        email:        email.toLowerCase(),
-        name:         name || "",
-        phone:        phone || "",
       },
     });
 
     return res.json({
-      success:  true,
-      orderId:  order.id,
-      amount:   order.amount,
-      currency: order.currency,
-      key:      KEY_ID,
+      success: true,
+      url: paymentLink.short_url,
     });
+
   } catch (err) {
-    console.error("CREATE ORDER ERROR:", err);
-    return res.status(500).json({ success: false, message: "Could not start payment" });
+    console.error("CREATE PAYMENT LINK ERROR:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Could not create payment link",
+    });
   }
 });
 
-// ── POST /api/sessions/:id/verify-payment ────────────────────────────────────
-// Verifies a Checkout popup result by signature (HMAC of order_id|payment_id
-// using your key secret) — this is cryptographic proof from Razorpay, the
-// client can't forge it. We then pull the order back from Razorpay directly
-// (never trust client-sent amount/sessionId) and record it in pendingPayments
-// so the existing /:id/book route picks it up exactly as it does for webhooks.
-router.post("/:id/verify-payment", async (req, res) => {
-  try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature)
-      return res.status(400).json({ success: false, message: "Missing payment details" });
-    if (!KEY_SECRET)
-      return res.status(500).json({ success: false, message: "Razorpay is not configured on the server" });
-
-    const expected = crypto
-      .createHmac("sha256", KEY_SECRET)
-      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-      .digest("hex");
-
-    const sigBuf = Buffer.from(razorpay_signature);
-    const expBuf = Buffer.from(expected);
-    if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf))
-      return res.status(400).json({ success: false, message: "Payment signature could not be verified" });
-
-    let order;
-    try {
-      order = await razorpay.orders.fetch(razorpay_order_id);
-    } catch (err) {
-      return res.status(400).json({ success: false, message: "Could not confirm payment with Razorpay" });
-    }
-
-    const { db } = await connectDB();
-    const session = await db.collection("sessions").findOne({ _id: new ObjectId(req.params.id) });
-    if (!session)
-      return res.status(404).json({ success: false, message: "Session not found" });
-
-    const feeAmount = parseInt(session.fee || "0");
-    if (order.notes?.sessionId !== req.params.id || order.amount !== feeAmount * 100)
-      return res.status(400).json({ success: false, message: "Payment does not match this session" });
-
-    await db.collection("pendingPayments").updateOne(
-      { paymentId: razorpay_payment_id },
-      {
-        $set: {
-          paymentId:  razorpay_payment_id,
-          orderId:    razorpay_order_id,
-          sessionId:  req.params.id,
-          amount:     order.amount,
-          email:      (order.notes?.email || "").toLowerCase(),
-          contact:    order.notes?.phone || "",
-          verified:   true,
-          used:       false,
-          source:     "checkout-direct",
-          capturedAt: new Date(),
-        },
-      },
-      { upsert: true }
-    );
-
-    return res.json({ success: true, payment: { razorpayId: razorpay_payment_id, amount: order.amount } });
-  } catch (err) {
-    console.error("SESSION VERIFY PAYMENT ERROR:", err);
-    return res.status(500).json({ success: false, message: "Server error" });
-  }
-});
-
-// ── POST /api/sessions/webhook ────────────────────────────────────────────────
-// Kept as a reconciliation safety net (e.g. browser closed mid-flow before
-// /verify-payment fired). Not required for the normal Checkout popup path
-// anymore, since that's verified synchronously above.
 router.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
   try {
     if (!SESSIONS_WEBHOOK_SECRET) {
@@ -345,10 +293,53 @@ router.post("/:id/book", async (req, res) => {
   }
 });
 
-// ── GET /api/sessions/:id/check-payment-by-email ─────────────────────────────
-// Manual fallback only (e.g. "I paid but something glitched" support case).
-// The normal Checkout popup flow no longer needs this — verification happens
-// synchronously via /verify-payment.
+router.post("/:id/verify-payment", async (req, res) => {
+  try {
+    const { razorpay_payment_id } = req.body;
+    if (!razorpay_payment_id)
+      return res.status(400).json({ success: false, message: "Missing payment ID" });
+
+    const { db } = await connectDB();
+    const session = await db.collection("sessions").findOne({ _id: new ObjectId(req.params.id) });
+    if (!session)
+      return res.status(404).json({ success: false, message: "Session not found" });
+
+    const feeAmount = parseInt(session.fee || "0");
+    if (feeAmount === 0)
+      return res.json({ success: true, payment: { razorpayId: "", amount: 0 } });
+
+    // Try webhook store first
+    const pendingDoc = await db.collection("pendingPayments").findOne({
+      paymentId: razorpay_payment_id,
+      verified:  true,
+      used:      false,
+    });
+
+    if (pendingDoc) {
+      if (pendingDoc.amount !== feeAmount * 100)
+        return res.status(400).json({ success: false, message: "Payment amount does not match session fee" });
+      return res.json({ success: true, payment: { razorpayId: pendingDoc.paymentId, amount: pendingDoc.amount, method: pendingDoc.method } });
+    }
+
+    // Fallback — check Razorpay directly
+    let rzPay;
+    try {
+      rzPay = await fetchRazorpayPayment(razorpay_payment_id);
+    } catch (err) {
+      return res.status(400).json({ success: false, message: "Could not verify payment" });
+    }
+    if (rzPay.status !== "captured")
+      return res.status(400).json({ success: false, message: `Payment not captured (status: ${rzPay.status})` });
+    if (rzPay.amount !== feeAmount * 100)
+      return res.status(400).json({ success: false, message: "Payment amount does not match session fee" });
+
+    return res.json({ success: true, payment: { razorpayId: razorpay_payment_id, amount: rzPay.amount, method: rzPay.method } });
+  } catch (err) {
+    console.error("SESSION VERIFY PAYMENT ERROR:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 router.get("/:id/check-payment-by-email", async (req, res) => {
   try {
     const { email } = req.query;
@@ -360,11 +351,14 @@ router.get("/:id/check-payment-by-email", async (req, res) => {
 
     const pending = db.collection("pendingPayments");
 
+    // Prefer an exact session match (webhook notes carried the session id)
     let payment = await pending.findOne(
       { email: emailLc, sessionId: sid, verified: true, used: false },
       { sort: { capturedAt: -1 } }
     );
 
+    // Fallback: most recent unused payment for this email with no session
+    // tag at all (Payment Page didn't pass notes through)
     if (!payment) {
       payment = await pending.findOne(
         { email: emailLc, sessionId: "", verified: true, used: false, source: "sessions" },
@@ -411,7 +405,7 @@ router.put("/:id", adminAuth, async (req, res) => {
       duration: duration || "1 hour",
       seats: seats || "", fee: fee || "0", desc: desc || "",
       offlineSessionId: offlineSessionId || "",
-      razorpayLink: razorpayLink || "",   // unused by the Checkout popup flow; kept for backward compat
+      razorpayLink: razorpayLink || "",   // ← NEW
       editedBy: req.admin.name,
       editedAt: new Date().toISOString(),
     };
