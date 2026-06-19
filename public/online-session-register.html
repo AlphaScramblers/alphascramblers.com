@@ -103,6 +103,8 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .suc-row .sk{color:var(--muted)}.suc-row .sv{font-weight:600;color:var(--navy)}
 .suc-contact{font-size:12.5px;color:var(--muted)}
 .suc-contact strong{color:var(--navy)}
+/* Returned-from-payment banner */
+#return-banner{display:none;background:rgba(122,184,232,.08);border:1px solid var(--sky-mid);border-radius:var(--r);padding:11px 15px;margin-bottom:14px;font-size:12.5px;color:var(--navy);text-align:center}
 @media(max-width:900px){
   html,body{overflow:auto}
   .layout{grid-template-columns:1fr;height:auto;overflow:visible}
@@ -156,6 +158,11 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
       <div class="form-heading">Reserve your spot</div>
       <p class="form-sub">Fill in your details below. We'll confirm via WhatsApp.</p>
 
+      <!-- shown only when user returns from Razorpay Payment Page -->
+      <div id="return-banner">
+        ⏳ Welcome back! Verifying your payment using your email address…
+      </div>
+
       <div class="fblock">
         <div class="fblock-title">Your Details</div>
         <div class="fgrid">
@@ -185,14 +192,13 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
       <!-- Payment block — only shown for paid sessions -->
       <div class="fblock" id="pay-block" style="display:none">
         <div class="fblock-title">Payment</div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">This session requires a fee of <strong id="pay-amount-label">₹0</strong>. Complete payment to secure your spot.</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">
+          This session requires a fee of <strong id="pay-amount-label">₹0</strong>.
+          Complete payment to secure your spot.
+        </p>
         <div class="pay-now-wrap show" id="pay-now-wrap">
           <div id="pnw-content">
-            <a href="#" id="pay-now-link" class="pay-now-btn">
-              Pay <span id="pay-btn-amount">₹0</span> Now
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
-            </a>
-            <p class="pay-now-note">You'll be taken to Razorpay, then brought back here automatically.</p>
+            <!-- populated by setPayNowState() -->
           </div>
         </div>
       </div>
@@ -223,24 +229,30 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 <div class="toast" id="toast"></div>
 
 <script>
-// ── Config ───────────────────────────────────────────────
+// ── Config ────────────────────────────────────────────────────────────────────
 const API_BASE    = 'https://api.alphascramblers.com';
 const STORAGE_KEY = 'asc_sess_reg_v1';
 
-// ── State ─────────────────────────────────────────────────
+// How long to poll the backend waiting for the webhook to arrive.
+// 15 tries × 2 s = 30 s max before we give up and show a failure state.
+const POLL_INTERVAL_MS = 2000;
+const POLL_MAX_TRIES   = 15;
+
+// sessionStorage flag: set just before navigating to Razorpay so we know the
+// user is coming back from a payment attempt, not loading the page fresh.
+const RETURNING_FLAG = 'asc_returning_from_razorpay';
+
+// ── State ─────────────────────────────────────────────────────────────────────
 let session  = null;
-let payState = { verified: false };
+let payState = { verified: false, razorpayId: '' };
 
-const POLL_INTERVAL_MS = 1500;
-const POLL_MAX_TRIES   = 10;
-
-// ── Helpers ───────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 function toast(msg, err) {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.className = 'toast show' + (err ? ' err' : '');
+  t.className   = 'toast show' + (err ? ' err' : '');
   clearTimeout(window._tt);
-  window._tt = setTimeout(() => t.className = 'toast', 3200);
+  window._tt = setTimeout(() => { t.className = 'toast'; }, 3200);
 }
 
 function val(id) { return document.getElementById(id)?.value.trim() || ''; }
@@ -254,7 +266,7 @@ function setErr(fieldId, errId, show) {
 function fmtDate(dateStr) {
   if (!dateStr) return '—';
   return new Date(dateStr + 'T00:00').toLocaleDateString('en-IN', {
-    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   });
 }
 
@@ -265,29 +277,28 @@ function fmtTime(t) {
   return (hr > 12 ? hr - 12 : hr || 12) + ':' + m + ' ' + (hr >= 12 ? 'PM' : 'AM');
 }
 
-// ── Get session ID from URL ───────────────────────────────
+// ── URL helpers ───────────────────────────────────────────────────────────────
 function getSessionId() {
-  const params = new URLSearchParams(location.search);
-  return params.get('id') || params.get('session') || params.get('sid');
+  const p = new URLSearchParams(location.search);
+  return p.get('id') || p.get('session') || p.get('sid');
 }
 
-// ── Fetch session ─────────────────────────────────────────
+// ── Fetch session list and find our session ───────────────────────────────────
 async function loadSession(sid) {
   const res  = await fetch(`${API_BASE}/api/sessions`);
   const data = await res.json();
-  const all  = data.sessions || [];
-  return all.find(s => (s._id || s.id) === sid) || null;
+  return (data.sessions || []).find(s => (s._id || s.id) === sid) || null;
 }
 
-// ── Render left panel ────────────────────────────────────
+// ── Render left panel ─────────────────────────────────────────────────────────
 function renderLeft(s) {
   const feeNum = parseInt(s.fee || '0');
   document.title = `Register — ${s.title} · AlphaScramblers`;
   document.getElementById('page-title').textContent = `Register — ${s.title} · AlphaScramblers`;
-  document.getElementById('left-date').textContent = fmtDate(s.date).replace(/^[^,]+,\s*/, '');
-  document.getElementById('left-title').innerHTML = s.title.replace(/(\w+)\s*$/, '<em>$1</em>');
-  document.getElementById('left-desc').textContent = s.desc || 'Join this live session with AlphaScramblers.';
-  document.getElementById('fee-display').className = feeNum > 0 ? 'fee-amount' : 'fee-free';
+  document.getElementById('left-date').textContent  = fmtDate(s.date).replace(/^[^,]+,\s*/, '');
+  document.getElementById('left-title').innerHTML   = s.title.replace(/(\w+)\s*$/, '<em>$1</em>');
+  document.getElementById('left-desc').textContent  = s.desc || 'Join this live session with AlphaScramblers.';
+  document.getElementById('fee-display').className  = feeNum > 0 ? 'fee-amount' : 'fee-free';
   document.getElementById('fee-display').textContent = feeNum > 0 ? '₹' + feeNum : 'Free';
 
   const dl = document.getElementById('detail-list');
@@ -309,29 +320,22 @@ function renderLeft(s) {
     `By registering you confirm your attendance for this session on ${fmtDate(s.date)}.`;
 }
 
-function calIcon() {
-  return `<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
-}
-function clockIcon() {
-  return `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 15.5"/></svg>`;
-}
-function bookIcon() {
-  return `<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>`;
-}
-function groupIcon() {
-  return `<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>`;
-}
+function calIcon()   { return `<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`; }
+function clockIcon() { return `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 15.5"/></svg>`; }
+function bookIcon()  { return `<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>`; }
+function groupIcon() { return `<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>`; }
 
-// ── Payment helpers ───────────────────────────────────────
+// ── Payment UI state machine ──────────────────────────────────────────────────
+// States: 'default' | 'verifying' | 'paid' | 'failed'
 function setPayNowState(state, detail) {
   const wrap    = document.getElementById('pay-now-wrap');
   const content = document.getElementById('pnw-content');
   const feeNum  = parseInt(session?.fee || '0');
   const sid     = getSessionId();
 
-  // Build the Razorpay URL with the session id appended so it
-  // survives the redirect back and getSessionId() still works.
-  const baseLink = session?.razorpayLink || '';
+  // Build the Payment Page URL. Append ?id= so that when Razorpay redirects
+  // back (to whatever URL you configured), the session id survives in the URL.
+  const baseLink   = session?.razorpayLink || '';
   const RAZORPAY_URL = baseLink
     ? baseLink + (baseLink.includes('?') ? '&' : '?') + 'id=' + encodeURIComponent(sid)
     : '';
@@ -340,22 +344,45 @@ function setPayNowState(state, detail) {
 
   if (state === 'verifying') {
     wrap.classList.add('verifying');
-    content.innerHTML = `<div class="pnw-status"><span class="pnw-spin"></span> Verifying your payment…</div><p class="pnw-sub">This only takes a moment, please don't close this tab.</p>`;
+    content.innerHTML = `
+      <div class="pnw-status">
+        <span class="pnw-spin"></span> Verifying your payment…
+      </div>
+      <p class="pnw-sub">This only takes a moment — please don't close this tab.</p>`;
+
   } else if (state === 'paid') {
     wrap.classList.add('paid');
-    content.innerHTML = `<div class="pnw-status paid-text"><span class="pnw-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span> Payment Verified</div><p class="pnw-sub">Razorpay ID: ${detail || ''}</p>`;
+    content.innerHTML = `
+      <div class="pnw-status paid-text">
+        <span class="pnw-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+        Payment Verified
+      </div>
+      <p class="pnw-sub">Razorpay ID: ${detail || ''}</p>`;
+
   } else if (state === 'failed') {
     wrap.classList.add('failed');
-    content.innerHTML = `<div class="pnw-status failed-text">Payment could not be verified</div><p class="pnw-sub">${detail || 'Please try again.'}</p><button type="button" class="pnw-retry" onclick="resetPayNow()">Try paying again</button>`;
+    content.innerHTML = `
+      <div class="pnw-status failed-text">Payment could not be verified</div>
+      <p class="pnw-sub">${detail || 'Please try again or contact us.'}</p>
+      <button type="button" class="pnw-retry" onclick="resetPayNow()">Try paying again</button>`;
+
   } else {
-    // default — show the Pay button
-    content.innerHTML = `<a href="${RAZORPAY_URL}" id="pay-now-link" class="pay-now-btn">Pay ₹${feeNum} Now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a><p class="pay-now-note">You'll be taken to Razorpay, then brought back here automatically.</p>`;
+    // 'default' — show the Pay Now button
+    content.innerHTML = `
+      <a href="${RAZORPAY_URL}" id="pay-now-link" class="pay-now-btn">
+        Pay ₹${feeNum} Now
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/>
+        </svg>
+      </a>
+      <p class="pay-now-note">You'll be taken to Razorpay, then brought back here automatically.</p>`;
     attachPayLinkHandler();
   }
 }
 
 function resetPayNow() {
-  payState = { verified: false };
+  payState = { verified: false, razorpayId: '' };
   setPayNowState('default');
   updateSubmitState();
 }
@@ -367,6 +394,7 @@ function updateSubmitState() {
   document.getElementById('pay-gate-note').style.display = isPaid ? 'none' : 'block';
 }
 
+// ── Form persistence across the Razorpay redirect ────────────────────────────
 function saveFormToStorage() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({
     first: val('f-first'), last: val('f-last'),
@@ -376,9 +404,9 @@ function saveFormToStorage() {
 }
 
 function restoreFormFromStorage() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return;
   try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
     const d = JSON.parse(raw);
     if (d.sessionId !== getSessionId()) return;
     if (!val('f-first') && d.first) document.getElementById('f-first').value = d.first;
@@ -388,6 +416,7 @@ function restoreFormFromStorage() {
   } catch (_) {}
 }
 
+// ── Wire up the Pay Now link ──────────────────────────────────────────────────
 function attachPayLinkHandler() {
   const link = document.getElementById('pay-now-link');
   if (!link) return;
@@ -397,105 +426,120 @@ function attachPayLinkHandler() {
       toast('Please fill in your details before paying.', true);
       return;
     }
+    // Persist the form so it survives the redirect back from Razorpay.
     saveFormToStorage();
-    // No sessionStorage flags needed — the id param in the URL
-    // is enough to identify the returning user.
+    // Set a flag so we know the user is returning from Razorpay, not loading fresh.
+    sessionStorage.setItem(RETURNING_FLAG, '1');
+    // Navigation continues to the Razorpay Payment Page URL.
   });
 }
 
+// ── Field validation ──────────────────────────────────────────────────────────
 function validateFields() {
   let ok = true;
   const first = val('f-first'), last = val('f-last'),
         phone = val('f-phone'), email = val('f-email');
 
-  setErr('f-first', 'e-first', !first); if (!first) ok = false;
-  setErr('f-last',  'e-last',  !last);  if (!last)  ok = false;
+  setErr('f-first', 'e-first', !first);            if (!first)  ok = false;
+  setErr('f-last',  'e-last',  !last);              if (!last)   ok = false;
 
   const phoneOk = /^[6-9]\d{9}$/.test(phone);
-  setErr('f-phone', 'e-phone', !phoneOk); if (!phoneOk) ok = false;
+  setErr('f-phone', 'e-phone', !phoneOk);           if (!phoneOk) ok = false;
 
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  setErr('f-email', 'e-email', !emailOk); if (!emailOk) ok = false;
+  setErr('f-email', 'e-email', !emailOk);           if (!emailOk) ok = false;
 
   return { ok, first, last, phone, email };
 }
 
-// ── Poll webhook → fallback verify → auto-submit ─────────
-async function pollWebhookThenVerify(paymentId) {
+// ── Core: poll /check-payment-by-email then auto-submit ──────────────────────
+//
+// Razorpay Payment Pages never append payment parameters to the redirect URL.
+// The webhook (server-to-server) fires when the payment is captured and writes
+// a verified doc to pendingPayments keyed by the user's email.
+// We poll that endpoint here until the doc appears, then proceed to booking.
+//
+async function pollByEmail(email) {
   const sid = getSessionId();
   setPayNowState('verifying');
+  document.getElementById('return-banner').style.display = 'none'; // replaced by verifying UI
 
-  let tries = 0;
-  while (tries < POLL_MAX_TRIES) {
-    tries++;
+  for (let i = 0; i < POLL_MAX_TRIES; i++) {
     try {
-      const res  = await fetch(`${API_BASE}/api/sessions/${sid}/check-payment?paymentId=${encodeURIComponent(paymentId)}`);
+      const res  = await fetch(
+        `${API_BASE}/api/sessions/${sid}/check-payment-by-email?email=${encodeURIComponent(email)}`
+      );
       const data = await res.json();
-      if (data.success && data.found) {
-        payState = { verified: true, razorpay_payment_id: paymentId };
-        setPayNowState('paid', paymentId);
+
+      if (data.success && data.paid) {
+        // Webhook has confirmed payment — record it locally and proceed.
+        payState = { verified: true, razorpayId: data.payment?.razorpayId || '' };
+        setPayNowState('paid', payState.razorpayId);
         toast('Payment verified ✓');
         updateSubmitState();
-        // Clean all Razorpay params from URL, keep only ?id=
-        history.replaceState({}, '', location.pathname + '?id=' + sid);
+        sessionStorage.removeItem(RETURNING_FLAG);
         await autoSubmit();
         return;
       }
-    } catch (_) {}
+    } catch (_) {
+      // Network blip — keep trying.
+    }
+
+    // Wait before next attempt. Show live progress so the user knows we're working.
+    const remaining = POLL_MAX_TRIES - i - 1;
+    const pnwSub = document.querySelector('.pnw-sub');
+    if (pnwSub && remaining > 0) {
+      pnwSub.textContent = `Still checking… (${remaining} ${remaining === 1 ? 'try' : 'tries'} left)`;
+    }
+
     await new Promise(r => setTimeout(r, POLL_INTERVAL_MS));
   }
 
-  // Fallback: direct verify via backend
-  try {
-    const res  = await fetch(`${API_BASE}/api/sessions/${sid}/verify-payment`, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ razorpay_payment_id: paymentId }),
-    });
-    const data = await res.json();
-    if (!res.ok || !data.success) throw new Error(data.message || 'Verification failed');
-    payState = { verified: true, razorpay_payment_id: paymentId };
-    setPayNowState('paid', paymentId);
-    toast('Payment verified ✓');
-    updateSubmitState();
-    history.replaceState({}, '', location.pathname + '?id=' + sid);
-    await autoSubmit();
-  } catch (err) {
-    payState = { verified: false };
-    setPayNowState('failed', err.message);
-    updateSubmitState();
-    history.replaceState({}, '', location.pathname + '?id=' + sid);
-  }
+  // Exhausted all retries — webhook hasn't arrived yet (or payment failed).
+  payState = { verified: false, razorpayId: '' };
+  setPayNowState('failed',
+    'We couldn\'t confirm your payment in time. If you paid, please contact us with your Razorpay transaction ID.');
+  updateSubmitState();
+  sessionStorage.removeItem(RETURNING_FLAG);
 }
 
-// ── Handle return from Razorpay ───────────────────────────
+// ── Detect return from Razorpay and kick off email polling ───────────────────
+//
+// Since Razorpay Payment Pages give us nothing in the URL, we rely on the
+// sessionStorage flag we set in attachPayLinkHandler() right before navigation.
+//
 async function handleReturnFromRazorpay() {
-  // Always restore form fields first — the user filled them before paying.
-  restoreFormFromStorage();
+  const isReturning = sessionStorage.getItem(RETURNING_FLAG) === '1';
 
-  const params      = new URLSearchParams(location.search);
-  const paymentId   = params.get('razorpay_payment_id');
-  const linkStatus  = params.get('razorpay_payment_link_status');   // "paid" | "cancelled" | undefined
-  const referenceId = params.get('razorpay_payment_link_reference_id'); // extra signal, logged only
-
-  // Nothing from Razorpay in the URL — normal page load, nothing to do.
-  if (!paymentId) {
+  if (!isReturning) {
+    // Normal page load — nothing to do.
     updateSubmitState();
     return;
   }
 
-  // Razorpay explicitly told us the payment didn't go through.
-  if (linkStatus && linkStatus !== 'paid') {
-    setPayNowState('failed', 'Payment was not completed. Please try again.');
+  // The user just came back from Razorpay.
+  // Form fields were restored from localStorage before this runs.
+  const email = val('f-email');
+
+  if (!email) {
+    // Edge case: storage was cleared somehow. Can't poll without email.
+    setPayNowState('failed', 'Could not read your email. Please fill in your details and try paying again.');
     updateSubmitState();
-    history.replaceState({}, '', location.pathname + '?id=' + getSessionId());
+    sessionStorage.removeItem(RETURNING_FLAG);
     return;
   }
 
-  // We have a payment ID (and optionally a "paid" status) — verify it.
-  await pollWebhookThenVerify(paymentId);
+  // Show a brief banner while we start polling.
+  document.getElementById('return-banner').style.display = 'block';
+
+  // Give the webhook ~1 s head-start before the first poll, since Razorpay
+  // fires the webhook and redirects the user almost simultaneously.
+  await new Promise(r => setTimeout(r, 1000));
+
+  await pollByEmail(email);
 }
 
+// ── Auto-submit after payment verification ────────────────────────────────────
 async function autoSubmit() {
   await new Promise(r => setTimeout(r, 50));
   const f = validateFields();
@@ -507,6 +551,7 @@ async function autoSubmit() {
   await doSubmit();
 }
 
+// ── Manual submit ─────────────────────────────────────────────────────────────
 async function doSubmit() {
   const f = validateFields();
   if (!f.ok) { toast('Please fill all required fields correctly.', true); return; }
@@ -522,7 +567,7 @@ async function doSubmit() {
   btn.disabled = true;
   lbl.innerHTML = '<span class="spin"></span> Submitting…';
 
-  // Generate / retrieve a stable userId
+  // Generate or retrieve a stable anonymous user ID.
   let uid = localStorage.getItem('asc_user_id');
   if (!uid) {
     uid = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2);
@@ -539,10 +584,6 @@ async function doSubmit() {
     at:        new Date().toISOString(),
   };
 
-  if (feeNum > 0) {
-    payload.razorpay_payment_id = payState.razorpay_payment_id;
-  }
-
   const sid = getSessionId();
 
   try {
@@ -557,7 +598,7 @@ async function doSubmit() {
     localStorage.removeItem(STORAGE_KEY);
     localStorage.setItem('as_registered_' + sid, 'yes');
 
-    document.getElementById('form-area').style.display   = 'none';
+    document.getElementById('form-area').style.display    = 'none';
     document.getElementById('success-view').style.display = 'block';
     document.getElementById('s-name').textContent    = f.first + ' ' + f.last;
     document.getElementById('s-session').textContent = session.title;
@@ -572,7 +613,7 @@ async function doSubmit() {
   }
 }
 
-// ── Boot ─────────────────────────────────────────────────
+// ── Boot ──────────────────────────────────────────────────────────────────────
 (async () => {
   const sid = getSessionId();
 
@@ -595,11 +636,15 @@ async function doSubmit() {
 
   const feeNum = parseInt(session.fee || '0');
   renderLeft(session);
+  document.getElementById('form-area').style.display = 'block';
+
+  // Restore form fields first — needed before handleReturnFromRazorpay() reads
+  // the email field to start polling.
+  restoreFormFromStorage();
 
   if (feeNum > 0) {
-    document.getElementById('pay-block').style.display       = 'block';
-    document.getElementById('pay-amount-label').textContent  = '₹' + feeNum;
-    document.getElementById('pay-btn-amount').textContent    = '₹' + feeNum;
+    document.getElementById('pay-block').style.display      = 'block';
+    document.getElementById('pay-amount-label').textContent = '₹' + feeNum;
 
     if (!session.razorpayLink) {
       document.getElementById('pnw-content').innerHTML =
@@ -609,7 +654,8 @@ async function doSubmit() {
     }
   }
 
-  document.getElementById('form-area').style.display = 'block';
+  // Check if the user is returning from the Razorpay Payment Page and, if so,
+  // start polling /check-payment-by-email with the restored email address.
   await handleReturnFromRazorpay();
   updateSubmitState();
 })();
