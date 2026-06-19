@@ -516,7 +516,25 @@ async function doSubmit() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'Registration failed');
 
+    // Write user-scoped key so homepage banner picks it up
+(function() {
+  try {
+    const up = localStorage.getItem('userProfile');
+    const profile = up ? JSON.parse(up) : null;
+    const uid = profile?.id || profile?._id || profile?.email
+             || localStorage.getItem('userId')
+             || localStorage.getItem('email')
+             || null;
+    if (uid) {
+      localStorage.setItem('as_registered_' + sid + '_' + uid, 'yes');
+    } else {
+      // fallback: write the old key too so at least something is stored
+      localStorage.setItem('as_registered_' + sid, 'yes');
+    }
+  } catch(_) {
     localStorage.setItem('as_registered_' + sid, 'yes');
+  }
+})();
 
     document.getElementById('form-area').style.display    = 'none';
     document.getElementById('success-view').style.display = 'block';

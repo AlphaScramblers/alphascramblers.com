@@ -1138,7 +1138,10 @@ function registeredKey(sid) {
 function isRegisteredLocally(sid) {
   if (!getToken() || !getCurrentUser()) return false;
   const key = registeredKey(sid);
-  return key ? localStorage.getItem(key) === 'yes' : false;
+  if (key && localStorage.getItem(key) === 'yes') return true;
+  // fallback: old unscoped key (pre-fix registrations)
+  if (localStorage.getItem('as_registered_' + sid) === 'yes') return true;
+  return false;
 }
 function markRegisteredLocally(sid) {
   const key = registeredKey(sid);
