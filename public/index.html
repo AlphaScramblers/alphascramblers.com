@@ -1134,13 +1134,10 @@
         <script src="./homepage/alpha.js"></script>
         <script src="./navregbot.js"></script>
         <script src="./login-signup-profile.js"></script>
-        
-        <!-- SESSION BANNER SCRIPT -->
-    <!-- SESSION BANNER SCRIPT -->
-<script>
+<script>     
 const API = 'https://api.alphascramblers.com';
-let sessions = [];      // all upcoming sessions
-let sessionIdx = 0;     // which one is shown
+let sessions = [];
+let sessionIdx = 0;
 const section = document.getElementById('as-session-section');
 
 // ── auth helpers ──────────────────────────────────────────────────────────────
@@ -1162,24 +1159,7 @@ function getCurrentUser() {
     return null;
   } catch { return null; }
 }
-
-// ── registration helpers ──────────────────────────────────────────────────────
-function registeredKey(sid) {
-  const user = getCurrentUser();
-  const uid  = user?._id || user?.id || user?.email || null;
-  return uid ? 'as_registered_' + sid + '_' + uid : null;
-}
-function isRegisteredLocally(sid) {
-  if (!getToken() || !getCurrentUser()) return false;
-  const key = registeredKey(sid);
-  if (key && localStorage.getItem(key) === 'yes') return true;
-  if (localStorage.getItem('as_registered_' + sid) === 'yes') return true;
-  return false;
-}
-function markRegisteredLocally(sid) {
-  const key = registeredKey(sid);
-  if (key) localStorage.setItem(key, 'yes');
-}
+function getUserId(user) { return user?._id || user?.id || null; }
 
 function formatFee(fee) {
   if (!fee || fee == 0 || fee === '0') return { label: 'Free', paid: false };
@@ -1196,15 +1176,28 @@ function setBookBtn(btn) {
   btn.disabled = false;
 }
 
+// ── source of truth: ask the backend, never localStorage ─────────────────────
+async function checkRegistered(sid) {
+  const uid = getUserId(getCurrentUser());
+  if (!getToken() || !uid) return false;
+  try {
+    const res  = await fetch(`${API}/api/sessions/${sid}/booked/${uid}`);
+    const data = await res.json();
+    return !!data.booked;
+  } catch {
+    return false;
+  }
+}
+
 // ── banner render ─────────────────────────────────────────────────────────────
-function renderSession(s, animate) {
-  const textEl = document.querySelector('.as-banner-text');
-  const btn    = document.getElementById('as-bookbtn');
+async function renderSession(s, animate) {
+  const textEl  = document.querySelector('.as-banner-text');
+  const btn     = document.getElementById('as-bookbtn');
   const counter = document.getElementById('as-counter');
   const prevBtn = document.getElementById('as-prev');
   const nextBtn = document.getElementById('as-next');
 
-  const doRender = () => {
+  const doRender = async () => {
     const d = new Date(s.date + 'T' + s.time);
     const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
     const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
@@ -1221,25 +1214,26 @@ function renderSession(s, animate) {
     prevBtn.disabled = sessionIdx === 0;
     nextBtn.disabled = sessionIdx === sessions.length - 1;
 
-    isRegisteredLocally(s._id.toString()) ? setRegisteredBtn(btn) : setBookBtn(btn);
+    setBookBtn(btn); // optimistic default while the check runs
+    const registered = await checkRegistered(s._id.toString());
+    registered ? setRegisteredBtn(btn) : setBookBtn(btn);
   };
 
   if (animate && textEl) {
     textEl.classList.add('as-slide-out');
-    setTimeout(() => {
-      doRender();
+    setTimeout(async () => {
+      await doRender();
       textEl.classList.remove('as-slide-out');
       textEl.classList.add('as-slide-in');
-      // force reflow
       void textEl.offsetWidth;
       textEl.classList.remove('as-slide-in');
     }, 180);
   } else {
-    doRender();
+    await doRender();
   }
 }
 
-// ── modal helpers ─────────────────────────────────────────────────────────────
+// ── login prompt (only modal we still need) ───────────────────────────────────
 function showOverlay(html) {
   removeOverlay();
   const el = document.createElement('div');
@@ -1253,7 +1247,6 @@ function removeOverlay() {
   const el = document.getElementById('as-overlay');
   if (el) el.remove();
 }
-
 function showLoginPrompt() {
   showOverlay(`
     <div class="as-login-modal">
@@ -1276,126 +1269,6 @@ function showLoginPrompt() {
   });
 }
 
-function showBookingModal(s, user) {
-  const fee = formatFee(s.fee);
-  const d = new Date(s.date + 'T' + s.time);
-  const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-  const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
-  const initials = ((user?.firstName || user?.name || '?')[0] + (user?.lastName ? user.lastName[0] : '')).toUpperCase();
-  const fullName = [user?.firstName || user?.name, user?.lastName].filter(Boolean).join(' ') || 'You';
-  const feeHTML  = fee.paid
-    ? `<span class="as-fee-value paid">₹${fee.label}</span><span class="as-fee-tag paid">PAID</span>`
-    : `<span class="as-fee-value">Free</span><span class="as-fee-tag">FREE</span>`;
-
-  showOverlay(`
-    <div class="as-modal">
-      <div class="as-modal-topbar">
-        <span class="as-modal-topbar-title">Session Registration</span>
-        <button class="as-mclose" id="as-mclose">&#x2715;</button>
-      </div>
-      <div class="as-modal-body">
-        <div class="as-modal-left">
-          <div class="as-modal-section-label">Session Details</div>
-          <div class="as-session-name">${s.title}</div>
-          <div class="as-detail-row">
-            <div class="as-detail-icon"><i class="fa-regular fa-calendar"></i></div>
-            <div>
-              <div class="as-detail-label">Date &amp; Time</div>
-              <div class="as-detail-value">${dateStr}</div>
-              <div class="as-detail-value" style="font-weight:400;color:#6b7280;">${timeStr}</div>
-            </div>
-          </div>
-          ${s.duration ? `<div class="as-detail-row"><div class="as-detail-icon"><i class="fa-regular fa-clock"></i></div><div><div class="as-detail-label">Duration</div><div class="as-detail-value">${s.duration}</div></div></div>` : ''}
-          ${s.topic    ? `<div class="as-detail-row"><div class="as-detail-icon"><i class="fa-solid fa-tag"></i></div><div><div class="as-detail-label">Topic</div><div class="as-detail-value">${s.topic}</div></div></div>` : ''}
-          ${s.seats    ? `<div class="as-detail-row"><div class="as-detail-icon"><i class="fa-solid fa-users"></i></div><div><div class="as-detail-label">Available Seats</div><div class="as-detail-value">${s.seats}</div></div></div>` : ''}
-          <div class="as-fee-block"><div class="as-fee-label">Session Fee</div>${feeHTML}</div>
-        </div>
-        <div class="as-modal-right">
-          <div class="as-modal-section-label">Your Details</div>
-          <div class="as-user-block">
-            <div class="as-user-block-header">
-              <span class="as-user-block-title">Account</span>
-              <span class="as-verified-tag">✓ Verified</span>
-            </div>
-            <div class="as-user-avatar-row">
-              <div class="as-user-av">${initials}</div>
-              <div>
-                <div class="as-user-fullname">${fullName}</div>
-                <div class="as-user-email-small">${user?.email || ''}</div>
-              </div>
-            </div>
-            <div class="as-user-rows">
-              ${user?.mobile || user?.phone ? `<div class="as-user-row"><div class="as-user-row-label">Mobile</div><div class="as-user-row-value">${user.mobile || user.phone}</div></div>` : ''}
-            </div>
-          </div>
-          <div class="as-err" id="as-err"></div>
-          <button class="as-confirm-btn" id="as-confirm-btn">
-            ${fee.paid ? `Pay ₹${fee.label} &amp; Register` : 'Confirm Registration'}
-          </button>
-          <div class="as-confirm-note">
-            ${fee.paid ? 'You will be redirected to the payment page.' : 'Free session — confirmed immediately.'}
-          </div>
-        </div>
-      </div>
-    </div>
-  `);
-  document.getElementById('as-mclose').addEventListener('click', removeOverlay);
-  document.getElementById('as-confirm-btn').addEventListener('click', () => handleConfirm(s, user));
-}
-
-async function handleConfirm(s, user) {
-  const btn   = document.getElementById('as-confirm-btn');
-  const errEl = document.getElementById('as-err');
-  const fee   = formatFee(s.fee);
-  const sid   = s._id.toString();
-
-  if (fee.paid) { window.location.href = `/online-session-register.html?id=${sid}`; return; }
-
-  btn.disabled = true;
-  btn.textContent = 'Confirming…';
-  errEl.style.display = 'none';
-
-  try {
-    const token = getToken();
-    const res  = await fetch(`${API}/api/bookings`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': `Bearer ${token}` } : {}) },
-      body: JSON.stringify({ sessionId: sid })
-    });
-    const data = await res.json();
-    if (!res.ok || !data.success) {
-      const msg = data?.message || 'Booking failed.';
-      if (msg.toLowerCase().includes('already')) { markRegisteredLocally(sid); showSuccess(s, user); return; }
-      errEl.textContent = msg; errEl.style.display = 'block';
-      btn.disabled = false; btn.textContent = 'Confirm Registration';
-      return;
-    }
-    markRegisteredLocally(sid);
-    showSuccess(s, user);
-  } catch {
-    errEl.textContent = 'Network error.'; errEl.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Confirm Registration';
-  }
-}
-
-function showSuccess(s, user) {
-  showOverlay(`
-    <div class="as-success">
-      <div class="as-success-icon">&#x2713;</div>
-      <div class="as-success-title">You're Registered!</div>
-      <div class="as-success-sub">
-        Your seat for <strong>${s.title}</strong> has been confirmed.<br>
-        We'll send details to <strong>${user?.email || 'your email'}</strong>.
-      </div>
-      <button class="as-success-close" id="as-success-close">Done</button>
-    </div>
-  `);
-  document.getElementById('as-success-close').addEventListener('click', () => {
-    removeOverlay();
-    renderSession(sessions[sessionIdx], false);
-  });
-}
-
 // ── load & boot ───────────────────────────────────────────────────────────────
 async function loadSessions() {
   try {
@@ -1415,7 +1288,7 @@ async function loadSessions() {
     if (!sessions.length) { section.classList.remove('as-visible'); return; }
 
     sessionIdx = 0;
-    renderSession(sessions[0], false);
+    await renderSession(sessions[0], false);
     section.classList.add('as-visible');
   } catch (err) {
     console.error('Session load error:', err);
@@ -1425,6 +1298,11 @@ async function loadSessions() {
 
 loadSessions();
 
+// clean up the ?registered=<sid> param left after redirect from registration page
+if (new URLSearchParams(location.search).get('registered')) {
+  history.replaceState(null, '', location.pathname);
+}
+
 // ── nav buttons ───────────────────────────────────────────────────────────────
 document.getElementById('as-prev').addEventListener('click', () => {
   if (sessionIdx > 0) { sessionIdx--; renderSession(sessions[sessionIdx], true); }
@@ -1433,16 +1311,17 @@ document.getElementById('as-next').addEventListener('click', () => {
   if (sessionIdx < sessions.length - 1) { sessionIdx++; renderSession(sessions[sessionIdx], true); }
 });
 
-// ── book button ───────────────────────────────────────────────────────────────
+// ── book button: just navigate, no modal ───────────────────────────────────────
 document.getElementById('as-bookbtn').addEventListener('click', () => {
   const s = sessions[sessionIdx];
-  if (!s) return;
-  if (isRegisteredLocally(s._id.toString())) return;
+  if (!s || s._id === undefined) return;
+  const sid = s._id.toString();
 
   const token = getToken();
   const user  = getCurrentUser();
   if (!token || !user) { showLoginPrompt(); return; }
-  showBookingModal(s, user);
+
+  window.location.href = `/online-session-register.html?id=${sid}`;
 });
 </script>
     <script defer src="/_vercel/insights/script.js"></script>

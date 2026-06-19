@@ -229,9 +229,28 @@ const API_BASE = 'https://api.alphascramblers.com';
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let session  = null;
+let account = null;
 let payState = { verified: false, razorpayId: '' };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+function getAccountUser() {
+  try {
+    const up = localStorage.getItem('userProfile');
+    if (up) return JSON.parse(up);
+    const email = localStorage.getItem('email');
+    const userId = localStorage.getItem('userId');
+    if (email || userId) return {
+      id: userId, _id: userId, email,
+      firstName: localStorage.getItem('firstName'),
+      lastName:  localStorage.getItem('lastName'),
+      mobile:    localStorage.getItem('no')
+    };
+    return null;
+  } catch { return null; }
+}
+function getAccountToken() {
+  return localStorage.getItem('token') || localStorage.getItem('authToken') || null;
+}
 function toast(msg, err) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -489,14 +508,10 @@ async function doSubmit() {
   lbl.innerHTML = '<span class="spin"></span> Submitting…';
 
   // Generate or retrieve a stable anonymous user ID.
-  let uid = localStorage.getItem('asc_user_id');
-  if (!uid) {
-    uid = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-    localStorage.setItem('asc_user_id', uid);
-  }
+  const accountId = account.id || account._id;
 
   const payload = {
-    userId:    uid,
+    userId:    accountId,
     name:      f.first + ' ' + f.last,
     firstName: f.first,
     lastName:  f.last,
@@ -515,34 +530,8 @@ async function doSubmit() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'Registration failed');
-
-    // Write user-scoped key so homepage banner picks it up
-(function() {
-  try {
-    const up = localStorage.getItem('userProfile');
-    const profile = up ? JSON.parse(up) : null;
-    const uid = profile?.id || profile?._id || profile?.email
-             || localStorage.getItem('userId')
-             || localStorage.getItem('email')
-             || null;
-    if (uid) {
-      localStorage.setItem('as_registered_' + sid + '_' + uid, 'yes');
-    } else {
-      // fallback: write the old key too so at least something is stored
-      localStorage.setItem('as_registered_' + sid, 'yes');
-    }
-  } catch(_) {
-    localStorage.setItem('as_registered_' + sid, 'yes');
-  }
-})();
-
-    document.getElementById('form-area').style.display    = 'none';
-    document.getElementById('success-view').style.display = 'block';
-    document.getElementById('s-name').textContent    = f.first + ' ' + f.last;
-    document.getElementById('s-session').textContent = session.title;
-    document.getElementById('s-date').textContent    = fmtDate(session.date);
-    document.getElementById('s-pay').textContent     = feeNum > 0 ? 'Paid Online · Verified' : 'Free Session';
-    document.querySelector('.right').scrollTo({ top: 0, behavior: 'smooth' });
+    window.location.href = `/index.html?registered=${sid}`;
+    return;
   } catch (err) {
     toast(err.message || 'Something went wrong. Try again.', true);
     btn.disabled = false;
@@ -571,6 +560,25 @@ async function doSubmit() {
     document.getElementById('error-view').style.display = 'block';
     return;
   }
+
+  account = getAccountUser();
+  const accountToken = getAccountToken();
+  const accountId = account?.id || account?._id;
+
+  if (!accountToken || !accountId) {
+    document.getElementById('error-view').style.display = 'block';
+    document.querySelector('#error-view .err-h').textContent = 'Please log in first';
+    document.querySelector('#error-view .err-p').textContent =
+      'You need to be logged in to your AlphaScramblers account to register. ' +
+      'Go back to the homepage, log in, then click "Book Your Seat" again.';
+    return;
+  }
+
+  // Pre-fill from the account — no anonymous ID needed anymore
+  document.getElementById('f-first').value = account.firstName || '';
+  document.getElementById('f-last').value  = account.lastName  || '';
+  document.getElementById('f-email').value = account.email     || '';
+  document.getElementById('f-phone').value = account.mobile    || '';
 
   const feeNum = parseInt(session.fee || '0');
   renderLeft(session);
