@@ -1179,6 +1179,8 @@ async function loadSessions() {
   }
 }
 
+window.addEventListener('as:userLoggedIn', () => { loadSessions(); });
+
 // ── Build slider markup: one slide per session, independent state per slide ──
 async function renderSlider(sessionList, user) {
   const banner = document.getElementById('as-banner');

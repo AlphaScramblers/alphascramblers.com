@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 localStorage.setItem("token", data.token);
                 await loadProfile();
-
+                window.dispatchEvent(new CustomEvent('as:userLoggedIn'));
                 logsub.textContent = "Account Created ✓";
                 logsub.disabled = true;
 
@@ -235,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 localStorage.setItem("token", data.token);
                 await loadProfile();
-
+                window.dispatchEvent(new CustomEvent('as:userLoggedIn'));
                 logsignin.textContent = "Signed In ✓";
                 logsignin.disabled = true;
                 logname.readOnly  = true;
