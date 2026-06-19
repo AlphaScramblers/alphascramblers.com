@@ -459,7 +459,6 @@ tbody tr{transition:background .1s}tbody tr:hover{background:var(--bg3)}tbody tr
               <div class="fg"><label class="fl">Duration</label><select class="fi" id="sdu"><option>30 minutes</option><option selected>1 hour</option><option>1.5 hours</option><option>2 hours</option><option>3 hours</option></select></div>
               <div class="fg"><label class="fl">Max Seats</label><input class="fi" id="sseat" type="number" placeholder="e.g. 25" min="1"/></div>
               <div class="fg fw"><label class="fl">Fee (₹) — leave 0 for free</label><input class="fi" id="sfee" type="number" placeholder="0" min="0" value="0"/></div>
-      <div class="fg fw"><label class="fl">Razorpay Payment Link <span style="font-weight:400;color:var(--t3)">(required for paid sessions)</span></label><input class="fi" id="srzp" type="url" placeholder="https://pages.razorpay.com/pl_xxx/view"/><div style="font-size:11px;color:var(--t3);margin-top:4px">Paste the Razorpay Payment Page or Payment Link URL. Students will be sent here to pay the fee before confirming registration.</div></div>
               <div class="fg fw"><label class="fl">Description</label><textarea class="fi" id="sdesc" rows="3" placeholder="What will this session cover?"></textarea></div>
               <div class="fg fw frow"><button class="btn btn-sec" id="clearbtn">Clear</button><button class="btn btn-ac" id="pubbtn">🚀 Publish Session</button></div>
             </div>
@@ -742,7 +741,6 @@ function renderSessions() {
           </div>
           <div class="sc-del-row">
             <button class="btn btn-am sm edit-sess">✏️ Edit</button>
-            <button class="btn btn-sec sm copy-reg-link" data-sid="${sid}">🔗 Copy Reg Link</button>
             <button class="btn btn-rd sm del-sess">Remove Session</button>
           </div>
         </div>
@@ -794,15 +792,6 @@ function renderSessions() {
         toast('Delete failed: ' + e.message, 'rd');
         btn.textContent = 'Remove Session'; btn.disabled = false;
       }
-    });
-  });
-
-  el.querySelectorAll('.copy-reg-link').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const sid = btn.dataset.sid;
-      const url = `${location.origin}/session-register.html?id=${sid}`;
-      navigator.clipboard.writeText(url).then(() => toast('Registration link copied!', 'gr'));
     });
   });
 
@@ -1060,7 +1049,6 @@ function openEditModal(s) {
         <div class="fg"><label class="fl">Duration</label><select class="fi" id="e-dur">${durOpts}</select></div>
         <div class="fg"><label class="fl">Max Seats</label><input class="fi" type="number" id="e-seats" min="1"/></div>
         <div class="fg fw"><label class="fl">Fee (₹) — 0 for free</label><input class="fi" type="number" id="e-fee" min="0"/></div>
-        <div class="fg fw"><label class="fl">Razorpay Payment Link</label><input class="fi" type="url" id="e-rzp" placeholder="https://pages.razorpay.com/pl_xxx/view"/></div>
         <div class="fg fw"><label class="fl">Description</label><textarea class="fi" id="e-desc" rows="3"></textarea></div>
       </div>
       <div class="edit-modal-foot">
@@ -1077,7 +1065,6 @@ function openEditModal(s) {
   document.getElementById('e-seats').value = s.seats  || '';
   document.getElementById('e-fee').value   = s.fee    || '0';
   document.getElementById('e-desc').value  = s.desc   || '';
-document.getElementById('e-rzp').value   = s.razorpayLink || '';
 
   const sid = s._id || s.id;
   const closeModal = () => ov.remove();
@@ -1097,11 +1084,10 @@ document.getElementById('e-rzp').value   = s.razorpayLink || '';
     const body = {
       title, topic: document.getElementById('e-topic').value.trim(),
       date, time,
-      duration:     document.getElementById('e-dur').value,
-      seats:        document.getElementById('e-seats').value,
-      fee:          document.getElementById('e-fee').value || '0',
-      desc:         document.getElementById('e-desc').value.trim(),
-      razorpayLink: document.getElementById('e-rzp').value.trim(),
+      duration: document.getElementById('e-dur').value,
+      seats:    document.getElementById('e-seats').value,
+      fee:      document.getElementById('e-fee').value || '0',
+      desc:     document.getElementById('e-desc').value.trim(),
     };
 
     try {
@@ -1141,7 +1127,6 @@ Q('#pubbtn').addEventListener('click', async () => {
       title, topic: Q('#sto').value.trim(), date, time,
       duration: Q('#sdu').value, seats: Q('#sseat').value,
       fee: Q('#sfee').value || '0', desc: Q('#sdesc').value.trim(),
-        razorpayLink: Q('#srzp').value.trim(),
     });
     sessions.unshift(data.session);
     clearForm();
@@ -1156,7 +1141,7 @@ Q('#pubbtn').addEventListener('click', async () => {
 
 Q('#clearbtn').addEventListener('click', clearForm);
 function clearForm() {
-  ['st', 'sto', 'sd', 'stm', 'sseat', 'sdesc', 'srzp'].forEach(id => Q('#' + id).value = '');
+  ['st', 'sto', 'sd', 'stm', 'sseat', 'sdesc'].forEach(id => Q('#' + id).value = '');
   Q('#sdu').value = '1 hour'; Q('#sfee').value = '0';
   updatePreview();
 }
