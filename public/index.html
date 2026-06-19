@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
     <html lang="en">
     <head>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2209508338901541"
@@ -28,7 +28,7 @@
         <link rel="stylesheet" href="contact.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link href="https://fonts.googleapis.com/css2?family=Mada:wght@200..900&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&family=Mada:wght@200..900&display=swap" rel="stylesheet">
@@ -1134,30 +1134,33 @@
         <script src="./homepage/alpha.js"></script>
         <script src="./navregbot.js"></script>
         <script src="./login-signup-profile.js"></script>
-<script>     
+<script>
 const API = 'https://api.alphascramblers.com';
 let sessions = [];
 let sessionIdx = 0;
 const section = document.getElementById('as-session-section');
 
-// ── auth helpers ──────────────────────────────────────────────────────────────
+// ── auth: only the token lives in localStorage. Everything else (name, email,
+//    mobile, registration status) is fetched fresh from MongoDB on demand.
 function getToken() {
-  return localStorage.getItem('token') || localStorage.getItem('authToken') || null;
+  return localStorage.getItem('token') || null;
 }
-function getCurrentUser() {
+
+let currentAccount = null;
+async function loadAccount() {
+  const token = getToken();
+  if (!token) { currentAccount = null; return null; }
   try {
-    const up = localStorage.getItem('userProfile');
-    if (up) return JSON.parse(up);
-    const email = localStorage.getItem('email');
-    const userId = localStorage.getItem('userId');
-    if (email || userId) return {
-      id: userId, _id: userId, email,
-      firstName: localStorage.getItem('firstName'),
-      lastName:  localStorage.getItem('lastName'),
-      mobile:    localStorage.getItem('no')
-    };
-    return null;
-  } catch { return null; }
+    const res = await fetch('/api/profile', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = res.ok ? await res.json() : { success: false };
+    if (!data.success) localStorage.removeItem('token'); // stale token, clear it
+    currentAccount = data.success ? data.profile : null;
+  } catch {
+    currentAccount = null;
+  }
+  return currentAccount;
 }
 function getUserId(user) { return user?._id || user?.id || null; }
 
@@ -1178,10 +1181,13 @@ function setBookBtn(btn) {
 
 // ── source of truth: ask the backend, never localStorage ─────────────────────
 async function checkRegistered(sid) {
-  const uid = getUserId(getCurrentUser());
-  if (!getToken() || !uid) return false;
+  const token = getToken();
+  const uid   = getUserId(currentAccount);
+  if (!token || !uid) return false;
   try {
-    const res  = await fetch(`${API}/api/sessions/${sid}/booked/${uid}`);
+    const res  = await fetch(`${API}/api/sessions/${sid}/booked/${uid}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     const data = await res.json();
     return !!data.booked;
   } catch {
@@ -1296,12 +1302,29 @@ async function loadSessions() {
   }
 }
 
-loadSessions();
+// Fetch the account first (so checkRegistered has currentAccount ready),
+// then load and render the sessions.
+loadAccount().then(loadSessions);
 
 // clean up the ?registered=<sid> param left after redirect from registration page
 if (new URLSearchParams(location.search).get('registered')) {
   history.replaceState(null, '', location.pathname);
 }
+
+// ── re-sync after login/logout ─────────────────────────────────────────────────
+// login-signup-profile.js should dispatch 'as:login' right after it stores the
+// token (and nothing else) in localStorage, and 'as:logout' right after it
+// removes it. That keeps this banner's view of who's logged in fresh without
+// ever reading anything but the token key from localStorage itself.
+window.addEventListener('as:login', () => {
+  loadAccount().then(() => {
+    if (sessions.length) renderSession(sessions[sessionIdx], false);
+  });
+});
+window.addEventListener('as:logout', () => {
+  currentAccount = null;
+  if (sessions.length) renderSession(sessions[sessionIdx], false);
+});
 
 // ── nav buttons ───────────────────────────────────────────────────────────────
 document.getElementById('as-prev').addEventListener('click', () => {
@@ -1312,14 +1335,14 @@ document.getElementById('as-next').addEventListener('click', () => {
 });
 
 // ── book button: just navigate, no modal ───────────────────────────────────────
-document.getElementById('as-bookbtn').addEventListener('click', () => {
+document.getElementById('as-bookbtn').addEventListener('click', async () => {
   const s = sessions[sessionIdx];
   if (!s || s._id === undefined) return;
   const sid = s._id.toString();
 
-  const token = getToken();
-  const user  = getCurrentUser();
-  if (!token || !user) { showLoginPrompt(); return; }
+  if (!getToken()) { showLoginPrompt(); return; }
+  if (!currentAccount) await loadAccount(); // re-validate in case the token expired mid-visit
+  if (!currentAccount) { showLoginPrompt(); return; }
 
   window.location.href = `/online-session-register.html?id=${sid}`;
 });

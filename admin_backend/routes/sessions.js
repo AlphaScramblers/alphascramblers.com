@@ -1,5 +1,6 @@
 import express from "express";
 import crypto  from "crypto";
+import jwt     from "jsonwebtoken";
 import Razorpay from "razorpay";
 import { ObjectId } from "mongodb";
 import { connectDB } from "../lib/mongo.js";
@@ -8,6 +9,19 @@ import { adminAuth } from "../middleware/auth.js";
 const router = express.Router();
 
 const SESSIONS_WEBHOOK_SECRET = process.env.SESSIONS_RAZORPAY_WEBHOOK_SECRET;
+
+// ── Verify the user's own JWT (separate from adminAuth) ───────────────────────
+function requireUser(req, res, next) {
+  const auth  = req.headers.authorization || "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : null;
+  if (!token) return res.status(401).json({ success: false, message: "Please log in" });
+  try {
+    req.userId = jwt.verify(token, process.env.JWT_SECRET).id;
+    next();
+  } catch {
+    return res.status(401).json({ success: false, message: "Invalid or expired session" });
+  }
+}
 
 // ── Razorpay client ───────────────────────────────────────────────────────────
 // NOTE: these weren't defined in the file you pasted — if you already declare
@@ -61,7 +75,7 @@ router.post("/", adminAuth, async (req, res) => {
 // ── POST /api/sessions/:id/create-order ──────────────────────────────────────
 // Creates a Razorpay Order sized to this session's fee. Works for ANY session
 // with a fee > 0 — no per-session setup needed in the Razorpay dashboard.
-router.post("/:id/create-order", async (req, res) => {
+router.post("/:id/create-order", requireUser, async (req, res) => {
   try {
     const { name, email, phone } = req.body;
     if (!email)
@@ -85,6 +99,7 @@ router.post("/:id/create-order", async (req, res) => {
       notes: {
         sessionId:    req.params.id,
         sessionTitle: session.title,
+        userId:       req.userId,
         email:        email.toLowerCase(),
         name:         name || "",
         phone:        phone || "",
@@ -110,7 +125,7 @@ router.post("/:id/create-order", async (req, res) => {
 // client can't forge it. We then pull the order back from Razorpay directly
 // (never trust client-sent amount/sessionId) and record it in pendingPayments
 // so the existing /:id/book route picks it up exactly as it does for webhooks.
-router.post("/:id/verify-payment", async (req, res) => {
+router.post("/:id/verify-payment", requireUser, async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature)
@@ -144,6 +159,9 @@ router.post("/:id/verify-payment", async (req, res) => {
     if (order.notes?.sessionId !== req.params.id || order.amount !== feeAmount * 100)
       return res.status(400).json({ success: false, message: "Payment does not match this session" });
 
+    if (order.notes?.userId !== req.userId)
+      return res.status(403).json({ success: false, message: "This payment does not belong to your account" });
+
     await db.collection("pendingPayments").updateOne(
       { paymentId: razorpay_payment_id },
       {
@@ -152,6 +170,7 @@ router.post("/:id/verify-payment", async (req, res) => {
           orderId:    razorpay_order_id,
           sessionId:  req.params.id,
           amount:     order.amount,
+          userId:     req.userId,
           email:      (order.notes?.email || "").toLowerCase(),
           contact:    order.notes?.phone || "",
           verified:   true,
@@ -251,14 +270,13 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
   }
 });
 
-router.post("/:id/book", async (req, res) => {
+router.post("/:id/book", requireUser, async (req, res) => {
   try {
-    const {
-      userId, name, firstName, lastName, email, phone,
-    } = req.body;
+    const userId = req.userId;
+    const { name, firstName, lastName, email, phone } = req.body;
 
-    if (!userId || !email)
-      return res.status(400).json({ success: false, message: "userId and email required" });
+    if (!email)
+      return res.status(400).json({ success: false, message: "email required" });
 
     const { db } = await connectDB();
     const sessions = db.collection("sessions");
@@ -282,10 +300,19 @@ router.post("/:id/book", async (req, res) => {
       const emailLc = (email || "").toLowerCase();
       const pending = db.collection("pendingPayments");
 
+      // Prefer a payment tied to this exact account (normal Checkout popup flow)
       let pendingDoc = await pending.findOne(
-        { email: emailLc, sessionId: req.params.id, verified: true, used: false },
+        { userId, sessionId: req.params.id, verified: true, used: false },
         { sort: { capturedAt: -1 } }
       );
+      // Fall back to email match — covers webhook-sourced payments, which
+      // can't carry userId since Razorpay doesn't know your accounts
+      if (!pendingDoc) {
+        pendingDoc = await pending.findOne(
+          { email: emailLc, sessionId: req.params.id, verified: true, used: false },
+          { sort: { capturedAt: -1 } }
+        );
+      }
       if (!pendingDoc) {
         pendingDoc = await pending.findOne(
           { email: emailLc, sessionId: "", verified: true, used: false, source: "sessions" },
@@ -385,8 +412,11 @@ router.get("/:id/check-payment-by-email", async (req, res) => {
 });
 
 // ── GET /api/sessions/:id/booked/:userId ────────────────────────────────────
-router.get("/:id/booked/:userId", async (req, res) => {
+router.get("/:id/booked/:userId", requireUser, async (req, res) => {
   try {
+    if (req.userId !== req.params.userId)
+      return res.status(403).json({ success: false, message: "Forbidden" });
+
     const { db } = await connectDB();
     const booking = await db.collection("bookings").findOne({
       sid: req.params.id,

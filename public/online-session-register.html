@@ -229,28 +229,29 @@ const API_BASE = 'https://api.alphascramblers.com';
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let session  = null;
-let account = null;
+let account  = null;
 let payState = { verified: false, razorpayId: '' };
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-function getAccountUser() {
-  try {
-    const up = localStorage.getItem('userProfile');
-    if (up) return JSON.parse(up);
-    const email = localStorage.getItem('email');
-    const userId = localStorage.getItem('userId');
-    if (email || userId) return {
-      id: userId, _id: userId, email,
-      firstName: localStorage.getItem('firstName'),
-      lastName:  localStorage.getItem('lastName'),
-      mobile:    localStorage.getItem('no')
-    };
-    return null;
-  } catch { return null; }
-}
+// ── Auth: only the token lives in localStorage. Everything else (name, email,
+//    mobile) is fetched fresh from MongoDB on every page load via /api/auth/me.
 function getAccountToken() {
-  return localStorage.getItem('token') || localStorage.getItem('authToken') || null;
+  return localStorage.getItem('token') || null;
 }
+
+async function fetchAccount(token) {
+  try {
+    const res = await fetch('/api/profile', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.success ? data.profile : null;
+  } catch {
+    return null;
+  }
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
 function toast(msg, err) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -423,7 +424,10 @@ async function startCheckout() {
   try {
     const res = await fetch(`${API_BASE}/api/sessions/${sid}/create-order`, {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization:  `Bearer ${getAccountToken()}`
+      },
       body:    JSON.stringify({ name: f.first + ' ' + f.last, email: f.email, phone: f.phone }),
     });
     const data = await res.json();
@@ -468,7 +472,10 @@ async function verifyAndBook(response) {
   try {
     const res  = await fetch(`${API_BASE}/api/sessions/${sid}/verify-payment`, {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization:  `Bearer ${getAccountToken()}`
+      },
       body:    JSON.stringify({
         razorpay_order_id:   response.razorpay_order_id,
         razorpay_payment_id: response.razorpay_payment_id,
@@ -507,8 +514,7 @@ async function doSubmit() {
   btn.disabled = true;
   lbl.innerHTML = '<span class="spin"></span> Submitting…';
 
-  // Generate or retrieve a stable anonymous user ID.
-  const accountId = account.id || account._id;
+  const accountId = account._id || account.id;
 
   const payload = {
     userId:    accountId,
@@ -525,7 +531,10 @@ async function doSubmit() {
   try {
     const res  = await fetch(`${API_BASE}/api/sessions/${sid}/book`, {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization:  `Bearer ${getAccountToken()}`
+      },
       body:    JSON.stringify(payload),
     });
     const data = await res.json();
@@ -561,11 +570,8 @@ async function doSubmit() {
     return;
   }
 
-  account = getAccountUser();
   const accountToken = getAccountToken();
-  const accountId = account?.id || account?._id;
-
-  if (!accountToken || !accountId) {
+  if (!accountToken) {
     document.getElementById('error-view').style.display = 'block';
     document.querySelector('#error-view .err-h').textContent = 'Please log in first';
     document.querySelector('#error-view .err-p').textContent =
@@ -574,11 +580,24 @@ async function doSubmit() {
     return;
   }
 
-  // Pre-fill from the account — no anonymous ID needed anymore
+  // Fetch the real account fresh from MongoDB — nothing but the token was cached.
+  account = await fetchAccount(accountToken);
+  const accountId = account?._id || account?.id;
+
+  if (!accountId) {
+    localStorage.removeItem('token'); // stale/expired token
+    document.getElementById('error-view').style.display = 'block';
+    document.querySelector('#error-view .err-h').textContent = 'Session expired';
+    document.querySelector('#error-view .err-p').textContent =
+      'Your login has expired. Please go back, log in again, then click "Book Your Seat" again.';
+    return;
+  }
+
+  // Pre-fill from the account — fetched fresh from the server, never cached
   document.getElementById('f-first').value = account.firstName || '';
   document.getElementById('f-last').value  = account.lastName  || '';
   document.getElementById('f-email').value = account.email     || '';
-  document.getElementById('f-phone').value = account.mobile    || '';
+  document.getElementById('f-phone').value = account.mobileNumber || '';
 
   const feeNum = parseInt(session.fee || '0');
   renderLeft(session);
