@@ -59,8 +59,9 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 /* Payment block */
 .pay-now-wrap{display:none;background:var(--sky-lt);border:1.5px solid var(--sky-mid);border-radius:var(--r);padding:14px 16px;text-align:center;margin-top:12px}
 .pay-now-wrap.show{display:block}
-.pay-now-btn{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;text-decoration:none;border-radius:var(--r);padding:10px 22px;font-size:13.5px;font-weight:600;transition:all .15s}
+.pay-now-btn{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;text-decoration:none;border:none;cursor:pointer;border-radius:var(--r);padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;transition:all .15s}
 .pay-now-btn:hover{background:var(--navy2);box-shadow:0 4px 14px rgba(15,28,63,.25)}
+.pay-now-btn:disabled{opacity:.6;cursor:not-allowed}
 .pay-now-note{font-size:11px;color:var(--muted);margin-top:7px}
 .pay-now-wrap.verifying{background:var(--sky-lt);border-color:var(--sky-mid)}
 .pay-now-wrap.paid{background:var(--green-lt);border-color:#bfe3d4}
@@ -103,8 +104,6 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .suc-row .sk{color:var(--muted)}.suc-row .sv{font-weight:600;color:var(--navy)}
 .suc-contact{font-size:12.5px;color:var(--muted)}
 .suc-contact strong{color:var(--navy)}
-/* Returned-from-payment banner */
-#return-banner{display:none;background:rgba(122,184,232,.08);border:1px solid var(--sky-mid);border-radius:var(--r);padding:11px 15px;margin-bottom:14px;font-size:12.5px;color:var(--navy);text-align:center}
 @media(max-width:900px){
   html,body{overflow:auto}
   .layout{grid-template-columns:1fr;height:auto;overflow:visible}
@@ -157,11 +156,6 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     <div class="form-wrap" id="form-area" style="display:none">
       <div class="form-heading">Reserve your spot</div>
       <p class="form-sub">Fill in your details below. We'll confirm via WhatsApp.</p>
-
-      <!-- shown only when user returns from Razorpay Payment Page -->
-      <div id="return-banner">
-        ⏳ Welcome back! Verifying your payment using your email address…
-      </div>
 
       <div class="fblock">
         <div class="fblock-title">Your Details</div>
@@ -228,19 +222,10 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 
 <div class="toast" id="toast"></div>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
-const API_BASE    = 'https://api.alphascramblers.com';
-const STORAGE_KEY = 'asc_sess_reg_v1';
-
-// How long to poll the backend waiting for the webhook to arrive.
-// 15 tries × 2 s = 30 s max before we give up and show a failure state.
-const POLL_INTERVAL_MS = 2000;
-const POLL_MAX_TRIES   = 15;
-
-// sessionStorage flag: set just before navigating to Razorpay so we know the
-// user is coming back from a payment attempt, not loading the page fresh.
-const RETURNING_FLAG = 'asc_returning_from_razorpay';
+const API_BASE = 'https://api.alphascramblers.com';
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let session  = null;
@@ -331,14 +316,6 @@ function setPayNowState(state, detail) {
   const wrap    = document.getElementById('pay-now-wrap');
   const content = document.getElementById('pnw-content');
   const feeNum  = parseInt(session?.fee || '0');
-  const sid     = getSessionId();
-
-  // Build the Payment Page URL. Append ?id= so that when Razorpay redirects
-  // back (to whatever URL you configured), the session id survives in the URL.
-  const baseLink   = session?.razorpayLink || '';
-  const RAZORPAY_URL = baseLink
-    ? baseLink + (baseLink.includes('?') ? '&' : '?') + 'id=' + encodeURIComponent(sid)
-    : '';
 
   wrap.classList.remove('verifying', 'paid', 'failed');
 
@@ -348,7 +325,7 @@ function setPayNowState(state, detail) {
       <div class="pnw-status">
         <span class="pnw-spin"></span> Verifying your payment…
       </div>
-      <p class="pnw-sub">This only takes a moment — please don't close this tab.</p>`;
+      <p class="pnw-sub">Just a moment — please don't close this tab.</p>`;
 
   } else if (state === 'paid') {
     wrap.classList.add('paid');
@@ -362,22 +339,21 @@ function setPayNowState(state, detail) {
   } else if (state === 'failed') {
     wrap.classList.add('failed');
     content.innerHTML = `
-      <div class="pnw-status failed-text">Payment could not be verified</div>
+      <div class="pnw-status failed-text">Payment unsuccessful</div>
       <p class="pnw-sub">${detail || 'Please try again or contact us.'}</p>
-      <button type="button" class="pnw-retry" onclick="resetPayNow()">Try paying again</button>`;
+      <button type="button" class="pnw-retry" onclick="resetPayNow()">Try again</button>`;
 
   } else {
     // 'default' — show the Pay Now button
     content.innerHTML = `
-      <a href="${RAZORPAY_URL}" id="pay-now-link" class="pay-now-btn">
+      <button type="button" id="pay-now-btn" class="pay-now-btn" onclick="startCheckout()">
         Pay ₹${feeNum} Now
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/>
         </svg>
-      </a>
-      <p class="pay-now-note">You'll be taken to Razorpay, then brought back here automatically.</p>`;
-    attachPayLinkHandler();
+      </button>
+      <p class="pay-now-note">A secure Razorpay window will open — no page reload needed.</p>`;
   }
 }
 
@@ -392,46 +368,6 @@ function updateSubmitState() {
   const isPaid = feeNum === 0 || payState.verified;
   document.getElementById('submit-btn').disabled = !isPaid;
   document.getElementById('pay-gate-note').style.display = isPaid ? 'none' : 'block';
-}
-
-// ── Form persistence across the Razorpay redirect ────────────────────────────
-function saveFormToStorage() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({
-    first: val('f-first'), last: val('f-last'),
-    phone: val('f-phone'), email: val('f-email'),
-    sessionId: getSessionId(),
-  }));
-}
-
-function restoreFormFromStorage() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-    const d = JSON.parse(raw);
-    if (d.sessionId !== getSessionId()) return;
-    if (!val('f-first') && d.first) document.getElementById('f-first').value = d.first;
-    if (!val('f-last')  && d.last)  document.getElementById('f-last').value  = d.last;
-    if (!val('f-phone') && d.phone) document.getElementById('f-phone').value = d.phone;
-    if (!val('f-email') && d.email) document.getElementById('f-email').value = d.email;
-  } catch (_) {}
-}
-
-// ── Wire up the Pay Now link ──────────────────────────────────────────────────
-function attachPayLinkHandler() {
-  const link = document.getElementById('pay-now-link');
-  if (!link) return;
-  link.addEventListener('click', e => {
-    if (!validateFields().ok) {
-      e.preventDefault();
-      toast('Please fill in your details before paying.', true);
-      return;
-    }
-    // Persist the form so it survives the redirect back from Razorpay.
-    saveFormToStorage();
-    // Set a flag so we know the user is returning from Razorpay, not loading fresh.
-    sessionStorage.setItem(RETURNING_FLAG, '1');
-    // Navigation continues to the Razorpay Payment Page URL.
-  });
 }
 
 // ── Field validation ──────────────────────────────────────────────────────────
@@ -452,103 +388,88 @@ function validateFields() {
   return { ok, first, last, phone, email };
 }
 
-// ── Core: poll /check-payment-by-email then auto-submit ──────────────────────
-//
-// Razorpay Payment Pages never append payment parameters to the redirect URL.
-// The webhook (server-to-server) fires when the payment is captured and writes
-// a verified doc to pendingPayments keyed by the user's email.
-// We poll that endpoint here until the doc appears, then proceed to booking.
-//
-async function pollByEmail(email) {
+// ── Checkout popup flow ───────────────────────────────────────────────────────
+// Replaces the old hosted Payment Page redirect: we create an order, open the
+// Razorpay popup in-page, and verify the result the moment it comes back —
+// no redirect, no localStorage hand-off, no polling.
+async function startCheckout() {
+  const f = validateFields();
+  if (!f.ok) { toast('Please fill in your details before paying.', true); return; }
+
+  const sid = getSessionId();
+  const btn = document.getElementById('pay-now-btn');
+  if (btn) btn.disabled = true;
+
+  let order;
+  try {
+    const res = await fetch(`${API_BASE}/api/sessions/${sid}/create-order`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ name: f.first + ' ' + f.last, email: f.email, phone: f.phone }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.message || 'Could not start payment');
+    order = data;
+  } catch (err) {
+    toast(err.message || 'Could not start payment. Try again.', true);
+    if (btn) btn.disabled = false;
+    return;
+  }
+
+  const rzp = new Razorpay({
+    key:         order.key,
+    amount:      order.amount,
+    currency:    order.currency || 'INR',
+    name:        'AlphaScramblers',
+    description: session?.title || 'Workshop Registration',
+    order_id:    order.orderId,
+    prefill:     { name: f.first + ' ' + f.last, email: f.email, contact: f.phone },
+    theme:       { color: '#0f1c3f' },
+    handler:     function (response) { verifyAndBook(response); },
+    modal: {
+      ondismiss: function () {
+        if (btn) btn.disabled = false;
+        toast('Payment window closed.', false);
+      },
+    },
+  });
+
+  rzp.on('payment.failed', function (response) {
+    setPayNowState('failed', response?.error?.description || 'Your payment did not go through.');
+    updateSubmitState();
+  });
+
+  rzp.open();
+}
+
+async function verifyAndBook(response) {
   const sid = getSessionId();
   setPayNowState('verifying');
-  document.getElementById('return-banner').style.display = 'none'; // replaced by verifying UI
 
-  for (let i = 0; i < POLL_MAX_TRIES; i++) {
-    try {
-      const res  = await fetch(
-        `${API_BASE}/api/sessions/${sid}/check-payment-by-email?email=${encodeURIComponent(email)}`
-      );
-      const data = await res.json();
+  try {
+    const res  = await fetch(`${API_BASE}/api/sessions/${sid}/verify-payment`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        razorpay_order_id:   response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature:  response.razorpay_signature,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.message || 'Payment verification failed');
 
-      if (data.success && data.paid) {
-        // Webhook has confirmed payment — record it locally and proceed.
-        payState = { verified: true, razorpayId: data.payment?.razorpayId || '' };
-        setPayNowState('paid', payState.razorpayId);
-        toast('Payment verified ✓');
-        updateSubmitState();
-        sessionStorage.removeItem(RETURNING_FLAG);
-        await autoSubmit();
-        return;
-      }
-    } catch (_) {
-      // Network blip — keep trying.
-    }
-
-    // Wait before next attempt. Show live progress so the user knows we're working.
-    const remaining = POLL_MAX_TRIES - i - 1;
-    const pnwSub = document.querySelector('.pnw-sub');
-    if (pnwSub && remaining > 0) {
-      pnwSub.textContent = `Still checking… (${remaining} ${remaining === 1 ? 'try' : 'tries'} left)`;
-    }
-
-    await new Promise(r => setTimeout(r, POLL_INTERVAL_MS));
-  }
-
-  // Exhausted all retries — webhook hasn't arrived yet (or payment failed).
-  payState = { verified: false, razorpayId: '' };
-  setPayNowState('failed',
-    'We couldn\'t confirm your payment in time. If you paid, please contact us with your Razorpay transaction ID.');
-  updateSubmitState();
-  sessionStorage.removeItem(RETURNING_FLAG);
-}
-
-// ── Detect return from Razorpay and kick off email polling ───────────────────
-//
-// Since Razorpay Payment Pages give us nothing in the URL, we rely on the
-// sessionStorage flag we set in attachPayLinkHandler() right before navigation.
-//
-async function handleReturnFromRazorpay() {
-  const isReturning = sessionStorage.getItem(RETURNING_FLAG) === '1';
-
-  if (!isReturning) {
-    // Normal page load — nothing to do.
+    payState = { verified: true, razorpayId: data.payment?.razorpayId || response.razorpay_payment_id };
+    setPayNowState('paid', payState.razorpayId);
     updateSubmitState();
-    return;
-  }
+    toast('Payment verified ✓');
 
-  // The user just came back from Razorpay.
-  // Form fields were restored from localStorage before this runs.
-  const email = val('f-email');
-
-  if (!email) {
-    // Edge case: storage was cleared somehow. Can't poll without email.
-    setPayNowState('failed', 'Could not read your email. Please fill in your details and try paying again.');
+    // Auto-register — no extra click needed, same as before.
+    await doSubmit();
+  } catch (err) {
+    setPayNowState('failed', err.message || 'We could not verify this payment. Please contact us with your Razorpay payment ID.');
     updateSubmitState();
-    sessionStorage.removeItem(RETURNING_FLAG);
-    return;
   }
-
-  // Show a brief banner while we start polling.
-  document.getElementById('return-banner').style.display = 'block';
-
-  // Give the webhook ~1 s head-start before the first poll, since Razorpay
-  // fires the webhook and redirects the user almost simultaneously.
-  await new Promise(r => setTimeout(r, 1000));
-
-  await pollByEmail(email);
-}
-
-// ── Auto-submit after payment verification ────────────────────────────────────
-async function autoSubmit() {
-  await new Promise(r => setTimeout(r, 50));
-  const f = validateFields();
-  if (!f.ok) {
-    toast('Please complete your details and click Confirm Registration.', false);
-    updateSubmitState();
-    return;
-  }
-  await doSubmit();
 }
 
 // ── Manual submit ─────────────────────────────────────────────────────────────
@@ -595,7 +516,6 @@ async function doSubmit() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'Registration failed');
 
-    localStorage.removeItem(STORAGE_KEY);
     localStorage.setItem('as_registered_' + sid, 'yes');
 
     document.getElementById('form-area').style.display    = 'none';
@@ -638,25 +558,12 @@ async function doSubmit() {
   renderLeft(session);
   document.getElementById('form-area').style.display = 'block';
 
-  // Restore form fields first — needed before handleReturnFromRazorpay() reads
-  // the email field to start polling.
-  restoreFormFromStorage();
-
   if (feeNum > 0) {
     document.getElementById('pay-block').style.display      = 'block';
     document.getElementById('pay-amount-label').textContent = '₹' + feeNum;
-
-    if (!session.razorpayLink) {
-      document.getElementById('pnw-content').innerHTML =
-        '<p style="font-size:12.5px;color:var(--red)">Payment link not configured for this session. Contact us to register.</p>';
-    } else {
-      setPayNowState('default');
-    }
+    setPayNowState('default');
   }
 
-  // Check if the user is returning from the Razorpay Payment Page and, if so,
-  // start polling /check-payment-by-email with the restored email address.
-  await handleReturnFromRazorpay();
   updateSubmitState();
 })();
 </script>
