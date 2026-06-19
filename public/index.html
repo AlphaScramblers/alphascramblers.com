@@ -1098,14 +1098,36 @@
     <!-- SESSION BANNER SCRIPT -->
 <script>
 const API = 'https://api.alphascramblers.com';
-
 let currentSession = null;
 const section = document.getElementById('as-session-section');
 
-// ── helpers ──────────────────────────────────────────────────────────────────
-function registeredKey(sid) { return 'as_registered_' + sid; }
-function isRegisteredLocally(sid) { return localStorage.getItem(registeredKey(sid)) === 'yes'; }
-function markRegisteredLocally(sid) { localStorage.setItem(registeredKey(sid), 'yes'); }
+// ── auth helpers (DEFINED FIRST) ──────────────────────────────────────────────
+function getToken() {
+  return localStorage.getItem('token') || localStorage.getItem('authToken') || null;
+}
+function getCurrentUser() {
+  try {
+    const u = localStorage.getItem('user') || localStorage.getItem('userData');
+    return u ? JSON.parse(u) : null;
+  } catch { return null; }
+}
+
+// ── registration helpers ──────────────────────────────────────────────────────
+function registeredKey(sid) {
+  const user = getCurrentUser();
+  const uid = user?._id || user?.id || user?.email || null;
+  if (!uid) return null; // no user = no valid key
+  return 'as_registered_' + sid + '_' + uid;
+}
+function isRegisteredLocally(sid) {
+  if (!getToken() || !getCurrentUser()) return false;
+  const key = registeredKey(sid);
+  return key ? localStorage.getItem(key) === 'yes' : false;
+}
+function markRegisteredLocally(sid) {
+  const key = registeredKey(sid);
+  if (key) localStorage.setItem(key, 'yes');
+}
 
 function getToken() { return localStorage.getItem('token') || localStorage.getItem('authToken') || null; }
 function getCurrentUser() {
