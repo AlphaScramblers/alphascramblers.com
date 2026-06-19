@@ -461,17 +461,23 @@ async function pollWebhookThenVerify(paymentId) {
 async function handleReturnFromRazorpay() {
   restoreFormFromStorage();
 
-  const returning = sessionStorage.getItem('asc_returning_from_pay') === 'yes'
+  const params = new URLSearchParams(location.search);
+  const paymentIdFromUrl = params.get('razorpay_payment_id');
+  const returningFlag = sessionStorage.getItem('asc_returning_from_pay') === 'yes'
     && sessionStorage.getItem('asc_pay_sid') === getSessionId();
 
-  if (!returning) { updateSubmitState(); return; }
+  if (!paymentIdFromUrl && !returningFlag) { updateSubmitState(); return; }
+
+  if (paymentIdFromUrl) {
+    sessionStorage.removeItem('asc_returning_from_pay');
+    sessionStorage.removeItem('asc_pay_sid');
+    await pollWebhookThenVerify(paymentIdFromUrl);
+    return;
+  }
 
   const email = val('f-email');
   if (!email) { updateSubmitState(); return; }
-
   const sid = getSessionId();
-
-  // Check by email first (most reliable after redirect)
   try {
     const res  = await fetch(`${API_BASE}/api/sessions/${sid}/check-payment-by-email?email=${encodeURIComponent(email)}`);
     const data = await res.json();
@@ -485,16 +491,6 @@ async function handleReturnFromRazorpay() {
       return;
     }
   } catch (_) {}
-
-  // Check URL params as fallback
-  const params = new URLSearchParams(location.search);
-  const paymentId = params.get('razorpay_payment_id');
-  if (paymentId) {
-    sessionStorage.removeItem('asc_returning_from_pay');
-    sessionStorage.removeItem('asc_pay_sid');
-    await pollWebhookThenVerify(paymentId);
-    return;
-  }
 
   updateSubmitState();
 }
@@ -555,6 +551,7 @@ async function doSubmit() {
     if (!res.ok) throw new Error(data.message || 'Registration failed');
 
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.setItem('as_registered_' + sid, 'yes'); 
     document.getElementById('form-area').style.display  = 'none';
     document.getElementById('success-view').style.display = 'block';
     document.getElementById('s-name').textContent    = f.first + ' ' + f.last;
