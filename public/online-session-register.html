@@ -224,13 +224,12 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 
 <script>
 // ── Config ───────────────────────────────────────────────
-const API_BASE  = 'https://api.alphascramblers.com';
+const API_BASE    = 'https://api.alphascramblers.com';
 const STORAGE_KEY = 'asc_sess_reg_v1';
 
 // ── State ─────────────────────────────────────────────────
-let session   = null;
-let userId    = null;   // from URL or localStorage
-let payState  = { verified: false };
+let session  = null;
+let payState = { verified: false };
 
 const POLL_INTERVAL_MS = 1500;
 const POLL_MAX_TRIES   = 10;
@@ -254,7 +253,9 @@ function setErr(fieldId, errId, show) {
 
 function fmtDate(dateStr) {
   if (!dateStr) return '—';
-  return new Date(dateStr + 'T00:00').toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  return new Date(dateStr + 'T00:00').toLocaleDateString('en-IN', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
 }
 
 function fmtTime(t) {
@@ -291,10 +292,10 @@ function renderLeft(s) {
 
   const dl = document.getElementById('detail-list');
   dl.innerHTML = [
-    s.date   ? { icon: calIcon(), label: 'Date',     val: fmtDate(s.date) } : null,
-    s.time   ? { icon: clockIcon(), label: 'Time',   val: fmtTime(s.time) + (s.duration ? ' · ' + s.duration : '') } : null,
-    s.topic  ? { icon: bookIcon(), label: 'Topic',   val: s.topic } : null,
-    s.seats  ? { icon: groupIcon(), label: 'Seats',  val: s.seats + ' spots available' } : null,
+    s.date  ? { icon: calIcon(),   label: 'Date',  val: fmtDate(s.date) } : null,
+    s.time  ? { icon: clockIcon(), label: 'Time',  val: fmtTime(s.time) + (s.duration ? ' · ' + s.duration : '') } : null,
+    s.topic ? { icon: bookIcon(),  label: 'Topic', val: s.topic } : null,
+    s.seats ? { icon: groupIcon(), label: 'Seats', val: s.seats + ' spots available' } : null,
   ].filter(Boolean).map(item => `
     <div class="detail-item">
       <div class="d-icon">${item.icon}</div>
@@ -304,7 +305,6 @@ function renderLeft(s) {
       </div>
     </div>`).join('');
 
-  // terms note
   document.getElementById('terms-note').textContent =
     `By registering you confirm your attendance for this session on ${fmtDate(s.date)}.`;
 }
@@ -324,10 +324,18 @@ function groupIcon() {
 
 // ── Payment helpers ───────────────────────────────────────
 function setPayNowState(state, detail) {
-  const wrap = document.getElementById('pay-now-wrap');
+  const wrap    = document.getElementById('pay-now-wrap');
   const content = document.getElementById('pnw-content');
-  const feeNum = parseInt(session?.fee || '0');
-  const RAZORPAY_URL = session?.razorpayLink || '';
+  const feeNum  = parseInt(session?.fee || '0');
+  const sid     = getSessionId();
+
+  // Build the Razorpay URL with the session id appended so it
+  // survives the redirect back and getSessionId() still works.
+  const baseLink = session?.razorpayLink || '';
+  const RAZORPAY_URL = baseLink
+    ? baseLink + (baseLink.includes('?') ? '&' : '?') + 'id=' + encodeURIComponent(sid)
+    : '';
+
   wrap.classList.remove('verifying', 'paid', 'failed');
 
   if (state === 'verifying') {
@@ -340,6 +348,7 @@ function setPayNowState(state, detail) {
     wrap.classList.add('failed');
     content.innerHTML = `<div class="pnw-status failed-text">Payment could not be verified</div><p class="pnw-sub">${detail || 'Please try again.'}</p><button type="button" class="pnw-retry" onclick="resetPayNow()">Try paying again</button>`;
   } else {
+    // default — show the Pay button
     content.innerHTML = `<a href="${RAZORPAY_URL}" id="pay-now-link" class="pay-now-btn">Pay ₹${feeNum} Now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a><p class="pay-now-note">You'll be taken to Razorpay, then brought back here automatically.</p>`;
     attachPayLinkHandler();
   }
@@ -371,9 +380,9 @@ function restoreFormFromStorage() {
   if (!raw) return;
   try {
     const d = JSON.parse(raw);
-    if (d.sessionId !== getSessionId()) return; // don't restore for different session
+    if (d.sessionId !== getSessionId()) return;
     if (!val('f-first') && d.first) document.getElementById('f-first').value = d.first;
-    if (!val('f-last')  && d.last)  document.getElementById('f-last').value = d.last;
+    if (!val('f-last')  && d.last)  document.getElementById('f-last').value  = d.last;
     if (!val('f-phone') && d.phone) document.getElementById('f-phone').value = d.phone;
     if (!val('f-email') && d.email) document.getElementById('f-email').value = d.email;
   } catch (_) {}
@@ -389,8 +398,8 @@ function attachPayLinkHandler() {
       return;
     }
     saveFormToStorage();
-    sessionStorage.setItem('asc_returning_from_pay', 'yes');
-    sessionStorage.setItem('asc_pay_sid', getSessionId());
+    // No sessionStorage flags needed — the id param in the URL
+    // is enough to identify the returning user.
   });
 }
 
@@ -427,6 +436,7 @@ async function pollWebhookThenVerify(paymentId) {
         setPayNowState('paid', paymentId);
         toast('Payment verified ✓');
         updateSubmitState();
+        // Clean all Razorpay params from URL, keep only ?id=
         history.replaceState({}, '', location.pathname + '?id=' + sid);
         await autoSubmit();
         return;
@@ -438,9 +448,9 @@ async function pollWebhookThenVerify(paymentId) {
   // Fallback: direct verify via backend
   try {
     const res  = await fetch(`${API_BASE}/api/sessions/${sid}/verify-payment`, {
-      method: 'POST',
+      method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ razorpay_payment_id: paymentId }),
+      body:    JSON.stringify({ razorpay_payment_id: paymentId }),
     });
     const data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.message || 'Verification failed');
@@ -458,41 +468,32 @@ async function pollWebhookThenVerify(paymentId) {
   }
 }
 
+// ── Handle return from Razorpay ───────────────────────────
 async function handleReturnFromRazorpay() {
+  // Always restore form fields first — the user filled them before paying.
   restoreFormFromStorage();
 
-  const params = new URLSearchParams(location.search);
-  const paymentIdFromUrl = params.get('razorpay_payment_id');
-  const returningFlag = sessionStorage.getItem('asc_returning_from_pay') === 'yes'
-    && sessionStorage.getItem('asc_pay_sid') === getSessionId();
+  const params      = new URLSearchParams(location.search);
+  const paymentId   = params.get('razorpay_payment_id');
+  const linkStatus  = params.get('razorpay_payment_link_status');   // "paid" | "cancelled" | undefined
+  const referenceId = params.get('razorpay_payment_link_reference_id'); // extra signal, logged only
 
-  if (!paymentIdFromUrl && !returningFlag) { updateSubmitState(); return; }
-
-  if (paymentIdFromUrl) {
-    sessionStorage.removeItem('asc_returning_from_pay');
-    sessionStorage.removeItem('asc_pay_sid');
-    await pollWebhookThenVerify(paymentIdFromUrl);
+  // Nothing from Razorpay in the URL — normal page load, nothing to do.
+  if (!paymentId) {
+    updateSubmitState();
     return;
   }
 
-  const email = val('f-email');
-  if (!email) { updateSubmitState(); return; }
-  const sid = getSessionId();
-  try {
-    const res  = await fetch(`${API_BASE}/api/sessions/${sid}/check-payment-by-email?email=${encodeURIComponent(email)}`);
-    const data = await res.json();
-    if (data.success && data.paid) {
-      sessionStorage.removeItem('asc_returning_from_pay');
-      sessionStorage.removeItem('asc_pay_sid');
-      setPayNowState('paid', data.paymentId);
-      payState = { verified: true, razorpay_payment_id: data.paymentId };
-      updateSubmitState();
-      await autoSubmit();
-      return;
-    }
-  } catch (_) {}
+  // Razorpay explicitly told us the payment didn't go through.
+  if (linkStatus && linkStatus !== 'paid') {
+    setPayNowState('failed', 'Payment was not completed. Please try again.');
+    updateSubmitState();
+    history.replaceState({}, '', location.pathname + '?id=' + getSessionId());
+    return;
+  }
 
-  updateSubmitState();
+  // We have a payment ID (and optionally a "paid" status) — verify it.
+  await pollWebhookThenVerify(paymentId);
 }
 
 async function autoSubmit() {
@@ -521,18 +522,21 @@ async function doSubmit() {
   btn.disabled = true;
   lbl.innerHTML = '<span class="spin"></span> Submitting…';
 
-  // Generate/retrieve userId
+  // Generate / retrieve a stable userId
   let uid = localStorage.getItem('asc_user_id');
-  if (!uid) { uid = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2); localStorage.setItem('asc_user_id', uid); }
+  if (!uid) {
+    uid = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    localStorage.setItem('asc_user_id', uid);
+  }
 
   const payload = {
-    userId: uid,
-    name: f.first + ' ' + f.last,
+    userId:    uid,
+    name:      f.first + ' ' + f.last,
     firstName: f.first,
-    lastName: f.last,
-    phone: f.phone,
-    email: f.email,
-    at: new Date().toISOString(),
+    lastName:  f.last,
+    phone:     f.phone,
+    email:     f.email,
+    at:        new Date().toISOString(),
   };
 
   if (feeNum > 0) {
@@ -543,16 +547,17 @@ async function doSubmit() {
 
   try {
     const res  = await fetch(`${API_BASE}/api/sessions/${sid}/book`, {
-      method: 'POST',
+      method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body:    JSON.stringify(payload),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'Registration failed');
 
     localStorage.removeItem(STORAGE_KEY);
-    localStorage.setItem('as_registered_' + sid, 'yes'); 
-    document.getElementById('form-area').style.display  = 'none';
+    localStorage.setItem('as_registered_' + sid, 'yes');
+
+    document.getElementById('form-area').style.display   = 'none';
     document.getElementById('success-view').style.display = 'block';
     document.getElementById('s-name').textContent    = f.first + ' ' + f.last;
     document.getElementById('s-session').textContent = session.title;
@@ -573,7 +578,7 @@ async function doSubmit() {
 
   if (!sid) {
     document.getElementById('loading-view').style.display = 'none';
-    document.getElementById('error-view').style.display = 'block';
+    document.getElementById('error-view').style.display   = 'block';
     return;
   }
 
@@ -591,14 +596,12 @@ async function doSubmit() {
   const feeNum = parseInt(session.fee || '0');
   renderLeft(session);
 
-  // Show payment block only for paid sessions
   if (feeNum > 0) {
-    document.getElementById('pay-block').style.display = 'block';
-    document.getElementById('pay-amount-label').textContent = '₹' + feeNum;
-    document.getElementById('pay-btn-amount').textContent   = '₹' + feeNum;
+    document.getElementById('pay-block').style.display       = 'block';
+    document.getElementById('pay-amount-label').textContent  = '₹' + feeNum;
+    document.getElementById('pay-btn-amount').textContent    = '₹' + feeNum;
 
     if (!session.razorpayLink) {
-      // No Razorpay link configured — degrade gracefully
       document.getElementById('pnw-content').innerHTML =
         '<p style="font-size:12.5px;color:var(--red)">Payment link not configured for this session. Contact us to register.</p>';
     } else {
