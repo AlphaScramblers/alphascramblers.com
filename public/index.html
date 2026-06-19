@@ -1095,327 +1095,90 @@
         <script src="./login-signup-profile.js"></script>
         
         <!-- SESSION BANNER SCRIPT -->
-    <!-- SESSION BANNER SCRIPT -->
-<script>
-const API = 'https://api.alphascramblers.com';
+    <script>
+    const API = 'https://api.alphascramblers.com';
 
-let currentSession = null;
-const section = document.getElementById('as-session-section');
+    let currentSession = null;
+    const section = document.getElementById('as-session-section');
 
-// ── helpers ──────────────────────────────────────────────────────────────────
-function registeredKey(sid) { return 'as_registered_' + sid; }
-function isRegisteredLocally(sid) { return localStorage.getItem(registeredKey(sid)) === 'yes'; }
-function markRegisteredLocally(sid) { localStorage.setItem(registeredKey(sid), 'yes'); }
-
-function getToken() { return localStorage.getItem('token') || localStorage.getItem('authToken') || null; }
-function getCurrentUser() {
-  try {
-    const u = localStorage.getItem('user') || localStorage.getItem('userData');
-    return u ? JSON.parse(u) : null;
-  } catch { return null; }
-}
-
-function formatFee(fee) {
-  if (!fee || fee == 0 || fee === '0') return { label: 'Free', paid: false };
-  return { label: fee, paid: true };
-}
-
-function setRegisteredBtn(btn) {
-  btn.textContent = 'Registered ✓';
-  btn.classList.add('as-registered');
-  btn.disabled = true;
-}
-function setBookBtn(btn) {
-  btn.textContent = 'Book Your Seat';
-  btn.classList.remove('as-registered');
-  btn.disabled = false;
-}
-
-// ── modal helpers ─────────────────────────────────────────────────────────────
-function showOverlay(html) {
-  removeOverlay();
-  const el = document.createElement('div');
-  el.className = 'as-overlay';
-  el.id = 'as-overlay';
-  el.innerHTML = html;
-  document.body.appendChild(el);
-  // close on backdrop click
-  el.addEventListener('click', e => { if (e.target === el) removeOverlay(); });
-}
-function removeOverlay() {
-  const el = document.getElementById('as-overlay');
-  if (el) el.remove();
-}
-
-// ── LOGIN PROMPT modal ────────────────────────────────────────────────────────
-function showLoginPrompt() {
-  showOverlay(`
-    <div class="as-login-modal">
-      <div class="as-login-header">
-        <div class="as-login-icon"><i class="fa-solid fa-lock"></i></div>
-        <div class="as-login-title">Login Required</div>
-        <div class="as-login-sub">Please log in to your AlphaScramblers account to book a session seat.</div>
-      </div>
-      <div class="as-login-body">
-        <button class="as-login-btn" id="as-goto-login">Log In / Sign Up</button>
-        <div class="as-confirm-note" style="margin-top:14px;">
-          Don't have an account? Creating one is free and takes 30 seconds.
-        </div>
-      </div>
-    </div>
-  `);
-  document.getElementById('as-goto-login').addEventListener('click', () => {
-    removeOverlay();
-    // trigger your existing login modal
-    document.querySelector('.login')?.click() || document.querySelector('.login1')?.click();
-  });
-}
-
-// ── BOOKING CONFIRMATION modal ────────────────────────────────────────────────
-function showBookingModal(s, user) {
-  const fee = formatFee(s.fee);
-  const d = new Date(s.date + 'T' + s.time);
-  const dateStr = d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  const timeStr = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-
-  const initials = ((user?.firstName || user?.name || '?')[0] + (user?.lastName ? user.lastName[0] : '')).toUpperCase();
-  const fullName = [user?.firstName || user?.name, user?.lastName].filter(Boolean).join(' ') || 'You';
-  const email    = user?.email || '';
-
-  const feeHTML = fee.paid
-    ? `<span class="as-fee-value paid">₹${fee.label}</span><span class="as-fee-tag paid">PAID</span>`
-    : `<span class="as-fee-value">Free</span><span class="as-fee-tag">FREE</span>`;
-
-  showOverlay(`
-    <div class="as-modal">
-      <div class="as-modal-topbar">
-        <span class="as-modal-topbar-title">Session Registration</span>
-        <button class="as-mclose" id="as-mclose">&#x2715;</button>
-      </div>
-      <div class="as-modal-body">
-        <!-- LEFT -->
-        <div class="as-modal-left">
-          <div class="as-modal-section-label">Session Details</div>
-          <div class="as-session-name">${s.title}</div>
-          <div class="as-detail-row">
-            <div class="as-detail-icon"><i class="fa-regular fa-calendar"></i></div>
-            <div>
-              <div class="as-detail-label">Date &amp; Time</div>
-              <div class="as-detail-value">${dateStr}</div>
-              <div class="as-detail-value" style="font-weight:400;color:#6b7280;">${timeStr}</div>
-            </div>
-          </div>
-          ${s.duration ? `
-          <div class="as-detail-row">
-            <div class="as-detail-icon"><i class="fa-regular fa-clock"></i></div>
-            <div>
-              <div class="as-detail-label">Duration</div>
-              <div class="as-detail-value">${s.duration}</div>
-            </div>
-          </div>` : ''}
-          ${s.topic ? `
-          <div class="as-detail-row">
-            <div class="as-detail-icon"><i class="fa-solid fa-tag"></i></div>
-            <div>
-              <div class="as-detail-label">Topic</div>
-              <div class="as-detail-value">${s.topic}</div>
-            </div>
-          </div>` : ''}
-          ${s.seats ? `
-          <div class="as-detail-row">
-            <div class="as-detail-icon"><i class="fa-solid fa-users"></i></div>
-            <div>
-              <div class="as-detail-label">Available Seats</div>
-              <div class="as-detail-value">${s.seats}</div>
-            </div>
-          </div>` : ''}
-          <div class="as-fee-block">
-            <div class="as-fee-label">Session Fee</div>
-            ${feeHTML}
-          </div>
-        </div>
-
-        <!-- RIGHT -->
-        <div class="as-modal-right">
-          <div class="as-modal-section-label">Your Details</div>
-          <div class="as-user-block">
-            <div class="as-user-block-header">
-              <span class="as-user-block-title">Account</span>
-              <span class="as-verified-tag">✓ Verified</span>
-            </div>
-            <div class="as-user-avatar-row">
-              <div class="as-user-av">${initials}</div>
-              <div>
-                <div class="as-user-fullname">${fullName}</div>
-                <div class="as-user-email-small">${email}</div>
-              </div>
-            </div>
-            <div class="as-user-rows">
-              ${user?.mobile || user?.phone ? `
-              <div class="as-user-row">
-                <div class="as-user-row-label">Mobile</div>
-                <div class="as-user-row-value">${user.mobile || user.phone}</div>
-              </div>` : ''}
-            </div>
-          </div>
-
-          <div class="as-err" id="as-err"></div>
-
-          <button class="as-confirm-btn" id="as-confirm-btn">
-            ${fee.paid ? `Pay ₹${fee.label} &amp; Register` : 'Confirm Registration'}
-          </button>
-          <div class="as-confirm-note">
-            ${fee.paid
-              ? 'You will be redirected to the payment page to complete your registration.'
-              : 'Free session — no payment required. Your seat will be confirmed immediately.'}
-          </div>
-        </div>
-      </div>
-    </div>
-  `);
-
-  document.getElementById('as-mclose').addEventListener('click', removeOverlay);
-  document.getElementById('as-confirm-btn').addEventListener('click', () => handleConfirm(s, user));
-}
-
-// ── CONFIRM / REGISTER ────────────────────────────────────────────────────────
-async function handleConfirm(s, user) {
-  const btn = document.getElementById('as-confirm-btn');
-  const errEl = document.getElementById('as-err');
-  const fee = formatFee(s.fee);
-  const sid = s._id.toString();
-
-  // paid → go to registration page (Razorpay lives there)
-  if (fee.paid) {
-    window.location.href = `/online-session-register.html?id=${sid}`;
-    return;
-  }
-
-  // free → book directly
-  btn.disabled = true;
-  btn.textContent = 'Confirming…';
-  errEl.style.display = 'none';
-
-  try {
-    const token = getToken();
-    const res = await fetch(`${API}/api/bookings`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-      },
-      body: JSON.stringify({ sessionId: sid })
-    });
-
-    const data = await res.json();
-
-    if (!res.ok || !data.success) {
-      const msg = data?.message || 'Booking failed. Please try again.';
-      // already registered — treat as success
-      if (msg.toLowerCase().includes('already')) {
-        markRegisteredLocally(sid);
-        showSuccess(s, user);
-        return;
-      }
-      errEl.textContent = msg;
-      errEl.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Confirm Registration';
-      return;
+    // ── local "already registered" flag (set by the registration page on success) ──
+    function registeredKey(sid) { return 'as_registered_' + sid; }
+    function isRegisteredLocally(sid) {
+    return localStorage.getItem(registeredKey(sid)) === 'yes';
     }
 
-    markRegisteredLocally(sid);
-    showSuccess(s, user);
+    function formatFee(fee) {
+    if (!fee || fee == 0 || fee === '0') return { label: 'Free', paid: false };
+    return { label: fee, paid: true };
+    }
 
-  } catch (err) {
-    errEl.textContent = 'Network error. Please check your connection.';
-    errEl.style.display = 'block';
+    function setRegisteredBtn(btn) {
+    btn.textContent = 'Registered ✓';
+    btn.classList.add('as-registered');
+    btn.disabled = true;
+    }
+    function setBookBtn(btn) {
+    btn.textContent = 'Book Your Seat';
+    btn.classList.remove('as-registered');
     btn.disabled = false;
-    btn.textContent = 'Confirm Registration';
-  }
-}
+    }
 
-// ── SUCCESS modal ─────────────────────────────────────────────────────────────
-function showSuccess(s, user) {
-  showOverlay(`
-    <div class="as-success">
-      <div class="as-success-icon">&#x2713;</div>
-      <div class="as-success-title">You're Registered!</div>
-      <div class="as-success-sub">
-        Your seat for <strong>${s.title}</strong> has been confirmed.<br>
-        We'll send details to <strong>${user?.email || 'your email'}</strong>.
-      </div>
-      <button class="as-success-close" id="as-success-close">Done</button>
-    </div>
-  `);
-  document.getElementById('as-success-close').addEventListener('click', () => {
-    removeOverlay();
-    setRegisteredBtn(document.getElementById('as-bookbtn'));
-  });
-}
+    async function loadSessions() {
+    try {
+        const res  = await fetch(`${API}/api/sessions`);
+        const data = await res.json();
+        if (!data.success || !data.sessions.length) {
+        section.classList.remove('as-visible');
+        return;
+        }
 
-// ── LOAD SESSIONS ─────────────────────────────────────────────────────────────
-async function loadSessions() {
-  try {
-    const res  = await fetch(`${API}/api/sessions`);
-    const data = await res.json();
-    if (!data.success || !data.sessions.length) { section.classList.remove('as-visible'); return; }
+        const now = new Date();
+        const upcoming = data.sessions
+        .filter(s => {
+            if (!s.date) return false;
+            if (s.offlineSessionId) return false; // offline handled separately
+            const endOfDay = new Date(s.date + 'T23:59:59');
+            return endOfDay >= now;
+        })
+        .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
 
-    const now = new Date();
-    const upcoming = data.sessions
-      .filter(s => {
-        if (!s.date) return false;
-        if (s.offlineSessionId) return false;
-        const endOfDay = new Date(s.date + 'T23:59:59');
-        return endOfDay >= now;
-      })
-      .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+        if (!upcoming.length) { section.classList.remove('as-visible'); return; }
 
-    if (!upcoming.length) { section.classList.remove('as-visible'); return; }
+        currentSession = upcoming[0];
+        const s = currentSession;
+        const d = new Date(s.date + 'T' + s.time);
+        const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+        const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
+        const fee = formatFee(s.fee);
 
-    currentSession = upcoming[0];
-    const s = currentSession;
-    const d = new Date(s.date + 'T' + s.time);
-    const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-    const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
-    const fee = formatFee(s.fee);
+        document.getElementById('as-title').textContent = s.title;
+        let meta = dateStr + ' at ' + timeStr + ' &nbsp;|&nbsp; ' + (s.duration || '1 hour');
+        if (s.topic) meta += ' &nbsp;|&nbsp; ' + s.topic;
+        if (s.seats) meta += ' &nbsp;|&nbsp; ' + s.seats + ' seats';
+        meta += ' &nbsp;|&nbsp; ' + (fee.paid ? 'Rs. ' + fee.label : 'Free');
+        document.getElementById('as-meta').innerHTML = meta;
 
-    document.getElementById('as-title').textContent = s.title;
-    let meta = dateStr + ' at ' + timeStr + ' &nbsp;|&nbsp; ' + (s.duration || '1 hour');
-    if (s.topic)  meta += ' &nbsp;|&nbsp; ' + s.topic;
-    if (s.seats)  meta += ' &nbsp;|&nbsp; ' + s.seats + ' seats';
-    meta += ' &nbsp;|&nbsp; ' + (fee.paid ? '₹' + fee.label : 'Free');
-    document.getElementById('as-meta').innerHTML = meta;
+        const btn = document.getElementById('as-bookbtn');
+        const sid = s._id.toString();
+        isRegisteredLocally(sid) ? setRegisteredBtn(btn) : setBookBtn(btn);
 
-    const btn = document.getElementById('as-bookbtn');
-    isRegisteredLocally(s._id.toString()) ? setRegisteredBtn(btn) : setBookBtn(btn);
+        section.classList.add('as-visible');
+    } catch (err) {
+        console.error('Session load error:', err);
+        section.classList.remove('as-visible');
+    }
+    }
 
-    section.classList.add('as-visible');
-  } catch (err) {
-    console.error('Session load error:', err);
-    section.classList.remove('as-visible');
-  }
-}
+    loadSessions();
 
-loadSessions();
-
-// ── BOOK BUTTON ───────────────────────────────────────────────────────────────
-document.getElementById('as-bookbtn').addEventListener('click', () => {
-  if (!currentSession) return;
-  const sid = currentSession._id.toString();
-  if (isRegisteredLocally(sid)) return;
-
-  const token = getToken();
-  const user  = getCurrentUser();
-
-  if (!token || !user) {
-    showLoginPrompt();
-    return;
-  }
-
-  showBookingModal(currentSession, user);
-});
-</script>
+    document.getElementById('as-bookbtn').addEventListener('click', () => {
+    if (!currentSession) return;
+    const sid = currentSession._id.toString();
+    if (isRegisteredLocally(sid)) return;
+    // Both free and paid registrations happen on the dedicated page
+    window.location.href = `/online-session-register.html?id=${sid}`;
+    });
+    </script>
     <script defer src="/_vercel/insights/script.js"></script>
     </body>
     </html>
