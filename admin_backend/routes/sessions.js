@@ -57,6 +57,11 @@ router.post("/:id/book", async (req, res) => {
     if (!session)
       return res.status(404).json({ success: false, message: "Session not found" });
 
+    // Paid sessions must go through /api/razorpay/order + /api/razorpay/verify
+    const feeRupees = parseInt(session.fee || "0", 10);
+    if (feeRupees > 0)
+      return res.status(400).json({ success: false, message: "This session requires payment. Use the payment flow." });
+
     const existing = await bookings.findOne({ sid: req.params.id, userId });
     if (existing)
       return res.status(400).json({ success: false, message: "Already registered for this session" });
@@ -79,6 +84,7 @@ router.post("/:id/book", async (req, res) => {
       sessionTime: session.time || "",
       duration:    session.duration || "",
       fee:         session.fee || "0",
+      payMode:     "free",
       wpAdded:     false,
       at:          new Date().toISOString(),
     });

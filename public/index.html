@@ -19,6 +19,7 @@
   "logo": "https://alphascramblers.com/logo.png"
 }
 </script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Career Counselling|Stream Selection|AlphaScramblers</title>
@@ -1340,8 +1341,18 @@ function openModal(session, user) {
   document.getElementById('as-sub').addEventListener('click', () => submitBooking(session, user));
 }
 
-// ── Submit booking to Express backend ──
+// ── Submit booking — routes to free flow or Razorpay flow ──
 async function submitBooking(session, user) {
+  const feeRupees = parseInt(session.fee || '0', 10);
+  if (feeRupees > 0) {
+    await startRazorpayPayment(session, user);
+  } else {
+    await confirmFreeBooking(session, user);
+  }
+}
+
+// ── Free session: book directly (unchanged behaviour) ──
+async function confirmFreeBooking(session, user) {
   const err = document.getElementById('as-err');
   const btn = document.getElementById('as-sub');
   btn.textContent = 'Confirming...'; btn.disabled = true; err.style.display = 'none';
@@ -1364,33 +1375,140 @@ async function submitBooking(session, user) {
     });
 
     const data = await res.json();
-
     if (!data.success && data.message !== 'Already registered for this session') {
       throw new Error(data.message);
     }
 
     saveBookedLocally(sid, userId);
     setRegisteredBtn(document.getElementById('as-bookbtn'));
-
-    const fee = formatFee(session.fee);
-    const ov  = document.getElementById('as-overlay');
-    ov.innerHTML = `
-      <div class="as-success">
-        <div class="as-success-icon"><i class="fa-solid fa-check"></i></div>
-        <div class="as-success-title">Registration Confirmed</div>
-        <div class="as-success-sub">
-          Thank you, <strong>${esc(user.firstName)}</strong>.<br/>
-          You have been successfully registered for <strong>${esc(session.title)}</strong>.<br/>
-          ${fee.paid ? 'Payment details will be shared on WhatsApp shortly.' : 'You will be added to the WhatsApp group soon.'}
-        </div>
-        <button class="as-success-close" onclick="document.getElementById('as-overlay').remove()">Done</button>
-      </div>`;
+    showSuccessScreen(session, user, false);
   } catch (ex) {
     console.error(ex);
     err.style.display = 'block';
     err.textContent = ex.message || 'Something went wrong. Please try again.';
     btn.textContent = 'Confirm Registration'; btn.disabled = false;
   }
+}
+
+// ── Paid session: open Razorpay Checkout popup ──
+async function startRazorpayPayment(session, user) {
+  const err = document.getElementById('as-err');
+  const btn = document.getElementById('as-sub');
+  btn.textContent = 'Preparing payment...'; btn.disabled = true; err.style.display = 'none';
+
+  const sid    = session._id.toString();
+  const userId = user._id || user.id;
+
+  try {
+    // 1. Create order on backend
+    const orderRes  = await fetch(`${API}/api/razorpay/order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: sid })
+    });
+    const orderData = await orderRes.json();
+    if (!orderData.success) throw new Error(orderData.message || 'Could not start payment');
+
+    btn.textContent = 'Confirm Registration'; btn.disabled = false;
+
+    // 2. Open Razorpay Checkout
+    const options = {
+      key: orderData.key,
+      amount: orderData.order.amount,
+      currency: orderData.order.currency,
+      name: 'AlphaScramblers',
+      description: session.title,
+      order_id: orderData.order.id,
+      prefill: {
+        name:  user.firstName + ' ' + user.lastName,
+        email: user.email,
+        contact: user.mobileNumber || user.mobileno || '',
+      },
+      theme: { color: '#1a56db' },
+      handler: async function (response) {
+        // 3. Payment succeeded on Razorpay's side — verify on our backend
+        await verifyAndConfirm(response, session, user);
+      },
+      modal: {
+        ondismiss: function () {
+          btn.textContent = 'Confirm Registration'; btn.disabled = false;
+        }
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', function (response) {
+      err.style.display = 'block';
+      err.textContent = 'Payment failed: ' + (response.error?.description || 'Please try again.');
+      btn.textContent = 'Confirm Registration'; btn.disabled = false;
+    });
+    rzp.open();
+
+  } catch (ex) {
+    console.error(ex);
+    err.style.display = 'block';
+    err.textContent = ex.message || 'Something went wrong. Please try again.';
+    btn.textContent = 'Confirm Registration'; btn.disabled = false;
+  }
+}
+
+// ── Verify payment signature on backend, then show success ──
+async function verifyAndConfirm(razorpayResponse, session, user) {
+  const err = document.getElementById('as-err');
+  const btn = document.getElementById('as-sub');
+  if (btn) { btn.textContent = 'Verifying payment...'; btn.disabled = true; }
+
+  const sid    = session._id.toString();
+  const userId = user._id || user.id;
+
+  try {
+    const res = await fetch(`${API}/api/razorpay/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        razorpay_order_id:   razorpayResponse.razorpay_order_id,
+        razorpay_payment_id: razorpayResponse.razorpay_payment_id,
+        razorpay_signature:  razorpayResponse.razorpay_signature,
+        sessionId: sid,
+        userId,
+        name:      user.firstName + ' ' + user.lastName,
+        firstName: user.firstName,
+        lastName:  user.lastName,
+        email:     user.email,
+        phone:     user.mobileNumber || user.mobileno || '',
+      })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message || 'Payment verification failed');
+
+    saveBookedLocally(sid, userId);
+    setRegisteredBtn(document.getElementById('as-bookbtn'));
+    showSuccessScreen(session, user, true);
+  } catch (ex) {
+    console.error(ex);
+    if (err) {
+      err.style.display = 'block';
+      err.textContent = ex.message || 'Payment could not be verified. Please contact support if money was deducted.';
+    }
+    if (btn) { btn.textContent = 'Confirm Registration'; btn.disabled = false; }
+  }
+}
+
+// ── Shared success screen ──
+function showSuccessScreen(session, user, wasPaid) {
+  const ov = document.getElementById('as-overlay');
+  if (!ov) return;
+  ov.innerHTML = `
+    <div class="as-success">
+      <div class="as-success-icon"><i class="fa-solid fa-check"></i></div>
+      <div class="as-success-title">Registration Confirmed</div>
+      <div class="as-success-sub">
+        Thank you, <strong>${esc(user.firstName)}</strong>.<br/>
+        You have been successfully registered for <strong>${esc(session.title)}</strong>.<br/>
+        ${wasPaid ? 'Your payment was successful. Details will be shared on WhatsApp shortly.' : 'You will be added to the WhatsApp group soon.'}
+      </div>
+      <button class="as-success-close" onclick="document.getElementById('as-overlay').remove()">Done</button>
+    </div>`;
 }
 
 function removeOverlay() {

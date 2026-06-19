@@ -7,6 +7,7 @@ import userRoutes     from "./routes/users.js";
 import sessionRoutes  from "./routes/sessions.js";
 import bookingRoutes  from "./routes/bookings.js";
 import offlineRegistrationRoutes from "./routes/offlineRegistrations.js";
+import razorpayRouter from "./routes/razorpay.js";
 
 const app  = express();
 const PORT = process.env.PORT || 3001;
@@ -32,6 +33,7 @@ app.use("/api/users",    userRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/offline-registrations", offlineRegistrationRoutes);
+app.use("/api/razorpay", razorpayRouter);
 
 // ── Health check ────────────────────────────────────────
 app.get("/", (req, res) => res.json({ status: "AlphaScramblers backend running ✓" }));
