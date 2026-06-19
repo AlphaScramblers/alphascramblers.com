@@ -57,6 +57,71 @@ router.post("/", adminAuth, async (req, res) => {
   }
 });
 
+router.post("/:id/create-payment-link", async (req, res) => {
+  try {
+    const { email, phone, name } = req.body;
+
+    if (!email)
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
+
+    const { db } = await connectDB();
+
+    const session = await db.collection("sessions").findOne({
+      _id: new ObjectId(req.params.id),
+    });
+
+    if (!session)
+      return res.status(404).json({
+        success: false,
+        message: "Session not found",
+      });
+
+    const feeAmount = parseInt(session.fee || "0");
+
+    if (feeAmount <= 0)
+      return res.status(400).json({
+        success: false,
+        message: "This session is free",
+      });
+
+    const paymentLink = await razorpay.paymentLink.create({
+      amount: feeAmount * 100,
+      currency: "INR",
+
+      customer: {
+        name: name || "",
+        email,
+        contact: phone || "",
+      },
+
+      notify: {
+        sms: true,
+        email: true,
+      },
+
+      notes: {
+        sessionId: session._id.toString(),
+        sessionTitle: session.title,
+      },
+    });
+
+    return res.json({
+      success: true,
+      url: paymentLink.short_url,
+    });
+
+  } catch (err) {
+    console.error("CREATE PAYMENT LINK ERROR:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Could not create payment link",
+    });
+  }
+});
+
 router.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
   try {
     if (!SESSIONS_WEBHOOK_SECRET) {
