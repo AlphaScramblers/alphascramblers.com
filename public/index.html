@@ -1107,8 +1107,24 @@ function getToken() {
 }
 function getCurrentUser() {
   try {
-    const u = localStorage.getItem('user') || localStorage.getItem('userData');
-    return u ? JSON.parse(u) : null;
+    // Try the object key first
+    const u = localStorage.getItem('userProfile');
+    if (u) return JSON.parse(u);
+    
+    // Fall back to flat keys
+    const email = localStorage.getItem('email');
+    const userId = localStorage.getItem('userId');
+    if (email || userId) {
+      return {
+        id: userId,
+        _id: userId,
+        email: email,
+        firstName: localStorage.getItem('firstName'),
+        lastName: localStorage.getItem('lastName'),
+        mobile: localStorage.getItem('no')
+      };
+    }
+    return null;
   } catch { return null; }
 }
 
