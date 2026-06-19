@@ -1145,14 +1145,6 @@ function markRegisteredLocally(sid) {
   if (key) localStorage.setItem(key, 'yes');
 }
 
-function getToken() { return localStorage.getItem('token') || localStorage.getItem('authToken') || null; }
-function getCurrentUser() {
-  try {
-    const u = localStorage.getItem('user') || localStorage.getItem('userData');
-    return u ? JSON.parse(u) : null;
-  } catch { return null; }
-}
-
 function formatFee(fee) {
   if (!fee || fee == 0 || fee === '0') return { label: 'Free', paid: false };
   return { label: fee, paid: true };
