@@ -6,17 +6,9 @@ import { adminAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 
-const KEY_ID     = process.env.RAZORPAY_KEY_ID;
-const KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
-// Separate webhook secret for the sessions Payment Page, configured as its
-// own webhook in the Razorpay dashboard (Settings → Webhooks → Add New
-// Webhook → URL: https://api.alphascramblers.com/api/sessions/webhook).
-// Keeping this distinct from RAZORPAY_WEBHOOK_SECRET (used by
-// offline-registrations) means the two Payment Pages/webhooks can be
-// rotated or disabled independently without affecting each other.
 const SESSIONS_WEBHOOK_SECRET = process.env.SESSIONS_RAZORPAY_WEBHOOK_SECRET;
 
-// ── Razorpay helpers (same as offlineRegistrations.js) ──────────────────────
+// ── Razorpay helpers ──────────────────────
 async function fetchRazorpayPayment(paymentId) {
   if (!KEY_ID || !KEY_SECRET) throw new Error("Razorpay API keys are not configured on the server");
   const auth = Buffer.from(`${KEY_ID}:${KEY_SECRET}`).toString("base64");
@@ -65,19 +57,6 @@ router.post("/", adminAuth, async (req, res) => {
   }
 });
 
-// ── POST /api/sessions/webhook ───────────────────────────────────────────────
-// Razorpay calls this server-to-server the moment a payment on the sessions
-// Payment Page succeeds. Mirrors offlineRegistrations.js's webhook, but is
-// its own route with its own secret so the two Payment Pages stay independent.
-// IMPORTANT: must receive the RAW body for HMAC verification — mounted with
-// express.raw() in index.js BEFORE the global express.json() middleware.
-//
-// Because a Razorpay Payment Page gives us no reliable way to tag which
-// session a payment belongs to (no custom redirect params), we identify the
-// session from the payment's notes if present, falling back to matching by
-// email only. Configure the Payment Page's "Additional Fields" / order notes
-// to include the session id where possible for unambiguous matching;
-// otherwise the most recent unused payment for that email is used.
 router.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
   try {
     if (!SESSIONS_WEBHOOK_SECRET) {
@@ -155,12 +134,6 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
   }
 });
 
-// ── POST /api/sessions/:id/book — student books a session ───────────────────
-// For paid sessions (fee > 0), requires that the webhook has already written
-// a verified, unused pendingPayments doc for this email (and ideally this
-// session id). Razorpay Payment Pages give the frontend no payment id to pass
-// us directly, so — same as offlineRegistrations.js — the webhook is the
-// sole source of truth here, looked up by email.
 router.post("/:id/book", async (req, res) => {
   try {
     const {
@@ -255,10 +228,6 @@ router.post("/:id/book", async (req, res) => {
   }
 });
 
-// ── POST /api/sessions/:id/verify-payment ───────────────────────────────────
-// Frontend calls this right when the student is redirected back from Razorpay.
-// Returns whether the payment ID is found & verified in pendingPayments.
-// If not found in webhook store, falls back to direct Razorpay API check.
 router.post("/:id/verify-payment", async (req, res) => {
   try {
     const { razorpay_payment_id } = req.body;
@@ -306,13 +275,6 @@ router.post("/:id/verify-payment", async (req, res) => {
   }
 });
 
-// ── GET /api/sessions/:id/check-payment-by-email ────────────────────────────
-// Razorpay Payment Pages don't return any identifying query params on
-// redirect, so the frontend can't poll by paymentId. Instead it polls this
-// route by email right after returning from Razorpay. Prefers a payment
-// whose webhook notes matched this session id; falls back to the most
-// recent unused payment for this email if notes weren't set on the Payment
-// Page (e.g. session id wasn't passed through as a custom field).
 router.get("/:id/check-payment-by-email", async (req, res) => {
   try {
     const { email } = req.query;
