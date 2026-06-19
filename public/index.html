@@ -51,7 +51,22 @@
         max-width: 1100px;
     }
     #as-session-section.as-visible { display: block; }
-
+    #as-banner { position: relative; }
+    .as-slide { align-items: center; gap: 20px; flex-wrap: wrap; width: 100%; }
+    .as-slider-nav {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin-top: 12px; padding-top: 10px; border-top: 1px solid #eef1fa;
+    }
+    .as-nav-disabled { opacity: 0.4; pointer-events: none; }
+    .as-slide-arrow {
+    background: #f0f4fb; border: 1px solid #d1d9f0; color: #1a56db;
+    width: 26px; height: 26px; border-radius: 6px; cursor: pointer;
+    font-size: 14px; display: flex; align-items: center; justify-content: center;
+    }
+    .as-slide-arrow:hover { background: #e0e8fb; }
+    .as-slide-dots { display: flex; gap: 6px; }
+    .as-dot { width: 7px; height: 7px; border-radius: 50%; background: #d1d9f0; cursor: pointer; }
+    .as-dot.active { background: #1a56db; }
     /* ── BANNER ── */
     #as-banner {
         background: #ffffff;
@@ -1095,11 +1110,12 @@
     <script src="./navregbot.js"></script>
     <script src="./login-signup-profile.js"></script>
     
-    <!-- SESSION BANNER SCRIPT -->
 <script>
 const API = 'https://api.alphascramblers.com';
 
-let currentSession = null;
+let allUpcomingSessions = [];
+let currentSlide = 0;
+let sliderLocked = false;
 const section = document.getElementById('as-session-section');
 
 // ── localStorage helpers ──
@@ -1133,19 +1149,7 @@ function formatFee(fee) {
   return { label: fee, originalPrice: null, paid: true };
 }
 
-// ── Button state helpers ──
-function setRegisteredBtn(btn) {
-  btn.textContent = 'Registered ✓';
-  btn.classList.add('as-registered');
-  btn.disabled = true;
-}
-function setBookBtn(btn) {
-  btn.textContent = 'Book Your Seat';
-  btn.classList.remove('as-registered');
-  btn.disabled = false;
-}
-
-// ── Load sessions from Express backend ──
+// ── Load ALL upcoming sessions, build slider ──
 async function loadSessions() {
   try {
     const res  = await fetch(`${API}/api/sessions`);
@@ -1155,56 +1159,19 @@ async function loadSessions() {
       return;
     }
 
-    // Pick the next upcoming session — show all day on session date, hide only after midnight
-    const now  = new Date();
-    const upcoming = data.sessions
+    const now = new Date();
+    allUpcomingSessions = data.sessions
       .filter(s => {
-        if (!s.date) return false;
-        if (s.offlineSessionId) return false;
+        if (!s.date || s.offlineSessionId) return false;
         const endOfDay = new Date(s.date + 'T23:59:59');
         return endOfDay >= now;
       })
       .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
-      
 
-    if (!upcoming.length) { section.classList.remove('as-visible'); return; }
+    if (!allUpcomingSessions.length) { section.classList.remove('as-visible'); return; }
 
-    currentSession = upcoming[0];
-    const s  = currentSession;
-    const d  = new Date(s.date + 'T' + s.time);
-    const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-    const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
-
-    document.getElementById('as-title').textContent = s.title;
-    let meta = dateStr + ' at ' + timeStr + ' &nbsp;|&nbsp; ' + (s.duration || '1 hour');
-    if (s.topic) meta += ' &nbsp;|&nbsp; ' + s.topic;
-    if (s.seats) meta += ' &nbsp;|&nbsp; ' + s.seats + ' seats';
-    document.getElementById('as-meta').innerHTML = meta;
-
-    // Check if user already booked
-    const btn  = document.getElementById('as-bookbtn');
     const user = await getLoggedInUser();
-    const sid  = s._id.toString();
-
-    if (user) {
-      const userId = user._id || user.id;
-      if (isBookedLocally(sid, userId)) {
-        setRegisteredBtn(btn);
-      } else {
-        // Verify with server
-        const chk = await fetch(`${API}/api/sessions/${sid}/booked/${userId}`);
-        const chkData = await chk.json();
-        if (chkData.booked) {
-          saveBookedLocally(sid, userId);
-          setRegisteredBtn(btn);
-        } else {
-          setBookBtn(btn);
-        }
-      }
-    } else {
-      setBookBtn(btn);
-    }
-
+    await renderSlider(allUpcomingSessions, user);
     section.classList.add('as-visible');
   } catch (err) {
     console.error('Session load error:', err);
@@ -1212,18 +1179,104 @@ async function loadSessions() {
   }
 }
 
-loadSessions();
+// ── Build slider markup: one slide per session, independent state per slide ──
+async function renderSlider(sessionList, user) {
+  const banner = document.getElementById('as-banner');
 
-// ── Book Now click ──
-document.getElementById('as-bookbtn').addEventListener('click', async () => {
-  if (!currentSession) return;
-  const user = await getLoggedInUser();
-  if (!user) { openLoginPrompt(); return; }
-  const sid    = currentSession._id.toString();
-  const userId = user._id || user.id;
-  if (isBookedLocally(sid, userId)) return;
-  openModal(currentSession, user);
-});
+  const slidesHtml = await Promise.all(sessionList.map(async (s, idx) => {
+    const d = new Date(s.date + 'T' + s.time);
+    const dateStr = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    const timeStr = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
+    let meta = dateStr + ' at ' + timeStr + ' &nbsp;|&nbsp; ' + (s.duration || '1 hour');
+    if (s.topic) meta += ' &nbsp;|&nbsp; ' + s.topic;
+    if (s.seats) meta += ' &nbsp;|&nbsp; ' + s.seats + ' seats';
+
+    const sid = s._id.toString();
+    let alreadyBooked = false;
+    if (user) {
+      const userId = user._id || user.id;
+      if (isBookedLocally(sid, userId)) {
+        alreadyBooked = true;
+      } else {
+        try {
+          const chk = await fetch(`${API}/api/sessions/${sid}/booked/${userId}`);
+          const chkData = await chk.json();
+          if (chkData.booked) { saveBookedLocally(sid, userId); alreadyBooked = true; }
+        } catch {}
+      }
+    }
+
+    return `
+      <div class="as-slide" data-slide-index="${idx}" style="display:${idx === 0 ? 'flex' : 'none'}">
+        <div class="as-banner-left">
+          <div class="as-indicator"></div>
+          <div class="as-banner-text">
+            <div class="as-eyebrow">Upcoming Session</div>
+            <div class="as-title">${esc(s.title)}</div>
+            <div class="as-meta">${meta}</div>
+          </div>
+        </div>
+        <button class="as-bookbtn ${alreadyBooked ? 'as-registered' : ''}" data-session-index="${idx}" ${alreadyBooked ? 'disabled' : ''}>
+          ${alreadyBooked ? 'Registered ✓' : 'Book Your Seat'}
+        </button>
+      </div>`;
+  }));
+
+  banner.innerHTML = slidesHtml.join('') + (sessionList.length > 1 ? `
+    <div class="as-slider-nav">
+      <button class="as-slide-arrow" id="as-prev" aria-label="Previous session">&#8249;</button>
+      <div class="as-slide-dots" id="as-dots">
+        ${sessionList.map((_, i) => `<span class="as-dot ${i === 0 ? 'active' : ''}" data-dot-index="${i}"></span>`).join('')}
+      </div>
+      <button class="as-slide-arrow" id="as-next" aria-label="Next session">&#8250;</button>
+    </div>` : '');
+
+  currentSlide = 0;
+  attachSlideListeners(sessionList, user);
+}
+
+function attachSlideListeners(sessionList, user) {
+  const banner = document.getElementById('as-banner');
+
+  // Book buttons — each closure captures ITS OWN session, never a shared global
+  banner.querySelectorAll('.as-bookbtn').forEach(btn => {
+    if (btn.disabled) return;
+    const idx = parseInt(btn.dataset.sessionIndex, 10);
+    const boundSession = sessionList[idx];   // locked in at attach-time, immutable per button
+    btn.addEventListener('click', async () => {
+      const freshUser = await getLoggedInUser();
+      if (!freshUser) { openLoginPrompt(); return; }
+      const sid = boundSession._id.toString();
+      const userId = freshUser._id || freshUser.id;
+      if (isBookedLocally(sid, userId)) return;
+      openModal(boundSession, freshUser);
+    });
+  });
+
+  const prev = document.getElementById('as-prev');
+  const next = document.getElementById('as-next');
+  if (prev) prev.addEventListener('click', () => goToSlide(currentSlide - 1, sessionList.length));
+  if (next) next.addEventListener('click', () => goToSlide(currentSlide + 1, sessionList.length));
+
+  banner.querySelectorAll('.as-dot').forEach(dot => {
+    dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.dotIndex, 10), sessionList.length));
+  });
+}
+
+function goToSlide(idx, total) {
+  if (sliderLocked) return;
+  if (idx < 0) idx = total - 1;
+  if (idx >= total) idx = 0;
+  currentSlide = idx;
+  document.querySelectorAll('.as-slide').forEach(s => {
+    s.style.display = parseInt(s.dataset.slideIndex, 10) === idx ? 'flex' : 'none';
+  });
+  document.querySelectorAll('.as-dot').forEach(d => {
+    d.classList.toggle('active', parseInt(d.dataset.dotIndex, 10) === idx);
+  });
+}
+
+loadSessions();
 
 // ── Login prompt ──
 function openLoginPrompt() {
@@ -1250,7 +1303,7 @@ function openLoginPrompt() {
   });
 }
 
-// ── Booking modal ──
+// ── Booking modal — receives the exact session object bound to the clicked button ──
 function openModal(session, user) {
   removeOverlay();
   const fee     = formatFee(session.fee);
@@ -1269,6 +1322,9 @@ function openModal(session, user) {
 
   const ov = document.createElement('div');
   ov.className = 'as-overlay'; ov.id = 'as-overlay';
+  // data-session-id is a visible safety tag — lets you sanity-check in devtools
+  // that the modal in front of the user matches the session it claims to be for
+  ov.dataset.sessionId = session._id.toString();
   ov.innerHTML = `
     <div class="as-modal">
       <div class="as-modal-topbar">
@@ -1336,9 +1392,22 @@ function openModal(session, user) {
       </div>
     </div>`;
   document.body.appendChild(ov);
+  lockSlider();
   ov.addEventListener('click', e => { if (e.target === ov) removeOverlay(); });
   document.getElementById('as-mclose').addEventListener('click', removeOverlay);
   document.getElementById('as-sub').addEventListener('click', () => submitBooking(session, user));
+}
+
+// ── Lock/unlock the slider while a modal or Checkout popup is open ──
+function lockSlider() {
+  sliderLocked = true;
+  const nav = document.querySelector('.as-slider-nav');
+  if (nav) nav.classList.add('as-nav-disabled');
+}
+function unlockSlider() {
+  sliderLocked = false;
+  const nav = document.querySelector('.as-slider-nav');
+  if (nav) nav.classList.remove('as-nav-disabled');
 }
 
 // ── Submit booking — routes to free flow or Razorpay flow ──
@@ -1351,7 +1420,7 @@ async function submitBooking(session, user) {
   }
 }
 
-// ── Free session: book directly (unchanged behaviour) ──
+// ── Free session: book directly ──
 async function confirmFreeBooking(session, user) {
   const err = document.getElementById('as-err');
   const btn = document.getElementById('as-sub');
@@ -1380,7 +1449,7 @@ async function confirmFreeBooking(session, user) {
     }
 
     saveBookedLocally(sid, userId);
-    setRegisteredBtn(document.getElementById('as-bookbtn'));
+    markSlideRegistered(sid);
     showSuccessScreen(session, user, false);
   } catch (ex) {
     console.error(ex);
@@ -1390,7 +1459,7 @@ async function confirmFreeBooking(session, user) {
   }
 }
 
-// ── Paid session: open Razorpay Checkout popup ──
+// ── Paid session: open Razorpay Checkout, bound to this exact session+user ──
 async function startRazorpayPayment(session, user) {
   const err = document.getElementById('as-err');
   const btn = document.getElementById('as-sub');
@@ -1400,7 +1469,6 @@ async function startRazorpayPayment(session, user) {
   const userId = user._id || user.id;
 
   try {
-    // 1. Create order on backend
     const orderRes  = await fetch(`${API}/api/razorpay/order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1411,36 +1479,42 @@ async function startRazorpayPayment(session, user) {
 
     btn.textContent = 'Confirm Registration'; btn.disabled = false;
 
-    // 2. Open Razorpay Checkout
     const options = {
       key: orderData.key,
       amount: orderData.order.amount,
       currency: orderData.order.currency,
       name: 'AlphaScramblers',
       description: session.title,
-      order_id: orderData.order.id,
+      order_id: orderData.order.id,   // ties this popup to exactly one order, set server-side
       prefill: {
         name:  user.firstName + ' ' + user.lastName,
         email: user.email,
         contact: user.mobileNumber || user.mobileno || '',
       },
       theme: { color: '#1a56db' },
+      // session & user are closed over from startRazorpayPayment's own arguments —
+      // even if the slider moves to a different session while Checkout is open,
+      // this handler still only ever resolves against THIS session/user pair
       handler: async function (response) {
-        // 3. Payment succeeded on Razorpay's side — verify on our backend
         await verifyAndConfirm(response, session, user);
       },
       modal: {
         ondismiss: function () {
-          btn.textContent = 'Confirm Registration'; btn.disabled = false;
+          const liveBtn = document.getElementById('as-sub');
+          if (liveBtn) { liveBtn.textContent = 'Confirm Registration'; liveBtn.disabled = false; }
         }
       }
     };
 
     const rzp = new Razorpay(options);
     rzp.on('payment.failed', function (response) {
-      err.style.display = 'block';
-      err.textContent = 'Payment failed: ' + (response.error?.description || 'Please try again.');
-      btn.textContent = 'Confirm Registration'; btn.disabled = false;
+      const liveErr = document.getElementById('as-err');
+      const liveBtn = document.getElementById('as-sub');
+      if (liveErr) {
+        liveErr.style.display = 'block';
+        liveErr.textContent = 'Payment failed: ' + (response.error?.description || 'Please try again.');
+      }
+      if (liveBtn) { liveBtn.textContent = 'Confirm Registration'; liveBtn.disabled = false; }
     });
     rzp.open();
 
@@ -1452,7 +1526,7 @@ async function startRazorpayPayment(session, user) {
   }
 }
 
-// ── Verify payment signature on backend, then show success ──
+// ── Verify payment signature on backend for THIS session, then show success ──
 async function verifyAndConfirm(razorpayResponse, session, user) {
   const err = document.getElementById('as-err');
   const btn = document.getElementById('as-sub');
@@ -1469,7 +1543,7 @@ async function verifyAndConfirm(razorpayResponse, session, user) {
         razorpay_order_id:   razorpayResponse.razorpay_order_id,
         razorpay_payment_id: razorpayResponse.razorpay_payment_id,
         razorpay_signature:  razorpayResponse.razorpay_signature,
-        sessionId: sid,
+        sessionId: sid,            // explicit, not inferred — backend trusts only this + the verified order
         userId,
         name:      user.firstName + ' ' + user.lastName,
         firstName: user.firstName,
@@ -1482,7 +1556,7 @@ async function verifyAndConfirm(razorpayResponse, session, user) {
     if (!data.success) throw new Error(data.message || 'Payment verification failed');
 
     saveBookedLocally(sid, userId);
-    setRegisteredBtn(document.getElementById('as-bookbtn'));
+    markSlideRegistered(sid);
     showSuccessScreen(session, user, true);
   } catch (ex) {
     console.error(ex);
@@ -1494,7 +1568,18 @@ async function verifyAndConfirm(razorpayResponse, session, user) {
   }
 }
 
-// ── Shared success screen ──
+// ── Mark the matching slide's button as Registered, without touching other slides ──
+function markSlideRegistered(sid) {
+  const idx = allUpcomingSessions.findIndex(s => s._id.toString() === sid);
+  if (idx === -1) return;
+  const btn = document.querySelector(`.as-bookbtn[data-session-index="${idx}"]`);
+  if (btn) {
+    btn.textContent = 'Registered ✓';
+    btn.classList.add('as-registered');
+    btn.disabled = true;
+  }
+}
+
 function showSuccessScreen(session, user, wasPaid) {
   const ov = document.getElementById('as-overlay');
   if (!ov) return;
@@ -1507,13 +1592,14 @@ function showSuccessScreen(session, user, wasPaid) {
         You have been successfully registered for <strong>${esc(session.title)}</strong>.<br/>
         ${wasPaid ? 'Your payment was successful. Details will be shared on WhatsApp shortly.' : 'You will be added to the WhatsApp group soon.'}
       </div>
-      <button class="as-success-close" onclick="document.getElementById('as-overlay').remove()">Done</button>
+      <button class="as-success-close" onclick="document.getElementById('as-overlay').remove(); unlockSlider();">Done</button>
     </div>`;
 }
 
 function removeOverlay() {
   const old = document.getElementById('as-overlay');
   if (old) old.remove();
+  unlockSlider();
 }
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
