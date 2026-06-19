@@ -801,7 +801,7 @@ function renderSessions() {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const sid = btn.dataset.sid;
-      const url = `${location.origin}/session-register.html?id=${sid}`;
+      const url = `${location.origin}/online-session-register.html?id=${sid}`;
       navigator.clipboard.writeText(url).then(() => toast('Registration link copied!', 'gr'));
     });
   });
